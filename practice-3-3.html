@@ -1,0 +1,592 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Practice: Lesson 3.3, Strike the System</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans:wght@400..700&family=Noto+Serif:ital,wght@0,400..700;1,400..700&display=swap">
+<style>
+:root{
+  --bg:#FBF5EA; --surface:#FFFDF8; --ink:#1E1E1E; --muted:#5A5A5A; --line:#E6DAC3; --tint:#F3EAD3; --navy:#12285A; --gold:#C9A24A; --goldt:#6B4E0E;
+  --obj:#0B8686; --att:#C95F06; --res:#2E3192; --env:#C0245B; --ok:#1B7A52;
+  --display:"Noto Serif",Georgia,"Times New Roman",serif;
+  --body:"Noto Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0B1A3D; --surface:#12285A; --ink:#FBF5EA; --muted:#C9C3B3; --line:#2B4686; --tint:#1D3770; --gold:#E6C36A; --goldt:#E6C36A;
+    --obj:#46CFC6; --att:#F5A04D; --res:#A3AAFF; --env:#FF7BA9; --ok:#5BD59B; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0B1A3D; --surface:#12285A; --ink:#FBF5EA; --muted:#C9C3B3; --line:#2B4686; --tint:#1D3770; --gold:#E6C36A; --goldt:#E6C36A;
+  --obj:#46CFC6; --att:#F5A04D; --res:#A3AAFF; --env:#FF7BA9; --ok:#5BD59B; color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;
+  padding-left:max(14px,env(safe-area-inset-left,0px));padding-right:max(14px,env(safe-area-inset-right,0px));padding-block:22px 40px}
+.wrap{max-width:900px;margin:0 auto;display:flex;flex-direction:column;gap:32px}
+h1,h2,h3{font-family:var(--display);font-weight:500;text-wrap:balance;margin:0;letter-spacing:-.01em}
+h1{font-size:clamp(30px,5.4vw,44px);line-height:1.06}
+h2{font-size:clamp(23px,3.4vw,29px);line-height:1.15}
+h3{font-size:19px;line-height:1.25}
+p{margin:0}
+sub{font-size:.72em;line-height:0}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.lede{font-size:17.5px;max-width:64ch}
+.intro{max-width:66ch;color:var(--muted)}
+header{display:flex;flex-direction:column;gap:12px}
+section{display:flex;flex-direction:column;gap:18px;min-width:0}
+.sym{font-family:var(--mono);font-size:.92em;white-space:nowrap}
+.k-obj{color:var(--obj)} .k-att{color:var(--att)} .k-res{color:var(--res)} .k-env{color:var(--env)}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px;display:flex;flex-direction:column;gap:14px;min-width:0}
+.bar{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;justify-content:space-between}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--bg)}
+.seg button{font:inherit;font-size:14px;color:var(--muted);background:transparent;border:0;padding:8px 13px;cursor:pointer}
+.seg button+button{border-left:1px solid var(--line)}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--surface)}
+button:focus-visible,input:focus-visible{outline:2px solid var(--res);outline-offset:2px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{font:inherit;font-size:14px;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:7px 13px;cursor:pointer;display:inline-flex;gap:8px;align-items:center}
+.chip i{font-style:normal;font-family:var(--mono);font-size:11px;color:var(--muted)}
+.chip[aria-pressed="true"]{background:var(--res);border-color:var(--res);color:#fff}
+.chip[aria-pressed="true"] i{color:#fff;opacity:.8}
+.chip:disabled{cursor:default}
+.chip.reached:not([aria-pressed="true"]){border-color:var(--res)}
+.btn{font:inherit;font-size:14px;color:var(--ink);background:var(--surface);border:1px solid var(--ink);border-radius:8px;padding:8px 16px;cursor:pointer}
+.btn.primary{background:var(--ink);color:var(--surface)}
+.btn.ghost{border-color:var(--line);color:var(--muted)}
+.scope-wrap{position:relative;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--bg)}
+canvas{display:block;width:100%}
+.playbtn{position:absolute;right:8px;bottom:8px;font:inherit;font-size:12px;background:var(--surface);color:var(--muted);border:1px solid var(--line);border-radius:6px;padding:4px 10px;cursor:pointer}
+.box{border:1px solid var(--line);border-radius:8px;background:var(--bg);padding:10px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.box .cap{font-size:12px;color:var(--muted)}
+.meters{display:flex;flex-direction:column;gap:9px}
+.meter{display:grid;grid-template-columns:1fr auto;gap:2px 8px;font-size:13px;align-items:baseline}
+.meter b{font-weight:600}
+.meter output{font-family:var(--mono);font-size:12px;color:var(--muted)}
+.meter .track{grid-column:1/-1;height:7px;background:var(--line);border-radius:4px;overflow:hidden}
+.meter .fill{height:100%;width:0;background:var(--res);border-radius:4px}
+.meter.f2 .fill{background:var(--env)} .meter.f3 .fill{background:var(--obj)}
+.slider{display:flex;align-items:center;gap:10px;flex:1 1 280px;min-width:0}
+.slider label{font-size:14px;min-width:0}
+.slider input[type=range]{flex:1;min-width:60px;accent-color:var(--res)}
+.slider small{color:var(--muted);font-size:12px;white-space:nowrap}
+.slider output{font-family:var(--mono);font-size:12.5px;color:var(--muted);min-width:46px;text-align:right}
+.readout{font-size:14px;color:var(--muted)}
+.readout b{color:var(--ink)}
+.tag{font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);border:1px solid var(--line);border-radius:4px;padding:2px 6px}
+.note{font-size:13px;color:var(--muted);max-width:70ch}
+.balance{background:var(--tint);border-radius:10px;padding:16px 18px;display:flex;flex-direction:column;gap:8px;max-width:78ch}
+footer{font-size:13px;color:var(--muted);max-width:76ch;border-top:1px solid var(--line);padding-top:12px}
+@media (max-width:640px){.panel{padding:12px}.wrap{gap:26px}}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
+
+[hidden]{display:none!important}
+:root{--c-h:var(--res);--c-ref:var(--obj);--c-over:var(--env);--c-settle:var(--att);--c-rip:var(--obj)}
+nav.parts{display:flex;flex-wrap:wrap;gap:8px 20px;margin-top:4px}
+nav.parts a{color:var(--ink);text-decoration:none;border-bottom:1px solid var(--line);padding-bottom:2px;font-size:15px}
+nav.parts a:hover,nav.parts a:focus-visible{border-color:var(--res);color:var(--res)}
+.msg{min-height:1.5em;font-size:15px}
+.fbbox{border-top:1px solid var(--line);padding-top:12px;display:flex;flex-direction:column;gap:8px;min-height:6.5em}
+.fbbox .verdict{font-family:var(--display);font-size:19px}
+.fbbox .ref{font-family:var(--mono);font-size:11px;color:var(--muted)}
+.fbbox q{font-style:italic;quotes:"“" "”"}
+.strikebar{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center}
+.chip:focus-visible,.pick:focus-visible,summary:focus-visible{outline:2px solid var(--res);outline-offset:2px}
+#cv{height:270px}
+.mini #cv2{height:150px}
+.legend{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:13px;color:var(--muted)}
+.legend span{display:inline-flex;align-items:center;gap:7px}
+.sw{display:inline-block;width:22px;height:0;border-top:2.5px solid var(--c-h)}
+.sw-ref{border-top:2px dashed var(--c-ref)}
+.sw-held{border-top:2px solid var(--muted);opacity:.7}
+.feats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.feat{border-top:3px solid var(--line);padding-top:7px;display:flex;flex-direction:column;gap:3px;min-width:0}
+.feat .tag{align-self:flex-start}
+.feat b{font-family:var(--display);font-size:20px;font-weight:500;line-height:1.2}
+.feat .fd{font-size:13px;color:var(--muted);line-height:1.35}
+.feat[data-f="settle"]{border-color:var(--c-settle)} .feat[data-f="settle"] b{color:var(--c-settle)}
+.feat[data-f="over"]{border-color:var(--c-over)} .feat[data-f="over"] b{color:var(--c-over)}
+.feat[data-f="ripple"]{border-color:var(--c-rip)} .feat[data-f="ripple"] b{color:var(--c-rip)}
+.controls{display:flex;flex-direction:column;gap:14px}
+.controls .slider{flex:0 0 auto;flex-wrap:wrap}
+.controls .slider label{font-weight:600;min-width:150px}
+.helpers{display:flex;flex-direction:column;gap:8px}
+.chip[data-h][aria-pressed="true"]{background:var(--ok);border-color:var(--ok)}
+.btn:disabled{opacity:.45;cursor:default}
+.eqs summary{cursor:pointer;font-size:15px;color:var(--ink)}
+.eqbody{display:flex;flex-direction:column;gap:10px;padding-top:10px}
+.eq{font-size:16px;white-space:normal}
+/* part 2 */
+.scene{border-left:3px solid var(--line);padding:2px 0 2px 12px;font-family:var(--display);font-size:18.5px;line-height:1.45;min-height:5.6em}
+.picks{gap:10px}
+.pick{font:inherit;font-size:15px;color:var(--ink);background:var(--bg);border:1.5px solid var(--line);border-top-width:4px;border-radius:10px;padding:9px 14px;cursor:pointer;min-width:0}
+.pick[data-p="settle"]{border-top-color:var(--c-settle)}
+.pick[data-p="over"]{border-top-color:var(--c-over)}
+.pick[data-p="ripple"]{border-top-color:var(--c-rip)}
+.pick.wrong{opacity:.55}
+.pick.right{background:var(--surface);box-shadow:0 0 0 2px var(--ink)}
+.pick:disabled{cursor:default}
+.dots{display:flex;gap:6px}
+.dots i{width:10px;height:10px;border-radius:50%;border:1.5px solid var(--muted)}
+.dots i.done{background:var(--ink);border-color:var(--ink)}
+.dots i.cur{border-color:var(--ink);box-shadow:0 0 0 2px var(--line)}
+@media (max-width:640px){
+  .feats{grid-template-columns:minmax(0,1fr)}
+  .feat{flex-direction:row;flex-wrap:wrap;align-items:baseline;gap:4px 10px}
+  .feat .fd{flex-basis:100%}
+  #cv{height:230px}
+  .controls .slider label{min-width:0;flex-basis:100%}
+  .scene{font-size:17px}
+}
+body[data-part] header{display:none}
+body[data-part="1"] #s2,body[data-part="2"] #s1{display:none}
+body[data-part]{padding-block:10px 18px}
+
+
+.brandhdr{background:#12285A;color:#FBF5EA;text-align:center;padding:18px 18px 20px;border-radius:14px;display:flex;flex-direction:column;align-items:center;gap:6px}
+.brandhdr .logos{display:flex;align-items:center;justify-content:center;gap:18px}
+.brandhdr .logos img{width:56px;height:66px;object-fit:contain;display:block}
+.brandhdr .logos img.rit{width:86px;height:65px}
+.brandhdr .eyebrow{color:#E6C36A;font-weight:700;letter-spacing:3px}
+.brandhdr h1{color:#FBF5EA;font-weight:700}
+.brandhdr .course{color:#E6C36A;font-weight:600;font-size:14px}
+.brandhdr .lede{color:#F1ECDF;font-size:15.5px;max-width:62ch}
+.brandhdr .scorenote{color:#F1ECDF;font-size:14.5px}
+nav.parts a{color:var(--ink)}
+.brandhdr nav.parts a{color:#FBF5EA;border-bottom:1px solid #E6C36A;background:none;padding-bottom:2px}
+.brandhdr nav.parts a:hover,.brandhdr nav.parts a:focus-visible{color:#E6C36A;border-color:#E6C36A}
+.tag.scored{color:var(--goldt);border-color:var(--gold)}
+.scorebox{border-left:5px solid var(--gold);background:var(--tint);border-radius:10px;padding:12px 14px;margin-bottom:14px}
+.scorebox .big{font-family:var(--display);font-size:30px;line-height:1.1;color:var(--ink)}
+.scorebox .band{font-family:var(--display);font-size:18px;margin:4px 0}
+.scorebox .band.good{color:var(--ok)}
+.scorebox .saved{font-size:13.5px;color:var(--muted)}
+.scorebox ul{margin:6px 0 0;padding-left:20px}
+</style></head><body>
+<div class="wrap">
+<header class="brandhdr">
+  <div class="logos"><img src="vedantanz-logo.png" alt="Ramakrishna Vedanta NZ emblem" width="56" height="66"><img class="rit" src="ritam-wordmark.png" alt="Ritam" width="86" height="65"></div>
+  <div class="eyebrow">Practice · Lesson 3.3</div>
+  <h1>Strike the System</h1>
+  <p class="course">The Mind in the Light of Modern and Spiritual Sciences · Advanced</p>
+  <p class="lede">Strike a tuning fork once and it rings in its own way. The lesson asks you to look at the mind the same way: a glance, a word or a scent strikes it, and what follows is the mind’s impulse response, h(t). Here you will strike a model of it and watch its three features, then find those features in four short stories.</p>
+  <p class="scorenote"><b>Part I</b> is practice and is not scored. <b>Part II</b> is scored: your first pick in each story counts.</p>
+  <nav class="parts" aria-label="Parts of this page"><a href="#s1">I. Strike it</a><a href="#s2">II. Which feature is at issue?</a></nav>
+</header>
+
+<section id="s1">
+  <h2>I. Strike it <span class="tag">Practice: not scored</span></h2>
+  <p class="intro">Choose an input to strike the system. The trace shows the reaction h(t) rising, falling and settling, with settling time, overshoot and residual ripple marked on it. Two separate controls change the system: how large the reaction is, and how much damping it has.</p>
+  <div class="panel" id="lab">
+    <div class="bar">
+      <div class="strikebar"><span class="eyebrow">Strike with</span>
+        <div class="chips" id="inChips" role="group" aria-label="Input">
+          <button class="chip" data-in="glance" aria-pressed="false">A glance</button>
+          <button class="chip" data-in="word" aria-pressed="true">A word</button>
+          <button class="chip" data-in="scent" aria-pressed="false">A scent</button>
+        </div>
+      </div>
+      <button class="btn primary" id="bStrike">Strike again</button>
+    </div>
+
+    <div class="scope-wrap"><canvas id="cv" role="img" aria-label="Trace of the reaction over time"></canvas></div>
+    <div class="legend">
+      <span><i class="sw sw-h"></i>this response, h(t)</span>
+      <span><i class="sw sw-ref"></i>a well-damped response to the same strike</span>
+      <span id="lgHeld" hidden><i class="sw sw-held"></i>the response you held</span>
+    </div>
+
+    <div class="feats" aria-live="polite">
+      <div class="feat" data-f="settle"><span class="tag">settling time</span><b id="fSettle">brief</b><span class="fd">How long before the mind returns to its baseline state.</span></div>
+      <div class="feat" data-f="over"><span class="tag">overshoot</span><b id="fOver">none</b><span class="fd">How far the reaction goes beyond the well-damped response, and swings past baseline.</span></div>
+      <div class="feat" data-f="ripple"><span class="tag">residual ripple</span><b id="fRipple">none</b><span class="fd">The quiet ringing that goes on after the main response has settled.</span></div>
+    </div>
+
+    <div class="controls">
+      <div class="slider"><label for="rSize">Size of the reaction</label><small>smaller</small><input type="range" id="rSize" min="0" max="100" value="55"><small>larger</small></div>
+      <div class="slider"><label for="rDamp">Damping</label><small>little, it rings</small><input type="range" id="rDamp" min="0" max="100" value="18"><small>much, it settles once</small></div>
+      <div class="helpers">
+        <span class="eyebrow">Dampers named in §2: each adds some damping here</span>
+        <div class="chips" id="hChips" role="group" aria-label="Dampers">
+          <button class="chip" data-h="ethics" aria-pressed="false">Ethics and integrity</button>
+          <button class="chip" data-h="clarity" aria-pressed="false">Clarity of understanding (viveka)</button>
+          <button class="chip" data-h="breath" aria-pressed="false">Steady breath</button>
+          <button class="chip" data-h="pattern" aria-pressed="false">Seeing your own pattern</button>
+        </div>
+        <p class="note">§2 also names a calm environment and unhurried time. The helpers are labels for what the lesson describes, not amounts: the lesson gives no formula, and the page adds the same step for each.</p>
+      </div>
+      <div class="chips"><button class="btn" id="bHold">Hold this response to compare</button><button class="btn ghost" id="bClear" hidden>Clear the held response</button><button class="btn ghost" id="bReset">Start again</button></div>
+    </div>
+
+    <div id="labMsg" class="msg fbbox" role="status" aria-live="polite"></div>
+
+    <details class="eqs"><summary>Where h(t) sits in the lesson’s equation</summary>
+      <div class="eqbody">
+        <p class="eq sym">ψ<sub>exp</sub>(t) = [ψ<sub>x</sub>(t) ∗ h(t)] + ψ<sub>m</sub>(t)</p>
+        <p class="note">The object wave ψ<sub>x</sub>(t) is shaped by h(t), the impulse response that the saṁskāras held in chitta form, before the attention wave ψ<sub>m</sub>(t) meets it. Their resultant is the vṛtti that is experienced, ψ<sub>exp</sub>(t) (§13). This lab shows only h(t): what the system does when it is struck once, briefly (§1).</p>
+        <p class="note">The trace is a model, drawn as a simple ringing that dies away so that its three features can be seen. It does not measure anyone, and the lesson does not say a mind is a fixed filter: it says the filter is reshaped by practice, “japa (repetition of a sacred name), breath regulation, ethical living, and inquiry” (§3), as a riverbed is re-carved (§8).</p>
+      </div>
+    </details>
+  </div>
+  <div class="balance">
+    <h3>Damping is not numbness</h3>
+    <p>Well-damped does not mean feeling less. “You feel your feelings fully when something triggers you, but the response is proportionate, and you settle relatively quickly” (§2). Try it: raise the damping and the reaction still rises. It simply stops ringing.</p>
+  </div>
+</section>
+
+<section id="s2">
+  <h2>II. Which feature is at issue? <span class="tag scored">Scored: first pick counts</span></h2>
+  <p class="intro">Four short stories, all made up. In each, someone is struck by a small input. Which of the three features does the story turn on?</p>
+  <div class="panel" id="st">
+    <div class="bar"><span class="tag" id="stPro">Story 1 of 4</span><div class="dots" id="stDots" aria-hidden="true"></div></div>
+    <div class="scene"><p id="stText"></p></div>
+    <div class="chips picks" id="stPicks" role="group" aria-label="Feature">
+      <button class="pick" data-p="settle">Settling time</button>
+      <button class="pick" data-p="over">Overshoot</button>
+      <button class="pick" data-p="ripple">Residual ripple</button>
+    </div>
+    <div id="stMsg" class="msg fbbox" role="status" aria-live="polite"><p class="note">Pick one of the three.</p></div>
+    <div class="scope-wrap mini" id="stMiniWrap" hidden><canvas id="cv2" role="img" aria-label="Sketch of this story’s response"></canvas></div>
+    <div class="bar"><div class="chips"><button class="btn primary" id="stNext" hidden>Next story</button><button class="btn ghost" id="stShow">Show me</button><button class="btn ghost" id="stReset">Start again</button></div></div>
+  </div>
+  <div class="panel" id="stDone" hidden>
+    <div class="scorebox" id="scBox" aria-live="polite"></div>
+    <h3>Three features, one system</h3>
+    <p>Two of these stories begin with almost the same remark. “The difference is not the comment itself. It is the settling time of the system” (§1). Settling time, overshoot and residual ripple are “features of your system’s impulse response, shaped by your history” (§1).</p>
+  </div>
+  <div class="balance">
+    <h3>Noticing, not blaming</h3>
+    <p>“Learning to notice them is not to blame yourself; it is to wake up to how your mind actually works” (§1). And the deepest damping, the lesson says, comes from seeing your own pattern: “Once you see the pattern, it begins to lose its hold” (§2).</p>
+  </div>
+</section>
+<footer>Part I is practice and is not scored. Part II is scored, and only to show you where to look again. Based on Lesson 3.3, this page illustrates the lesson’s qualitative picture of the mind’s impulse response and does not measure, diagnose or advise on any person’s situation. For help with distress, please speak with a qualified professional or someone you trust.<br>Ritam · Ramakrishna Vedanta Centre NZ · <a href="https://www.vedanta.nz">www.vedanta.nz</a></footer>
+</div>
+
+<script>
+window.Core=(function(){
+"use strict";
+var TAU=Math.PI*2;
+try{var q=new URLSearchParams(location.search).get("theme");if(q==="light"||q==="dark")document.documentElement.setAttribute("data-theme",q)}catch(e){}
+function lerp(a,b,t){return a+(b-a)*t}
+function clamp(x,a,b){return Math.max(a,Math.min(b,x))}
+function el(id){return document.getElementById(id)}
+var col={},subs=[];
+function readColors(){
+  var cs=getComputedStyle(document.documentElement);
+  ["--bg","--surface","--ink","--muted","--line","--tint","--obj","--att","--res","--env","--ok"].forEach(function(k){col[k]=cs.getPropertyValue(k).trim()});
+  subs.forEach(function(f){try{f()}catch(e){}});
+}
+readColors();
+try{window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change",readColors)}catch(e){}
+new MutationObserver(readColors).observe(document.documentElement,{attributes:true,attributeFilter:["data-theme"]});
+function onTheme(f){subs.push(f)}
+var dpr=Math.max(1,Math.min(2,window.devicePixelRatio||1));
+function fit(c){
+  var w=c.clientWidth,h=c.clientHeight;
+  if(!w||!h)return null;
+  var bw=Math.round(w*dpr),bh=Math.round(h*dpr);
+  if(c.width!==bw||c.height!==bh){c.width=bw;c.height=bh}
+  var g=c.getContext("2d");g.setTransform(dpr,0,0,dpr,0,0);return {g:g,w:w,h:h};
+}
+var FONT="500 11.5px 'Source Sans 3',system-ui,sans-serif";
+function label(g,t,x,y,color,align,pill){
+  g.font=FONT;g.textAlign=align||"left";g.textBaseline="alphabetic";
+  if(pill){var w=g.measureText(t).width,x0=(align==="right")?x-w:(align==="center"?x-w/2:x);
+    g.save();g.globalAlpha=.82;g.fillStyle=col["--surface"];g.fillRect(x0-5,y-12,w+10,17);g.restore()}
+  g.fillStyle=color;g.fillText(t,x,y)}
+/* ring-buffer trace: arr, head index, length N */
+function trace(g,arr,head,N,x0,w,cy,sc,color,lw,alpha,dash){
+  g.save();g.globalAlpha=alpha==null?1:alpha;g.strokeStyle=color;g.lineWidth=lw;g.lineJoin="round";if(dash)g.setLineDash(dash);
+  g.beginPath();
+  for(var i=0;i<N;i++){var v=arr[(head+i)%N];var x=x0+w*i/(N-1),y=cy-v*sc;if(i)g.lineTo(x,y);else g.moveTo(x,y)}
+  g.stroke();g.restore();
+}
+/* shaded envelope band around a lane centre */
+function envelope(g,E,head,N,W,cy,sc,color,alpha){
+  g.save();g.globalAlpha=alpha;
+  g.beginPath();
+  for(var i=0;i<N;i++){var e=E[(head+i)%N],x=W*i/(N-1),y=cy-e*sc;if(i)g.lineTo(x,y);else g.moveTo(x,y)}
+  for(var j=N-1;j>=0;j--){var e2=E[(head+j)%N],x2=W*j/(N-1);g.lineTo(x2,cy+e2*sc)}
+  g.closePath();g.fillStyle=color;g.globalAlpha=.09*alpha;g.fill();g.restore();
+  g.save();g.globalAlpha=alpha;g.strokeStyle=color;g.lineWidth=1.6;g.setLineDash([6,4]);
+  [1,-1].forEach(function(sg){g.beginPath();for(var i2=0;i2<N;i2++){var ee=E[(head+i2)%N]*sg,xx=W*i2/(N-1),yy=cy-ee*sc;if(i2)g.lineTo(xx,yy);else g.moveTo(xx,yy)}g.stroke()});
+  g.restore();
+}
+return {TAU:TAU,lerp:lerp,clamp:clamp,el:el,col:col,onTheme:onTheme,fit:fit,label:label,trace:trace,envelope:envelope,FONT:FONT};
+})();
+
+</script>
+<script>
+(function(){
+"use strict";
+var $=Core.el,C=Core.col;
+try{var pt=new URLSearchParams(location.search).get("part");if(pt==="1"||pt==="2")document.body.setAttribute("data-part",pt)}catch(e){}
+var RM=false;try{RM=window.matchMedia("(prefers-reduced-motion: reduce)").matches}catch(e){}
+
+/* ===== model: a simple damped ringing, natural frequency 1, time window T ===== */
+var T=60,N=900,ZMIN=0.08;
+function zOf(v){return ZMIN*Math.pow(1/ZMIN,v/100)}
+function kOf(v){return 0.4+0.6*v/100}
+function hAt(z,K,t){
+  if(t<0)return 0;
+  if(z>=0.999)return K*t*Math.exp(-t);
+  var wd=Math.sqrt(1-z*z);return K*Math.exp(-z*t)*Math.sin(wd*t)/wd;
+}
+function series(z,K){var a=new Float64Array(N);for(var i=0;i<N;i++)a[i]=hAt(z,K,T*i/(N-1));return a}
+var HMAX=(function(){var m=0,s=series(ZMIN,1);for(var i=0;i<N;i++)m=Math.max(m,s[i]);return m})();
+function analyze(z,K){
+  var h=series(z,K),ref=series(1,K),peak=0,ip=0,rp=0,irp=0,i;
+  for(i=0;i<N;i++){if(h[i]>peak){peak=h[i];ip=i}if(ref[i]>rp){rp=ref[i];irp=i}}
+  var s1=0.15*rp,s2=0.03*rp,iS=0,iR=0;
+  for(i=0;i<N;i++){var a=Math.abs(h[i]);if(a>s1)iS=i;if(a>s2)iR=i}
+  var sign=0,flips=0;
+  for(i=iS;i<=iR;i++){var sg=h[i]>0?1:(h[i]<0?-1:0);if(sg&&sign&&sg!==sign)flips++;if(sg)sign=sg}
+  var hasRip=(flips>=1&&iR>iS+4);
+  var tr=0,itr=0;for(i=ip;i<N;i++){if(h[i]<tr){tr=h[i];itr=i}if(h[i]>0&&tr<0)break}
+  return {h:h,ref:ref,peak:peak,ip:ip,rp:rp,irp:irp,iS:iS,iR:hasRip?iR:iS,hasRip:hasRip,trough:tr,itr:itr,r:(peak-rp)/rp,z:z,K:K};
+}
+function wordsFor(A){
+  var fs=A.iS/(N-1),fr=(A.iR-A.iS)/(N-1);
+  return {
+    settle:fs<0.12?"brief":fs<0.25?"a while":fs<0.5?"long":"very long",
+    over:A.r<0.06?"none":A.r<0.45?"slight":A.r<1.0?"marked":"large",
+    ripple:!A.hasRip?"none":fr<0.1?"faint, soon gone":fr<0.3?"lingering":"long-lasting"
+  };
+}
+
+/* ===== drawing ===== */
+function bracket(g,xa,xb,y,color,text){
+  g.save();g.strokeStyle=color;g.lineWidth=1.6;g.beginPath();
+  g.moveTo(xa,y-5);g.lineTo(xa,y);g.lineTo(xb,y);g.lineTo(xb,y-5);g.stroke();g.restore();
+  g.font=Core.FONT;var tw=g.measureText(text).width;
+  if(xb-xa>tw+14)Core.label(g,text,(xa+xb)/2,y+4,color,"center",true);
+  else Core.label(g,text,xb+6,y+4,color,"left",true);
+}
+function draw(cv,A,o){
+  var f=Core.fit(cv);if(!f)return;var g=f.g,W=f.w,H=f.h;
+  o=o||{};var prog=o.prog==null?1:o.prog,hl=o.hl||"all",compact=!!o.compact;
+  g.clearRect(0,0,W,H);g.fillStyle=C["--bg"];g.fillRect(0,0,W,H);
+  var top=compact?10:24,strip=compact?(hl==="over"?6:26):48,plotH=H-top-strip;
+  var mx=HMAX;if(compact){mx=0;for(var q=0;q<N;q++)mx=Math.max(mx,A.h[q],A.ref[q]);mx*=1.15}
+  var yb=top+plotH*0.54,sc=(plotH*0.54-6)/mx;
+  var x0=compact?14:30,x1=W-12;
+  function X(i){return x0+(x1-x0)*i/(N-1)}
+  function Y(v){return yb-v*sc}
+  /* baseline */
+  g.save();g.strokeStyle=C["--line"];g.lineWidth=1.2;g.beginPath();g.moveTo(8,yb);g.lineTo(x1,yb);g.stroke();g.restore();
+  if(!compact){
+    Core.label(g,"baseline",x1,yb-6,C["--muted"],"right",true);
+    Core.label(g,"time →",x1,top+plotH-2,C["--muted"],"right",false);
+  }
+  /* strike marker */
+  g.save();g.strokeStyle=C["--ink"];g.fillStyle=C["--ink"];g.lineWidth=1.6;
+  var sy=compact?top+2:top+8;g.beginPath();g.moveTo(x0,sy);g.lineTo(x0,yb-3);g.stroke();
+  g.beginPath();g.moveTo(x0-4,yb-9);g.lineTo(x0,yb-2);g.lineTo(x0+4,yb-9);g.closePath();g.fill();g.restore();
+  if(!compact&&o.input)Core.label(g,"struck by "+o.input,x0+8,top+6,C["--ink"],"left",true);
+  /* held trace */
+  if(o.held){Core.trace(g,o.held.h,0,N,x0,x1-x0,yb,sc,C["--muted"],1.6,.55)}
+  /* well-damped reference */
+  Core.trace(g,A.ref,0,N,x0,x1-x0,yb,sc,C["--muted"],1.6,.9,[5,4]);
+  /* this response, drawn up to prog */
+  var n=Math.max(2,Math.round(prog*N));
+  g.save();g.strokeStyle=C["--res"];g.lineWidth=2.4;g.lineJoin="round";g.beginPath();
+  for(var i=0;i<n;i++){var x=X(i),y=Y(A.h[i]);if(i)g.lineTo(x,y);else g.moveTo(x,y)}g.stroke();g.restore();
+  if(prog<1)return;
+  var cOver=C["--env"],cSet=C["--att"],cRip=C["--obj"];
+  /* overshoot */
+  if((hl==="all"||hl==="over")&&A.r>=0.06){
+    var yl=Y(A.rp);
+    g.save();g.fillStyle=cOver;g.globalAlpha=.28;g.beginPath();
+    var started=false,i0=A.irp,j;
+    for(j=0;j<N&&j<A.ip+200;j++){if(A.h[j]>A.rp){if(!started){g.moveTo(X(j),yl);started=true}g.lineTo(X(j),Y(A.h[j]))}else if(started&&j>A.ip)break}
+    if(started){g.lineTo(X(j),yl);g.closePath();g.fill()}
+    g.restore();
+    g.save();g.strokeStyle=cOver;g.lineWidth=1.2;g.setLineDash([2,3]);g.beginPath();g.moveTo(X(i0)-4,yl);g.lineTo(X(Math.min(N-1,A.ip+40)),yl);g.stroke();g.restore();
+    Core.label(g,"overshoot",X(A.ip)+12,Y(A.peak)+12,cOver,"left",true);
+    if(!compact&&A.trough<-0.25*A.rp)Core.label(g,"swings below baseline",X(A.itr)+10,Y(A.trough)+12,cOver,"left",true);
+  }
+  /* ripple: recolour the tail */
+  if((hl==="all"||hl==="ripple")&&A.hasRip){
+    g.save();g.strokeStyle=cRip;g.lineWidth=3.2;g.lineJoin="round";g.beginPath();
+    for(var k=A.iS;k<=A.iR;k++){var xx=X(k),yy=Y(A.h[k]);if(k>A.iS)g.lineTo(xx,yy);else g.moveTo(xx,yy)}g.stroke();g.restore();
+  }
+  /* settle mark and brackets */
+  var yS=H-(compact?12:32),yR=H-(compact?12:12);
+  if(hl==="all"||hl==="settle"){
+    g.save();g.strokeStyle=cSet;g.lineWidth=1.3;g.setLineDash([4,3]);g.beginPath();g.moveTo(X(A.iS),top+4);g.lineTo(X(A.iS),yS);g.stroke();g.restore();
+    bracket(g,x0,X(A.iS),yS,cSet,"settling time");
+  }
+  if((hl==="all"||hl==="ripple")&&A.hasRip){
+    if(hl==="ripple"){g.save();g.strokeStyle=cSet;g.globalAlpha=.6;g.lineWidth=1.2;g.setLineDash([4,3]);g.beginPath();g.moveTo(X(A.iS),top+4);g.lineTo(X(A.iS),yR);g.stroke();g.restore()}
+    bracket(g,X(A.iS),X(A.iR),yR,cRip,"residual ripple");
+  }
+}
+
+/* ===== Part I: the lab ===== */
+var cv=$("cv"),rSize=$("rSize"),rDamp=$("rDamp"),labMsg=$("labMsg");
+var INPUTS={glance:"a glance",word:"a word",scent:"a scent"};
+var HELP={
+  ethics:{n:"Ethics and integrity",q:"“Ethics and integrity are powerful dampeners.” When speech is truthful and actions are kind there is “less inner conflict, less guilt creating secondary ripples on top of the primary reaction” (§2)."},
+  clarity:{n:"Clarity of understanding",q:"“Clarity of understanding (discrimination, viveka, taught in Lesson 2.5) is also a dampener. When you can see clearly what is happening, you are less likely to spiral into confusion and catastrophizing” (§2)."},
+  breath:{n:"Steady breath",q:"“Breath regulation is a dampener. Slow, steady breathing signals to the nervous system that there is no current threat, and the system downshifts its reactivity” (§2)."},
+  pattern:{n:"Seeing your own pattern",q:"“The deepest damping comes from understanding your own patterns.” Once you see the pattern, “you are no longer identified with the oscillation; you are observing it” (§2)."}
+};
+var STEP=20;
+var L={input:"word",held:null,added:{},A:null,anim:0};
+function words(id,w){$(id).textContent=w}
+function cur(){return analyze(zOf(+rDamp.value),kOf(+rSize.value))}
+function dampWord(v){return v<25?"little, it rings":v<55?"some":v<85?"a good deal":"much, it settles once"}
+function sizeWord(v){return v<34?"smaller":v<67?"moderate":"larger"}
+function setAria(){rDamp.setAttribute("aria-valuetext",dampWord(+rDamp.value));rSize.setAttribute("aria-valuetext",sizeWord(+rSize.value))}
+function regime(z){
+  if(z<0.35)return ["Under-damped: it overshoots and keeps ringing.","“It rises higher than necessary, falls below the target, rises again, falls again, oscillating for a time before eventually settling” (§2). In the mind: “you over-react initially, the reaction reverberates, and the time to return to baseline is extended” (§2)."];
+  if(z>=0.85)return ["Well-damped: one smooth rise and fall.","“A well-damped system, when tapped, responds with a single, smooth rise and fall” (§2). The reaction still rises as far as its size allows. It just does not ring, and it settles soon."];
+  return ["Between the two: a little overshoot, then it settles.","The lesson describes the two ends, well-damped and under-damped (§2). Between them the trace changes smoothly: less overshoot, a shorter settling time, a shorter ripple as the damping rises."];
+}
+function render(prog){
+  L.A=cur();var w=wordsFor(L.A);
+  words("fSettle",w.settle);words("fOver",w.over);words("fRipple",w.ripple);
+  draw(cv,L.A,{prog:prog,input:INPUTS[L.input],held:L.held});
+  var lab="Trace of the reaction to "+INPUTS[L.input]+". Settling time "+w.settle+"; overshoot "+w.over+"; residual ripple "+w.ripple+".";
+  cv.setAttribute("aria-label",lab);
+}
+function say(lead,refs){
+  var R=regime(L.A.z);
+  labMsg.innerHTML='<p class="verdict">'+R[0]+'</p>'+(lead?'<p>'+lead+'</p>':'')+'<p>'+R[1]+'</p><p class="ref">'+(refs||"§1 · §2")+'</p>';
+}
+function strike(){
+  cancelAnimationFrame(L.anim);
+  if(RM){render(1);return}
+  var t0=null;
+  function step(t){if(t0==null)t0=t;var u=Math.min(1,(t-t0)/1500);render(u);if(u<1)L.anim=requestAnimationFrame(step)}
+  L.anim=requestAnimationFrame(step);
+}
+document.querySelectorAll("#inChips .chip").forEach(function(b){
+  b.addEventListener("click",function(){
+    var changed=L.input!==b.dataset.in;L.input=b.dataset.in;
+    document.querySelectorAll("#inChips .chip").forEach(function(c){c.setAttribute("aria-pressed",c===b?"true":"false")});
+    render(0);strike();
+    say(changed?"A glance, a word, a scent: “each is an impulse input” (§1). The shape does not change with the input here, because in this model the shape belongs to the system: “The fork’s structure determines its impulse response” (§1).":"Struck again: the same system gives the same response. “Strike it once and you get one signature response” (§1).");
+  });
+});
+$("bStrike").addEventListener("click",function(){render(0);strike();say("Struck again: the same system gives the same response. “Strike it once and you get one signature response” (§1).")});
+rSize.addEventListener("input",function(){setAria();cancelAnimationFrame(L.anim);render(1);
+  say("Size raises or lowers the whole trace, and the dashed well-damped response grows or shrinks with it. Settling time and ripple stay as they were: they belong to the damping. Overshoot is read against the well-damped response to the same strike, so a large reaction that settles cleanly shows none.","§1 · §2")});
+rDamp.addEventListener("input",function(){setAria();cancelAnimationFrame(L.anim);render(1);
+  say("Damping changes the shape, not the size setting: how far the reaction overshoots, how long it takes to settle, how long it keeps rippling. In a mechanical system the damper absorbs the energy of the oscillation “rather than letting it keep the system vibrating” (§2).","§2")});
+document.querySelectorAll("#hChips .chip").forEach(function(b){
+  b.addEventListener("click",function(){
+    var k=b.dataset.h,on=b.getAttribute("aria-pressed")!=="true",v=+rDamp.value,lead;
+    if(on){var add=Math.min(STEP,100-v);L.added[k]=add;rDamp.value=v+add;lead=HELP[k].q+(add<STEP?" (The damping is already near the well-damped end.)":"")}
+    else{rDamp.value=Math.max(0,v-(L.added[k]||0));L.added[k]=0;lead="Without “"+HELP[k].n.toLowerCase()+"”, the damping drops back by the same step."}
+    b.setAttribute("aria-pressed",on?"true":"false");setAria();render(0);strike();say(lead,"§2");
+  });
+});
+$("bHold").addEventListener("click",function(){
+  L.held=cur();$("lgHeld").hidden=false;$("bClear").hidden=false;render(1);
+  say("Held. Now change the damping or the size and strike again: the same input, a different response. Of two people who hear the same criticism, the lesson says: “The difference is not in the words. The difference is in the impulse response h(t)” (§3).","§1 · §3");
+});
+$("bClear").addEventListener("click",function(){L.held=null;$("lgHeld").hidden=true;$("bClear").hidden=true;render(1);say("The held response is cleared.")});
+function resetLab(first){
+  rSize.value=55;rDamp.value=18;L.added={};L.held=null;L.input="word";$("lgHeld").hidden=true;$("bClear").hidden=true;
+  document.querySelectorAll("#hChips .chip").forEach(function(c){c.setAttribute("aria-pressed","false")});
+  document.querySelectorAll("#inChips .chip").forEach(function(c){c.setAttribute("aria-pressed",c.dataset.in==="word"?"true":"false")});
+  setAria();render(0);strike();
+  say(first?"A word has struck the system. Watch the trace rise, swing and settle. The three features are marked on it and named below. Then try the controls.":"Back to the start: a word, a moderate reaction, little damping.");
+}
+$("bReset").addEventListener("click",function(){resetLab(false)});
+
+/* ===== Part II: stories ===== */
+var STORIES=[
+ {t:"At a meeting, a colleague points out that Dev’s figures are wrong. He feels a quick sting, checks the figures, thanks her, and a few moments later his mind is on the next item.",
+  a:"settle",z:1,K:.62,
+  v:"Settling time, and it is short.",
+  why:"“For some people, a sharp remark produces a brief sting that fades in moments” (§1). The sting is felt, and the mind returns to its baseline. §2 calls this well-damped: a single, smooth rise and fall.",
+  hint:{over:"Was the sting out of proportion? The story says it was quick, and Dev answered calmly. Look at how soon his mind returns to baseline (§1).",ripple:"Does anything linger after he moves on? The story says his mind is on the next item. Look at how soon the reaction ends (§1)."}},
+ {t:"A neighbour mentions, mildly, that Tom’s hedge is hanging over the footpath. Tom feels a flash of rage far bigger than the remark, and snaps back before he knows what he is saying.",
+  a:"over",z:.1,K:1,
+  v:"Overshoot.",
+  why:"“You hear a mildly critical comment and you feel panic, or rage, or shame far more intense than the moment seems to deserve. That excess is overshoot” (§1). The lesson traces it to “patterns in your conditioning that have taught the system to over-react”.",
+  hint:{settle:"The story does not say how long the anger lasts. It says how big it was compared with the remark (§1).",ripple:"Ripple is quiet, and it comes late, after the main response has settled. This reaction is loud and immediate (§1)."}},
+ {t:"A friend tells Lena that her plan is not really thought through. At midnight, hours later, she is still turning the words over and rehearsing what she should have said.",
+  a:"settle",z:.1,K:.55,
+  v:"Settling time, and it is long.",
+  why:"For others, “the same remark becomes grist for hours of rumination” (§1). Dev and Lena met much the same kind of remark. “The difference is not the comment itself. It is the settling time of the system” (§1).",
+  hint:{over:"Is the story about how big her first reaction was? It does not say. It says how long the reaction goes on: hours (§1).",ripple:"Close, but ripple is what lingers after the main response has settled (§1). Lena has not settled: hours later she is still in the main response."}},
+ {t:"Asha and her sister settled a small disagreement days ago, and both meant it. Yet now and then a faint unease comes back, a small doubt about something she said. It fades, then washes up again.",
+  a:"ripple",z:.12,K:.55,
+  v:"Residual ripple.",
+  why:"“Even after the main response has settled, you may notice a subtle oscillation: a lingering unease, a series of small doubt-spirals” (§1). “It is the mind continuing to ring at a very quiet amplitude.”",
+  hint:{settle:"Not quite. The main response settled days ago: they resolved it and meant it. The story is about what is left after settling (§1).",over:"Nothing here is bigger than the moment deserves. The unease is faint and small (§1)."}}
+];
+var NAMES={settle:"Settling time",over:"Overshoot",ripple:"Residual ripple"};
+var S={i:0,done:{},miss:{},shown:{}};
+var picks=document.querySelectorAll("#stPicks .pick"),stMsg=$("stMsg"),cv2=$("cv2");
+function dots(){var d=$("stDots");d.innerHTML="";STORIES.forEach(function(_,k){var e=document.createElement("i");if(S.done[k])e.className="done";else if(k===S.i)e.className="cur";d.appendChild(e)})}
+function showStory(){
+  var s=STORIES[S.i];$("stText").textContent=s.t;$("stPro").textContent="Story "+(S.i+1)+" of "+STORIES.length;
+  picks.forEach(function(p){p.disabled=false;p.classList.remove("wrong","right");p.setAttribute("aria-pressed","false")});
+  stMsg.innerHTML='<p class="note">Pick one of the three.</p>';
+  $("stMiniWrap").hidden=true;$("stNext").hidden=true;$("stShow").hidden=false;dots();
+}
+function reveal(){
+  var s=STORIES[S.i];S.done[S.i]=true;
+  picks.forEach(function(p){p.disabled=true;if(p.dataset.p===s.a){p.classList.add("right");p.setAttribute("aria-pressed","true")}});
+  stMsg.innerHTML='<p class="verdict">'+s.v+'</p><p>'+s.why+'</p><p class="ref">§1'+(S.i===0?" · §2":"")+'</p>';
+  $("stMiniWrap").hidden=false;
+  var A=analyze(s.z,s.K);draw(cv2,A,{compact:true,hl:s.a});
+  cv2.setAttribute("aria-label","Sketch of this story’s response, with "+NAMES[s.a].toLowerCase()+" marked.");
+  $("stShow").hidden=true;
+  if(S.i<STORIES.length-1){$("stNext").hidden=false}else{$("stDone").hidden=false;finish()}
+  dots();
+}
+picks.forEach(function(p){
+  p.addEventListener("click",function(){
+    var s=STORIES[S.i];
+    if(p.dataset.p===s.a){reveal()}
+    else{S.miss[S.i]=true;p.classList.add("wrong");p.disabled=true;stMsg.innerHTML='<p class="verdict">Not this one.</p><p>'+s.hint[p.dataset.p]+'</p>'}
+  });
+});
+$("stNext").addEventListener("click",function(){S.i++;showStory();try{$("stPicks").querySelector(".pick").focus({preventScroll:true})}catch(e){}});
+$("stShow").addEventListener("click",function(){S.miss[S.i]=true;reveal()});
+$("stReset").addEventListener("click",function(){S={i:0,done:{},miss:{},shown:{}};$("stDone").hidden=true;$("scBox").innerHTML="";showStory()});
+showStory();
+
+/* ===== Scoring for Part II, and hand-off to the host page when embedded ===== */
+var EMBED=/[?&]embed=1/.test(location.search);
+var META={code:"ADV-P-3-3",title:"Practice: Lesson 3.3, Strike the System (Part II)",programme:"The Mind in the Light of Modern and Spiritual Sciences (Advanced)",cut:75};
+function send(m){if(EMBED){try{parent.postMessage(m,"*")}catch(e){}}}
+function finish(){
+  if(S.sent){return}
+  var n=STORIES.length,right=0,ans=[],wrong=[];
+  STORIES.forEach(function(st,k){var ok=!S.miss[k];if(ok){right++}else{wrong.push(k)}ans.push({q:k+1,ok:ok,given:NAMES[st.a]+(ok?" (first pick)":" (not on first pick)")})});
+  var pct=Math.round(100*right/n),good=pct>=META.cut;
+  var h='<div class="big">'+right+' of '+n+' on the first pick</div>'+
+        '<p class="band '+(good?'good':'')+'">'+(good?'Well grasped':'Revisit these ideas')+'</p>';
+  if(wrong.length){h+='<p>Look again at §1 and §2 for:</p><ul>'+wrong.map(function(k){return '<li>Story '+(k+1)+': '+NAMES[STORIES[k].a]+'</li>'}).join('')+'</ul>'}
+  else{h+='<p>Nothing to revisit here.</p>'}
+  h+='<p class="saved" id="scSaved">'+(EMBED?'Saving your result…':'Sign in on the course page to have your result saved.')+'</p>';
+  $("scBox").innerHTML=h;S.sent=true;
+  send({type:"quizResult",code:META.code,title:META.title,programme:META.programme,score:right,maxScore:n,percent:pct,questionsCorrect:right,questionCount:n,answers:ans});
+}
+window.addEventListener("message",function(e){
+  var d=e.data||{};if(!d||typeof d!=="object"){return}
+  var el=$("scSaved");if(!el){return}
+  if(d.type==="saved"){el.textContent="Your result has been saved to your member record."}
+  else if(d.type==="saveError"){el.textContent="Your result could not be saved this time. You can start again and finish once more."}
+  else if(d.type==="notMember"){el.textContent="Sign in as a member to have your result saved."}
+});
+send({type:"ready"});
+
+/* redraw on resize and theme change */
+var rt=0;
+function redraw(){render(1);if(!$("stMiniWrap").hidden){var s=STORIES[S.i];draw(cv2,analyze(s.z,s.K),{compact:true,hl:s.a})}}
+window.addEventListener("resize",function(){clearTimeout(rt);rt=setTimeout(redraw,80)});
+Core.onTheme(function(){if(L.A)redraw()});
+resetLab(true);
+})();
+
+</script>
+</body></html>
