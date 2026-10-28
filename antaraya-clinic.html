@@ -1,0 +1,649 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The Antarāya Clinic</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Source+Sans+3:ital,wght@0,400;0,600;1,400&family=Spectral:ital,wght@0,400;0,500;1,400&display=swap">
+<style>
+:root{
+  --bg:#F2F5F9; --surface:#FFFFFF; --ink:#13203A; --muted:#58647D; --line:#D3DAE6; --tint:#E7EDF6;
+  --obj:#0B8686; --att:#C95F06; --res:#2E3192; --env:#C0245B; --ok:#1B7A52;
+  --display:"Spectral",Georgia,"Times New Roman",serif;
+  --body:"Source Sans 3",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0B1120; --surface:#121A2D; --ink:#E7ECF6; --muted:#9AA6BF; --line:#26324D; --tint:#1A2540;
+    --obj:#46CFC6; --att:#F5A04D; --res:#A3AAFF; --env:#FF7BA9; --ok:#5BD59B; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0B1120; --surface:#121A2D; --ink:#E7ECF6; --muted:#9AA6BF; --line:#26324D; --tint:#1A2540;
+  --obj:#46CFC6; --att:#F5A04D; --res:#A3AAFF; --env:#FF7BA9; --ok:#5BD59B; color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;
+  padding-left:max(14px,env(safe-area-inset-left,0px));padding-right:max(14px,env(safe-area-inset-right,0px));padding-block:22px 40px}
+.wrap{max-width:900px;margin:0 auto;display:flex;flex-direction:column;gap:32px}
+h1,h2,h3{font-family:var(--display);font-weight:500;text-wrap:balance;margin:0;letter-spacing:-.01em}
+h1{font-size:clamp(30px,5.4vw,44px);line-height:1.06}
+h2{font-size:clamp(23px,3.4vw,29px);line-height:1.15}
+h3{font-size:19px;line-height:1.25}
+p{margin:0}
+sub{font-size:.72em;line-height:0}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.lede{font-size:17.5px;max-width:64ch}
+.intro{max-width:66ch;color:var(--muted)}
+header{display:flex;flex-direction:column;gap:12px}
+section{display:flex;flex-direction:column;gap:18px;min-width:0}
+.sym{font-family:var(--mono);font-size:.92em;white-space:nowrap}
+.k-obj{color:var(--obj)} .k-att{color:var(--att)} .k-res{color:var(--res)} .k-env{color:var(--env)}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px;display:flex;flex-direction:column;gap:14px;min-width:0}
+.bar{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;justify-content:space-between}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--bg)}
+.seg button{font:inherit;font-size:14px;color:var(--muted);background:transparent;border:0;padding:8px 13px;cursor:pointer}
+.seg button+button{border-left:1px solid var(--line)}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--surface)}
+button:focus-visible,input:focus-visible{outline:2px solid var(--res);outline-offset:2px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{font:inherit;font-size:14px;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:7px 13px;cursor:pointer;display:inline-flex;gap:8px;align-items:center}
+.chip i{font-style:normal;font-family:var(--mono);font-size:11px;color:var(--muted)}
+.chip[aria-pressed="true"]{background:var(--res);border-color:var(--res);color:#fff}
+.chip[aria-pressed="true"] i{color:#fff;opacity:.8}
+.chip:disabled{cursor:default}
+.chip.reached:not([aria-pressed="true"]){border-color:var(--res)}
+.btn{font:inherit;font-size:14px;color:var(--ink);background:var(--surface);border:1px solid var(--ink);border-radius:8px;padding:8px 16px;cursor:pointer}
+.btn.primary{background:var(--ink);color:var(--surface)}
+.btn.ghost{border-color:var(--line);color:var(--muted)}
+.scope-wrap{position:relative;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--bg)}
+canvas{display:block;width:100%}
+.playbtn{position:absolute;right:8px;bottom:8px;font:inherit;font-size:12px;background:var(--surface);color:var(--muted);border:1px solid var(--line);border-radius:6px;padding:4px 10px;cursor:pointer}
+.box{border:1px solid var(--line);border-radius:8px;background:var(--bg);padding:10px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.box .cap{font-size:12px;color:var(--muted)}
+.meters{display:flex;flex-direction:column;gap:9px}
+.meter{display:grid;grid-template-columns:1fr auto;gap:2px 8px;font-size:13px;align-items:baseline}
+.meter b{font-weight:600}
+.meter output{font-family:var(--mono);font-size:12px;color:var(--muted)}
+.meter .track{grid-column:1/-1;height:7px;background:var(--line);border-radius:4px;overflow:hidden}
+.meter .fill{height:100%;width:0;background:var(--res);border-radius:4px}
+.meter.f2 .fill{background:var(--env)} .meter.f3 .fill{background:var(--obj)}
+.slider{display:flex;align-items:center;gap:10px;flex:1 1 280px;min-width:0}
+.slider label{font-size:14px;min-width:0}
+.slider input[type=range]{flex:1;min-width:60px;accent-color:var(--res)}
+.slider small{color:var(--muted);font-size:12px;white-space:nowrap}
+.slider output{font-family:var(--mono);font-size:12.5px;color:var(--muted);min-width:46px;text-align:right}
+.readout{font-size:14px;color:var(--muted)}
+.readout b{color:var(--ink)}
+.tag{font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);border:1px solid var(--line);border-radius:4px;padding:2px 6px}
+.note{font-size:13px;color:var(--muted);max-width:70ch}
+.balance{background:var(--tint);border-radius:10px;padding:16px 18px;display:flex;flex-direction:column;gap:8px;max-width:78ch}
+footer{font-size:13px;color:var(--muted);max-width:76ch;border-top:1px solid var(--line);padding-top:12px}
+@media (max-width:640px){.panel{padding:12px}.wrap{gap:26px}}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
+
+[hidden]{display:none!important}
+:root{--c-tam:var(--res);--c-raj:var(--att);--c-mix:var(--muted)}
+nav.parts{display:flex;flex-wrap:wrap;gap:8px 20px;margin-top:4px}
+nav.parts a{color:var(--ink);text-decoration:none;border-bottom:1px solid var(--line);padding-bottom:2px;font-size:15px}
+nav.parts a:hover,nav.parts a:focus-visible{border-color:var(--res);color:var(--res)}
+a:focus-visible,.nb:focus-visible,.gb:focus-visible,.ob:focus-visible,.sb:focus-visible,.opt:focus-visible{outline:2px solid var(--res);outline-offset:2px}
+.scene{border-left:3px solid var(--line);padding:2px 0 2px 12px;display:flex;flex-direction:column;gap:6px}
+.scene .tag{align-self:flex-start}
+.scene .frame{font-size:15px;color:var(--muted)}
+.quote{font-family:var(--display);font-size:19px;line-height:1.45}
+.msg{min-height:1.5em;font-size:15px}
+.fbbox{border-top:1px solid var(--line);padding-top:12px;display:flex;flex-direction:column;gap:8px;min-height:5.5em}
+.fbbox:empty{min-height:0;border-top:0;padding-top:0}
+.fbbox .verdict{font-family:var(--display);font-size:19px}
+.fbbox .ref{font-family:var(--mono);font-size:11px;color:var(--muted)}
+.btn.small{font-size:13px;padding:5px 11px}
+.btn.ghost[aria-pressed="true"]{border-color:var(--res);color:var(--res)}
+.step{display:flex;flex-direction:column;gap:10px}
+.chip.done:not([aria-pressed="true"]){border-color:var(--ok)}
+.chip.done:not([aria-pressed="true"]) i{color:var(--ok)}
+/* nine buttons */
+.nine{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.nb{font:inherit;text-align:left;border:1.5px solid var(--line);border-radius:9px;background:var(--bg);color:var(--ink);padding:8px 10px;cursor:pointer;display:flex;flex-direction:column;gap:2px;min-width:0}
+.nb b{font-family:var(--display);font-weight:500;font-size:17px;line-height:1.2;overflow-wrap:anywhere}
+.nb i{font-style:normal;font-family:var(--mono);font-size:10.5px;color:var(--muted)}
+.nb small{font-size:12.5px;color:var(--muted);line-height:1.3;display:none}
+.nine.gloss .nb small{display:block}
+.nb.no{border-style:dashed;opacity:.55}
+.nb.yes{border-color:var(--ok);box-shadow:0 0 0 1px var(--ok);background:var(--surface)}
+.nb:disabled{cursor:default}
+.guna{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.gb{font:inherit;text-align:left;border:1.5px solid var(--line);border-top:4px solid var(--line);border-radius:9px;background:var(--bg);color:var(--ink);padding:9px 11px;cursor:pointer;display:flex;flex-direction:column;gap:3px;min-width:0}
+.gb b{font-family:var(--display);font-weight:500;font-size:18px}
+.gb small{font-size:12.5px;color:var(--muted);line-height:1.35}
+.gb[data-g="tamasic"]{border-top-color:var(--c-tam)} .gb[data-g="tamasic"] b{color:var(--c-tam)}
+.gb[data-g="rajasic"]{border-top-color:var(--c-raj)} .gb[data-g="rajasic"] b{color:var(--c-raj)}
+.gb[data-g="mixed"]{border-top-color:var(--c-mix)}
+.gb.no{opacity:.55;border-style:dashed;border-top-style:solid}
+.gb.yes{box-shadow:0 0 0 2px var(--ok);background:var(--surface)}
+.gb:disabled{cursor:default}
+.reveal{background:var(--tint);border-radius:10px;padding:14px 16px;display:grid;grid-template-columns:auto minmax(0,1fr);gap:6px 14px;font-size:15px}
+.reveal dt{font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding-top:3px}
+.reveal dd{margin:0}
+.reveal .why{grid-column:1/-1;border-top:1px solid var(--line);padding-top:8px;margin-top:4px}
+.reveal .safe{grid-column:1/-1;border-left:3px solid var(--env);padding-left:10px;font-weight:600}
+.gtag{font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;border-radius:4px;padding:2px 7px;border:1px solid currentColor}
+.gtag.tamasic{color:var(--c-tam)} .gtag.rajasic{color:var(--c-raj)} .gtag.mixed{color:var(--c-mix)}
+.tbl{display:grid;grid-template-columns:auto auto minmax(0,1.1fr) minmax(0,1.6fr) auto;font-size:13.5px;border-top:1px solid var(--line)}
+.tbl>div{padding:7px 8px;border-bottom:1px solid var(--line);min-width:0}
+.tbl .h{font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.tbl .nm{font-family:var(--display);font-size:15.5px;overflow-wrap:anywhere}
+/* signs */
+.obs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.ob{font:inherit;font-size:15px;text-align:left;border:1.5px solid var(--line);border-radius:9px;background:var(--bg);color:var(--ink);padding:9px 11px;cursor:pointer;min-width:0;font-family:var(--display)}
+.ob[aria-pressed="true"]{background:var(--surface);box-shadow:0 0 0 2px var(--ink)}
+.ob.placed{opacity:.5;border-style:dashed}
+.ob.wrong{animation:shake .35s}
+@keyframes shake{25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
+.signs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.sb{font:inherit;text-align:left;border:1.5px dashed var(--line);border-top:4px solid var(--env);border-radius:9px;background:transparent;color:var(--ink);padding:9px 10px;cursor:pointer;display:flex;flex-direction:column;gap:4px;min-width:0;min-height:96px}
+.sb b{font-family:var(--display);font-weight:500;font-size:17px;overflow-wrap:anywhere;color:var(--env)}
+.sb small{font-size:12.5px;color:var(--muted);line-height:1.35}
+.sb .got{font-size:12.5px;background:var(--tint);border-radius:6px;padding:3px 7px;font-family:var(--display)}
+.q{display:flex;flex-direction:column;gap:10px;border-top:1px solid var(--line);padding-top:12px}
+.qq{font-family:var(--display);font-size:18px}
+.chip.no{opacity:.55;border-style:dashed}
+.chip.yes{border-color:var(--ok);box-shadow:0 0 0 1px var(--ok)}
+/* first practice */
+.opts{display:flex;flex-direction:column;gap:8px}
+.opt{font:inherit;font-size:15px;text-align:left;border:1.5px solid var(--line);border-radius:9px;background:var(--bg);color:var(--ink);padding:9px 12px;cursor:pointer;display:flex;flex-direction:column;gap:2px}
+.opt small{font-size:12.5px;color:var(--muted)}
+.opt.no{opacity:.55;border-style:dashed}
+.opt.yes{border-color:var(--ok);box-shadow:0 0 0 1px var(--ok);background:var(--surface)}
+.opt:disabled{cursor:default}
+.then{background:var(--tint);border-radius:10px;padding:12px 14px;font-size:15px;display:flex;flex-direction:column;gap:6px}
+.then b{font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:400}
+/* part III */
+.effects{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;counter-reset:ef}
+.effects li{border:1px solid var(--line);border-radius:8px;padding:8px 10px;font-size:14px;color:var(--muted);background:var(--bg);counter-increment:ef}
+.effects li::before{content:counter(ef) ". ";font-family:var(--mono);font-size:11px}
+.effects li.on{color:var(--ink);border-color:var(--obj);background:var(--surface)}
+.two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.pane{border:1px solid var(--line);border-radius:9px;padding:12px;display:flex;flex-direction:column;gap:8px;min-width:0;background:var(--bg)}
+.pane .pt{font-size:14px;color:var(--muted)}
+.pstate{font-family:var(--display);font-size:17px}
+.nineDots{display:flex;flex-wrap:wrap;gap:6px;min-height:150px;align-content:center;justify-content:center}
+.nineDots span{font-family:var(--display);font-size:14px;padding:3px 8px;border-radius:999px;border:1px solid var(--env);color:var(--env);transition:opacity .9s ease,filter .9s ease}
+.jit span{animation:jit .22s infinite alternate}
+.nineDots span:nth-child(2n){animation-delay:-.1s}
+.nineDots span:nth-child(3n){animation-duration:.31s}
+@keyframes jit{from{transform:translate(-1.5px,1px)}to{transform:translate(1.5px,-1px)}}
+#rCan{height:150px}
+.pfoot{font-size:13px;color:var(--muted);border-top:1px solid var(--line);padding-top:10px;max-width:76ch}
+@media (max-width:700px){
+  .nine{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .guna{grid-template-columns:minmax(0,1fr)}
+  .obs,.signs{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .effects{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .two{grid-template-columns:minmax(0,1fr)}
+  .tbl{grid-template-columns:minmax(0,1fr) auto}
+  .tbl .h,.tbl .c-n,.tbl .c-gl,.tbl .c-sig{display:none}
+  .tbl .nm,.tbl .c-g{border-bottom:0;padding-bottom:0}
+  .tbl .c-sigm{display:block!important;grid-column:1/-1;color:var(--muted);font-size:13px;border-bottom:1px solid var(--line)}
+  .quote{font-size:17.5px}
+}
+.tbl .c-sigm{display:none}
+@media (prefers-reduced-motion: reduce){
+  .jit span{animation:none}
+  .nineDots span{transition:none}
+  .ob.wrong{animation:none}
+}
+body[data-part] header{display:none}
+body[data-part="1"] #s2,body[data-part="1"] #s3,
+body[data-part="2"] #s1,body[data-part="2"] #s3,
+body[data-part="3"] #s1,body[data-part="3"] #s2{display:none}
+body[data-part]{padding-block:10px 18px}
+.sb .got{display:inline-block;align-self:flex-start;line-height:1.3}
+.btn:disabled{opacity:.45;cursor:default}
+
+</style></head><body>
+<div class="wrap">
+<header>
+  <div class="eyebrow">The Mind in the Light of Modern and Spiritual Sciences · Lesson 5.3</div>
+  <h1>The Antarāya Clinic</h1>
+  <p class="lede">Patañjali names nine ways the inner instrument can fail, four signs that arise with them, and one rise in the signal-to-noise ratio that dissolves them. Here you will meet nine invented practitioners, name what is going wrong for each, see what comes with it and where the lesson says to begin, and then watch why relief and realisation are not two goals.</p>
+  <nav class="parts" aria-label="Parts of this page"><a href="#s1">I. Name the obstacle</a><a href="#s2">II. What comes with it</a><a href="#s3">III. One rise, two readings</a></nav>
+</header>
+
+<section id="s1">
+  <h2>I. Name the obstacle</h2>
+  <p class="intro">YS 1.30 lists nine antarāyas, each a distinct failure-mode of the inner instrument with its own signature. Read what each practitioner says. Name the antarāya, then its dominant guṇa as the lesson’s table gives it. The practitioners are invented.</p>
+  <div class="panel" id="nx">
+    <div class="bar"><div class="chips" id="nCases" role="group" aria-label="Cases"></div></div>
+    <div class="scene" id="nScene"><span class="tag" id="nTag">Case 1 of 9</span><p class="frame" id="nFrame"></p><p class="quote" id="nQuote"></p></div>
+
+    <div class="step" id="nStep1">
+      <div class="bar"><span class="eyebrow">Step 1 · Which antarāya?</span><button class="btn ghost small" id="nGloss" aria-pressed="false">Show the lesson’s plain meanings</button></div>
+      <div class="nine" id="nNine" role="group" aria-label="The nine antarāyas"></div>
+    </div>
+    <div class="step" id="nStep2" hidden>
+      <span class="eyebrow">Step 2 · Which leaning?</span>
+      <div class="guna" id="nGuna" role="group" aria-label="Dominant guṇa"></div>
+    </div>
+    <div id="nMsg" class="msg fbbox" role="status" aria-live="polite"></div>
+    <div class="reveal" id="nReveal" hidden></div>
+    <div class="bar"><div class="chips"><button class="btn ghost" id="nShow">Show me</button><button class="btn ghost" id="nPrev">Previous case</button><button class="btn primary" id="nNext">Next case</button></div><button class="btn ghost" id="nReset">Start again</button></div>
+  </div>
+  <div class="panel" id="nTable" hidden>
+    <h3>The nine, as the lesson’s table gives them</h3>
+    <div class="tbl" id="nTbl" role="table" aria-label="The nine antarāyas"></div>
+    <p class="note">“Mixed” indicates an antarāya that can present with either tamasic or rajasic signature depending on the system; it is not a third guṇa-category (§3.5).</p>
+  </div>
+  <div class="balance">
+    <h3>Not a failure of will</h3>
+    <p>Each antarāya is a structural failure-mode: it names which component of the instrument is malfunctioning and how (§3.5). Read beside the Saṁyama Table, the Antarāya Table tells the practitioner what is going wrong; the Saṁyama Table tells them what comes right when the antarāya dissolves.</p>
+  </div>
+  <p class="pfoot">A learning aid, not an assessment. The practitioners are invented, and nothing here diagnoses anyone. Illness belongs first with a doctor; distress with a qualified professional or someone you trust.</p>
+</section>
+
+<section id="s2">
+  <h2>II. What comes with it</h2>
+  <p class="intro">YS 1.31 names four signs that arise together with the distractions. Then §7 says where a failing Saṁyama has to begin. Work through both.</p>
+
+  <div class="panel" id="sg">
+    <h3>The four co-arising signs</h3>
+    <p class="note">§3.6 describes a practitioner like this: “sitting is uncomfortable, mood is low, the body will not settle, and the breath is short and ragged.” Tap one observation, then the sign it shows.</p>
+    <div class="obs" id="sObs" role="group" aria-label="Observations"></div>
+    <div class="signs" id="sSigns" role="group" aria-label="The four signs"></div>
+    <div id="sMsg" class="msg fbbox" role="status" aria-live="polite"><p class="verdict">Four observations, four signs.</p><p>Choose an observation to begin.</p></div>
+    <div class="q" id="sQ" hidden>
+      <p class="qq">These four signs arise with which antarāyas?</p>
+      <div class="chips" id="sQ1"></div>
+      <p class="qq">And should the practitioner work on each sign separately?</p>
+      <div class="chips" id="sQ2"></div>
+      <div id="sQMsg" class="msg fbbox" role="status" aria-live="polite"></div>
+    </div>
+    <div class="bar"><span></span><div class="chips"><button class="btn ghost" id="sShow">Show me</button><button class="btn ghost" id="sReset">Start again</button></div></div>
+  </div>
+
+  <div class="panel" id="fx">
+    <h3>Where does this practitioner begin?</h3>
+    <p class="note">“The practitioner whose Saṁyama is failing cannot simply try harder. The failure has structural causes, and the structure tells us where to begin” (§7). Choose a case, read it again, and choose what comes first.</p>
+    <div class="chips" id="fCases" role="group" aria-label="Cases"></div>
+    <div class="scene" id="fScene"><span class="tag" id="fTag"></span><p class="frame" id="fFrame"></p><p class="quote" id="fQuote"></p></div>
+    <div class="opts" id="fOpts" role="group" aria-label="What comes first"></div>
+    <div id="fMsg" class="msg fbbox" role="status" aria-live="polite"></div>
+    <div class="then" id="fThen" hidden></div>
+    <div class="bar"><span class="note" id="fPro"></span><div class="chips"><button class="btn ghost" id="fShow">Show me</button><button class="btn primary" id="fNext">Next case</button></div></div>
+  </div>
+  <div class="balance">
+    <h3>Rhythm prepares; attention crosses</h3>
+    <p>“In both presentations, the principle is the same: Saṁyama begins where the rhythm-and-sound family of Lesson 5.2 has prepared the ground. Once the threshold is crossed, japa with artha-bhāvanam, Patañjali’s prescribed practice, is the natural entry into dhāraṇā” (§7).</p>
+  </div>
+  <p class="pfoot">A learning aid, not an assessment. It shows the lesson’s reasoning on invented cases and gives no personal advice. Illness comes first to medical care, not to practice.</p>
+</section>
+
+<section id="s3">
+  <h2>III. One rise, two readings</h2>
+  <p class="intro">YS 1.29: “Thence comes the realisation of the inward-turned awareness, and the dissolution of the obstacles.” Before you watch it, decide what you think the sūtra is saying.</p>
+  <div class="panel" id="rx">
+    <div class="scene"><span class="tag">An invented practitioner</span><p class="quote">“First I want the restlessness and the dullness to go. Realisation can be a separate project, later.”</p></div>
+    <p class="qq">What does YS 1.29 say about these two?</p>
+    <div class="opts" id="rQ" role="group" aria-label="Your reading"></div>
+    <div id="rMsg" class="msg fbbox" role="status" aria-live="polite"></div>
+  </div>
+  <div class="panel" id="rv">
+    <div class="bar"><span class="eyebrow">The YS 1.28 procedure, its four effects accumulating</span><span class="tag" id="rLevel">n(t): high</span></div>
+    <ol class="effects" id="rSteps"></ol>
+    <div class="two">
+      <div class="pane"><span class="eyebrow">(a) antarāya-abhāva</span><p class="pt">The disturbances lose their excitation and dissipate.</p><div class="nineDots" id="rNine" aria-hidden="true"></div><p class="pstate" id="rA">The nine are active.</p></div>
+      <div class="pane"><span class="eyebrow">(b) pratyak-cetana-adhigama</span><p class="pt">The substrate of awareness becomes perceptible.</p><div class="scope-wrap"><canvas id="rCan" height="150" aria-hidden="true"></canvas></div><p class="pstate" id="rB">Masked by noise.</p></div>
+    </div>
+    <div class="bar"><div class="chips"><button class="btn primary" id="rStep">Let the next effect accumulate</button><button class="btn" id="rOnly">Dissolve only the obstacles</button><button class="btn ghost" id="rReset">Start again</button></div></div>
+    <div id="rvMsg" class="msg fbbox" role="status" aria-live="polite"><p class="verdict">One control on this panel.</p><p>There is a single term being changed: n(t), the noise of the inner instrument. Let the four effects accumulate one at a time and watch both sides.</p></div>
+  </div>
+  <div class="balance">
+    <h3>Patañjali’s ca</h3>
+    <p>“The practitioner is not asked to choose between symptom-relief and self-realisation. The practice that reduces anxiety, dullness, doubt, and instability is the practice that makes the substrate perceptible. The same procedure raises SNR; raised SNR has both faces. There is no trade-off, no detour. That is what Patañjali’s ca is doing” (§3.4).</p>
+  </div>
+  <p class="pfoot">A learning aid, not an assessment. A qualitative picture of the lesson’s reading of YS 1.29; it measures nothing.</p>
+</section>
+</div>
+
+<script>
+window.Core=(function(){
+"use strict";
+var TAU=Math.PI*2;
+try{var q=new URLSearchParams(location.search).get("theme");if(q==="light"||q==="dark")document.documentElement.setAttribute("data-theme",q)}catch(e){}
+function lerp(a,b,t){return a+(b-a)*t}
+function clamp(x,a,b){return Math.max(a,Math.min(b,x))}
+function el(id){return document.getElementById(id)}
+var col={},subs=[];
+function readColors(){
+  var cs=getComputedStyle(document.documentElement);
+  ["--bg","--surface","--ink","--muted","--line","--tint","--obj","--att","--res","--env","--ok"].forEach(function(k){col[k]=cs.getPropertyValue(k).trim()});
+  subs.forEach(function(f){try{f()}catch(e){}});
+}
+readColors();
+try{window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change",readColors)}catch(e){}
+new MutationObserver(readColors).observe(document.documentElement,{attributes:true,attributeFilter:["data-theme"]});
+function onTheme(f){subs.push(f)}
+var dpr=Math.max(1,Math.min(2,window.devicePixelRatio||1));
+function fit(c){
+  var w=c.clientWidth,h=c.clientHeight;
+  if(!w||!h)return null;
+  var bw=Math.round(w*dpr),bh=Math.round(h*dpr);
+  if(c.width!==bw||c.height!==bh){c.width=bw;c.height=bh}
+  var g=c.getContext("2d");g.setTransform(dpr,0,0,dpr,0,0);return {g:g,w:w,h:h};
+}
+var FONT="500 11.5px 'Source Sans 3',system-ui,sans-serif";
+function label(g,t,x,y,color,align,pill){
+  g.font=FONT;g.textAlign=align||"left";g.textBaseline="alphabetic";
+  if(pill){var w=g.measureText(t).width,x0=(align==="right")?x-w:(align==="center"?x-w/2:x);
+    g.save();g.globalAlpha=.82;g.fillStyle=col["--surface"];g.fillRect(x0-5,y-12,w+10,17);g.restore()}
+  g.fillStyle=color;g.fillText(t,x,y)}
+/* ring-buffer trace: arr, head index, length N */
+function trace(g,arr,head,N,x0,w,cy,sc,color,lw,alpha,dash){
+  g.save();g.globalAlpha=alpha==null?1:alpha;g.strokeStyle=color;g.lineWidth=lw;g.lineJoin="round";if(dash)g.setLineDash(dash);
+  g.beginPath();
+  for(var i=0;i<N;i++){var v=arr[(head+i)%N];var x=x0+w*i/(N-1),y=cy-v*sc;if(i)g.lineTo(x,y);else g.moveTo(x,y)}
+  g.stroke();g.restore();
+}
+/* shaded envelope band around a lane centre */
+function envelope(g,E,head,N,W,cy,sc,color,alpha){
+  g.save();g.globalAlpha=alpha;
+  g.beginPath();
+  for(var i=0;i<N;i++){var e=E[(head+i)%N],x=W*i/(N-1),y=cy-e*sc;if(i)g.lineTo(x,y);else g.moveTo(x,y)}
+  for(var j=N-1;j>=0;j--){var e2=E[(head+j)%N],x2=W*j/(N-1);g.lineTo(x2,cy+e2*sc)}
+  g.closePath();g.fillStyle=color;g.globalAlpha=.09*alpha;g.fill();g.restore();
+  g.save();g.globalAlpha=alpha;g.strokeStyle=color;g.lineWidth=1.6;g.setLineDash([6,4]);
+  [1,-1].forEach(function(sg){g.beginPath();for(var i2=0;i2<N;i2++){var ee=E[(head+i2)%N]*sg,xx=W*i2/(N-1),yy=cy-ee*sc;if(i2)g.lineTo(xx,yy);else g.moveTo(xx,yy)}g.stroke()});
+  g.restore();
+}
+return {TAU:TAU,lerp:lerp,clamp:clamp,el:el,col:col,onTheme:onTheme,fit:fit,label:label,trace:trace,envelope:envelope,FONT:FONT};
+})();
+
+</script>
+<script>
+(function(){
+"use strict";
+var $=Core.el;
+try{var pt=new URLSearchParams(location.search).get("part");if(pt==="1"||pt==="2"||pt==="3")document.body.setAttribute("data-part",pt)}catch(e){}
+var RM=false;try{RM=window.matchMedia("(prefers-reduced-motion: reduce)").matches}catch(e){}
+function h(tag,cls,html){var e=document.createElement(tag);if(cls)e.className=cls;if(html!=null)e.innerHTML=html;return e}
+function fb(box,v,p,ref){box.innerHTML='<p class="verdict">'+v+'</p>'+(p?'<p>'+p+'</p>':'')+(ref?'<p class="ref">'+ref+'</p>':'')}
+
+/* The nine, verbatim from the lesson's YS 1.30 table (§3.5) */
+var A=[
+ {k:"vyadhi",n:"vyādhi",pl:"physical disease, illness",sig:"G(t) compromised; the autonomic gain destabilised by bodily disturbance",g:"tamasic"},
+ {k:"styana",n:"styāna",pl:"mental dullness, lack of mental clarity",sig:"h(t) sluggish; ψₘ slow to engage; gain low",g:"tamasic"},
+ {k:"samsaya",n:"saṁśaya",pl:"doubt, oscillation between alternatives",sig:"buddhi destabilised; vacillating verdicts; fₘ unable to fix",g:"rajasic"},
+ {k:"pramada",n:"pramāda",pl:"heedlessness, carelessness, failure to maintain attention",sig:"ψₘ failing its post; intermittent dhāraṇā collapse",g:"mixed"},
+ {k:"alasya",n:"ālasya",pl:"sloth, inertia, lack of energy for practice",sig:"G(t) chronically low; system unable to engage",g:"tamasic"},
+ {k:"avirati",n:"avirati",pl:"non-restraint; sense-attachment; ψₘ pulled out by ψₓ",sig:"external signal consumes ψₘ; pratyāhāra cannot establish",g:"rajasic"},
+ {k:"bhranti",n:"bhrānti-darśana",pl:"false perception, distorted view",sig:"h(t) badly distorted; the filter producing systematic misreadings",g:"rajasic"},
+ {k:"alabdha",n:"alabdha-bhūmikatva",pl:"non-attainment of stages; Saṁyama not consolidating",sig:"the practice not landing; no stable fₘ-locking achieved",g:"mixed"},
+ {k:"anava",n:"anavasthitatva",pl:"instability; unable to hold a stage once gained",sig:"fₘ-lock unstable; Lift 2 not consolidating",g:"rajasic"}
+];
+var MIXED='“Mixed” indicates an antarāya that can present with either tamasic or rajasic signature depending on the system; it is not a third guṇa-category (§3.5).';
+
+/* Invented vignettes, one per antarāya, in the lesson's order. cue: shown after a wrong choice. */
+var V=[
+ {fr:"A practitioner has been unwell for several days, with a fever and aching limbs.",q:"“When I sit, the body pulls everything to it. The ache is all I can attend to, and the breath keeps catching.”",
+  cue:"Begin with the body: something in it is not well.",
+  why:"The lesson places vyādhi in G(t), the autonomic gain, destabilised by bodily disturbance."},
+ {fr:"A practitioner sits after a full night’s sleep, rested in body and willing to practise.",q:"“The mind is foggy. The object is there, but nothing in me takes hold of it. It is like trying to think through wool.”",
+  cue:"The body is rested and the will is there; it is the mind that will not come clear.",
+  why:"Willing, but the attention-wave is slow to engage and the mind lacks clarity: h(t) sluggish, gain low. §7 names styāna among the antarāyas operative in a tamasic system."},
+ {fr:"A practitioner has tried three methods this month and keeps a list of a fourth.",q:"“Halfway through a sit I start asking whether this is the right object, whether another method would be better. I switch, then switch back.”",
+  cue:"Two alternatives, and the verdict keeps swinging between them.",
+  why:"The discriminating faculty cannot settle its verdict, so fₘ has nothing fixed to lock to."},
+ {fr:"A practitioner sits with every intention of staying with the chosen object.",q:"“Then I notice that a long while has gone and I was not there at all. Nothing pulled me away. I simply stopped keeping watch.”",
+  cue:"Nothing pulled the attention away; the watch was simply not kept.",
+  why:"The attention-wave fails its post and dhāraṇā collapses intermittently. Nothing outside is consuming it; it is heedlessness."},
+ {fr:"A practitioner has a cushion ready and a time set aside every morning.",q:"“I keep postponing the sit. When I do sit down, I feel heavy before I begin, as if there is no energy for practice at all.”",
+  cue:"The difficulty starts before the sit: there is no energy to engage at all.",
+  why:"G(t) chronically low: the system cannot summon the energy to engage. §7 names ālasya with styāna as operative in a tamasic system."},
+ {fr:"A practitioner keeps the phone beside the cushion.",q:"“In the middle of the sit I reach for it to check messages. Every sound outside, every pull towards something pleasant, takes me with it.”",
+  cue:"Something outside keeps taking the attention with it.",
+  why:"The external signal consumes the attention-wave, so pratyāhāra cannot establish. §7 names avirati with anavasthitatva as dominating a rajasic system."},
+ {fr:"A practitioner keeps a journal of every sit.",q:"“I wrote that a passing calm was a great attainment, and that a restless day proved I was getting worse. Reading back, I see I read both the wrong way round, and I keep doing it.”",
+  cue:"The attention is not the problem here; the reading of what happens is systematically off.",
+  why:"The filter h(t) is badly distorted, producing systematic misreadings of what arises."},
+ {fr:"A practitioner has sat every day for a long time, keeping the form faithfully.",q:"“The routine is solid, but nothing settles. I have never felt the attention hold steady on the object. No stage ever seems to take.”",
+  cue:"Faithful practice, but no stage has ever been reached.",
+  why:"The practice is not landing: no stable fₘ-locking has been achieved, so Saṁyama does not consolidate."},
+ {fr:"A practitioner has had sits in which the attention flowed steadily for a long stretch.",q:"“Then it is gone, and the next day I cannot find it again. What I reach does not stay.”",
+  cue:"A stage was reached. The trouble is keeping it.",
+  why:"The fₘ-lock is unstable and Lift 2 does not consolidate: the stage is gained, then lost. §7 names anavasthitatva with avirati as dominating a rajasic system."}
+];
+var GUNA={
+ tamasic:{t:"tamasic",d:"heavy, dull, sleepy, finding it difficult to summon energy (§7)"},
+ rajasic:{t:"rajasic",d:"driven, fragmented, thought-flooded, unable to sit still (§7)"},
+ mixed:{t:"mixed",d:"can present either way, depending on the system (§3.5)"}
+};
+
+/* ---------------- Part I ---------------- */
+var st1=V.map(function(){return {name:false,guna:false,wrongN:{},wrongG:{}}});
+var cur=0;
+var nCases=$("nCases"),nNine=$("nNine"),nGuna=$("nGuna"),nMsg=$("nMsg"),nRev=$("nReveal");
+V.forEach(function(v,i){var b=h("button","chip",'Case '+(i+1));b.setAttribute("aria-pressed","false");b.addEventListener("click",function(){go(i)});nCases.appendChild(b)});
+A.forEach(function(a,i){var b=h("button","nb",'<b>'+a.n+'</b><small>'+a.pl+'</small>');b.dataset.i=i;b.addEventListener("click",function(){pickN(i)});nNine.appendChild(b)});
+["tamasic","rajasic","mixed"].forEach(function(g){var b=h("button","gb",'<b>'+GUNA[g].t+'</b><small>'+GUNA[g].d+'</small>');b.dataset.g=g;b.addEventListener("click",function(){pickG(g)});nGuna.appendChild(b)});
+$("nGloss").addEventListener("click",function(){var on=this.getAttribute("aria-pressed")!=="true";this.setAttribute("aria-pressed",on?"true":"false");nNine.classList.toggle("gloss",on);this.textContent=on?"Hide the plain meanings":"Show the lesson’s plain meanings"});
+
+function go(i){cur=i;render1();}
+function render1(){
+  var s=st1[cur],v=V[cur],a=A[cur];
+  [].forEach.call(nCases.children,function(b,i){b.setAttribute("aria-pressed",i===cur?"true":"false");b.classList.toggle("done",st1[i].guna)});
+  $("nTag").textContent="Case "+(cur+1)+" of 9";$("nFrame").textContent=v.fr;$("nQuote").textContent=v.q;
+  [].forEach.call(nNine.children,function(b,i){b.classList.toggle("yes",s.name&&i===cur);b.classList.toggle("no",!!s.wrongN[i]&&!(s.name&&i===cur));b.disabled=s.name});
+  $("nStep2").hidden=!s.name;
+  [].forEach.call(nGuna.children,function(b){var g=b.dataset.g;b.classList.toggle("yes",s.guna&&g===a.g);b.classList.toggle("no",!!s.wrongG[g]&&!(s.guna&&g===a.g));b.disabled=s.guna});
+  if(!s.name)fb(nMsg,"What is going wrong for this practitioner?","Choose one of the nine. The plain meanings from the lesson’s table are there if you want them.");
+  else if(!s.guna)fb(nMsg,"Yes: "+a.n+", “"+a.pl+".”","Now its dominant guṇa, as the lesson’s table gives it.","§3.5 · YS 1.30");
+  else nMsg.innerHTML="";
+  nRev.hidden=!s.guna;
+  if(s.guna)showReveal();
+  $("nPrev").disabled=cur===0;$("nNext").textContent=cur===8?"See all nine":"Next case";
+  $("nShow").hidden=s.guna;
+  $("nTable").hidden=!st1.every(function(x){return x.guna});
+}
+function showReveal(){
+  var a=A[cur],v=V[cur];
+  var html='<dt>Antarāya</dt><dd><b>'+(cur+1)+'. '+a.n+'</b>: '+a.pl+'</dd>'+
+   '<dt>Signature</dt><dd>'+a.sig+'</dd>'+
+   '<dt>Dominant guṇa</dt><dd><span class="gtag '+a.g+'">'+a.g+'</span></dd>'+
+   '<dd class="why">'+v.why+(a.g==="mixed"?' '+MIXED:'')+'</dd>';
+  if(a.k==="vyadhi")html+='<dd class="safe">Illness comes first to medical care, not to practice. A practitioner who is unwell should see a doctor.</dd>';
+  nRev.innerHTML=html;
+}
+function pickN(i){
+  var s=st1[cur];if(s.name)return;
+  if(i===cur){s.name=true;render1();return}
+  s.wrongN[i]=true;render1();
+  fb(nMsg,"Not "+A[i].n+".","In the lesson’s table "+A[i].n+" is “"+A[i].pl+".” Listen again to what this practitioner says. "+V[cur].cue,"§3.5 · YS 1.30");
+}
+function pickG(g){
+  var s=st1[cur],a=A[cur];if(s.guna)return;
+  if(g===a.g){s.guna=true;render1();
+    fb(nMsg,a.n+": "+a.g+".",a.g==="mixed"?"Mixed is not a third guṇa. It means this antarāya can present with either signature, depending on the system.":"That is the leaning the lesson’s table gives.","§3.5");return}
+  s.wrongG[g]=true;render1();
+  var p=(g==="mixed")?"The lesson marks only two of the nine as mixed. This one has a dominant leaning. Look at its signature: "+a.sig+".":
+    (a.g==="mixed")?"The lesson does not give this one a single leaning. "+MIXED:
+    "Look at the signature the lesson gives: "+a.sig+". Which kind of system is that: "+GUNA[a.g==="tamasic"?"tamasic":"rajasic"].d.replace(/ \(§.*\)$/,"")+", or "+GUNA[a.g==="tamasic"?"rajasic":"tamasic"].d.replace(/ \(§.*\)$/,"")+"?";
+  fb(nMsg,"Not "+g+" in the lesson’s table.",p,"§3.5 · §7");
+}
+$("nShow").addEventListener("click",function(){var s=st1[cur];s.name=true;s.guna=true;render1();fb(nMsg,"Here it is: "+A[cur].n+", "+A[cur].g+".","Read the signature below, then go back to the practitioner’s words and find it there.","§3.5")});
+$("nPrev").addEventListener("click",function(){if(cur>0)go(cur-1)});
+$("nNext").addEventListener("click",function(){if(cur<8)go(cur+1);else{var all=st1.every(function(x){return x.guna});if(!all){var j=st1.findIndex(function(x){return !x.guna});go(j);fb(nMsg,"Case "+(j+1)+" is still open.","The table of all nine appears once every case is named.")}else $("nTable").scrollIntoView({behavior:RM?"auto":"smooth",block:"start"})}});
+$("nReset").addEventListener("click",function(){st1=V.map(function(){return {name:false,guna:false,wrongN:{},wrongG:{}}});go(0)});
+(function(){var t=$("nTbl");["#","Antarāya","Plain meaning","Wave-equation signature","Guṇa"].forEach(function(x){t.appendChild(h("div","h",x))});
+ A.forEach(function(a,i){t.appendChild(h("div","c-n",String(i+1)));t.appendChild(h("div","nm",a.n));t.appendChild(h("div","c-gl",a.pl));t.appendChild(h("div","c-sig",a.sig));t.appendChild(h("div","c-g",'<span class="gtag '+a.g+'">'+a.g+'</span>'));t.appendChild(h("div","c-sigm",a.pl+'. <br>'+a.sig))})})();
+render1();
+
+/* ---------------- Part II a: the four signs ---------------- */
+var SIGNS=[
+ {k:"duhkha",n:"duḥkha",d:"subjective experience of suffering, distress, pain"},
+ {k:"daur",n:"daurmanasya",d:"lowered mood, dejection (the affective signature)"},
+ {k:"anga",n:"aṅgamejayatva",d:"motor restlessness, fidgeting, inability to maintain bodily stillness (the somatic signature)"},
+ {k:"svasa",n:"śvāsa-praśvāsa",d:"disturbed respiratory rhythm, irregular inhalation and exhalation (the autonomic signature)"}
+];
+var OBS=[{t:"Sitting is uncomfortable",s:"duhkha"},{t:"Mood is low",s:"daur"},{t:"The body will not settle",s:"anga"},{t:"The breath is short and ragged",s:"svasa"}];
+var placed={},selO=-1,qa1=false,qa2=false;
+var sObs=$("sObs"),sSigns=$("sSigns"),sMsg=$("sMsg");
+OBS.forEach(function(o,i){var b=h("button","ob",o.t);b.setAttribute("aria-pressed","false");b.addEventListener("click",function(){if(placed[i])return;selO=(selO===i)?-1:i;renderS();if(selO>=0)fb(sMsg,"“"+o.t+".”","Which of the four signs is this?")});sObs.appendChild(b)});
+SIGNS.forEach(function(s){var b=h("button","sb",'<b>'+s.n+'</b><small>'+s.d+'</small><span class="gotw"></span>');b.dataset.k=s.k;b.addEventListener("click",function(){dropS(s.k)});sSigns.appendChild(b)});
+function dropS(k){
+  if(selO<0){fb(sMsg,"Choose an observation first.","Then tap the sign it shows.");return}
+  var o=OBS[selO],s=SIGNS.find(function(x){return x.k===k});
+  if(o.s===k){placed[selO]=true;fb(sMsg,"Yes: "+s.n+".","“"+o.t+"” is "+s.d.replace(/ \(.*\)$/,"")+(/\(/.test(s.d)?", "+s.d.match(/\((.*)\)/)[1]:"")+".","§3.6 · YS 1.31");selO=-1;}
+  else{var bt=sObs.children[selO];bt.classList.remove("wrong");void bt.offsetWidth;bt.classList.add("wrong");fb(sMsg,"Not "+s.n+".",s.n+" is the lesson’s word for "+s.d.replace(/ \(.*\)$/,"")+". Look for the sign that names “"+o.t.toLowerCase()+".”","§3.6")}
+  renderS();
+}
+function renderS(){
+  [].forEach.call(sObs.children,function(b,i){b.setAttribute("aria-pressed",selO===i?"true":"false");b.classList.toggle("placed",!!placed[i]);b.disabled=!!placed[i]});
+  [].forEach.call(sSigns.children,function(b){var k=b.dataset.k;var got=OBS.filter(function(o,i){return placed[i]&&o.s===k}).map(function(o){return '<span class="got">'+o.t+'</span>'}).join("");b.querySelector(".gotw").innerHTML=got});
+  var all=OBS.every(function(o,i){return placed[i]});
+  $("sQ").hidden=!all;
+  if(all&&!sMsg.dataset.done){sMsg.dataset.done="1";fb(sMsg,"All four signs are present.","When sitting is uncomfortable, mood is low, the body will not settle and the breath is short and ragged, “an antarāya is active and the four-fold signature confirms it” (§3.6). Two questions follow.","§3.6")}
+}
+var Q1=[{t:"Only vyādhi, the bodily one",ok:false,f:"The signs are bodily and affective, but they are not tied to illness. Patañjali calls them vikṣepa-saha-bhuvaḥ, “co-arising with the distractions”: they are the observable signatures by which the operation of any antarāya can be detected (§3.6, §3.7)."},
+ {t:"Only the tamasic ones",ok:false,f:"Restlessness and ragged breath are as likely in a driven system as dullness is in a heavy one. The lesson ties the signs to no single leaning: they are correlates by which the operation of any antarāya can be detected (§3.7)."},
+ {t:"Any antarāya that is active",ok:true,f:"They are four “physiological and affective correlates by which the operation of any antarāya can be detected” (§3.7), the way fever is an observable correlate of infection (§3.6)."}];
+var Q2=[{t:"Yes, one by one",ok:false,f:"The lesson says the opposite: “These are not additional obstacles to be addressed separately” (§3.6). Chasing them one by one treats the fever and leaves the infection."},
+ {t:"No: address the underlying antarāya, and the signs go with it",ok:true,f:"“The practitioner does not need to chase the four signs; the YS 1.28 procedure addresses the underlying antarāya, and the signs dissipate as the antarāya does” (§3.6)."}];
+function mkQ(box,arr,flag){arr.forEach(function(o){var b=h("button","chip",o.t);b.addEventListener("click",function(){
+  if(o.ok){[].forEach.call(box.children,function(x){x.disabled=true});b.classList.add("yes");if(flag===1)qa1=true;else qa2=true}else b.classList.add("no");
+  fb($("sQMsg"),o.ok?"That is the lesson’s reading.":"Not quite.",o.f,"§3.6 · §3.7")});box.appendChild(b)})}
+mkQ($("sQ1"),Q1,1);mkQ($("sQ2"),Q2,2);
+$("sShow").addEventListener("click",function(){OBS.forEach(function(o,i){placed[i]=true});selO=-1;renderS();
+  [["sQ1",Q1],["sQ2",Q2]].forEach(function(p){[].forEach.call($(p[0]).children,function(b,i){b.disabled=true;if(p[1][i].ok)b.classList.add("yes")})});
+  fb($("sQMsg"),"The four signs go with any active antarāya, and are not worked on separately.","They are “observable correlates of the antarāyas, the way fever is an observable correlate of infection”; the YS 1.28 procedure addresses the underlying antarāya and the signs dissipate as it does (§3.6).","§3.6")});
+$("sReset").addEventListener("click",function(){placed={};selO=-1;delete sMsg.dataset.done;fb(sMsg,"Four observations, four signs.","Choose an observation to begin.");
+  [$("sQ1"),$("sQ2")].forEach(function(bx){[].forEach.call(bx.children,function(b){b.disabled=false;b.classList.remove("yes","no")})});$("sQMsg").innerHTML="";renderS()});
+renderS();
+
+/* ---------------- Part II b: what comes first ---------------- */
+var OPT=[
+ {k:"try",t:"Try harder at dhāraṇā",d:"Sit longer, hold the object more firmly."},
+ {k:"act",t:"Rhythm and sound first: the activating practices of Lesson 5.2",d:"§7 names light movement, kīrtana or group japa, mālā-japa."},
+ {k:"coh",t:"Rhythm and sound first: coherent breathing (Lesson 5.2)",d:"§7: ten to fifteen minutes at the resonance frequency around 0.1 Hz."},
+ {k:"mauna",t:"Mauna: deepening pratyāhāra",d:"Withdrawing engagement from the inner monologue (§4)."},
+ {k:"med",t:"Medical care first",d:"Before any practice."}
+];
+var FC=V.map(function(v,i){return {tag:"Case "+(i+1)+" · "+A[i].n,fr:v.fr,q:v.q,i:i}});
+FC.push({tag:"Case 10 · the inner monologue",fr:"A practitioner sits in a quiet room with eyes closed. Nothing outside is calling.",q:"“The commentary never stops: planning, rehearsing, replaying the day. I am talking to myself the whole sit.”",i:9});
+function ans(i){if(i===0)return ["med"];if(i===9)return ["mauna"];var g=A[i].g;return g==="tamasic"?["act"]:g==="rajasic"?["coh"]:["act","coh"]}
+var TRY_T="“A system in tamasic anṛta … cannot productively begin with dhāraṇā. The amplitude G(t) is too low; the attention-wave arrives with too little strength to meet anything” (§7). Trying harder does not supply the missing strength.";
+var TRY_R="“Attempting dhāraṇā in such a system intensifies the oscillation rather than calming it” (§7). For a rajasic system, trying harder makes it worse.";
+function feedback(i,k){
+  var g=i<9?A[i].g:null,ok=ans(i).indexOf(k)>=0;
+  if(i===0){
+    if(k==="med")return [true,"Yes: medical care comes first.","This practitioner is ill. The lesson’s table places vyādhi in G(t), the gain destabilised by bodily disturbance, but a signature is not a treatment. Illness comes first to medical care, not to practice; this page suggests no practice for it."];
+    return [false,"Not first.","This practitioner has a fever and aching limbs. Whatever the lesson says about the gain, illness comes first to medical care, not to practice. "+(k==="try"?"Trying harder at dhāraṇā while unwell helps nothing.":"")];
+  }
+  if(i===9){
+    if(k==="mauna")return [true,"Yes: mauna.","“For the practitioner whose inner monologue is the principal disrupter, with endless mental commentary even in formal sitting, mauna is the deepening of pratyāhāra that is required … Not the silencing of the inner voice by force, but the starving of it by the patient withdrawal of consent” (§7). The inner monologue functions as ψₓ even though it is internally generated (§4)."];
+    if(k==="try")return [false,"Not trying harder.","The room is quiet, yet the self-generated input keeps feeding h(t) and disrupts dhāraṇā exactly as external signal would (§4). Holding harder does not touch the source."];
+    if(k==="med")return [false,"Nothing here suggests illness.","The lesson names a specific practice for this presentation in §7."];
+    return [false,"Look at where the input comes from.","Nothing outside is calling; the input is the practitioner’s own commentary. §7 names the deepening of pratyāhāra that this needs."];
+  }
+  if(k==="try")return [false,"Not trying harder.",(g==="tamasic"?TRY_T:g==="rajasic"?TRY_R:TRY_T+" And for a rajasic system: "+TRY_R)];
+  if(k==="med")return [false,"Not medical care first, for this case.","Nothing in what this practitioner says points to illness. The lesson’s table marks this antarāya "+g+"; §7 gives the sequence for a "+(g==="mixed"?"tamasic or rajasic":g)+" system."];
+  if(k==="mauna")return [false,"Not mauna first.","Mauna is for the practitioner “whose inner monologue is the principal disrupter” (§7). This practitioner’s trouble is "+A[i].pl+". §7 says both tamasic and rajasic systems begin with the rhythm-and-sound family of Lesson 5.2."];
+  if(g==="tamasic"){
+    if(k==="act")return [true,"Yes: the activating practices first.","“Such a system requires the activating practices of Lesson 5.2 first: light movement to wake G(t); kīrtana or group japa to provide the external rhythmic energy the isolated system cannot generate; mālā-japa to engage all three guṇas of the gross body. Only when the system has been brought to baseline by these means does dhāraṇā become a productive practice” (§7)."+(i===0?"":"")];
+    return [false,"Rhythm and sound, yes; but which quality?","The lesson’s table marks "+A[i].n+" tamasic. A tamasic system needs energy it cannot generate alone, so §7 begins with the activating practices; the steadying rhythm is for a driven, racing system."];
+  }
+  if(g==="rajasic"){
+    if(k==="coh")return [true,"Yes: coherent breathing first.","“Coherent breathing first, ten to fifteen minutes at the resonance frequency around 0.1 Hz, phase-locks the autonomic system and steadies the racing attention rhythm. Then dhāraṇā, on a chosen object, becomes possible” (§7)."+([5,8].indexOf(i)>=0?" §7 names "+A[i].n+" directly.":" §7 names anavasthitatva and avirati; the table marks "+A[i].n+" rajasic too, so the same reasoning applies.")];
+    return [false,"Rhythm and sound, yes; but which quality?","The lesson’s table marks "+A[i].n+" rajasic. Activating a driven system adds to the oscillation; §7 begins a rajasic system with coherent breathing."];
+  }
+  return [true,"Yes, either can be right: it depends on the system.",A[i].n+" is marked mixed. "+MIXED+" If this practitioner’s system is heavy and dull, §7 begins with the activating practices; if it is driven and fragmented, with coherent breathing. Either way, rhythm and sound come before dhāraṇā."];
+}
+var fcur=0,fdone={},fwrong={};
+var fCases=$("fCases"),fOpts=$("fOpts"),fMsg=$("fMsg"),fThen=$("fThen");
+FC.forEach(function(c,i){var b=h("button","chip",'<i>'+(i+1)+'</i>'+(i<9?A[i].n:"inner monologue"));b.setAttribute("aria-pressed","false");b.addEventListener("click",function(){fcur=i;renderF();});fCases.appendChild(b)});
+OPT.forEach(function(o){var b=h("button","opt",'<span>'+o.t+'</span><small>'+o.d+'</small>');b.dataset.k=o.k;b.addEventListener("click",function(){pickF(o.k)});fOpts.appendChild(b)});
+function pickF(k){
+  if(fdone[fcur])return;
+  var r=feedback(fcur,k);
+  if(r[0])fdone[fcur]=k;else{fwrong[fcur]=fwrong[fcur]||{};fwrong[fcur][k]=true}
+  renderF();fb(fMsg,r[1],r[2],"§7"+(fcur===9?" · §4":"")+(fcur<9?" · §3.5":""));
+}
+function thenText(i){
+  if(i===0)return "";
+  if(i===9)return '<b>Then</b><p>With the self-generated input withdrawn, “the inner instrument becomes available for dhāraṇā at a depth that an inwardly-talking mind cannot reach” (§4).</p>';
+  return '<b>Then</b><p>“Once the threshold is crossed, japa with artha-bhāvanam, Patañjali’s prescribed practice, is the natural entry into dhāraṇā. The mantra serves as both reference rhythm and dhāraṇā object” (§7).</p>';
+}
+function renderF(){
+  var c=FC[fcur],done=fdone[fcur],w=fwrong[fcur]||{},ok=ans(fcur);
+  [].forEach.call(fCases.children,function(b,i){b.setAttribute("aria-pressed",i===fcur?"true":"false");b.classList.toggle("done",!!fdone[i])});
+  $("fTag").textContent=c.tag;$("fFrame").textContent=c.fr;$("fQuote").textContent=c.q;
+  [].forEach.call(fOpts.children,function(b){var k=b.dataset.k;b.disabled=!!done;b.classList.toggle("yes",!!done&&(k===done||ok.indexOf(k)>=0));b.classList.toggle("no",!!w[k]&&!(done&&ok.indexOf(k)>=0))});
+  if(!done&&!Object.keys(w).length)fb(fMsg,"What comes first for this practitioner?","Choose one.");
+  fThen.hidden=!done||fcur===0;fThen.innerHTML=done?thenText(fcur):"";
+  var n=Object.keys(fdone).length;$("fPro").textContent=n+" of 10 cases worked through";
+  $("fShow").hidden=!!done;$("fNext").textContent=fcur===9?"Back to case 1":"Next case";
+}
+$("fShow").addEventListener("click",function(){var k=ans(fcur)[0];fdone[fcur]=k;var r=feedback(fcur,k);renderF();fb(fMsg,r[1],r[2],"§7")});
+$("fNext").addEventListener("click",function(){fcur=(fcur+1)%10;renderF()});
+renderF();
+
+/* ---------------- Part III: one rise, two readings ---------------- */
+var RQ=[
+ {t:"Two goals, one after the other: relief first, realisation later",ok:false,f:"Patañjali “insists they are not two stages, not two separate consequences, not means and end” (§3.4)."},
+ {t:"Two goals that need two different practices",ok:false,f:"The sūtra joins them with ca, “and”, as the fruit of one procedure, YS 1.28. “There is no trade-off, no detour” (§3.4)."},
+ {t:"One event, read from two sides",ok:true,f:"“They are one operational event with two readings” (§3.4): the same SNR-rise, read from two complementary domains. Watch it below."}
+];
+RQ.forEach(function(o){var b=h("button","opt",'<span>'+o.t+'</span>');b.addEventListener("click",function(){
+  if(o.ok){[].forEach.call($("rQ").children,function(x){x.disabled=true});b.classList.add("yes")}else b.classList.add("no");
+  fb($("rMsg"),o.ok?"That is the lesson’s reading.":"Not as the lesson reads it.",o.f,"§3.4 · YS 1.29")});$("rQ").appendChild(b)});
+
+var EFF=["Entrainment","Rhythmic saturation","Phase-coherence","Disclosure of the substrate"];
+var LVL=["high","lowering","lower","low, far enough"];
+var STA=[["The nine are active.","Masked by noise."],["Losing their excitation.","A faint steadiness, mostly masked."],["Fading.","Showing through the noise."],["Faint, quiet.","Clearer."],["Dissipated.","Perceptible."]];
+var rs=0,rT=0,rRaf=0;
+EFF.forEach(function(e){$("rSteps").appendChild(h("li","",e))});
+A.forEach(function(a){$("rNine").appendChild(h("span","",a.n))});
+function noiseOf(s){return [1,.72,.48,.26,.1][s]}
+function renderR(){
+  [].forEach.call($("rSteps").children,function(li,i){li.classList.toggle("on",i<rs)});
+  $("rLevel").textContent="n(t): "+(rs===0?"high":LVL[rs-1]);
+  var nz=noiseOf(rs);
+  $("rNine").classList.toggle("jit",!RM&&rs<3);
+  [].forEach.call($("rNine").children,function(s){s.style.opacity=String(.15+.85*nz);s.style.filter="blur("+((1-nz)*1.2).toFixed(2)+"px)"});
+  $("rA").textContent=STA[rs][0];$("rB").textContent=STA[rs][1];
+  $("rStep").disabled=rs>=4;
+  drawR();
+}
+function drawR(){
+  var c=$("rCan"),f=Core.fit(c);if(!f)return;var g=f.g,W=f.w,H=f.h,col=Core.col;
+  g.clearRect(0,0,W,H);
+  var nz=noiseOf(rs),sig=1-nz*0.85;
+  /* the steady substrate: a calm horizontal band of light, always present */
+  var gr=g.createLinearGradient(0,H*0.2,0,H*0.8);gr.addColorStop(0,"rgba(0,0,0,0)");gr.addColorStop(.5,col["--obj"]);gr.addColorStop(1,"rgba(0,0,0,0)");
+  g.save();g.globalAlpha=.85;g.fillStyle=gr;g.fillRect(0,H*0.2,W,H*0.6);g.restore();
+  g.save();g.globalAlpha=.9;g.strokeStyle=col["--obj"];g.lineWidth=2;g.beginPath();g.moveTo(0,H/2);g.lineTo(W,H/2);g.stroke();g.restore();
+  /* the noise masking it */
+  var seed=RM?7:(rT|0);function rnd(){seed=(seed*16807+11)%2147483647;return seed/2147483647}
+  var count=Math.round(nz*W*H/30);
+  g.save();
+  for(var i=0;i<count;i++){var x=rnd()*W,y=rnd()*H,r=1+rnd()*2.2;g.globalAlpha=.55+.4*rnd();g.fillStyle=(i%3===0)?col["--env"]:(i%3===1?col["--muted"]:col["--ink"]);g.fillRect(x,y,r,r)}
+  g.restore();
+  if(nz>0.3){g.save();g.globalAlpha=nz*0.75;g.fillStyle=col["--bg"];g.fillRect(0,0,W,H);g.restore();
+    g.save();for(var j=0;j<count*0.6;j++){var x2=rnd()*W,y2=rnd()*H;g.globalAlpha=.6;g.fillStyle=(j%2)?col["--env"]:col["--muted"];g.fillRect(x2,y2,2,2)}g.restore();}
+}
+function loop(){rT++;drawR();rRaf=requestAnimationFrame(function(){setTimeout(loop,90)})}
+if(!RM)loop();
+Core.onTheme(drawR);window.addEventListener("resize",drawR);
+$("rStep").addEventListener("click",function(){if(rs>=4)return;rs++;renderR();
+  var msgs=[
+   ["Entrainment.","Japa delivers OM as a reference rhythm; bhāvanā tunes the attention-wave toward what the sound signals (§3.3). The noise begins to fall, and both sides move."],
+   ["Rhythmic saturation.","Repetition, then the absorption-pause between repetitions: the soak and dry of the Āyurvedic bhāvanā (§3.3). Still one change, still both sides."],
+   ["Phase-coherence.","Śabda, artha and pratyaya, which ran in confused superposition, are brought into phase-lock. “The signal-to-noise ratio of the inner instrument rises” (§3.3)."],
+   ["Disclosure of the substrate.","“Reduce noise; the noise-dependent disturbances dissipate (effect a); and the substrate, no longer masked by noise, becomes perceptible (effect b). One change in the system. Two complementary readings” (§3.4)."]];
+  var m=msgs[rs-1];fb($("rvMsg"),m[0],m[1],rs<4?"§3.3 · §3.4":"§3.4 · YS 1.29")});
+$("rOnly").addEventListener("click",function(){fb($("rvMsg"),"There is no separate control for that.","“The same drop in n(t) produces both effects” (§3.4). The page offers only one control because the lesson describes only one change: as the obstacles dissipate, the substrate is unmasked by the very same fall in noise. The relief and the realisation are “the same SNR-rise, read from two complementary domains.”","§3.4")});
+$("rReset").addEventListener("click",function(){rs=0;renderR();fb($("rvMsg"),"One control on this panel.","There is a single term being changed: n(t), the noise of the inner instrument. Let the four effects accumulate one at a time and watch both sides.")});
+renderR();
+})();
+
+</script>
+</body></html>
