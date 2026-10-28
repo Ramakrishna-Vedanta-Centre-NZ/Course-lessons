@@ -164,6 +164,25 @@ nav.parts a{color:var(--ink)}
 .scorebox .band.good{color:var(--ok)}
 .scorebox .saved{font-size:13.5px;color:var(--muted)}
 .scorebox ul{margin:6px 0 0;padding-left:20px}
+
+/* PRACTICE TEMPLATE: one coloured "part" per section (part-1 .. part-4) */
+.part{--pc:#0E7A8A;--pcon:#FFFFFF;--pcbg:#E6F2F3;border:2px solid var(--pc);border-radius:14px;overflow:hidden;background:var(--pcbg)}
+.part-1{--pc:#0E7A8A;--pcbg:#E6F2F3}
+.part-2{--pc:#12285A;--pcbg:#EEF0F8}
+.part-3{--pc:#2F6B3A;--pcbg:#E6F0E3}
+.part-4{--pc:#7A2A5E;--pcbg:#F5E6F0}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .part{--pcbg:#0F2250;border-color:var(--pcl,var(--pc))}
+ :root:not([data-theme="light"]) .part-1{--pcl:#46CFC6} :root:not([data-theme="light"]) .part-2{--pcl:#E6C36A} :root:not([data-theme="light"]) .part-3{--pcl:#7FD08C} :root:not([data-theme="light"]) .part-4{--pcl:#F08CC8}}
+:root[data-theme="dark"] .part{--pcbg:#0F2250;border-color:var(--pcl,var(--pc))}
+:root[data-theme="dark"] .part-1{--pcl:#46CFC6} :root[data-theme="dark"] .part-2{--pcl:#E6C36A} :root[data-theme="dark"] .part-3{--pcl:#7FD08C} :root[data-theme="dark"] .part-4{--pcl:#F08CC8}
+.part-band{background:var(--pc);color:var(--pcon);padding:12px 16px;display:flex;align-items:center;flex-wrap:wrap;gap:6px 14px}
+.part-band h2{color:inherit;font-size:clamp(20px,3.4vw,26px);font-weight:600;flex:1 1 220px}
+.part-num{font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;font-weight:500;background:rgba(255,255,255,.18);border-radius:4px;padding:3px 9px}
+.part-band .tag{color:inherit;border-color:currentColor;background:rgba(255,255,255,.12)}
+.part-2 .part-band .tag,.part-2 .part-num{color:#E6C36A}
+.part-body{padding:16px;display:flex;flex-direction:column;gap:14px}
+.part .panel{background:var(--surface)}
+@media (max-width:640px){.part-body{padding:12px}}
 </style></head><body>
 <div class="wrap">
 <header class="brandhdr">
@@ -176,8 +195,9 @@ nav.parts a{color:var(--ink)}
   <nav class="parts" aria-label="Parts of this page"><a href="#s1">I. Strike it</a><a href="#s2">II. Which feature is at issue?</a></nav>
 </header>
 
-<section id="s1">
-  <h2>I. Strike it <span class="tag">Practice: not scored</span></h2>
+<section id="s1" class="part part-1">
+  <div class="part-band"><span class="part-num">Part I</span><h2>Strike it</h2><span class="tag">Practice: not scored</span></div>
+  <div class="part-body">
   <p class="intro">Choose an input to strike the system. The trace shows the reaction h(t) rising, falling and settling, with settling time, overshoot and residual ripple marked on it. Two separate controls change the system: how large the reaction is, and how much damping it has.</p>
   <div class="panel" id="lab">
     <div class="bar">
@@ -234,10 +254,12 @@ nav.parts a{color:var(--ink)}
     <h3>Damping is not numbness</h3>
     <p>Well-damped does not mean feeling less. “You feel your feelings fully when something triggers you, but the response is proportionate, and you settle relatively quickly” (§2). Try it: raise the damping and the reaction still rises. It simply stops ringing.</p>
   </div>
+  </div>
 </section>
 
-<section id="s2">
-  <h2>II. Which feature is at issue? <span class="tag scored">Scored: first pick counts</span></h2>
+<section id="s2" class="part part-2">
+  <div class="part-band"><span class="part-num">Part II</span><h2>Which feature is at issue?</h2><span class="tag">Scored: first pick counts</span></div>
+  <div class="part-body">
   <p class="intro">Four short stories, all made up. In each, someone is struck by a small input. Which of the three features does the story turn on?</p>
   <div class="panel" id="st">
     <div class="bar"><span class="tag" id="stPro">Story 1 of 4</span><div class="dots" id="stDots" aria-hidden="true"></div></div>
@@ -259,6 +281,7 @@ nav.parts a{color:var(--ink)}
   <div class="balance">
     <h3>Noticing, not blaming</h3>
     <p>“Learning to notice them is not to blame yourself; it is to wake up to how your mind actually works” (§1). And the deepest damping, the lesson says, comes from seeing your own pattern: “Once you see the pattern, it begins to lose its hold” (§2).</p>
+  </div>
   </div>
 </section>
 <footer>Part I is practice and is not scored. Part II is scored, and only to show you where to look again. Based on Lesson 3.3, this page illustrates the lesson’s qualitative picture of the mind’s impulse response and does not measure, diagnose or advise on any person’s situation. For help with distress, please speak with a qualified professional or someone you trust.<br>Ritam · Ramakrishna Vedanta Centre NZ · <a href="https://www.vedanta.nz">www.vedanta.nz</a></footer>
