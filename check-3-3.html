@@ -5,22 +5,23 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Understanding Check: Lesson 3.3</title>
 <meta name="description" content="Eight questions on Lesson 3.3, Saṁskāra as Live Filter, from The Mind in the Light of Modern and Spiritual Sciences.">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Spectral:wght@400;500;600&family=Source+Sans+3:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400..700;1,400..700&family=Noto+Sans:wght@400..700&display=swap">
 <style>
 :root{
- --bg:#F2F5F9; --surface:#FFFFFF; --ink:#13203A; --muted:#58647D; --line:#D3DAE6; --tint:#E7EDF6;
- --res:#2E3192; --ok:#1B7A52; --okbg:#E3F1EA; --no:#B03A5B; --nobg:#F7E6EC;
- --display:"Spectral",Georgia,serif; --body:"Source Sans 3",system-ui,-apple-system,"Segoe UI",sans-serif; --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+ --bg:#FBF5EA; --surface:#FFFDF8; --ink:#1E1E1E; --muted:#5A5A5A; --line:#E6DAC3; --tint:#F3EAD3;
+ --navy:#12285A; --gold:#C9A24A; --goldt:#6B4E0E; --qink:#13295B;
+ --res:#12285A; --ok:#2F5A2E; --okbg:#E3EDDF; --no:#C2557A; --nobg:#F6E3EA;
+ --display:"Noto Serif",Georgia,serif; --body:"Noto Sans",system-ui,-apple-system,"Segoe UI",sans-serif; --mono:"Noto Sans",system-ui,sans-serif;
 }
 @media (prefers-color-scheme: dark){
  :root:not([data-theme="light"]){
-  --bg:#0B1120; --surface:#121A2D; --ink:#E7ECF6; --muted:#9AA6BF; --line:#26324D; --tint:#1A2540;
-  --res:#A3AAFF; --ok:#5BD59B; --okbg:#12302A; --no:#FF8FB0; --nobg:#3A1A28; color-scheme:dark;
+  --bg:#0B1A3D; --surface:#12285A; --ink:#FBF5EA; --muted:#C9C3B3; --line:#2B4686; --tint:#1D3770;
+  --goldt:#E6C36A; --qink:#FBF5EA; --res:#E6C36A; --ok:#8FD79A; --okbg:#1E3A2A; --no:#F08FB0; --nobg:#4A2236; color-scheme:dark;
  }
 }
 :root[data-theme="dark"]{
- --bg:#0B1120; --surface:#121A2D; --ink:#E7ECF6; --muted:#9AA6BF; --line:#26324D; --tint:#1A2540;
- --res:#A3AAFF; --ok:#5BD59B; --okbg:#12302A; --no:#FF8FB0; --nobg:#3A1A28; color-scheme:dark;
+ --bg:#0B1A3D; --surface:#12285A; --ink:#FBF5EA; --muted:#C9C3B3; --line:#2B4686; --tint:#1D3770;
+ --goldt:#E6C36A; --qink:#FBF5EA; --res:#E6C36A; --ok:#8FD79A; --okbg:#1E3A2A; --no:#F08FB0; --nobg:#4A2236; color-scheme:dark;
 }
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;
@@ -69,13 +70,29 @@ button:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(-
 .saved{font-size:14px;color:var(--muted)}
 footer{text-align:center;font-size:13px;color:var(--muted)}
 footer a{color:var(--res)}
+.wrap header{background:#12285A;color:#FBF5EA;text-align:center;padding:18px 16px 20px;border-radius:14px}
+.wrap header img{width:56px;height:66px;object-fit:contain;display:block;margin:0 auto}
+.wrap header .eyebrow{color:#E6C36A;font-weight:700;letter-spacing:3px;margin:8px 0 0}
+.wrap header h1{color:#FBF5EA;font-weight:700;margin:6px 0 4px}
+.wrap header .course{font-size:14px;color:#E6C36A;margin:0 0 8px;font-weight:600}
+.wrap header .sub{color:#F1ECDF;font-size:15px}
+.bar i{background:var(--gold)!important}
+.opt:hover:not(:disabled){border-color:var(--gold)!important}
+input.fill:focus{border-color:var(--gold)!important}
+.q{color:var(--qink)}
+.qn{color:var(--goldt);font-weight:700}
+.btn{background:var(--navy)!important;color:#FBF5EA!important}
+.btn.alt{background:transparent!important;color:var(--ink)!important;border:1px solid var(--navy)!important}
+.card{box-shadow:0 2px 8px rgba(19,41,91,.08)}
 </style>
 </head>
 <body>
 <div class="wrap">
  <header>
+  <img src="https://ramakrishna-vedanta-centre-nz.github.io/satsangs/logo.png" alt="Ramakrishna Vedanta NZ emblem" width="56" height="66">
   <p class="eyebrow">Understanding check · Lesson 3.3</p>
   <h1>Saṁskāra as Live Filter</h1>
+  <p class="course">The Mind in the Light of Modern and Spiritual Sciences · Advanced</p>
   <p class="sub">Eight questions on the lesson. Take them as often as you like; each answer comes with its explanation.</p>
  </header>
  <div class="bar"><i id="prog"></i></div>
