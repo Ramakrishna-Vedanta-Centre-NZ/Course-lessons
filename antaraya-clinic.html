@@ -212,7 +212,7 @@ body[data-part]{padding-block:10px 18px}
 
 <section id="s1">
   <h2>I. Name the obstacle</h2>
-  <p class="intro">YS 1.30 lists nine antarāyas, each a distinct failure-mode of the inner instrument with its own signature. Read what each practitioner says. Name the antarāya, then its dominant guṇa as the lesson’s table gives it. The practitioners are invented.</p>
+  <p class="intro">YS I.30 lists nine antarāyas, each a distinct failure-mode of the inner instrument with its own signature. Read what each practitioner says. Name the antarāya, then its dominant guṇa as the lesson’s table gives it. The practitioners are invented.</p>
   <div class="panel" id="nx">
     <div class="bar"><div class="chips" id="nCases" role="group" aria-label="Cases"></div></div>
     <div class="scene" id="nScene"><span class="tag" id="nTag">Case 1 of 9</span><p class="frame" id="nFrame"></p><p class="quote" id="nQuote"></p></div>
@@ -243,7 +243,7 @@ body[data-part]{padding-block:10px 18px}
 
 <section id="s2">
   <h2>II. What comes with it</h2>
-  <p class="intro">YS 1.31 names four signs that arise together with the distractions. Then §7 says where a failing Saṁyama has to begin. Work through both.</p>
+  <p class="intro">YS I.31 names four signs that arise together with the distractions. Then §7 says where a failing Saṁyama has to begin. Work through both.</p>
 
   <div class="panel" id="sg">
     <h3>The four co-arising signs</h3>
@@ -280,15 +280,15 @@ body[data-part]{padding-block:10px 18px}
 
 <section id="s3">
   <h2>III. One rise, two readings</h2>
-  <p class="intro">YS 1.29: “Thence comes the realisation of the inward-turned awareness, and the dissolution of the obstacles.” Before you watch it, decide what you think the sūtra is saying.</p>
+  <p class="intro">YS I.29: “Thence comes the realisation of the inward-turned awareness, and the dissolution of the obstacles.” Before you watch it, decide what you think the sūtra is saying.</p>
   <div class="panel" id="rx">
     <div class="scene"><span class="tag">An invented practitioner</span><p class="quote">“First I want the restlessness and the dullness to go. Realisation can be a separate project, later.”</p></div>
-    <p class="qq">What does YS 1.29 say about these two?</p>
+    <p class="qq">What does YS I.29 say about these two?</p>
     <div class="opts" id="rQ" role="group" aria-label="Your reading"></div>
     <div id="rMsg" class="msg fbbox" role="status" aria-live="polite"></div>
   </div>
   <div class="panel" id="rv">
-    <div class="bar"><span class="eyebrow">The YS 1.28 procedure, its four effects accumulating</span><span class="tag" id="rLevel">n(t): high</span></div>
+    <div class="bar"><span class="eyebrow">The YS I.28 procedure, its four effects accumulating</span><span class="tag" id="rLevel">n(t): high</span></div>
     <ol class="effects" id="rSteps"></ol>
     <div class="two">
       <div class="pane"><span class="eyebrow">(a) antarāya-abhāva</span><p class="pt">The disturbances lose their excitation and dissipate.</p><div class="nineDots" id="rNine" aria-hidden="true"></div><p class="pstate" id="rA">The nine are active.</p></div>
@@ -301,7 +301,7 @@ body[data-part]{padding-block:10px 18px}
     <h3>Patañjali’s ca</h3>
     <p>“The practitioner is not asked to choose between symptom-relief and self-realisation. The practice that reduces anxiety, dullness, doubt, and instability is the practice that makes the substrate perceptible. The same procedure raises SNR; raised SNR has both faces. There is no trade-off, no detour. That is what Patañjali’s ca is doing” (§3.4).</p>
   </div>
-  <p class="pfoot">A learning aid, not an assessment. A qualitative picture of the lesson’s reading of YS 1.29; it measures nothing.</p>
+  <p class="pfoot">A learning aid, not an assessment. A qualitative picture of the lesson’s reading of YS I.29; it measures nothing.</p>
 </section>
 </div>
 
@@ -368,7 +368,7 @@ var RM=false;try{RM=window.matchMedia("(prefers-reduced-motion: reduce)").matche
 function h(tag,cls,html){var e=document.createElement(tag);if(cls)e.className=cls;if(html!=null)e.innerHTML=html;return e}
 function fb(box,v,p,ref){box.innerHTML='<p class="verdict">'+v+'</p>'+(p?'<p>'+p+'</p>':'')+(ref?'<p class="ref">'+ref+'</p>':'')}
 
-/* The nine, verbatim from the lesson's YS 1.30 table (§3.5) */
+/* The nine, verbatim from the lesson's YS I.30 table (§3.5) */
 var A=[
  {k:"vyadhi",n:"vyādhi",pl:"physical disease, illness",sig:"G(t) compromised; the autonomic gain destabilised by bodily disturbance",g:"tamasic"},
  {k:"styana",n:"styāna",pl:"mental dullness, lack of mental clarity",sig:"h(t) sluggish; ψₘ slow to engage; gain low",g:"tamasic"},
@@ -436,7 +436,7 @@ function render1(){
   $("nStep2").hidden=!s.name;
   [].forEach.call(nGuna.children,function(b){var g=b.dataset.g;b.classList.toggle("yes",s.guna&&g===a.g);b.classList.toggle("no",!!s.wrongG[g]&&!(s.guna&&g===a.g));b.disabled=s.guna});
   if(!s.name)fb(nMsg,"What is going wrong for this practitioner?","Choose one of the nine. The plain meanings from the lesson’s table are there if you want them.");
-  else if(!s.guna)fb(nMsg,"Yes: "+a.n+", “"+a.pl+".”","Now its dominant guṇa, as the lesson’s table gives it.","§3.5 · YS 1.30");
+  else if(!s.guna)fb(nMsg,"Yes: "+a.n+", “"+a.pl+".”","Now its dominant guṇa, as the lesson’s table gives it.","§3.5 · YS I.30");
   else nMsg.innerHTML="";
   nRev.hidden=!s.guna;
   if(s.guna)showReveal();
@@ -457,7 +457,7 @@ function pickN(i){
   var s=st1[cur];if(s.name)return;
   if(i===cur){s.name=true;render1();return}
   s.wrongN[i]=true;render1();
-  fb(nMsg,"Not "+A[i].n+".","In the lesson’s table "+A[i].n+" is “"+A[i].pl+".” Listen again to what this practitioner says. "+V[cur].cue,"§3.5 · YS 1.30");
+  fb(nMsg,"Not "+A[i].n+".","In the lesson’s table "+A[i].n+" is “"+A[i].pl+".” Listen again to what this practitioner says. "+V[cur].cue,"§3.5 · YS I.30");
 }
 function pickG(g){
   var s=st1[cur],a=A[cur];if(s.guna)return;
@@ -492,7 +492,7 @@ SIGNS.forEach(function(s){var b=h("button","sb",'<b>'+s.n+'</b><small>'+s.d+'</s
 function dropS(k){
   if(selO<0){fb(sMsg,"Choose an observation first.","Then tap the sign it shows.");return}
   var o=OBS[selO],s=SIGNS.find(function(x){return x.k===k});
-  if(o.s===k){placed[selO]=true;fb(sMsg,"Yes: "+s.n+".","“"+o.t+"” is "+s.d.replace(/ \(.*\)$/,"")+(/\(/.test(s.d)?", "+s.d.match(/\((.*)\)/)[1]:"")+".","§3.6 · YS 1.31");selO=-1;}
+  if(o.s===k){placed[selO]=true;fb(sMsg,"Yes: "+s.n+".","“"+o.t+"” is "+s.d.replace(/ \(.*\)$/,"")+(/\(/.test(s.d)?", "+s.d.match(/\((.*)\)/)[1]:"")+".","§3.6 · YS I.31");selO=-1;}
   else{var bt=sObs.children[selO];bt.classList.remove("wrong");void bt.offsetWidth;bt.classList.add("wrong");fb(sMsg,"Not "+s.n+".",s.n+" is the lesson’s word for "+s.d.replace(/ \(.*\)$/,"")+". Look for the sign that names “"+o.t.toLowerCase()+".”","§3.6")}
   renderS();
 }
@@ -507,14 +507,14 @@ var Q1=[{t:"Only vyādhi, the bodily one",ok:false,f:"The signs are bodily and a
  {t:"Only the tamasic ones",ok:false,f:"Restlessness and ragged breath are as likely in a driven system as dullness is in a heavy one. The lesson ties the signs to no single leaning: they are correlates by which the operation of any antarāya can be detected (§3.7)."},
  {t:"Any antarāya that is active",ok:true,f:"They are four “physiological and affective correlates by which the operation of any antarāya can be detected” (§3.7), the way fever is an observable correlate of infection (§3.6)."}];
 var Q2=[{t:"Yes, one by one",ok:false,f:"The lesson says the opposite: “These are not additional obstacles to be addressed separately” (§3.6). Chasing them one by one treats the fever and leaves the infection."},
- {t:"No: address the underlying antarāya, and the signs go with it",ok:true,f:"“The practitioner does not need to chase the four signs; the YS 1.28 procedure addresses the underlying antarāya, and the signs dissipate as the antarāya does” (§3.6)."}];
+ {t:"No: address the underlying antarāya, and the signs go with it",ok:true,f:"“The practitioner does not need to chase the four signs; the YS I.28 procedure addresses the underlying antarāya, and the signs dissipate as the antarāya does” (§3.6)."}];
 function mkQ(box,arr,flag){arr.forEach(function(o){var b=h("button","chip",o.t);b.addEventListener("click",function(){
   if(o.ok){[].forEach.call(box.children,function(x){x.disabled=true});b.classList.add("yes");if(flag===1)qa1=true;else qa2=true}else b.classList.add("no");
   fb($("sQMsg"),o.ok?"That is the lesson’s reading.":"Not quite.",o.f,"§3.6 · §3.7")});box.appendChild(b)})}
 mkQ($("sQ1"),Q1,1);mkQ($("sQ2"),Q2,2);
 $("sShow").addEventListener("click",function(){OBS.forEach(function(o,i){placed[i]=true});selO=-1;renderS();
   [["sQ1",Q1],["sQ2",Q2]].forEach(function(p){[].forEach.call($(p[0]).children,function(b,i){b.disabled=true;if(p[1][i].ok)b.classList.add("yes")})});
-  fb($("sQMsg"),"The four signs go with any active antarāya, and are not worked on separately.","They are “observable correlates of the antarāyas, the way fever is an observable correlate of infection”; the YS 1.28 procedure addresses the underlying antarāya and the signs dissipate as it does (§3.6).","§3.6")});
+  fb($("sQMsg"),"The four signs go with any active antarāya, and are not worked on separately.","They are “observable correlates of the antarāyas, the way fever is an observable correlate of infection”; the YS I.28 procedure addresses the underlying antarāya and the signs dissipate as it does (§3.6).","§3.6")});
 $("sReset").addEventListener("click",function(){placed={};selO=-1;delete sMsg.dataset.done;fb(sMsg,"Four observations, four signs.","Choose an observation to begin.");
   [$("sQ1"),$("sQ2")].forEach(function(bx){[].forEach.call(bx.children,function(b){b.disabled=false;b.classList.remove("yes","no")})});$("sQMsg").innerHTML="";renderS()});
 renderS();
@@ -589,12 +589,12 @@ renderF();
 /* ---------------- Part III: one rise, two readings ---------------- */
 var RQ=[
  {t:"Two goals, one after the other: relief first, realisation later",ok:false,f:"Patañjali “insists they are not two stages, not two separate consequences, not means and end” (§3.4)."},
- {t:"Two goals that need two different practices",ok:false,f:"The sūtra joins them with ca, “and”, as the fruit of one procedure, YS 1.28. “There is no trade-off, no detour” (§3.4)."},
+ {t:"Two goals that need two different practices",ok:false,f:"The sūtra joins them with ca, “and”, as the fruit of one procedure, YS I.28. “There is no trade-off, no detour” (§3.4)."},
  {t:"One event, read from two sides",ok:true,f:"“They are one operational event with two readings” (§3.4): the same SNR-rise, read from two complementary domains. Watch it below."}
 ];
 RQ.forEach(function(o){var b=h("button","opt",'<span>'+o.t+'</span>');b.addEventListener("click",function(){
   if(o.ok){[].forEach.call($("rQ").children,function(x){x.disabled=true});b.classList.add("yes")}else b.classList.add("no");
-  fb($("rMsg"),o.ok?"That is the lesson’s reading.":"Not as the lesson reads it.",o.f,"§3.4 · YS 1.29")});$("rQ").appendChild(b)});
+  fb($("rMsg"),o.ok?"That is the lesson’s reading.":"Not as the lesson reads it.",o.f,"§3.4 · YS I.29")});$("rQ").appendChild(b)});
 
 var EFF=["Entrainment","Rhythmic saturation","Phase-coherence","Disclosure of the substrate"];
 var LVL=["high","lowering","lower","low, far enough"];
@@ -639,7 +639,7 @@ $("rStep").addEventListener("click",function(){if(rs>=4)return;rs++;renderR();
    ["Rhythmic saturation.","Repetition, then the absorption-pause between repetitions: the soak and dry of the Āyurvedic bhāvanā (§3.3). Still one change, still both sides."],
    ["Phase-coherence.","Śabda, artha and pratyaya, which ran in confused superposition, are brought into phase-lock. “The signal-to-noise ratio of the inner instrument rises” (§3.3)."],
    ["Disclosure of the substrate.","“Reduce noise; the noise-dependent disturbances dissipate (effect a); and the substrate, no longer masked by noise, becomes perceptible (effect b). One change in the system. Two complementary readings” (§3.4)."]];
-  var m=msgs[rs-1];fb($("rvMsg"),m[0],m[1],rs<4?"§3.3 · §3.4":"§3.4 · YS 1.29")});
+  var m=msgs[rs-1];fb($("rvMsg"),m[0],m[1],rs<4?"§3.3 · §3.4":"§3.4 · YS I.29")});
 $("rOnly").addEventListener("click",function(){fb($("rvMsg"),"There is no separate control for that.","“The same drop in n(t) produces both effects” (§3.4). The page offers only one control because the lesson describes only one change: as the obstacles dissipate, the substrate is unmasked by the very same fall in noise. The relief and the realisation are “the same SNR-rise, read from two complementary domains.”","§3.4")});
 $("rReset").addEventListener("click",function(){rs=0;renderR();fb($("rvMsg"),"One control on this panel.","There is a single term being changed: n(t), the noise of the inner instrument. Let the four effects accumulate one at a time and watch both sides.")});
 renderR();
