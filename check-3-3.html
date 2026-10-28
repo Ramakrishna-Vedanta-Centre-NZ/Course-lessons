@@ -86,7 +86,7 @@ footer a{color:var(--res)}
 <script>
 /* Question bank. Types: mc (options o, correct index a), judge (statement q; a: 0 holds, 1 does not hold, 2 holds only in part), fill (accepted answers a[], show).
    e = explanation, c = idea to revisit, s = lesson section reference (null = lesson as a whole). All content from the 3.3 key ideas and misconceptions. */
-var META={lesson:'3.3',quizTitle:'Understanding check: Lesson 3.3, Saṁskāra as Live Filter',programme:'The Mind in the Light of Modern and Spiritual Sciences (Advanced)',cut:75};
+var META={code:'ADV-3-3',lesson:'3.3',quizTitle:'Understanding check: Lesson 3.3, Saṁskāra as Live Filter',programme:'The Mind in the Light of Modern and Spiritual Sciences (Advanced)',cut:75};
 var Q=[
 {t:'mc',q:'What sets the way a tuning fork rings and settles after a strike?',o:['How hard it was struck','The room it is in','Its structure','The listener’s attention'],a:2,
  e:'A tuning fork’s impulse response, how it rings and settles, is set by its structure. In the lesson the mind’s h(t) plays the same part, and it is set by conditioning.',c:'The impulse response is set by the system’s own structure (the tuning fork)',s:'1 and 2'},
@@ -119,9 +119,8 @@ function hdr(){
  document.getElementById('pos').textContent=i<Q.length?'Question '+(i+1)+' of '+Q.length:'Finished';
  document.getElementById('sc').textContent=i<Q.length?right+' right so far':'';
  document.getElementById('prog').style.width=(100*Math.min(i,Q.length)/Q.length)+'%';
- post();
 }
-function post(){try{window.parent.postMessage({source:'mind-check',type:'height',h:document.documentElement.scrollHeight},'*')}catch(e){}}
+function send(m){try{window.parent.postMessage(m,'*')}catch(e){}}
 function ref(s){return s?'Lesson 3.3, section '+s:'Lesson 3.3'}
 function show(){
  hdr();
@@ -143,12 +142,14 @@ function show(){
  document.getElementById('nx').onclick=function(){i++;show();window.scrollTo(0,0)};
 }
 function mark(ok,btn,typed){
+ started=true;
  var qq=Q[i];if(ok)right++;ans.push({q:i+1,ok:ok,given:typed!==undefined?typed:(btn?btn.textContent:'')});
  if(qq.t!=='fill'){app.querySelectorAll('.opt').forEach(function(b,k){b.disabled=true;if(k===qq.a)b.classList.add('right')});if(!ok&&btn)btn.classList.add('wrong')}
  var right_ans=qq.t==='mc'?qq.o[qq.a]:qq.t==='judge'?JL[qq.a]:qq.show;
  var fb=document.getElementById('fb');fb.className='fb '+(ok?'ok':'no');
  fb.innerHTML='<b>'+(ok?'Right.':'Not quite. The answer is: '+esc(right_ans))+'</b>'+esc(qq.e)+' <i>('+ref(qq.s)+'.)</i>';
  document.getElementById('nx').style.display='inline-block';hdr();
+ send({type:'progress',code:META.code,state:{i:i+1,right:right,ans:ans}});
 }
 function result(){
  var n=Q.length,p=Math.round(100*right/n),good=p>=META.cut;
@@ -164,17 +165,26 @@ function result(){
  h+='</div><p class="saved" id="savedmsg"></p><div class="acts"><button class="btn" id="again">Take it again</button></div></div>';
  app.innerHTML=h;
  document.getElementById('again').onclick=function(){i=0;right=0;ans=[];saved=false;show();window.scrollTo(0,0)};
- try{window.parent.postMessage({source:'mind-check',type:'result',lesson:META.lesson,quizTitle:META.quizTitle,programme:META.programme,
-  score:right,maxScore:n,percent:p,questionsCorrect:right,questionCount:n,answers:JSON.stringify(ans),completedAt:new Date().toISOString()},'*')}catch(e){}
- post();
+ send({type:'quizResult',code:META.code,title:META.quizTitle,programme:META.programme,score:right,maxScore:n,percent:p,questionsCorrect:right,questionCount:n,answers:ans});
+ send({type:'progress',code:META.code,state:null});
 }
 window.addEventListener('message',function(ev){
- var d=ev.data;if(!d||d.source!=='mind-check-host')return;
+ var d=ev.data;if(!d||!d.type)return;
  var m=document.getElementById('savedmsg');
  if(d.type==='saved'&&m){m.textContent='Your result has been saved to your member record.'}
- if(d.type==='notsaved'&&m){m.textContent='Your result could not be saved this time. Please sign in and try again.'}
+ if(d.type==='saveError'&&m){m.textContent='Your result could not be saved this time. You can take the check again.'}
+ if(d.type==='notMember'&&m){m.textContent='Sign in as a member to have your result saved.'}
+ if(d.type==='resume'&&d.state&&d.state.i>0&&d.state.i<Q.length&&!started){offerResume(d.state)}
 });
+var started=false;
+function offerResume(st){
+ var h='<div class="card"><p class="qn">Welcome back</p><p class="q">You have answered '+st.i+' of '+Q.length+' questions so far.</p><p>Would you like to continue where you left off, or start again from the beginning?</p><div class="acts"><button class="btn" id="cont">Continue from question '+(st.i+1)+'</button><button class="btn alt" id="rest">Start again</button></div></div>';
+ app.innerHTML=h;
+ document.getElementById('cont').onclick=function(){i=st.i;right=st.right||0;ans=st.ans||[];started=true;show()};
+ document.getElementById('rest').onclick=function(){i=0;right=0;ans=[];started=true;show()};
+}
 show();
+send({type:'ready'});
 </script>
 </body>
 </html>
