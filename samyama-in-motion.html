@@ -1,0 +1,558 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Saṁyama in Motion</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Source+Sans+3:ital,wght@0,400;0,600;1,400&family=Spectral:ital,wght@0,400;0,500;1,400&display=swap">
+<style>
+:root{
+  --bg:#F2F5F9; --surface:#FFFFFF; --ink:#13203A; --muted:#58647D; --line:#D3DAE6; --tint:#E7EDF6;
+  --obj:#0B8686; --att:#C95F06; --res:#2E3192; --env:#C0245B; --ok:#1B7A52;
+  --display:"Spectral",Georgia,"Times New Roman",serif;
+  --body:"Source Sans 3",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0B1120; --surface:#121A2D; --ink:#E7ECF6; --muted:#9AA6BF; --line:#26324D; --tint:#1A2540;
+    --obj:#46CFC6; --att:#F5A04D; --res:#A3AAFF; --env:#FF7BA9; --ok:#5BD59B; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0B1120; --surface:#121A2D; --ink:#E7ECF6; --muted:#9AA6BF; --line:#26324D; --tint:#1A2540;
+  --obj:#46CFC6; --att:#F5A04D; --res:#A3AAFF; --env:#FF7BA9; --ok:#5BD59B; color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;
+  padding-left:max(14px,env(safe-area-inset-left,0px));padding-right:max(14px,env(safe-area-inset-right,0px));padding-block:22px 40px}
+.wrap{max-width:900px;margin:0 auto;display:flex;flex-direction:column;gap:32px}
+h1,h2,h3{font-family:var(--display);font-weight:500;text-wrap:balance;margin:0;letter-spacing:-.01em}
+h1{font-size:clamp(30px,5.4vw,44px);line-height:1.06}
+h2{font-size:clamp(23px,3.4vw,29px);line-height:1.15}
+h3{font-size:19px;line-height:1.25}
+p{margin:0}
+sub{font-size:.72em;line-height:0}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.lede{font-size:17.5px;max-width:64ch}
+.intro{max-width:66ch;color:var(--muted)}
+header{display:flex;flex-direction:column;gap:12px}
+section{display:flex;flex-direction:column;gap:18px;min-width:0}
+.sym{font-family:var(--mono);font-size:.92em;white-space:nowrap}
+.k-obj{color:var(--obj)} .k-att{color:var(--att)} .k-res{color:var(--res)} .k-env{color:var(--env)}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px;display:flex;flex-direction:column;gap:14px;min-width:0}
+.bar{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;justify-content:space-between}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--bg)}
+.seg button{font:inherit;font-size:14px;color:var(--muted);background:transparent;border:0;padding:8px 13px;cursor:pointer}
+.seg button+button{border-left:1px solid var(--line)}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--surface)}
+button:focus-visible,input:focus-visible{outline:2px solid var(--res);outline-offset:2px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{font:inherit;font-size:14px;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:7px 13px;cursor:pointer;display:inline-flex;gap:8px;align-items:center}
+.chip i{font-style:normal;font-family:var(--mono);font-size:11px;color:var(--muted)}
+.chip[aria-pressed="true"]{background:var(--res);border-color:var(--res);color:#fff}
+.chip[aria-pressed="true"] i{color:#fff;opacity:.8}
+.chip:disabled{cursor:default}
+.chip.reached:not([aria-pressed="true"]){border-color:var(--res)}
+.btn{font:inherit;font-size:14px;color:var(--ink);background:var(--surface);border:1px solid var(--ink);border-radius:8px;padding:8px 16px;cursor:pointer}
+.btn.primary{background:var(--ink);color:var(--surface)}
+.btn.ghost{border-color:var(--line);color:var(--muted)}
+.scope-wrap{position:relative;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--bg)}
+canvas{display:block;width:100%}
+.playbtn{position:absolute;right:8px;bottom:8px;font:inherit;font-size:12px;background:var(--surface);color:var(--muted);border:1px solid var(--line);border-radius:6px;padding:4px 10px;cursor:pointer}
+.box{border:1px solid var(--line);border-radius:8px;background:var(--bg);padding:10px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.box .cap{font-size:12px;color:var(--muted)}
+.meters{display:flex;flex-direction:column;gap:9px}
+.meter{display:grid;grid-template-columns:1fr auto;gap:2px 8px;font-size:13px;align-items:baseline}
+.meter b{font-weight:600}
+.meter output{font-family:var(--mono);font-size:12px;color:var(--muted)}
+.meter .track{grid-column:1/-1;height:7px;background:var(--line);border-radius:4px;overflow:hidden}
+.meter .fill{height:100%;width:0;background:var(--res);border-radius:4px}
+.meter.f2 .fill{background:var(--env)} .meter.f3 .fill{background:var(--obj)}
+.slider{display:flex;align-items:center;gap:10px;flex:1 1 280px;min-width:0}
+.slider label{font-size:14px;min-width:0}
+.slider input[type=range]{flex:1;min-width:60px;accent-color:var(--res)}
+.slider small{color:var(--muted);font-size:12px;white-space:nowrap}
+.slider output{font-family:var(--mono);font-size:12.5px;color:var(--muted);min-width:46px;text-align:right}
+.readout{font-size:14px;color:var(--muted)}
+.readout b{color:var(--ink)}
+.tag{font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);border:1px solid var(--line);border-radius:4px;padding:2px 6px}
+.note{font-size:13px;color:var(--muted);max-width:70ch}
+.balance{background:var(--tint);border-radius:10px;padding:16px 18px;display:flex;flex-direction:column;gap:8px;max-width:78ch}
+footer{font-size:13px;color:var(--muted);max-width:76ch;border-top:1px solid var(--line);padding-top:12px}
+@media (max-width:640px){.panel{padding:12px}.wrap{gap:26px}}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
+
+#scope{height:330px}
+.bracket{display:flex;justify-content:flex-end;margin-top:-6px}
+.bracket span{font-family:var(--mono);font-size:11px;letter-spacing:.04em;color:var(--muted);border-bottom:2px solid var(--res);padding-bottom:2px}
+.row2{display:grid;grid-template-columns:minmax(0,1.5fr) 150px minmax(240px,1fr);gap:14px;align-items:stretch}
+#ruler{height:104px}
+#phasor{height:128px}
+.practice{border-top:1px solid var(--line);padding-top:14px;display:flex;flex-direction:column;gap:12px}
+.practice[hidden]{display:none}
+.trainrow{display:flex;flex-wrap:wrap;gap:12px 18px;align-items:center}
+#session{height:150px}
+.stagetext{border-top:1px solid var(--line);padding-top:14px;display:grid;grid-template-columns:minmax(0,1.4fr) minmax(250px,1fr);gap:8px 26px}
+.stagetext .st-head{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:6px 12px;align-items:baseline}
+.stagetext p{max-width:62ch}
+.deltas{margin:0;display:flex;flex-direction:column;gap:7px}
+.deltas div{display:grid;grid-template-columns:86px 1fr;gap:8px;font-size:14px}
+.deltas dt{font-family:var(--mono);font-size:12px;color:var(--muted);padding-top:2px}
+.deltas dd{margin:0}
+.why{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.why div{border-top:2px solid var(--ink);padding-top:10px;display:flex;flex-direction:column;gap:6px}
+.why h3{font-size:18px}
+.why p{font-size:15px;color:var(--muted)}
+.ladder-wrap{overflow-x:auto}
+.ladder{display:grid;grid-template-columns:minmax(110px,150px) repeat(3,minmax(0,1fr));gap:8px 14px;align-items:center;font-size:14px;min-width:520px}
+.ladder .h{font-size:12px;color:var(--muted);font-family:var(--mono);letter-spacing:.04em}
+.ladder .cell{display:flex;align-items:center;gap:8px;min-width:0}
+.ladder .cell span{flex:1;height:10px;background:var(--line);border-radius:5px;overflow:hidden}
+.ladder .cell span i{display:block;height:100%;background:var(--res);border-radius:5px}
+.ladder .cell.c2 span i{background:var(--env)} .ladder .cell.c3 span i{background:var(--obj)}
+.ladder .cell em{font-style:normal;font-family:var(--mono);font-size:12px;color:var(--muted);width:34px;text-align:right}
+@media (max-width:860px){.row2{grid-template-columns:minmax(0,1fr) 150px}.row2 .meters-box{grid-column:1/-1}}
+@media (max-width:640px){.row2{grid-template-columns:minmax(0,1fr)}#phasor{height:150px}.stagetext{grid-template-columns:minmax(0,1fr)}.why{grid-template-columns:minmax(0,1fr)}#scope{height:300px}.bracket{justify-content:flex-start}}
+
+</style></head><body>
+<div class="wrap">
+<header>
+  <div class="eyebrow">The Mind in the Light of Modern and Spiritual Sciences · Lesson 5.3</div>
+  <h1>Saṁyama in Motion</h1>
+  <p class="lede">Saṁyama is attention held on one object until the beat between knower and known is stilled. Here it is drawn in the notation of Lessons 3.2 and 5.3: the object-wave <span class="sym k-obj">ψ<sub>x</sub>(t)</span>, the attention wave <span class="sym k-att">ψ<sub>m</sub>(t)</span>, and their resultant <span class="sym k-res">R(t)</span>, the vṛtti. Step through the stages of the Saṁyama Table, or practise, and see what training changes.</p>
+</header>
+
+<section>
+  <div class="panel">
+    <div class="bar">
+      <div class="seg" role="group" aria-label="Mode">
+        <button id="modeStudy" aria-pressed="true">Study a stage</button>
+        <button id="modePractise" aria-pressed="false">Practise saṁyama</button>
+      </div>
+      <div class="chips" id="chips" role="group" aria-label="Stage"></div>
+    </div>
+    <div class="bracket" id="bracket" aria-hidden="true"><span>Saṁyama (YS 3.4): the last three stages as one operation</span></div>
+
+    <div class="scope-wrap">
+      <canvas id="scope" role="img" aria-label="Live traces: the object-wave, the attention wave, their sum the vṛtti with its envelope, and the noise n of t."></canvas>
+      <button class="playbtn" id="playbtn" aria-pressed="true">Pause</button>
+    </div>
+
+    <div class="row2">
+      <div class="box">
+        <canvas id="ruler" role="img" aria-label="Frequency ruler. The object sits at 5 hertz. The attention wave frequency moves along the ruler."></canvas>
+        <div class="cap">Frequency ruler. The gap between <span class="sym k-att">f<sub>m</sub></span> and <span class="sym k-obj">f<sub>s</sub></span> is Δf, the beat felt as separation.</div>
+      </div>
+      <div class="box">
+        <canvas id="phasor" role="img" aria-label="Phasor diagram. The two waves drawn as arrows; the resultant is the length of their sum."></canvas>
+        <div class="cap">Phasors. The envelope is the length of the sum.</div>
+      </div>
+      <div class="box meters-box">
+        <div class="meters">
+          <div class="meter"><b>Fullness</b><output id="mFullV">0%</output><div class="track"><div class="fill" id="mFull"></div></div></div>
+          <div class="meter f2"><b>Steadiness</b><output id="mSteadyV">0%</output><div class="track"><div class="fill" id="mSteady"></div></div></div>
+          <div class="meter f3"><b>Carrier near the object's rhythm</b><output id="mTrueV">0%</output><div class="track"><div class="fill" id="mTrue"></div></div></div>
+          <div class="cap" id="mNums" style="font-family:var(--mono);font-size:12px">Δf 0.0 Hz · Δφ 0°</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="practice" id="practice" hidden>
+      <div class="trainrow">
+        <div class="slider">
+          <label for="train">Practice level</label>
+          <small>Untrained</small>
+          <input type="range" id="train" min="0" max="100" value="10" aria-describedby="trainWord">
+          <small>Trained</small>
+        </div>
+        <span class="readout" id="trainWord"></span>
+      </div>
+      <div class="trainrow">
+        <button class="btn primary" id="begin">Begin practice</button>
+        <button class="btn ghost" id="resetP">Reset</button>
+        <button class="btn ghost" id="preU">Untrained mind</button>
+        <button class="btn ghost" id="preT">Trained mind</button>
+        <span class="readout" id="pRead">Press Begin practice. The attention wave will try to climb to samādhi.</span>
+      </div>
+      <canvas id="session" role="img" aria-label="Progress of the practice over time, with slips back marked."></canvas>
+      <p class="note">Each slip pulls attention to another object and sets the practice back. An untrained mind slips often and loses a lot, so it keeps returning to pratyāhāra and dhāraṇā. A trained mind slips rarely, loses little and recovers fast.</p>
+    </div>
+
+    <div class="stagetext" aria-live="polite">
+      <div class="st-head"><h3 id="stTitle"></h3><span class="tag" id="stTag"></span></div>
+      <p id="stBody"></p>
+      <dl class="deltas" id="stTable"></dl>
+    </div>
+    <p class="note">The scale is exaggerated so beats are visible: the object sits at 5 Hz. The six rows under each stage are the columns of the Saṁyama Table in Lesson 5.3. Where the lesson states an endpoint (Δf = 0, Δφ = 0, R(t) = 2A cos(2π f<sub>s</sub> t)) the page follows it exactly. The motion between stages is a teaching picture.</p>
+  </div>
+
+  <h2>Why the higher stages are preferred</h2>
+  <div class="why">
+    <div><h3>More of the object arrives</h3><p>While the beat runs, the envelope sweeps from full to empty and averages about 64% of full whatever the tilt. Once the beat stops, the tilt decides: the meeting delivers 2A·cos(Δφ/2). At Δφ = 180° nothing arrives. At Δφ = 0 the amplitude is 2A.</p></div>
+    <div><h3>No flicker, no strain</h3><p>The beat at |Δf| is the felt pulse of separation, the rhythm of reaching and missing. As Δf goes to zero the envelope stops fluctuating and the effort goes with it.</p></div>
+    <div><h3>Truer content</h3><p>The carrier sits at (f<sub>s</sub> + f<sub>m</sub>)/2. As f<sub>m</sub> comes to f<sub>s</sub> the content moves to the object's own rhythm, so what you know is what is there. ψ<sub>m</sub> is also the wave you can train.</p></div>
+  </div>
+  <div class="panel">
+    <div class="eyebrow">The same model, measured at each stage</div>
+    <div class="ladder-wrap"><div class="ladder" id="ladder" role="table" aria-label="Fullness, steadiness and carrier closeness at each stage"></div></div>
+  </div>
+  <div class="balance">
+    <h3>Samādhi is {9}, not {0}</h3>
+    <p>Saṁyama, however deep, is the highest reach of the manifest equation. The recognition that the awareness in which the equation appears is what one is, is a separate movement. It is not another stage of the meeting, and it is the subject of Lesson 5.7.</p>
+  </div>
+</section>
+
+<footer>Notation and stage placement follow Lessons 3.2 and 5.3. Ritam Diagram labels ({1, 2, 4, 8, 7, 5}, {3, 6}, {9}, {0}) are as in Lesson 5.3.</footer>
+</div>
+
+<script>
+window.Core=(function(){
+"use strict";
+var TAU=Math.PI*2;
+try{var q=new URLSearchParams(location.search).get("theme");if(q==="light"||q==="dark")document.documentElement.setAttribute("data-theme",q)}catch(e){}
+function lerp(a,b,t){return a+(b-a)*t}
+function clamp(x,a,b){return Math.max(a,Math.min(b,x))}
+function el(id){return document.getElementById(id)}
+var col={},subs=[];
+function readColors(){
+  var cs=getComputedStyle(document.documentElement);
+  ["--bg","--surface","--ink","--muted","--line","--tint","--obj","--att","--res","--env","--ok"].forEach(function(k){col[k]=cs.getPropertyValue(k).trim()});
+  subs.forEach(function(f){try{f()}catch(e){}});
+}
+readColors();
+try{window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change",readColors)}catch(e){}
+new MutationObserver(readColors).observe(document.documentElement,{attributes:true,attributeFilter:["data-theme"]});
+function onTheme(f){subs.push(f)}
+var dpr=Math.max(1,Math.min(2,window.devicePixelRatio||1));
+function fit(c){
+  var w=c.clientWidth,h=c.clientHeight;
+  if(!w||!h)return null;
+  var bw=Math.round(w*dpr),bh=Math.round(h*dpr);
+  if(c.width!==bw||c.height!==bh){c.width=bw;c.height=bh}
+  var g=c.getContext("2d");g.setTransform(dpr,0,0,dpr,0,0);return {g:g,w:w,h:h};
+}
+var FONT="500 11.5px 'Source Sans 3',system-ui,sans-serif";
+function label(g,t,x,y,color,align,pill){
+  g.font=FONT;g.textAlign=align||"left";g.textBaseline="alphabetic";
+  if(pill){var w=g.measureText(t).width,x0=(align==="right")?x-w:(align==="center"?x-w/2:x);
+    g.save();g.globalAlpha=.82;g.fillStyle=col["--surface"];g.fillRect(x0-5,y-12,w+10,17);g.restore()}
+  g.fillStyle=color;g.fillText(t,x,y)}
+/* ring-buffer trace: arr, head index, length N */
+function trace(g,arr,head,N,x0,w,cy,sc,color,lw,alpha,dash){
+  g.save();g.globalAlpha=alpha==null?1:alpha;g.strokeStyle=color;g.lineWidth=lw;g.lineJoin="round";if(dash)g.setLineDash(dash);
+  g.beginPath();
+  for(var i=0;i<N;i++){var v=arr[(head+i)%N];var x=x0+w*i/(N-1),y=cy-v*sc;if(i)g.lineTo(x,y);else g.moveTo(x,y)}
+  g.stroke();g.restore();
+}
+/* shaded envelope band around a lane centre */
+function envelope(g,E,head,N,W,cy,sc,color,alpha){
+  g.save();g.globalAlpha=alpha;
+  g.beginPath();
+  for(var i=0;i<N;i++){var e=E[(head+i)%N],x=W*i/(N-1),y=cy-e*sc;if(i)g.lineTo(x,y);else g.moveTo(x,y)}
+  for(var j=N-1;j>=0;j--){var e2=E[(head+j)%N],x2=W*j/(N-1);g.lineTo(x2,cy+e2*sc)}
+  g.closePath();g.fillStyle=color;g.globalAlpha=.09*alpha;g.fill();g.restore();
+  g.save();g.globalAlpha=alpha;g.strokeStyle=color;g.lineWidth=1.6;g.setLineDash([6,4]);
+  [1,-1].forEach(function(sg){g.beginPath();for(var i2=0;i2<N;i2++){var ee=E[(head+i2)%N]*sg,xx=W*i2/(N-1),yy=cy-ee*sc;if(i2)g.lineTo(xx,yy);else g.moveTo(xx,yy)}g.stroke()});
+  g.restore();
+}
+return {TAU:TAU,lerp:lerp,clamp:clamp,el:el,col:col,onTheme:onTheme,fit:fit,label:label,trace:trace,envelope:envelope,FONT:FONT};
+})();
+
+</script>
+<script>
+(function(){
+"use strict";
+var C=window.Core,col=C.col,el=C.el,TAU=C.TAU,lerp=C.lerp,clamp=C.clamp;
+var FS=5,DIST=[3.4,6.6,7.6],DT=1/120,N=480,M=240;
+/* working parameters per stage; text follows the Saṁyama Table of Lesson 5.3 */
+var STAGES=[
+ {name:"Ordinary mind",tag:"Scattered",df:.8,w:.9,dphi:125,nz:.5,osc:0,lk:0,pw:0,
+  body:"Attention scans many objects. ψₘ hops between this object and others, so fₘ sits far from fₛ and the beat is fast and chaotic. The standing tilt Δφ is large, so even the moments of contact are thin, and the noise n(t) is high. The vṛtti is rough, short-lived and mostly about “me and mine”.",
+  t:["Δf large, chaotic; Δφ large","rapid, chaotic beat","smeared, fragmented","high","doubling loop {1, 2, 4, 8, 7, 5}","scattered, distracted"]},
+ {name:"Pratyāhāra",tag:"Preparation",df:.8,w:.3,dphi:125,nz:.2,osc:0,lk:0,pw:0,
+  body:"Engagement is withdrawn from whatever arrives, so the external excitation falls. The alignment itself has not changed: ψₘ is not yet bound to the object, and Δf and Δφ are as before. But the flutter quietens and n(t) drops. This is structural preparation, not yet saṁyama.",
+  t:["not yet bound; external excitation reduced","unchanged, but quietening","unchanged","dropping","doubling loop, quietening","inward-turned, still-receiving"]},
+ {name:"Dhāraṇā",tag:"Saṁyama begins",df:.45,w:.12,dphi:110,nz:.14,osc:.9,lk:4,pw:.5,
+  body:"Dhāraṇā binds ψₘ to a single object (YS 3.1). fₘ is held near fₛ, drifts off, and is brought back, so the beat oscillates between near zero and large. Moments of coherence alternate with moments of disruption. The effort of locking is felt, and the effort is the practice. This is Lift 1, and the pull is intermittent.",
+  t:["Δf decreasing on average, oscillating","slowing; alternating rough and smooth","intermittently coherent","reduced","Lift 1, toward {3, 6}","effortful holding, repeated return"]},
+ {name:"Dhyāna",tag:"Unbroken flow",df:.03,w:0,dphi:60,nz:.07,osc:0,lk:2.5,pw:.3,
+  body:"In dhyāna (YS 3.2) the locking becomes continuous. fₘ ≈ fₛ steadily, the beat is small and stable, and the carrier runs close to fₛ. The envelope swells and subsides gently. A faint sense of “I am meditating on this” remains: the standing tilt Δφ has not fully released, though buddhi’s correction is reducing it. This is Lift 2.",
+  t:["Δf small, steady; Δφ reducing through buddhi’s correction","very slow, gentle swell","stable, near fₛ","low","Lift 2, toward {9}","continuous flow, effort receding"]},
+ {name:"Samādhi",tag:"Savikalpa",df:0,w:0,dphi:0,nz:.02,osc:0,lk:8,pw:0,
+  body:"In samādhi (YS 3.3) fₘ = fₛ and Δφ = 0, so R(t) = 2A cos(2π fₛ t): constant fullness, the carrier at the object’s own rhythm. The frequency did not change. What doubled is the amplitude. Both waves are still there. The meditator-as-separate has dissolved into the resonance, which is the “as if” of svarūpa-śūnyam iva. The system has reached {9}.",
+  t:["Δf = 0; Δφ = 0","constant fullness (2A)","at fₛ, the object’s own rhythm","minimal","{9}","object alone shining, knower-pole dissolved"]},
+ {name:"Self-Recognition",tag:"{0}",df:0,w:0,dphi:0,nz:.02,osc:0,lk:8,pw:0,
+  body:"Samādhi is {9}, not {0}. The source-pole {0} is not a state of the wave equation. It is the awareness in which the equation appears, together with chitta, the field where the two waves superpose. Samādhi is the highest reach of the manifest. Recognition that this awareness is what one is, is a separate movement: Self-Recognition, developed in Lesson 5.7.",
+  t:["not a state of the meeting","the equation appears within it","as every state does","as every state does","{0}, the source-pole","recognition of what one is, not an experience among others"]}
+];
+var TLAB=["Alignment","Envelope (beat)","Carrier","n(t)","Ritam Diagram","Felt quality"];
+function params(p){var i=Math.min(3,Math.floor(p)),f=p-i,a=STAGES[i],b=STAGES[i+1],o={};
+  ["df","w","dphi","nz","osc","lk","pw"].forEach(function(k){o[k]=lerp(a[k],b[k],f)});return o}
+function gauss(){var u=0,v=0;while(!u)u=Math.random();v=Math.random();return Math.sqrt(-2*Math.log(u))*Math.cos(TAU*v)}
+
+/* ---------- simulation ---------- */
+function Sim(){
+  this.t=0;this.thS=0;this.psi=0;this.fm=FS+.8;this.dphi=2.2;this.wob=0;this.k=-1;this.nextSw=0;this.lapseUntil=-1;this.lapseF=7;this.nv=0;
+  this.S=new Float32Array(N);this.A=new Float32Array(N);this.R=new Float32Array(N);this.E=new Float32Array(N);this.F=new Float32Array(N);this.Z=new Float32Array(N);
+  this.head=0;this.count=0;this.rho=0;
+}
+Sim.prototype.lapse=function(){this.lapseUntil=this.t+.9+Math.random()*.8;this.lapseF=DIST[Math.floor(Math.random()*DIST.length)]};
+Sim.prototype.step=function(P){
+  var dt=DT;this.t+=dt;
+  if(this.t>=this.nextSw){this.k=Math.random()<P.w?Math.floor(Math.random()*DIST.length):-1;this.nextSw=this.t+.7+Math.random()*1.6}
+  var target=FS+P.df*(1+P.osc*Math.sin(TAU*.3*this.t));
+  if(this.k>=0)target=lerp(target,DIST[this.k],Math.min(1,P.w*1.1));
+  if(this.t<this.lapseUntil)target=lerp(target,this.lapseF,.9);
+  var amp=.005+.3*(P.df+P.w);
+  this.wob+=-this.wob*2*dt+(Math.random()-.5)*Math.sqrt(dt)*3*amp;
+  this.fm+=(target+this.wob-this.fm)*(1-Math.exp(-5*dt));
+  var dp=P.dphi*Math.PI/180;this.dphi+=(dp-this.dphi)*(1-Math.exp(-dt/.7));
+  this.thS=(this.thS+TAU*FS*dt)%TAU;
+  /* psi is the drift of ψm against ψx. Near frequency match it is held by a soft spring, so what remains is the standing tilt. */
+  this.psi+=TAU*(this.fm-FS)*dt;
+  this.psi=this.psi-TAU*Math.round(this.psi/TAU);
+  var kp=P.lk*(1-clamp(Math.abs(this.fm-FS)/.25,0,1));
+  if(kp>0){this.psi-=this.psi*(1-Math.exp(-kp*dt));if(P.pw>0)this.psi+=P.pw*Math.sqrt(2*kp*dt)*gauss()}
+  this.nv+=((gauss()*.9)-this.nv)*(1-Math.exp(-dt*45));
+  var s=Math.cos(this.thS),a=Math.cos(this.thS+this.psi+this.dphi);
+  var rho=this.psi+this.dphi;this.rho=rho;
+  var i=this.head;this.S[i]=s;this.A[i]=a;this.R[i]=s+a;this.E[i]=2*Math.abs(Math.cos(rho/2));this.F[i]=this.fm;this.Z[i]=this.nv*P.nz;
+  this.head=(i+1)%N;if(this.count<N)this.count++;
+};
+Sim.prototype.stats=function(){
+  var n=Math.min(M,this.count);if(!n)return {full:0,steady:0,close:0,df:0};
+  var sum=0,sq=0,df=0,idx;
+  for(var j=0;j<n;j++){idx=(this.head-1-j+N)%N;var e=this.E[idx];sum+=e;sq+=e*e;df+=Math.abs(this.F[idx]-FS)}
+  var mean=sum/n,sd=Math.sqrt(Math.max(0,sq/n-mean*mean));df/=n;
+  return {full:mean/2,steady:1-Math.min(1,sd/.62),close:1-Math.min(1,df/1.5),df:df};
+};
+var sim=new Sim();
+
+/* ---------- state ---------- */
+var mode="study",p=0,pTarget=0,u=0,uTarget=0,playing=true,reduced=false;
+try{reduced=window.matchMedia("(prefers-reduced-motion: reduce)").matches}catch(e){}
+if(reduced)playing=false;
+var train=.1,practising=false,ptime=0,hist=[],lapses=[],reachedAt=null,histAcc=0,lapseCount=0;
+(function(){var P=params(0);for(var i=0;i<N+120;i++)sim.step(P)})();
+
+/* ---------- scope ---------- */
+var scope=el("scope");
+function drawScope(){
+  var f=C.fit(scope);if(!f)return;var g=f.g,W=f.w,H=f.h;
+  g.clearRect(0,0,W,H);
+  var hs=Math.round(H*.17),ha=hs,hn=Math.round(H*.13),hr=H-hs-ha-hn;
+  var y1=hs,y2=hs+ha,y3=hs+ha+hr;
+  var a=1-.85*u,m=10;
+  g.fillStyle=col["--surface"];g.globalAlpha=.55;g.fillRect(0,y1,W,ha);g.globalAlpha=1;
+  g.strokeStyle=col["--line"];g.lineWidth=1;
+  [y1,y2,y3].forEach(function(y){g.beginPath();g.moveTo(0,y+.5);g.lineTo(W,y+.5);g.stroke()});
+  g.save();g.strokeStyle=col["--line"];g.globalAlpha=.6;g.setLineDash([2,4]);
+  for(var s=1;s<4;s++){var x=W*s/4;g.beginPath();g.moveTo(x,0);g.lineTo(x,H);g.stroke()}
+  g.restore();
+  var fm=sim.fm,dphiDeg=sim.dphi*180/Math.PI,N_=N;
+  var scS=hs/2-8;
+  C.trace(g,sim.S,sim.head,N_,0,W,hs/2,scS,col["--obj"],2,a);
+  C.trace(g,sim.S,sim.head,N_,0,W,y1+ha/2,scS,col["--obj"],5,.22*a);
+  C.trace(g,sim.A,sim.head,N_,0,W,y1+ha/2,scS,col["--att"],2,a);
+  var cyR=y2+hr/2,scR=(hr/2-10)/2;
+  C.envelope(g,sim.E,sim.head,N_,W,cyR,scR,col["--env"],a);
+  C.trace(g,sim.R,sim.head,N_,0,W,cyR,scR,col["--res"],2.2,a);
+  C.trace(g,sim.Z,sim.head,N_,0,W,y3+hn/2,(hn/2-3),col["--muted"],1.2,a);
+  C.label(g,"ψₓ(t)  object-wave   fₛ = 5.0 Hz",m,14,col["--obj"],"left",true);
+  C.label(g,"ψₘ(t)  attention wave   fₘ = "+fm.toFixed(1)+" Hz   Δφ = "+Math.round(dphiDeg)+"°",m,y1+14,col["--att"],"left",true);
+  C.label(g,"R(t) = ψₓ(t) + ψₘ(t)   the vṛtti",m,y2+15,col["--res"],"left",true);
+  C.label(g,"envelope (clarity)",W-m,y2+15,col["--env"],"right",true);
+  C.label(g,"carrier (content) at "+((FS+fm)/2).toFixed(1)+" Hz",W-m,y2+30,col["--res"],"right",true);
+  C.label(g,"n(t)  noise",m,y3+13,col["--muted"],"left",true);
+  C.label(g,"4 s of history",W/2,H-5,col["--muted"],"center",true);
+  if(u>.01){
+    g.save();g.globalAlpha=.82*u;g.fillStyle=col["--surface"];g.fillRect(0,0,W,H);g.restore();
+    g.save();g.globalAlpha=u*.9;g.strokeStyle=col["--res"];g.lineWidth=2.4;g.shadowColor=col["--res"];g.shadowBlur=16;
+    g.beginPath();g.moveTo(W*.08,H/2);g.lineTo(W*.92,H/2);g.stroke();g.restore();
+    g.save();g.globalAlpha=u;g.textAlign="center";
+    g.font="italic 500 21px Spectral,Georgia,serif";g.fillStyle=col["--ink"];
+    g.fillText("{0}: the awareness in which the equation appears",W/2,H/2-26);
+    g.font="italic 500 17px Spectral,Georgia,serif";
+    g.fillText("one Citi, appearing as knower and known",W/2,H/2-2);
+    g.font=C.FONT;g.fillStyle=col["--muted"];
+    g.fillText("Not a state of the meeting. The equation does not reach a final value; it dissolves into this.",W/2,H/2+34);g.restore();
+  }
+}
+
+/* ---------- ruler ---------- */
+var ruler=el("ruler");
+function drawRuler(){
+  var f=C.fit(ruler);if(!f)return;var g=f.g,W=f.w,H=f.h;g.clearRect(0,0,W,H);
+  var lo=2.6,hi=8.6,x0=14,x1=W-14,by=H*.5;
+  function X(h){return x0+(h-lo)/(hi-lo)*(x1-x0)}
+  g.strokeStyle=col["--line"];g.lineWidth=1.5;g.beginPath();g.moveTo(x0,by);g.lineTo(x1,by);g.stroke();
+  for(var h=3;h<=8;h++){g.beginPath();g.moveTo(X(h),by-4);g.lineTo(X(h),by+4);g.stroke();C.label(g,h+" Hz",X(h),by+19,col["--muted"],"center")}
+  DIST.forEach(function(d){g.fillStyle=col["--muted"];g.globalAlpha=.55;g.beginPath();g.arc(X(d),by,5,0,TAU);g.fill();g.globalAlpha=1;C.label(g,"other",X(d),by-12,col["--muted"],"center")});
+  var xs=X(FS),xm=X(sim.fm);
+  g.strokeStyle=col["--env"];g.lineWidth=2;g.setLineDash([3,3]);g.beginPath();g.moveTo(xs,by-24);g.lineTo(xm,by-24);g.stroke();g.setLineDash([]);
+  C.label(g,"Δf "+Math.abs(sim.fm-FS).toFixed(1),(xs+xm)/2,by-30,col["--env"],"center");
+  g.fillStyle=col["--obj"];g.beginPath();g.moveTo(xs,by-9);g.lineTo(xs+8,by);g.lineTo(xs,by+9);g.lineTo(xs-8,by);g.closePath();g.fill();
+  C.label(g,"object",xs,by+38,col["--obj"],"center");
+  g.fillStyle=col["--att"];g.beginPath();g.arc(xm,by,7,0,TAU);g.fill();
+  C.label(g,"attention",xm,by-44,col["--att"],"center");
+}
+
+/* ---------- phasor ---------- */
+var phasor=el("phasor");
+function drawPhasor(){
+  var f=C.fit(phasor);if(!f)return;var g=f.g,W=f.w,H=f.h;g.clearRect(0,0,W,H);
+  var cx=W/2,cy=H/2,un=Math.min(W,H)/2/2.25;
+  g.strokeStyle=col["--line"];g.lineWidth=1;
+  [1,2].forEach(function(r){g.beginPath();g.arc(cx,cy,un*r,0,TAU);g.stroke()});
+  g.beginPath();g.moveTo(cx-un*2.1,cy);g.lineTo(cx+un*2.1,cy);g.moveTo(cx,cy-un*2.1);g.lineTo(cx,cy+un*2.1);g.stroke();
+  var rho=sim.rho,sx=cx+un,sy=cy,ax=sx+un*Math.cos(rho),ay=sy-un*Math.sin(rho);
+  function arrow(x1,y1,x2,y2,c,lw){g.strokeStyle=c;g.fillStyle=c;g.lineWidth=lw;g.beginPath();g.moveTo(x1,y1);g.lineTo(x2,y2);g.stroke();
+    var an=Math.atan2(y2-y1,x2-x1);g.beginPath();g.moveTo(x2,y2);g.lineTo(x2-8*Math.cos(an-.4),y2-8*Math.sin(an-.4));g.lineTo(x2-8*Math.cos(an+.4),y2-8*Math.sin(an+.4));g.closePath();g.fill()}
+  arrow(cx,cy,sx,sy,col["--obj"],2.4);
+  arrow(sx,sy,ax,ay,col["--att"],2.4);
+  g.setLineDash([4,3]);arrow(cx,cy,ax,ay,col["--res"],3);g.setLineDash([]);
+  C.label(g,"ψₓ",cx+un*.5,cy+15,col["--obj"],"center");
+}
+
+/* ---------- meters ---------- */
+var mA={full:0,steady:0,close:0};
+function updateMeters(){
+  var s=sim.stats();
+  mA.full+=(s.full-mA.full)*.3;mA.steady+=(s.steady-mA.steady)*.3;mA.close+=(s.close-mA.close)*.3;
+  [["mFull","mFullV",mA.full],["mSteady","mSteadyV",mA.steady],["mTrue","mTrueV",mA.close]].forEach(function(r){
+    var v=Math.round(clamp(r[2],0,1)*100);el(r[0]).style.width=v+"%";el(r[1]).textContent=v+"%"});
+  el("mNums").textContent="Δf "+Math.abs(sim.fm-FS).toFixed(1)+" Hz · Δφ "+Math.round(sim.dphi*180/Math.PI)+"°";
+}
+
+/* ---------- stage text and chips ---------- */
+var chipsEl=el("chips");
+STAGES.forEach(function(s,i){
+  var b=document.createElement("button");b.className="chip";b.dataset.s=i;
+  b.innerHTML="<i>"+(i<5?i:"{0}")+"</i><span>"+s.name+"</span>";chipsEl.appendChild(b);
+});
+var chipBtns=[].slice.call(chipsEl.children);
+var shownStage=-1;
+function setText(i){
+  if(i===shownStage)return;shownStage=i;var s=STAGES[i];
+  el("stTitle").textContent=s.name;el("stTag").textContent=s.tag;el("stBody").textContent=s.body;
+  var h="";TLAB.forEach(function(l,k){h+="<div><dt>"+l+"</dt><dd></dd></div>"});
+  el("stTable").innerHTML=h;
+  [].forEach.call(el("stTable").querySelectorAll("dd"),function(d,k){d.textContent=s.t[k]});
+  el("bracket").style.visibility=(i>=2&&i<=4)?"visible":"hidden";
+}
+function markChips(i){chipBtns.forEach(function(b,k){b.setAttribute("aria-pressed",String(k===i));b.classList.toggle("reached",mode==="practise"&&k<=i&&k<5)})}
+function settle(sec){p=pTarget;var P=params(p);for(var i=0;i<sec*120;i++)sim.step(P);u=uTarget}
+function setStudy(i){
+  pTarget=Math.min(4,i);uTarget=i===5?1:0;setText(i);markChips(i);
+  if(!playing)settle(5);
+}
+chipBtns.forEach(function(b){b.addEventListener("click",function(){if(mode==="study")setStudy(+b.dataset.s)})});
+
+/* ---------- mode and practice ---------- */
+var practiseBox=el("practice");
+function setMode(m){
+  mode=m;el("modeStudy").setAttribute("aria-pressed",String(m==="study"));el("modePractise").setAttribute("aria-pressed",String(m==="practise"));
+  practiseBox.hidden=m!=="practise";
+  chipBtns.forEach(function(b){b.disabled=m==="practise"});
+  if(m==="study"){practising=false;setStudy(Math.min(4,Math.round(p)))}
+  else{practising=false;p=0;pTarget=0;uTarget=0;u=0;resetSession();setText(0);markChips(0);if(!playing)settle(4)}
+}
+el("modeStudy").addEventListener("click",function(){setMode("study")});
+el("modePractise").addEventListener("click",function(){setMode("practise")});
+function trainWord(){var v=Math.round(train*100);return v<25?"Untrained":v<60?"Developing":"Trained"}
+function updateTrainUI(){el("trainWord").innerHTML="<b>"+trainWord()+"</b> mind. Slips come "+(train<.25?"often and cost a lot":train<.6?"now and then":"rarely and cost little")+"."}
+el("train").addEventListener("input",function(e){train=+e.target.value/100;updateTrainUI()});
+function setTrain(v){train=v;el("train").value=Math.round(v*100);updateTrainUI()}
+el("preU").addEventListener("click",function(){setTrain(.08);beginPractice()});
+el("preT").addEventListener("click",function(){setTrain(.95);beginPractice()});
+function resetSession(){hist=[];lapses=[];ptime=0;reachedAt=null;histAcc=0;lapseCount=0;el("pRead").textContent="Press Begin practice. The attention wave will try to climb to samādhi."}
+function beginPractice(){
+  if(mode!=="practise")setMode("practise");
+  resetSession();p=0;pTarget=4;practising=true;if(!playing)togglePlay(true);
+}
+el("begin").addEventListener("click",beginPractice);
+el("resetP").addEventListener("click",function(){practising=false;p=0;pTarget=0;resetSession();if(!playing)settle(4)});
+function practiceUpdate(dt){
+  if(!practising||mode!=="practise")return;
+  ptime+=dt;
+  var rate=.045+.09*train,lapseRate=(.12+.08*p)*(1-train)+.02,knock=1-.75*train;
+  p=Math.min(4,p+rate*dt);
+  if(Math.random()<lapseRate*dt){
+    var loss=knock*(.7+.6*Math.random());
+    if(p>.05){p=Math.max(0,p-loss);sim.lapse();lapses.push(ptime);lapseCount++}
+  }
+  if(reachedAt===null&&p>=3.98){reachedAt=ptime}
+  histAcc+=dt;
+  while(histAcc>=.25){histAcc-=.25;hist.push({t:ptime,p:p});if(hist.length>420)hist.shift()}
+  var s=Math.min(4,Math.round(p));
+  setText(s);markChips(s);
+  var msg="Time "+Math.round(ptime)+" s · slips "+lapseCount+" · now at "+STAGES[s].name;
+  if(reachedAt!==null)msg+=" · first reached samādhi at "+Math.round(reachedAt)+" s";
+  else if(ptime>60&&p<3)msg+=" · still working at the lower stages";
+  el("pRead").textContent=msg;
+}
+var sess=el("session");
+function drawSession(){
+  if(practiseBox.hidden)return;
+  var f=C.fit(sess);if(!f)return;var g=f.g,W=f.w,H=f.h;g.clearRect(0,0,W,H);
+  var l=104,r=W-10,t=10,b=H-22,T=100;
+  function Y(v){return b-(v/4)*(b-t)}
+  g.strokeStyle=col["--line"];g.lineWidth=1;
+  for(var i=0;i<=4;i++){g.beginPath();g.moveTo(l,Y(i)+.5);g.lineTo(r,Y(i)+.5);g.stroke();C.label(g,STAGES[i].name,l-8,Y(i)+4,i===Math.min(4,Math.round(p))?col["--ink"]:col["--muted"],"right")}
+  var now=ptime;
+  function X(tm){return r-(now-tm)/T*(r-l)}
+  g.save();g.beginPath();g.rect(l,0,r-l,H);g.clip();
+  g.strokeStyle=col["--res"];g.lineWidth=2.4;g.lineJoin="round";g.beginPath();var st=false;
+  hist.forEach(function(h){var x=X(h.t),y=Y(h.p);if(!st){g.moveTo(x,y);st=true}else g.lineTo(x,y)});
+  if(st)g.lineTo(X(now),Y(p));g.stroke();
+  lapses.forEach(function(tm){var x=X(tm);if(x<l)return;g.fillStyle=col["--env"];g.beginPath();g.moveTo(x,t+2);g.lineTo(x-5,t+2);g.lineTo(x,t+10);g.closePath();g.fill()});
+  g.restore();
+  g.fillStyle=col["--res"];g.beginPath();g.arc(X(now),Y(p),5,0,TAU);g.fill();
+  C.label(g,"slip",r,t+22,col["--env"],"right");
+  C.label(g,"last 100 s",l,H-6,col["--muted"]);
+}
+
+/* ---------- play/pause ---------- */
+function togglePlay(v){playing=v===undefined?!playing:v;el("playbtn").textContent=playing?"Pause":"Play";el("playbtn").setAttribute("aria-pressed",String(playing))}
+el("playbtn").addEventListener("click",function(){togglePlay()});
+if(reduced){el("playbtn").textContent="Play";el("playbtn").setAttribute("aria-pressed","false")}
+
+/* ---------- ladder ---------- */
+function buildLadder(){
+  var box=el("ladder");
+  ["Stage","Fullness","Steadiness","Carrier near the object"].forEach(function(h){var d=document.createElement("div");d.className="h";d.textContent=h.toUpperCase();box.appendChild(d)});
+  for(var i=0;i<5;i++){
+    var s=new Sim(),P=params(i);
+    for(var k=0;k<120*8;k++)s.step(P);
+    var sf=0,ss=0,sc=0,n=0;
+    for(var k2=0;k2<120*30;k2++){s.step(P);if(k2%10===0){var st=s.stats();sf+=st.full;ss+=st.steady;sc+=st.close;n++}}
+    var vals=[sf/n,ss/n,sc/n];
+    var nm=document.createElement("div");nm.textContent=STAGES[i].name;nm.style.fontFamily="var(--display)";nm.style.fontSize="16px";box.appendChild(nm);
+    vals.forEach(function(v,c){var cell=document.createElement("div");cell.className="cell c"+(c+1);
+      var pc=Math.round(clamp(v,0,1)*100);cell.innerHTML="<span><i style='width:"+pc+"%'></i></span><em>"+pc+"%</em>";box.appendChild(cell)});
+  }
+}
+buildLadder();
+
+/* ---------- main loop ---------- */
+setStudy(0);updateTrainUI();
+var last=performance.now(),acc=0,frameN=0;
+function frame(now){
+  var dtr=Math.min(.1,(now-last)/1000);last=now;
+  if(playing){
+    if(mode==="study"){p+=(pTarget-p)*(1-Math.exp(-3*dtr))}
+    practiceUpdate(dtr);
+    u+=(uTarget-u)*(1-Math.exp(-2.5*dtr));
+    acc+=dtr;var P=params(clamp(p,0,4));
+    while(acc>=DT){sim.step(P);acc-=DT}
+  }else{u+=(uTarget-u)*(1-Math.exp(-6*dtr))}
+  drawScope();drawRuler();drawPhasor();
+  if((frameN++)%4===0)updateMeters();
+  drawSession();
+  requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+})();
+
+</script>
+</body></html>

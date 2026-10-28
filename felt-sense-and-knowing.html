@@ -1,0 +1,358 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Felt Sense and Knowing</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Source+Sans+3:ital,wght@0,400;0,600;1,400&family=Spectral:ital,wght@0,400;0,500;1,400&display=swap">
+<style>
+:root{
+  --bg:#F2F5F9; --surface:#FFFFFF; --ink:#13203A; --muted:#58647D; --line:#D3DAE6; --tint:#E7EDF6;
+  --obj:#0B8686; --att:#C95F06; --res:#2E3192; --env:#C0245B; --ok:#1B7A52;
+  --display:"Spectral",Georgia,"Times New Roman",serif;
+  --body:"Source Sans 3",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0B1120; --surface:#121A2D; --ink:#E7ECF6; --muted:#9AA6BF; --line:#26324D; --tint:#1A2540;
+    --obj:#46CFC6; --att:#F5A04D; --res:#A3AAFF; --env:#FF7BA9; --ok:#5BD59B; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0B1120; --surface:#121A2D; --ink:#E7ECF6; --muted:#9AA6BF; --line:#26324D; --tint:#1A2540;
+  --obj:#46CFC6; --att:#F5A04D; --res:#A3AAFF; --env:#FF7BA9; --ok:#5BD59B; color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;
+  padding-left:max(14px,env(safe-area-inset-left,0px));padding-right:max(14px,env(safe-area-inset-right,0px));padding-block:22px 40px}
+.wrap{max-width:900px;margin:0 auto;display:flex;flex-direction:column;gap:32px}
+h1,h2,h3{font-family:var(--display);font-weight:500;text-wrap:balance;margin:0;letter-spacing:-.01em}
+h1{font-size:clamp(30px,5.4vw,44px);line-height:1.06}
+h2{font-size:clamp(23px,3.4vw,29px);line-height:1.15}
+h3{font-size:19px;line-height:1.25}
+p{margin:0}
+sub{font-size:.72em;line-height:0}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.lede{font-size:17.5px;max-width:64ch}
+.intro{max-width:66ch;color:var(--muted)}
+header{display:flex;flex-direction:column;gap:12px}
+section{display:flex;flex-direction:column;gap:18px;min-width:0}
+.sym{font-family:var(--mono);font-size:.92em;white-space:nowrap}
+.k-obj{color:var(--obj)} .k-att{color:var(--att)} .k-res{color:var(--res)} .k-env{color:var(--env)}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px;display:flex;flex-direction:column;gap:14px;min-width:0}
+.bar{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;justify-content:space-between}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--bg)}
+.seg button{font:inherit;font-size:14px;color:var(--muted);background:transparent;border:0;padding:8px 13px;cursor:pointer}
+.seg button+button{border-left:1px solid var(--line)}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--surface)}
+button:focus-visible,input:focus-visible{outline:2px solid var(--res);outline-offset:2px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{font:inherit;font-size:14px;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:7px 13px;cursor:pointer;display:inline-flex;gap:8px;align-items:center}
+.chip i{font-style:normal;font-family:var(--mono);font-size:11px;color:var(--muted)}
+.chip[aria-pressed="true"]{background:var(--res);border-color:var(--res);color:#fff}
+.chip[aria-pressed="true"] i{color:#fff;opacity:.8}
+.chip:disabled{cursor:default}
+.chip.reached:not([aria-pressed="true"]){border-color:var(--res)}
+.btn{font:inherit;font-size:14px;color:var(--ink);background:var(--surface);border:1px solid var(--ink);border-radius:8px;padding:8px 16px;cursor:pointer}
+.btn.primary{background:var(--ink);color:var(--surface)}
+.btn.ghost{border-color:var(--line);color:var(--muted)}
+.scope-wrap{position:relative;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--bg)}
+canvas{display:block;width:100%}
+.playbtn{position:absolute;right:8px;bottom:8px;font:inherit;font-size:12px;background:var(--surface);color:var(--muted);border:1px solid var(--line);border-radius:6px;padding:4px 10px;cursor:pointer}
+.box{border:1px solid var(--line);border-radius:8px;background:var(--bg);padding:10px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.box .cap{font-size:12px;color:var(--muted)}
+.meters{display:flex;flex-direction:column;gap:9px}
+.meter{display:grid;grid-template-columns:1fr auto;gap:2px 8px;font-size:13px;align-items:baseline}
+.meter b{font-weight:600}
+.meter output{font-family:var(--mono);font-size:12px;color:var(--muted)}
+.meter .track{grid-column:1/-1;height:7px;background:var(--line);border-radius:4px;overflow:hidden}
+.meter .fill{height:100%;width:0;background:var(--res);border-radius:4px}
+.meter.f2 .fill{background:var(--env)} .meter.f3 .fill{background:var(--obj)}
+.slider{display:flex;align-items:center;gap:10px;flex:1 1 280px;min-width:0}
+.slider label{font-size:14px;min-width:0}
+.slider input[type=range]{flex:1;min-width:60px;accent-color:var(--res)}
+.slider small{color:var(--muted);font-size:12px;white-space:nowrap}
+.slider output{font-family:var(--mono);font-size:12.5px;color:var(--muted);min-width:46px;text-align:right}
+.readout{font-size:14px;color:var(--muted)}
+.readout b{color:var(--ink)}
+.tag{font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);border:1px solid var(--line);border-radius:4px;padding:2px 6px}
+.note{font-size:13px;color:var(--muted);max-width:70ch}
+.balance{background:var(--tint);border-radius:10px;padding:16px 18px;display:flex;flex-direction:column;gap:8px;max-width:78ch}
+footer{font-size:13px;color:var(--muted);max-width:76ch;border-top:1px solid var(--line);padding-top:12px}
+@media (max-width:640px){.panel{padding:12px}.wrap{gap:26px}}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
+
+nav.parts{display:flex;flex-wrap:wrap;gap:8px 20px;margin-top:4px}
+nav.parts a{color:var(--ink);text-decoration:none;border-bottom:1px solid var(--line);padding-bottom:2px;font-size:15px}
+nav.parts a:hover,nav.parts a:focus-visible{border-color:var(--res);color:var(--res)}
+.flow{display:flex;flex-direction:column;gap:12px}
+.lane{border:1px solid var(--line);border-radius:10px;background:var(--surface);padding:16px;display:flex;flex-direction:column;gap:12px;transition:opacity .25s}
+.lane-title{display:flex;flex-wrap:wrap;gap:4px 12px;align-items:baseline;font-family:var(--display);font-size:19px}
+.lane-title small{font-family:var(--body);font-size:13px;color:var(--muted)}
+.nodes{display:flex;flex-wrap:wrap;gap:10px;align-items:stretch}
+.node{flex:1 1 170px;min-width:0;border-radius:8px;padding:10px 12px;display:flex;flex-direction:column;gap:4px;font-size:14px;border:1px solid var(--line)}
+.node i{font-style:normal;font-family:var(--mono);font-size:12px}
+.node b{font-weight:600;font-size:15px}
+.node p{color:var(--muted);font-size:14px}
+.node p u{text-decoration:none;font-family:var(--mono);font-size:11px;letter-spacing:.04em;text-transform:uppercase;color:var(--ink)}
+.node q{quotes:none;font-family:var(--display);font-style:italic;font-size:17px;color:var(--ink);margin-top:2px}
+.node.o{background:color-mix(in srgb,var(--obj) 11%,var(--surface))} .node.o i{color:var(--obj)}
+.node.a{background:color-mix(in srgb,var(--att) 11%,var(--surface))} .node.a i{color:var(--att)}
+.node.r{background:color-mix(in srgb,var(--res) 11%,var(--surface))} .node.r i{color:var(--res)}
+.node.h{background:color-mix(in srgb,var(--env) 9%,var(--surface))} .node.h i{color:var(--env)}
+.op{align-self:center;font-family:var(--mono);font-size:18px;color:var(--muted)}
+.bridge{align-self:center;font-size:13px;color:var(--muted);display:flex;align-items:center;gap:8px}
+.bridge::before,.bridge::after{content:"";width:1px;height:18px;background:var(--line)}
+.flow[data-view="felt"] .lane-under,.flow[data-view="under"] .lane-felt{opacity:.28}
+.contrib{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+.contrib div{display:flex;flex-direction:column;gap:3px;border-top:1px solid var(--line);padding-top:8px;font-size:14px;color:var(--muted)}
+.contrib b{color:var(--ink);font-size:15px}
+.contrib p{font-size:14px}
+.two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.two>div{border-top:2px solid var(--ink);padding-top:10px;display:flex;flex-direction:column;gap:6px;font-size:15px}
+.two p{color:var(--muted)}
+#routes{height:300px}
+.sliders2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 24px}
+.sliders2 .slider{flex:initial}
+.texts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 28px}
+.texts div{border-top:1px solid var(--line);padding-top:8px;font-size:14px;color:var(--muted);display:flex;flex-direction:column;gap:2px}
+.texts p{font-size:14px;color:var(--muted)}
+.texts b{color:var(--ink);font-size:15px;font-weight:600}
+.texts span.sa{font-family:var(--display);font-style:italic;font-size:15px;color:var(--ink)}
+@media (max-width:860px){.contrib{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:640px){.contrib,.two,.texts,.sliders2{grid-template-columns:minmax(0,1fr)}.op{display:none}}
+@media (prefers-reduced-motion: reduce){.lane{transition:none}}
+
+</style></head><body>
+<div class="wrap">
+<header>
+  <div class="eyebrow">The Mind in the Light of Modern and Spiritual Sciences · Lesson 3.8</div>
+  <h1>Two ways of knowing</h1>
+  <p class="lede">Every thing is met twice: once as it is felt, and once as it is understood. Both are vṛttis, formed in the same field. Then there is a third way, which does not go through words at all. Here the three are set side by side in the notation of Lessons 3.2 and 3.8: the object-wave <span class="sym k-obj">ψ<sub>x</sub>(t)</span>, the attention wave <span class="sym k-att">ψ<sub>m</sub>(t)</span>, the stored past <span class="sym k-env">h(t)</span> and the resultant <span class="sym k-res">R(t)</span>.</p>
+  <nav class="parts" aria-label="Parts of this page"><a href="#partA">I. Felt sense and understanding</a><a href="#partB">II. Why saṁyama knows differently</a></nav>
+</header>
+
+<section id="partA">
+  <h2>I. Felt sense and understanding</h2>
+  <p class="intro">Everyone has both. The felt sense is what it is like. The understanding is what it is about. Pick an example, then look at each lane on its own or together. The bell is the plainest case, hunger is inward, and a friend's words are relational.</p>
+  <div class="bar">
+    <div class="seg" id="exSeg" role="group" aria-label="Example">
+      <button data-ex="bell" aria-pressed="true">A bell</button>
+      <button data-ex="hunger" aria-pressed="false">Hunger</button>
+      <button data-ex="friend" aria-pressed="false">A friend's words</button>
+    </div>
+    <div class="seg" id="viewSeg" role="group" aria-label="View">
+      <button data-v="felt" aria-pressed="false">Felt sense</button>
+      <button data-v="under" aria-pressed="false">Understanding</button>
+      <button data-v="both" aria-pressed="true">Both</button>
+    </div>
+  </div>
+  <div class="flow" id="flow" data-view="both">
+    <div class="lane lane-felt">
+      <div class="lane-title">Felt sense <small>first-hand, direct (pratyakṣa)</small></div>
+      <div class="nodes">
+        <div class="node o"><i>ψₓ(t)</i><b>The thing itself</b><p id="exSig"></p></div>
+        <span class="op">+</span>
+        <div class="node a"><i>ψₘ(t)</i><b>Your attention</b><p>Carries its own frequency and the standing tilt Δφ, so what arrives is already “mine”.</p></div>
+        <span class="op">=</span>
+        <div class="node r"><i>R(t)</i><b>The felt sense</b>
+          <p><u>Carrier</u> <span id="exCar"></span></p>
+          <p><u>Envelope</u> <span id="exEnv"></span></p>
+          <q id="exFelt"></q></div>
+      </div>
+    </div>
+    <div class="bridge">buddhi reads the carrier and threads it through memory</div>
+    <div class="lane lane-under">
+      <div class="lane-title">Understanding <small>second-hand, through words and inference (āgama, anumāna)</small></div>
+      <div class="nodes">
+        <div class="node o"><i>ψₓ′(t)</i><b>The explanation</b><p id="exWords"></p></div>
+        <span class="op">∗</span>
+        <div class="node h"><i>h(t)</i><b>What you already know</b><p id="exStored"></p></div>
+        <span class="op">+</span>
+        <div class="node a"><i>G(t)·ψₘ(t)</i><b>Attention and buddhi</b><p>The same attention must meet the words, gained by body and prāṇa. A scattered mind takes in less.</p></div>
+        <span class="op">=</span>
+        <div class="node r"><i>R′(t)</i><b>The understanding</b><p id="exUnder"></p><q id="exGain"></q></div>
+      </div>
+    </div>
+  </div>
+  <h3>What contributes to understanding</h3>
+  <div class="contrib">
+    <div><b>Buddhi</b><p>Reads the carrier of the felt sense and assigns meaning to it.</p></div>
+    <div><b>Stored saṁskāra, h(t)</b><p>The filter of what was learned before. The doctor's training, the musician's ear, a shared history: each is h(t).</p></div>
+    <div><b>The words themselves</b><p>A second object-wave, ψₓ′(t), arriving by testimony and not by your own contact with the thing.</p></div>
+    <div><b>Inference</b><p>Links this felt sense to other cases: a cause, a course, a remedy.</p></div>
+  </div>
+  <div class="two">
+    <div><h3>The felt sense is first-hand, but not faithful by default</h3><p>It arrives with the ahaṁkāra's tilt already on it. The envelope may be thin or flickering. You have the experience and not yet the understanding of it.</p></div>
+    <div><h3>Understanding is structured, but second-hand</h3><p>It gives relations, predictions and a shared language, and it passes through h(t), so it is only as true as the stored pattern and the words. Neither replaces the other.</p></div>
+  </div>
+</section>
+
+<section id="partB">
+  <h2>II. Why saṁyama knows differently</h2>
+  <p class="intro">Everyday knowing reaches the object through words, concepts and ideas. Saṁyama meets the object itself, with Δf and Δφ both at zero. This is a teaching picture, not a measurement: the object's fine structure stands for its particular character, and a concept keeps what is shared across many objects.</p>
+  <div class="panel">
+    <div class="sliders2">
+      <div class="slider"><label for="detail">Particular detail the concept keeps</label><input type="range" id="detail" min="0" max="100" value="25"><output id="detailV">25%</output></div>
+      <div class="slider"><label for="tilt">Standing tilt Δφ</label><input type="range" id="tilt" min="0" max="180" value="100"><output id="tiltV">100°</output></div>
+    </div>
+    <div class="scope-wrap"><canvas id="routes" role="img" aria-label="Three traces of one object: the object itself, what arrives through words and concepts, and what arrives through saṁyama."></canvas></div>
+    <p class="note">Top: the object-wave with its full structure. Middle: what arrives by words, losing detail and scaled by cos(Δφ/2). Bottom: the same object through saṁyama, where nothing is lost on the way. Drag both sliders to zero detail and 180° to see the extreme.</p>
+  </div>
+
+  <h3>What Patañjali says, read in the course's terms</h3>
+  <div class="texts">
+    <div><span class="sa">śabdārtha-pratyayānām itaretarādhyāsāt saṅkaraḥ (3.17)</span><b>Word, object and idea are mixed up</b><p>They are superimposed on one another (adhyāsa). Saṁyama on their separation unmixes them.</p></div>
+    <div><span class="sa">śabdārtha-jñāna-vikalpaiḥ saṅkīrṇā savitarkā (1.42)</span><b>Ordinary absorption is still mixed</b><p>Even when attention rests on an object, word, meaning and knowledge are tangled together.</p></div>
+    <div><span class="sa">smṛti-pariśuddhau svarūpa-śūnyevārtha-mātra-nirbhāsā nirvitarkā (1.43)</span><b>With memory purified, only the object shines</b><p>One reading in the course's terms: purified smṛti is h(t) no longer colouring the incoming wave, and “as if empty of its own form” is the standing tilt Δφ released.</p></div>
+    <div><span class="sa">ṛtaṁbharā tatra prajñā (1.48)</span><b>Truth-bearing insight</b><p>Insight that carries what is. In the course's terms, the object alone shining: <span style="white-space:nowrap">R(t) = 2A cos(2π f<sub>s</sub> t)</span>.</p></div>
+    <div><span class="sa">śrutānumāna-prajñābhyām anya-viṣayā viśeṣārthatvāt (1.49)</span><b>A different object from testimony and inference</b><p>Because it reaches the particular (viśeṣa). Words and inference reach what is shared.</p></div>
+    <div><span class="sa">taj-jayāt prajñālokaḥ (3.5)</span><b>The light of direct knowledge</b><p>With resonance established, the object is known by frequency-recognition, the same frequency recognising itself, and not by inference.</p></div>
+  </div>
+
+  <div class="balance">
+    <h3>Different questions, not rival answers</h3>
+    <p>For treating an infection, the doctor's understanding is the right tool: it is public, checkable and built from many cases. Saṁyama is superior in one respect only. It gives the thing itself, in its own particular nature, with no proxy, no filter and no self-reference in between. It also cannot be handed over in words, so it must be verified by those who practise it.</p>
+    <p>In this course's terms, this unity-based knowing is parā vidyā (Lesson 3.8), the knowing by which the Imperishable is attained (Muṇḍaka 1.1.5). Lesson 3.2 adds that even the perfected meeting still has two poles, and that Self-Recognition lies beyond it.</p>
+  </div>
+</section>
+
+<footer>Notation follows Lessons 3.2 and 3.8. The explanation-side object-wave is written ψₓ′(t) to mark it as a second object, the words about the thing, entering through h(t).</footer>
+</div>
+
+<script>
+window.Core=(function(){
+"use strict";
+var TAU=Math.PI*2;
+try{var q=new URLSearchParams(location.search).get("theme");if(q==="light"||q==="dark")document.documentElement.setAttribute("data-theme",q)}catch(e){}
+function lerp(a,b,t){return a+(b-a)*t}
+function clamp(x,a,b){return Math.max(a,Math.min(b,x))}
+function el(id){return document.getElementById(id)}
+var col={},subs=[];
+function readColors(){
+  var cs=getComputedStyle(document.documentElement);
+  ["--bg","--surface","--ink","--muted","--line","--tint","--obj","--att","--res","--env","--ok"].forEach(function(k){col[k]=cs.getPropertyValue(k).trim()});
+  subs.forEach(function(f){try{f()}catch(e){}});
+}
+readColors();
+try{window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change",readColors)}catch(e){}
+new MutationObserver(readColors).observe(document.documentElement,{attributes:true,attributeFilter:["data-theme"]});
+function onTheme(f){subs.push(f)}
+var dpr=Math.max(1,Math.min(2,window.devicePixelRatio||1));
+function fit(c){
+  var w=c.clientWidth,h=c.clientHeight;
+  if(!w||!h)return null;
+  var bw=Math.round(w*dpr),bh=Math.round(h*dpr);
+  if(c.width!==bw||c.height!==bh){c.width=bw;c.height=bh}
+  var g=c.getContext("2d");g.setTransform(dpr,0,0,dpr,0,0);return {g:g,w:w,h:h};
+}
+var FONT="500 11.5px 'Source Sans 3',system-ui,sans-serif";
+function label(g,t,x,y,color,align,pill){
+  g.font=FONT;g.textAlign=align||"left";g.textBaseline="alphabetic";
+  if(pill){var w=g.measureText(t).width,x0=(align==="right")?x-w:(align==="center"?x-w/2:x);
+    g.save();g.globalAlpha=.82;g.fillStyle=col["--surface"];g.fillRect(x0-5,y-12,w+10,17);g.restore()}
+  g.fillStyle=color;g.fillText(t,x,y)}
+/* ring-buffer trace: arr, head index, length N */
+function trace(g,arr,head,N,x0,w,cy,sc,color,lw,alpha,dash){
+  g.save();g.globalAlpha=alpha==null?1:alpha;g.strokeStyle=color;g.lineWidth=lw;g.lineJoin="round";if(dash)g.setLineDash(dash);
+  g.beginPath();
+  for(var i=0;i<N;i++){var v=arr[(head+i)%N];var x=x0+w*i/(N-1),y=cy-v*sc;if(i)g.lineTo(x,y);else g.moveTo(x,y)}
+  g.stroke();g.restore();
+}
+/* shaded envelope band around a lane centre */
+function envelope(g,E,head,N,W,cy,sc,color,alpha){
+  g.save();g.globalAlpha=alpha;
+  g.beginPath();
+  for(var i=0;i<N;i++){var e=E[(head+i)%N],x=W*i/(N-1),y=cy-e*sc;if(i)g.lineTo(x,y);else g.moveTo(x,y)}
+  for(var j=N-1;j>=0;j--){var e2=E[(head+j)%N],x2=W*j/(N-1);g.lineTo(x2,cy+e2*sc)}
+  g.closePath();g.fillStyle=color;g.globalAlpha=.09*alpha;g.fill();g.restore();
+  g.save();g.globalAlpha=alpha;g.strokeStyle=color;g.lineWidth=1.6;g.setLineDash([6,4]);
+  [1,-1].forEach(function(sg){g.beginPath();for(var i2=0;i2<N;i2++){var ee=E[(head+i2)%N]*sg,xx=W*i2/(N-1),yy=cy-ee*sc;if(i2)g.lineTo(xx,yy);else g.moveTo(xx,yy)}g.stroke()});
+  g.restore();
+}
+return {TAU:TAU,lerp:lerp,clamp:clamp,el:el,col:col,onTheme:onTheme,fit:fit,label:label,trace:trace,envelope:envelope,FONT:FONT};
+})();
+
+</script>
+<script>
+(function(){
+"use strict";
+var C=window.Core,col=C.col,el=C.el,TAU=C.TAU;
+var EX={
+ bell:{
+  sig:"The bell's vibration reaches the ear: one steady pitch, a swell, a slow fade.",
+  car:"The ring itself: its pitch, its brightness, the hush that follows.",
+  env:"Full and clear when attention rests on it. Choppy if the mind is elsewhere.",
+  felt:"“Ah, that sound.”",
+  words:"“A struck metal vessel vibrates at a fundamental pitch, with overtones that fade at different rates.”",
+  stored:"Physics of sound, music and the names of notes, if you have studied them.",
+  under:"Why it rings, why it fades, why two near pitches beat. Something you can explain and repeat.",
+  gain:"The bell understood."},
+ hunger:{
+  sig:"Energy stores are low, and the body sends its signal of need.",
+  car:"The pang, the emptiness, the pull toward food.",
+  env:"Sharp and nagging when the mind is restless. Plain and bearable when it is settled.",
+  felt:"“I am hungry.”",
+  words:"“The body is running low on energy and is signalling for more fuel.”",
+  stored:"What you learned about food, energy and the body.",
+  under:"A reason, a timescale and a remedy: why now, what helps, when it will pass.",
+  gain:"Hunger understood."},
+ friend:{
+  sig:"A friend speaks. Her words, her tone and her face arrive together.",
+  car:"The warmth, or the sting, carried by how it was said.",
+  env:"Steady if you are present with her. Flickering if you are rehearsing your reply.",
+  felt:"“Something in me tightened.”",
+  words:"“She was tired and meant concern. I heard criticism because of how a similar remark once landed.”",
+  stored:"Your history with her, and with remarks like this one.",
+  under:"Why it stung, what she meant, what to say back. A reading you can check by asking her.",
+  gain:"The moment understood."}
+};
+function setEx(k){var e=EX[k];
+  el("exSig").textContent=e.sig;el("exCar").textContent=e.car;el("exEnv").textContent=e.env;el("exFelt").textContent=e.felt;
+  el("exWords").textContent=e.words;el("exStored").textContent=e.stored;el("exUnder").textContent=e.under;el("exGain").textContent=e.gain;
+  [].forEach.call(el("exSeg").children,function(b){b.setAttribute("aria-pressed",String(b.dataset.ex===k))});
+}
+[].forEach.call(el("exSeg").children,function(b){b.addEventListener("click",function(){setEx(b.dataset.ex)})});
+[].forEach.call(el("viewSeg").children,function(b){b.addEventListener("click",function(){
+  el("flow").dataset.view=b.dataset.v;[].forEach.call(el("viewSeg").children,function(c){c.setAttribute("aria-pressed",String(c===b))})})});
+setEx("bell");
+
+var routes=el("routes"),detail=el("detail"),tilt=el("tilt");
+function objFn(x,keep){
+  var f=Math.sin(TAU*x),r=.6*Math.sin(TAU*3*x+.8)+.35*Math.sin(TAU*5*x+2.2)+.2*Math.sin(TAU*8*x+.4);
+  return (f+keep*r)/1.9;
+}
+function drawRoutes(){
+  var f=C.fit(routes);if(!f)return;var g=f.g,W=f.w,H=f.h;g.clearRect(0,0,W,H);
+  var keep=detail.value/100,td=+tilt.value,cf=Math.cos(td*Math.PI/360);
+  var rows=3,rh=H/rows,pts=Math.max(200,Math.round(W));
+  var sa=0,sb=0,sab=0;
+  for(var i=0;i<pts;i++){var x=2*i/(pts-1),o=objFn(x,1),c=objFn(x,keep);sa+=o*o;sb+=c*c;sab+=o*c}
+  var corr=sab/Math.sqrt(sa*sb);
+  var cfg=[
+   {name:"The object itself",sub:"ψₓ(t), full structure",keep:1,amp:1,ghost:false,c:col["--obj"],val:""},
+   {name:"Through words and concepts",sub:"",keep:keep,amp:cf,ghost:true,c:col["--res"],val:"shape kept "+Math.round(corr*100)+"%   arrives at "+Math.round(cf*100)+"%"},
+   {name:"Through saṁyama",sub:"Δf = 0, Δφ = 0",keep:1,amp:1,ghost:true,c:col["--res"],val:"shape kept 100%   arrives at 100%"}
+  ];
+  cfg.forEach(function(r,ri){
+    var y0=ri*rh,cy=y0+rh/2+6,sc=rh/2-18;
+    g.strokeStyle=col["--line"];g.lineWidth=1;g.beginPath();g.moveTo(0,y0+rh-.5);g.lineTo(W,y0+rh-.5);g.stroke();
+    g.save();g.strokeStyle=col["--line"];g.setLineDash([2,4]);g.beginPath();g.moveTo(0,cy);g.lineTo(W,cy);g.stroke();g.restore();
+    if(r.ghost){g.save();g.strokeStyle=col["--obj"];g.lineWidth=3.5;g.globalAlpha=.28;g.beginPath();
+      for(var i=0;i<pts;i++){var x=2*i/(pts-1),y=cy-objFn(x,1)*sc;if(i)g.lineTo(i*W/(pts-1),y);else g.moveTo(0,y)}g.stroke();g.restore()}
+    g.save();g.strokeStyle=r.c;g.lineWidth=2.2;g.lineJoin="round";g.beginPath();
+    for(var j=0;j<pts;j++){var xx=2*j/(pts-1),yy=cy-objFn(xx,r.keep)*sc*r.amp;if(j)g.lineTo(j*W/(pts-1),yy);else g.moveTo(0,yy)}g.stroke();g.restore();
+    C.label(g,r.name+(r.sub?"   "+r.sub:""),10,y0+16,r.c,"left",true);
+    if(r.val)C.label(g,r.val,W-10,y0+16,col["--muted"],"right",true);
+  });
+}
+detail.addEventListener("input",function(){el("detailV").textContent=detail.value+"%";drawRoutes()});
+tilt.addEventListener("input",function(){el("tiltV").textContent=tilt.value+"°";drawRoutes()});
+window.addEventListener("resize",drawRoutes);
+C.onTheme(drawRoutes);
+drawRoutes();setTimeout(drawRoutes,400);
+if(document.fonts&&document.fonts.ready)document.fonts.ready.then(drawRoutes);
+})();
+
+</script>
+</body></html>

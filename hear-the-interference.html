@@ -1,0 +1,404 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Hear the Meeting</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Source+Sans+3:ital,wght@0,400;0,600;1,400&family=Spectral:ital,wght@0,400;0,500;1,400&display=swap">
+<style>
+:root{
+  --bg:#F2F5F9; --surface:#FFFFFF; --ink:#13203A; --muted:#58647D; --line:#D3DAE6; --tint:#E7EDF6;
+  --obj:#0B8686; --att:#C95F06; --res:#2E3192; --env:#C0245B; --ok:#1B7A52;
+  --display:"Spectral",Georgia,"Times New Roman",serif;
+  --body:"Source Sans 3",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0B1120; --surface:#121A2D; --ink:#E7ECF6; --muted:#9AA6BF; --line:#26324D; --tint:#1A2540;
+    --obj:#46CFC6; --att:#F5A04D; --res:#A3AAFF; --env:#FF7BA9; --ok:#5BD59B; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0B1120; --surface:#121A2D; --ink:#E7ECF6; --muted:#9AA6BF; --line:#26324D; --tint:#1A2540;
+  --obj:#46CFC6; --att:#F5A04D; --res:#A3AAFF; --env:#FF7BA9; --ok:#5BD59B; color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;
+  padding-left:max(14px,env(safe-area-inset-left,0px));padding-right:max(14px,env(safe-area-inset-right,0px));padding-block:22px 40px}
+.wrap{max-width:900px;margin:0 auto;display:flex;flex-direction:column;gap:32px}
+h1,h2,h3{font-family:var(--display);font-weight:500;text-wrap:balance;margin:0;letter-spacing:-.01em}
+h1{font-size:clamp(30px,5.4vw,44px);line-height:1.06}
+h2{font-size:clamp(23px,3.4vw,29px);line-height:1.15}
+h3{font-size:19px;line-height:1.25}
+p{margin:0}
+sub{font-size:.72em;line-height:0}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.lede{font-size:17.5px;max-width:64ch}
+.intro{max-width:66ch;color:var(--muted)}
+header{display:flex;flex-direction:column;gap:12px}
+section{display:flex;flex-direction:column;gap:18px;min-width:0}
+.sym{font-family:var(--mono);font-size:.92em;white-space:nowrap}
+.k-obj{color:var(--obj)} .k-att{color:var(--att)} .k-res{color:var(--res)} .k-env{color:var(--env)}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px;display:flex;flex-direction:column;gap:14px;min-width:0}
+.bar{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;justify-content:space-between}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--bg)}
+.seg button{font:inherit;font-size:14px;color:var(--muted);background:transparent;border:0;padding:8px 13px;cursor:pointer}
+.seg button+button{border-left:1px solid var(--line)}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--surface)}
+button:focus-visible,input:focus-visible{outline:2px solid var(--res);outline-offset:2px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{font:inherit;font-size:14px;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:7px 13px;cursor:pointer;display:inline-flex;gap:8px;align-items:center}
+.chip i{font-style:normal;font-family:var(--mono);font-size:11px;color:var(--muted)}
+.chip[aria-pressed="true"]{background:var(--res);border-color:var(--res);color:#fff}
+.chip[aria-pressed="true"] i{color:#fff;opacity:.8}
+.chip:disabled{cursor:default}
+.chip.reached:not([aria-pressed="true"]){border-color:var(--res)}
+.btn{font:inherit;font-size:14px;color:var(--ink);background:var(--surface);border:1px solid var(--ink);border-radius:8px;padding:8px 16px;cursor:pointer}
+.btn.primary{background:var(--ink);color:var(--surface)}
+.btn.ghost{border-color:var(--line);color:var(--muted)}
+.scope-wrap{position:relative;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--bg)}
+canvas{display:block;width:100%}
+.playbtn{position:absolute;right:8px;bottom:8px;font:inherit;font-size:12px;background:var(--surface);color:var(--muted);border:1px solid var(--line);border-radius:6px;padding:4px 10px;cursor:pointer}
+.box{border:1px solid var(--line);border-radius:8px;background:var(--bg);padding:10px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.box .cap{font-size:12px;color:var(--muted)}
+.meters{display:flex;flex-direction:column;gap:9px}
+.meter{display:grid;grid-template-columns:1fr auto;gap:2px 8px;font-size:13px;align-items:baseline}
+.meter b{font-weight:600}
+.meter output{font-family:var(--mono);font-size:12px;color:var(--muted)}
+.meter .track{grid-column:1/-1;height:7px;background:var(--line);border-radius:4px;overflow:hidden}
+.meter .fill{height:100%;width:0;background:var(--res);border-radius:4px}
+.meter.f2 .fill{background:var(--env)} .meter.f3 .fill{background:var(--obj)}
+.slider{display:flex;align-items:center;gap:10px;flex:1 1 280px;min-width:0}
+.slider label{font-size:14px;min-width:0}
+.slider input[type=range]{flex:1;min-width:60px;accent-color:var(--res)}
+.slider small{color:var(--muted);font-size:12px;white-space:nowrap}
+.slider output{font-family:var(--mono);font-size:12.5px;color:var(--muted);min-width:46px;text-align:right}
+.readout{font-size:14px;color:var(--muted)}
+.readout b{color:var(--ink)}
+.tag{font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);border:1px solid var(--line);border-radius:4px;padding:2px 6px}
+.note{font-size:13px;color:var(--muted);max-width:70ch}
+.balance{background:var(--tint);border-radius:10px;padding:16px 18px;display:flex;flex-direction:column;gap:8px;max-width:78ch}
+footer{font-size:13px;color:var(--muted);max-width:76ch;border-top:1px solid var(--line);padding-top:12px}
+@media (max-width:640px){.panel{padding:12px}.wrap{gap:26px}}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
+
+#scope{height:300px}
+.stephead{display:flex;flex-direction:column;gap:4px;min-height:92px}
+.stephead p{max-width:68ch;color:var(--muted)}
+.sliders{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 24px}
+.soundbar .vol{flex:0 1 190px}
+.mapping{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.mapping div{border-top:2px solid var(--ink);padding-top:9px;display:flex;flex-direction:column;gap:3px;font-size:14.5px}
+.mapping b{font-family:var(--display);font-weight:500;font-size:18px}
+.mapping p{color:var(--muted)}
+@media (max-width:640px){.sliders,.mapping{grid-template-columns:minmax(0,1fr)}#scope{height:270px}.stephead{min-height:150px}}
+
+</style></head><body>
+<div class="wrap">
+<header>
+  <div class="eyebrow">The Mind in the Light of Modern and Spiritual Sciences · Lesson 3.2</div>
+  <h1>Hear the meeting</h1>
+  <p class="lede">A struck bell sends out one steady pitch. That is the object-wave <span class="sym k-obj">ψ<sub>x</sub>(t)</span>. Your attention brings a wave of its own, <span class="sym k-att">ψ<sub>m</sub>(t)</span>. What you hear is their sum, the resultant <span class="sym k-res">R(t)</span>, which is the vṛtti. Here you can hear it, and change it.</p>
+</header>
+
+<section>
+  <div class="panel">
+    <div class="bar">
+      <div class="chips" id="steps" role="group" aria-label="Guided steps"></div>
+    </div>
+    <div class="stephead" aria-live="polite"><h3 id="stTitle"></h3><p id="stBody"></p></div>
+
+    <div class="scope-wrap"><canvas id="scope" role="img" aria-label="Three live traces. The object-wave, the attention wave, and their sum with its envelope."></canvas></div>
+
+    <div class="bar soundbar">
+      <button class="btn primary" id="snd" aria-pressed="false">Sound on</button>
+      <div class="seg" role="group" aria-label="What you hear">
+        <button id="hx" aria-pressed="true">Bell ψ<sub>x</sub></button>
+        <button id="hm" aria-pressed="true">Attention ψ<sub>m</sub></button>
+      </div>
+      <div class="seg" role="group" aria-label="Timbre">
+        <button id="tPure" aria-pressed="false">Pure tone</button>
+        <button id="tBell" aria-pressed="true">Bell-like</button>
+      </div>
+      <div class="slider vol"><label for="vol">Volume</label><input type="range" id="vol" min="0" max="100" value="40"></div>
+    </div>
+
+    <div class="sliders">
+      <div class="slider"><label for="df">Pitch difference Δf</label><input type="range" id="df" min="-6" max="6" step="0.1" value="4"><output id="dfV">4.0 Hz</output></div>
+      <div class="slider"><label for="dphi">Standing tilt Δφ</label><input type="range" id="dphi" min="0" max="180" step="1" value="0"><output id="dphiV">0°</output></div>
+    </div>
+
+    <div class="meters" id="meters">
+      <div class="meter"><b>Fullness of the disclosure (full = 2A)</b><output id="mFullV">0%</output><div class="track"><div class="fill" id="mFull"></div></div></div>
+      <div class="meter f2"><b>Beat felt</b><output id="mBeatV">0 per second</output><div class="track"><div class="fill" id="mBeat"></div></div></div>
+    </div>
+    <p class="note">The traces are drawn slowed down so you can see them: the carrier is shown at 24 Hz, while what you hear is near 220 Hz. The beat rate is true. Sound starts only when you press the button, at a low level. Please set your device volume before you begin.</p>
+  </div>
+
+  <div class="mapping">
+    <div><span class="sym k-att">f<sub>m</sub></span><b>Manas</b><p>sets the pitch of attention. The pitch slider is its work.</p></div>
+    <div><span class="sym k-att">Δφ</span><b>Ahaṁkāra</b><p>the standing tilt: the self-reference that angles every meeting toward "me".</p></div>
+    <div><span class="sym k-att">Δφ → 0</span><b>Buddhi</b><p>corrects the phase and reads the carrier. Watch the fullness rise.</p></div>
+  </div>
+</section>
+
+<footer>Notation follows Lesson 3.2. With equal amplitudes, A cos(2π f<sub>s</sub> t) + A cos(2π f<sub>m</sub> t) = 2A · cos(2π (f<sub>s</sub> − f<sub>m</sub>)/2 · t) · cos(2π (f<sub>s</sub> + f<sub>m</sub>)/2 · t). The envelope runs at half the difference and is felt as a beat at |f<sub>s</sub> − f<sub>m</sub>|. When f<sub>m</sub> = f<sub>s</sub> the sum has fullness 2A · cos(Δφ/2).</footer>
+</div>
+
+<script>
+window.Core=(function(){
+"use strict";
+var TAU=Math.PI*2;
+try{var q=new URLSearchParams(location.search).get("theme");if(q==="light"||q==="dark")document.documentElement.setAttribute("data-theme",q)}catch(e){}
+function lerp(a,b,t){return a+(b-a)*t}
+function clamp(x,a,b){return Math.max(a,Math.min(b,x))}
+function el(id){return document.getElementById(id)}
+var col={},subs=[];
+function readColors(){
+  var cs=getComputedStyle(document.documentElement);
+  ["--bg","--surface","--ink","--muted","--line","--tint","--obj","--att","--res","--env","--ok"].forEach(function(k){col[k]=cs.getPropertyValue(k).trim()});
+  subs.forEach(function(f){try{f()}catch(e){}});
+}
+readColors();
+try{window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change",readColors)}catch(e){}
+new MutationObserver(readColors).observe(document.documentElement,{attributes:true,attributeFilter:["data-theme"]});
+function onTheme(f){subs.push(f)}
+var dpr=Math.max(1,Math.min(2,window.devicePixelRatio||1));
+function fit(c){
+  var w=c.clientWidth,h=c.clientHeight;
+  if(!w||!h)return null;
+  var bw=Math.round(w*dpr),bh=Math.round(h*dpr);
+  if(c.width!==bw||c.height!==bh){c.width=bw;c.height=bh}
+  var g=c.getContext("2d");g.setTransform(dpr,0,0,dpr,0,0);return {g:g,w:w,h:h};
+}
+var FONT="500 11.5px 'Source Sans 3',system-ui,sans-serif";
+function label(g,t,x,y,color,align,pill){
+  g.font=FONT;g.textAlign=align||"left";g.textBaseline="alphabetic";
+  if(pill){var w=g.measureText(t).width,x0=(align==="right")?x-w:(align==="center"?x-w/2:x);
+    g.save();g.globalAlpha=.82;g.fillStyle=col["--surface"];g.fillRect(x0-5,y-12,w+10,17);g.restore()}
+  g.fillStyle=color;g.fillText(t,x,y)}
+/* ring-buffer trace: arr, head index, length N */
+function trace(g,arr,head,N,x0,w,cy,sc,color,lw,alpha,dash){
+  g.save();g.globalAlpha=alpha==null?1:alpha;g.strokeStyle=color;g.lineWidth=lw;g.lineJoin="round";if(dash)g.setLineDash(dash);
+  g.beginPath();
+  for(var i=0;i<N;i++){var v=arr[(head+i)%N];var x=x0+w*i/(N-1),y=cy-v*sc;if(i)g.lineTo(x,y);else g.moveTo(x,y)}
+  g.stroke();g.restore();
+}
+/* shaded envelope band around a lane centre */
+function envelope(g,E,head,N,W,cy,sc,color,alpha){
+  g.save();g.globalAlpha=alpha;
+  g.beginPath();
+  for(var i=0;i<N;i++){var e=E[(head+i)%N],x=W*i/(N-1),y=cy-e*sc;if(i)g.lineTo(x,y);else g.moveTo(x,y)}
+  for(var j=N-1;j>=0;j--){var e2=E[(head+j)%N],x2=W*j/(N-1);g.lineTo(x2,cy+e2*sc)}
+  g.closePath();g.fillStyle=color;g.globalAlpha=.09*alpha;g.fill();g.restore();
+  g.save();g.globalAlpha=alpha;g.strokeStyle=color;g.lineWidth=1.6;g.setLineDash([6,4]);
+  [1,-1].forEach(function(sg){g.beginPath();for(var i2=0;i2<N;i2++){var ee=E[(head+i2)%N]*sg,xx=W*i2/(N-1),yy=cy-ee*sc;if(i2)g.lineTo(xx,yy);else g.moveTo(xx,yy)}g.stroke()});
+  g.restore();
+}
+return {TAU:TAU,lerp:lerp,clamp:clamp,el:el,col:col,onTheme:onTheme,fit:fit,label:label,trace:trace,envelope:envelope,FONT:FONT};
+})();
+
+</script>
+<script>
+(function(){
+"use strict";
+var C=window.Core,col=C.col,el=C.el,TAU=C.TAU,clamp=C.clamp;
+var FSD=24,SRD=320,N=480,DT=1/SRD,FS_AUDIO=220;
+var P={df:4,dphi:0,gx:1,gm:1,bell:1,vol:.4};   /* targets (what the sliders say) */
+var V={df:4,dphi:0};                              /* displayed values, may be mid-animation */
+
+/* ---------- audio generator (also runs inside an AudioWorklet) ---------- */
+function makeGen(sr){
+  var TAU=Math.PI*2,p={fs:220,df:4,dphi:0,gx:1,gm:1,bell:1,vol:0,run:0},c={df:4,dphi:0,gx:1,gm:1,bell:1,vol:0},th=0,psi=0;
+  var k=1-Math.exp(-1/(sr*0.03)),kv=1-Math.exp(-1/(sr*0.06)),kl=1-Math.exp(-1/(sr*0.08));
+  return {
+    set:function(q){for(var n in q)p[n]=q[n]},
+    fill:function(L){
+      for(var n=0;n<L.length;n++){
+        c.df+=(p.df-c.df)*k;c.dphi+=(p.dphi-c.dphi)*k;c.gx+=(p.gx-c.gx)*k;c.gm+=(p.gm-c.gm)*k;c.bell+=(p.bell-c.bell)*k;
+        c.vol+=((p.run?p.vol:0)-c.vol)*kv;
+        th+=TAU*p.fs/sr;if(th>TAU)th-=TAU;
+        if(Math.abs(p.df)<0.001&&Math.abs(c.df)<0.02){psi+=(Math.round(psi/TAU)*TAU-psi)*kl}
+        else{psi+=TAU*c.df/sr}
+        if(psi>TAU)psi-=TAU;else if(psi<-TAU)psi+=TAU;
+        var x=Math.cos(th)+c.bell*(0.30*Math.cos(2.76*th+0.5)+0.16*Math.cos(5.4*th+1.1));
+        var m=Math.cos(th+psi+c.dphi*Math.PI/180);
+        L[n]=c.vol*0.5*(c.gx*x+c.gm*m);
+      }
+    }
+  };
+}
+var ctx=null,node=null,gen=null,soundOn=false,audioFail=false;
+function post(){
+  var msg={fs:FS_AUDIO,df:P.df,dphi:P.dphi,gx:P.gx,gm:P.gm,bell:P.bell,vol:.02+P.vol*.2,run:soundOn?1:0};
+  if(gen)gen.set(msg);
+  if(node&&node.port)node.port.postMessage(msg);
+}
+function startAudio(cb){
+  if(ctx){ctx.resume().then(cb);return}
+  var AC=window.AudioContext||window.webkitAudioContext;
+  if(!AC){audioFail=true;cb();return}
+  try{ctx=new AC()}catch(e){audioFail=true;cb();return}
+  var done=function(){ctx.resume().then(cb,cb)};
+  if(ctx.audioWorklet&&window.Blob&&window.URL){
+    var src="var makeGen="+makeGen.toString()+";class G extends AudioWorkletProcessor{constructor(){super();this.g=makeGen(sampleRate);this.port.onmessage=function(e){this.g.set(e.data)}.bind(this)}process(i,o){var ch=o[0];this.g.fill(ch[0]);for(var k=1;k<ch.length;k++)ch[k].set(ch[0]);return true}}registerProcessor('gen',G);";
+    var url=URL.createObjectURL(new Blob([src],{type:"application/javascript"}));
+    ctx.audioWorklet.addModule(url).then(function(){
+      node=new AudioWorkletNode(ctx,"gen",{numberOfInputs:0,outputChannelCount:[2]});
+      node.connect(ctx.destination);post();done();
+    }).catch(function(){fallback();done()});
+  }else{fallback();done()}
+}
+function fallback(){
+  try{
+    gen=makeGen(ctx.sampleRate);
+    var sp=ctx.createScriptProcessor(2048,0,2);
+    sp.onaudioprocess=function(e){var a=e.outputBuffer.getChannelData(0);gen.fill(a);e.outputBuffer.getChannelData(1).set(a)};
+    sp.connect(ctx.destination);node=null;post();
+  }catch(e){audioFail=true}
+}
+var snd=el("snd");
+function setSound(on){
+  if(on){
+    startAudio(function(){
+      soundOn=true;post();snd.textContent=audioFail?"Sound is not available here":"Sound off";snd.setAttribute("aria-pressed",String(!audioFail));
+    });
+  }else{
+    soundOn=false;post();snd.textContent="Sound on";snd.setAttribute("aria-pressed","false");
+    setTimeout(function(){if(!soundOn&&ctx&&ctx.state==="running")ctx.suspend()},500);
+  }
+}
+snd.addEventListener("click",function(){setSound(!soundOn)});
+
+/* ---------- display simulation (slowed carrier) ---------- */
+var S=new Float32Array(N),A=new Float32Array(N),R=new Float32Array(N),E=new Float32Array(N);
+var head=0,th=0,psi=0,count=0,gxs=1,gms=1;
+function step(){
+  gxs+=(P.gx-gxs)*.06;gms+=(P.gm-gms)*.06;
+  th=(th+TAU*FSD*DT)%TAU;
+  if(Math.abs(V.df)<.001){psi+=(Math.round(psi/TAU)*TAU-psi)*(1-Math.exp(-DT/.08))}
+  else{psi+=TAU*V.df*DT}
+  psi=psi-TAU*Math.round(psi/TAU);
+  var rho=psi+V.dphi*Math.PI/180;
+  var s=gxs*Math.cos(th),a=gms*Math.cos(th+rho);
+  S[head]=s;A[head]=a;R[head]=s+a;
+  E[head]=Math.hypot(gxs+gms*Math.cos(rho),gms*Math.sin(rho));
+  head=(head+1)%N;if(count<N)count++;
+}
+for(var i=0;i<N+60;i++)step();
+
+/* ---------- drawing ---------- */
+var scope=el("scope");
+function draw(){
+  var f=C.fit(scope);if(!f)return;var g=f.g,W=f.w,H=f.h;g.clearRect(0,0,W,H);
+  var hs=Math.round(H*.2),ha=hs,hr=H-hs-ha,y1=hs,y2=hs+ha,m=10;
+  g.fillStyle=col["--surface"];g.globalAlpha=.55;g.fillRect(0,y1,W,ha);g.globalAlpha=1;
+  g.strokeStyle=col["--line"];g.lineWidth=1;
+  [y1,y2].forEach(function(y){g.beginPath();g.moveTo(0,y+.5);g.lineTo(W,y+.5);g.stroke()});
+  g.save();g.strokeStyle=col["--line"];g.globalAlpha=.6;g.setLineDash([2,4]);
+  for(var s=1;s<3;s++){var x=W*s/3;g.beginPath();g.moveTo(x,0);g.lineTo(x,H);g.stroke()}
+  g.restore();
+  var sc=hs/2-9;
+  C.trace(g,S,head,N,0,W,hs/2,sc,col["--obj"],2,.25+.75*gxs);
+  C.trace(g,S,head,N,0,W,y1+ha/2,sc,col["--obj"],5,.18);
+  C.trace(g,A,head,N,0,W,y1+ha/2,sc,col["--att"],2,.25+.75*gms);
+  var cyR=y2+hr/2,scR=(hr/2-10)/2;
+  C.envelope(g,E,head,N,W,cyR,scR,col["--env"],1);
+  C.trace(g,R,head,N,0,W,cyR,scR,col["--res"],2.2,1);
+  C.label(g,"ψₓ(t)  the bell   fₛ",m,15,col["--obj"],"left",true);
+  C.label(g,"ψₘ(t)  attention   Δf = "+V.df.toFixed(1)+" Hz   Δφ = "+Math.round(V.dphi)+"°",m,y1+15,col["--att"],"left",true);
+  C.label(g,"R(t) = ψₓ(t) + ψₘ(t)   the vṛtti",m,y2+16,col["--res"],"left",true);
+  C.label(g,"envelope",W-m,y2+16,col["--env"],"right",true);
+  C.label(g,"1.5 s of history",m,H-8,col["--muted"],"left",true);
+  C.label(g,"now",W-m,H-8,col["--muted"],"right",true);
+}
+var mf=0;
+function meters(){
+  var n=Math.min(120,count),sum=0;
+  for(var j=0;j<n;j++)sum+=E[(head-1-j+N)%N];
+  var full=sum/n/2;mf+=(full-mf)*.4;
+  var v=Math.round(clamp(mf,0,1)*100);
+  el("mFull").style.width=v+"%";el("mFullV").textContent=v+"%";
+  var beat=(P.gx>.5&&P.gm>.5)?Math.abs(V.df):0;
+  el("mBeat").style.width=Math.round(clamp(beat/6,0,1)*100)+"%";
+  el("mBeatV").textContent=(beat<.05?"none":beat.toFixed(1)+" per second");
+}
+
+/* ---------- controls ---------- */
+var dfEl=el("df"),dpEl=el("dphi");
+function syncSliders(){
+  dfEl.value=V.df;dpEl.value=V.dphi;
+  el("dfV").textContent=V.df.toFixed(1)+" Hz";el("dphiV").textContent=Math.round(V.dphi)+"°";
+}
+dfEl.addEventListener("input",function(){cancelAnim();V.df=+dfEl.value;P.df=V.df;syncSliders();post();markStep(-1)});
+dpEl.addEventListener("input",function(){cancelAnim();V.dphi=+dpEl.value;P.dphi=V.dphi;syncSliders();post();markStep(-1)});
+var anim=null;
+function cancelAnim(){anim=null}
+function tween(to,sec){
+  var from={df:V.df,dphi:V.dphi};anim={t:0,sec:sec,from:from,to:to};
+}
+function tickAnim(dt){
+  if(!anim)return;
+  anim.t+=dt;var k=clamp(anim.t/anim.sec,0,1),e=k<.5?2*k*k:1-Math.pow(-2*k+2,2)/2;
+  V.df=anim.from.df+(anim.to.df-anim.from.df)*e;V.dphi=anim.from.dphi+(anim.to.dphi-anim.from.dphi)*e;
+  P.df=V.df;P.dphi=V.dphi;syncSliders();post();
+  if(k>=1)anim=null;
+}
+function setListen(x,m){
+  P.gx=x;P.gm=m;
+  el("hx").setAttribute("aria-pressed",String(x>0));el("hm").setAttribute("aria-pressed",String(m>0));post();
+}
+el("hx").addEventListener("click",function(){setListen(P.gx>0?0:1,P.gm);markStep(-1)});
+el("hm").addEventListener("click",function(){setListen(P.gx,P.gm>0?0:1);markStep(-1)});
+function setTimbre(b){P.bell=b;el("tBell").setAttribute("aria-pressed",String(b===1));el("tPure").setAttribute("aria-pressed",String(b===0));post()}
+el("tBell").addEventListener("click",function(){setTimbre(1)});
+el("tPure").addEventListener("click",function(){setTimbre(0)});
+el("vol").addEventListener("input",function(e){P.vol=+e.target.value/100;post()});
+
+var STEPS=[
+ {n:"1",name:"The bell alone",
+  t:"A struck bell sends out one steady pitch, fₛ. This is the object-wave ψₓ(t). It has its own rhythm, and you cannot change it by will. Press Sound on and listen.",
+  set:function(){setListen(1,0);cancelAnim();V.df=0;V.dphi=0;P.df=0;P.dphi=0;syncSliders();post()}},
+ {n:"2",name:"Attention joins, out of tune",
+  t:"Attention brings a wave of its own, ψₘ(t), at a slightly different pitch fₘ. The two add in the one field. Listen: the sound swells and fades four times a second. That is the beat |fₛ − fₘ|, the felt flicker between knower and known.",
+  set:function(){setListen(1,1);cancelAnim();V.df=4;V.dphi=0;P.df=4;P.dphi=0;syncSliders();post()}},
+ {n:"3",name:"Manas tunes to the object",
+  t:"Manas sets fₘ, and it now settles on the pitch of the bell. Watch Δf slide to zero. The beat stops and one steady tone remains. But a standing tilt Δφ of 120° is still there, so the tone is steady and only half as full: cos(Δφ/2) = 50%.",
+  set:function(){setListen(1,1);cancelAnim();V.df=4;V.dphi=120;P.df=4;P.dphi=120;syncSliders();post();tween({df:0,dphi:120},4.5)}},
+ {n:"4",name:"The extreme tilt",
+  t:"Turn the tilt up to 180°. Both waves are still playing, and almost nothing is heard. Attention that is exactly out of step with the object hides it, though the object is fully present.",
+  set:function(){setListen(1,1);cancelAnim();V.df=0;P.df=0;V.dphi=Math.min(V.dphi,120);P.dphi=V.dphi;syncSliders();post();tween({df:0,dphi:180},3)}},
+ {n:"5",name:"Buddhi corrects the phase",
+  t:"Buddhi corrects the phase. Watch Δφ close from 180° to zero, and listen to the same two tones grow from near silence to full strength. Nothing about the bell changed. Only the meeting did.",
+  set:function(){setListen(1,1);cancelAnim();V.df=0;P.df=0;V.dphi=180;P.dphi=180;syncSliders();post();tween({df:0,dphi:0},8)}},
+ {n:"6",name:"Full alignment",
+  t:"Δf = 0 and Δφ = 0. The sum is R(t) = 2A cos(2π fₛ t): the bell alone, at its own pitch, at full strength. Both waves are still there. In Lesson 3.2 this is savikalpa samādhi, samādhi with a remaining object-pole.",
+  set:function(){setListen(1,1);cancelAnim();tween({df:0,dphi:0},2)}}
+];
+var chipsEl=el("steps");
+STEPS.forEach(function(s,i){
+  var b=document.createElement("button");b.className="chip";b.setAttribute("aria-pressed","false");
+  b.innerHTML="<i>"+s.n+"</i><span>"+s.name+"</span>";
+  b.addEventListener("click",function(){s.set();markStep(i)});chipsEl.appendChild(b);
+});
+var chipBtns=[].slice.call(chipsEl.children);
+function markStep(i){
+  chipBtns.forEach(function(b,k){b.setAttribute("aria-pressed",String(k===i))});
+  if(i>=0){el("stTitle").textContent=STEPS[i].name;el("stBody").textContent=STEPS[i].t}
+}
+STEPS[1].set();markStep(1);
+
+var last=performance.now(),acc=0,fn=0,reduced=false;
+try{reduced=window.matchMedia("(prefers-reduced-motion: reduce)").matches}catch(e){}
+function frame(now){
+  var dt=Math.min(.1,(now-last)/1000);last=now;
+  tickAnim(dt);acc+=dt;
+  while(acc>=DT){step();acc-=DT}
+  draw();if(fn++%4===0)meters();
+  requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+})();
+
+</script>
+</body></html>
