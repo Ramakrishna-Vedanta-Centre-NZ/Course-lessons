@@ -602,6 +602,14 @@ window.addEventListener("message",function(e){
   else if(d.type==="notMember"){el.textContent="Sign in as a member to have your result saved."}
 });
 send({type:"ready"});
+/* tell the host page how tall this page is, so the embed grows instead of scrolling inside its frame */
+(function(){
+  var last=0;
+  function h(){var d=document.documentElement,b=document.body;var v=Math.ceil(Math.max(d.scrollHeight,b.scrollHeight,b.offsetHeight));if(v&&Math.abs(v-last)>1){last=v;send({type:"height",height:v})}}
+  window.addEventListener("load",h);window.addEventListener("resize",h);
+  if(window.ResizeObserver)new ResizeObserver(h).observe(document.body);
+  setInterval(h,700);h();
+})();
 
 /* redraw on resize and theme change */
 var rt=0;
