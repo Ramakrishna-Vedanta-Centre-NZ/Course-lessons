@@ -235,6 +235,7 @@ body[data-part]{padding-block:10px 18px}
   .chain .nd{padding:4px 8px}
 }
 
+.frlist{margin:.2rem 0 .6rem;padding-left:1.2rem}.frlist li{margin:.15rem 0}
 </style></head><body>
 <div class="wrap">
 <header>
@@ -315,8 +316,15 @@ body[data-part]{padding-block:10px 18px}
   </div>
 
   <div class="panel" id="fronts">
-    <h3>Four fronts</h3>
-    <p class="intro">Four practitioners each train one front and leave another untouched. What does the lesson say each will find (§4, “The three and the field together”)?</p>
+    <h3>Practice on all four fronts at once</h3>
+    <p class="intro">Lesson 4.4 (§4) says effective practice has to work on four fronts together. Each front is the work on one function of the inner instrument:</p>
+    <ul class="frlist">
+      <li><b>Manas</b>: training attention, so the mind can hold and direct itself.</li>
+      <li><b>Buddhi</b>: training discernment, so the mind can tell what is worth attending to.</li>
+      <li><b>Chitta</b>: reshaping saṁskāras, the stored grooves that filter experience.</li>
+      <li><b>Ahaṁkāra</b>: softening the standing tilt, the defended sense of "me" that claims what arises.</li>
+    </ul>
+    <p class="intro">The lesson pairs the fronts. When one is trained and its partner is left out, something specific goes missing. Below, each practitioner trains one front and leaves out another. Choose what the lesson says that practitioner ends up with.</p>
     <div id="frQs" class="frqs"></div>
     <div id="frMsg" class="msg" role="status" aria-live="polite"></div>
     <div class="bar"><div class="chips"><button type="button" class="btn ghost" id="frReset">Start again</button></div></div>
@@ -771,10 +779,10 @@ renderF();
 /* four fronts */
 var OUT=["A steady mind that cannot tell what is worth attending to.","Clarity in the abstract that collapses under the pull of old grooves.","Insight that gets immediately appropriated by a defended self.","Openness with no capacity to direct itself."];
 var FQ=[
- {q:"<b>One</b> trains manas (attention), but not buddhi (discernment).",a:0,order:[2,0,3,1]},
- {q:"<b>Another</b> trains buddhi, but does no chitta-work (saṁskāra reshaping).",a:1,order:[1,3,0,2]},
- {q:"<b>A third</b> does chitta-work, but no ahaṁkāra-softening.",a:2,order:[3,2,1,0]},
- {q:"<b>A fourth</b> softens ahaṁkāra, but does no manas-training.",a:3,order:[0,1,3,2]}
+ {q:"<b>Practitioner 1.</b> Trains: manas (attention). Leaves out: buddhi (discernment). What does this practitioner end up with?",a:0,order:[2,0,3,1]},
+ {q:"<b>Practitioner 2.</b> Trains: buddhi (discernment). Leaves out: chitta-work (reshaping saṁskāras). What does this practitioner end up with?",a:1,order:[1,3,0,2]},
+ {q:"<b>Practitioner 3.</b> Trains: chitta-work (reshaping saṁskāras). Leaves out: ahaṁkāra-softening. What does this practitioner end up with?",a:2,order:[3,2,1,0]},
+ {q:"<b>Practitioner 4.</b> Trains: ahaṁkāra-softening. Leaves out: manas (attention). What does this practitioner end up with?",a:3,order:[0,1,3,2]}
 ];
 var WHO=["manas-training without buddhi-training","buddhi-training without chitta-work","chitta-work without ahaṁkāra-softening","ahaṁkāra-softening without manas-training"];
 var frAns={};
@@ -789,7 +797,7 @@ function renderFr(){
       if(tried.indexOf(oi)>=0)b.classList.add(oi===Q.a?"right":"no");
       if(solved&&oi!==Q.a)b.disabled=true;
       b.addEventListener("click",function(){if(solved)return;(frAns[qi]=frAns[qi]||[]).push(oi);
-        $("frMsg").textContent=oi===Q.a?"Yes: "+WHO[Q.a]+" produces "+OUT[oi].charAt(0).toLowerCase()+OUT[oi].slice(1)+" (§4).":"Not this one. The lesson gives that outcome for "+WHO[oi]+" (§4).";
+        $("frMsg").textContent=oi===Q.a?"Yes. "+WHO[Q.a].charAt(0).toUpperCase()+WHO[Q.a].slice(1)+" gives: "+OUT[oi].charAt(0).toLowerCase()+OUT[oi].slice(1)+" (§4).":"Not this one. The lesson gives that outcome for "+WHO[oi]+". Which pairing is the one in the question? (§4)";
         $("frMsg").className=oi===Q.a?"msg ok":"msg";renderFr()});
       o.appendChild(b);
     });
