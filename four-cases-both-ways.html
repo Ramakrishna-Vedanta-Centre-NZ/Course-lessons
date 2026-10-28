@@ -268,7 +268,7 @@ body[data-part]{padding-block:10px 18px}
 
 <section id="s2">
   <h2>II. Four cases, read both ways</h2>
-  <p class="intro">The lesson works four examples: three clinically familiar, one from ordinary healthy life (§5). Choose a case, make your own reading of each component and of the chariot, then reveal the lesson’s reading. Each component carries all three guṇas; what you are reading is which one predominates.</p>
+  <p class="intro">The lesson works four examples: three clinically familiar, one from ordinary healthy life (§5). Choose a case, make your own reading of each component and of the chariot, then reveal the lesson’s reading. Each component carries all three guṇas; what you are reading is which one predominates. Choose one button in each row; &ldquo;mixed&rdquo; means two guṇas share the predominance, as in the lesson&rsquo;s sattvic-rajasic readings. You may skip rows, and you can reveal the lesson&rsquo;s reading at any time.</p>
   <p class="safety"><b>These are composite illustrations, not a diagnosis.</b> They are the lesson’s own worked examples, not a way of reading a particular person. Anyone who is distressed should seek support from a doctor or a qualified professional.</p>
   <div class="caseTabs" id="caseTabs" role="group" aria-label="Choose a case"></div>
   <div class="panel" id="casePanel">
@@ -301,7 +301,7 @@ body[data-part]{padding-block:10px 18px}
 
 <section id="s3">
   <h2>III. Place the function in the equation</h2>
-  <p class="intro">The antaḥkaraṇa says what does the behaving; the equation says what behaves (§4). Tap a function, then tap its place. Ahaṁkāra has two faces, so it appears twice.</p>
+  <p class="intro">The antaḥkaraṇa says what does the behaving; the equation says what behaves (§4). Seven cards sit below the equation; ahaṁkāra appears twice because it has two faces. Tap a card, then tap the box that describes the place where it belongs. Each box says what happens there. A wrong tap gives a hint, and nothing is lost.</p>
   <div class="panel">
     <div class="eqLine" id="eqLine" aria-label="The wave equation">
       <span class="t" data-t="psiexp">ψ<sub>exp</sub>(t)</span> <span class="op">=</span> <span class="t br" data-t="field">[</span><span class="t" data-t="psix">ψₓ(t)</span> <span class="op">∗</span> <span class="t k-obj" data-t="h">h(t)</span><span class="t br" data-t="field">]</span> <span class="op t" data-t="meet">+</span> <span class="t k-att" data-t="G">G(t)</span> <span class="op">·</span> <span class="t k-att" data-t="psim">ψₘ(t)</span> <span class="op">+</span> <span class="t" data-t="n">n(t)</span>
@@ -721,13 +721,13 @@ renderCase();
 
 /* ===== Part III: place the function ===== */
 var SLOTS=[
- {k:"fm",sy:"fₘ",d:"Sets the frequency of the attention wave ψₘ(t); its steadiness is the heart of attention",lit:["psim","fm"]},
- {k:"G",sy:"G(t)",d:"Sets the amplitude of the attention wave",lit:["G"]},
- {k:"field",sy:"[ψₓ(t) ∗ h(t)]",d:"The field in which the two waves meet; its saṁskāras form the filter h(t)",lit:["h","field"]},
- {k:"meet",sy:"adds no term",d:"Acts on the meeting: corrects the phase, bringing the tilt toward zero, and reads the carrier",lit:["meet"]},
- {k:"dphi",sy:"Δφ",d:"The standing phase-offset the attention wave carries into every meeting, before the meeting begins",lit:["dphi"]},
- {k:"tag",sy:"across moments",d:"Tags each tilted meeting as mine and weaves a continuous self across time",lit:["tag"]},
- {k:"wit",sy:"not a component",d:"That in which the field, and the whole equation, appears",lit:["wit"]}
+ {k:"fm",sy:"The frequency of attention (fₘ)",d:"Sets the frequency of the attention wave ψₘ(t); its steadiness is the heart of attention",lit:["psim","fm"]},
+ {k:"G",sy:"The strength of attention (G(t))",d:"Sets the amplitude of the attention wave",lit:["G"]},
+ {k:"field",sy:"Where the waves meet: [ψₓ(t) ∗ h(t)]",d:"The field in which the two waves meet; its saṁskāras form the filter h(t)",lit:["h","field"]},
+ {k:"meet",sy:"Acts on the meeting, with no term of its own",d:"Acts on the meeting: corrects the phase, bringing the tilt toward zero, and reads the carrier",lit:["meet"]},
+ {k:"dphi",sy:"The standing tilt (Δφ)",d:"The standing phase-offset the attention wave carries into every meeting, before the meeting begins",lit:["dphi"]},
+ {k:"tag",sy:"The tagging of each meeting as mine",d:"Tags each tilted meeting as mine and weaves a continuous self across time",lit:["tag"]},
+ {k:"wit",sy:"Not a component at all",d:"That in which the field, and the whole equation, appears",lit:["wit"]}
 ];
 var FCARDS=[
  {id:"manas",t:"manas",ok:["fm"],why:"Yes, manas: it deploys ψₘ(t), the attention wave, and sets its frequency fₘ. Train manas, and you train the steadiness of fₘ (§4, Manas).",hint:"Manas is the directing of attention, where the mind currently is. Which property of the attention wave does it set (§4, Manas)?"},
