@@ -276,13 +276,7 @@ body[data-part]{padding-block:10px 18px}
           <desc id="twD">A tall stone tower with the minister at a window near the top, his wife at the foot, and a beetle waiting on the ground.</desc>
           <rect class="sk" x="0" y="0" width="320" height="410"/>
           <rect class="gd" x="0" y="408" width="320" height="42"/>
-          <g id="seesaw" class="seesaw" aria-hidden="true">
-            <text class="sstxt" x="262" y="20" text-anchor="middle">the lateral see-saw</text>
-            <g class="plank"><line x1="226" y1="64" x2="298" y2="64" class="plk"/><circle cx="226" cy="64" r="4" class="ed1"/><circle cx="298" cy="64" r="4" class="ed2"/></g>
-            <path d="M255 82 L262 66 L269 82 Z" class="piv"/>
-            <text class="sstxt" x="226" y="98" text-anchor="middle">iḍā</text>
-            <text class="sstxt" x="298" y="98" text-anchor="middle">piṅgalā</text>
-          </g>
+          
           <rect class="twr" x="112" y="78" width="96" height="332"/>
           <g id="mortar" class="mortar"></g>
           <path class="twr" d="M106 78 V60 H122 V70 H134 V60 H150 V70 H170 V60 H186 V70 H198 V60 H214 V78 Z"/>
@@ -451,7 +445,6 @@ body[data-part]{padding-block:10px 18px}
       </figure>
     </div>
     <p class="readout" id="hText"></p>
-    <div class="bar"><button class="btn ghost" id="gripBtn">Grip harder</button><span class="msg" id="gripMsg" role="status" aria-live="polite"></span></div>
   </div>
 
   <div class="panel" id="sq">
@@ -596,10 +589,10 @@ if(tw){
   var st={a:false,h:false,placed:false,arrived:false,links:0,busy:false,gen:0};
   var amp=0,ssT=null;
   var THROW=[
-   {ap:70,m:"She heaves the rope. It is far too heavy to throw so high, and it comes down in a heap. The rope is strong enough to bear a person, and for that very reason no one can hand it to him at the top of the tower."},
-   {ap:150,m:"The pack thread goes a little way up and falls back. Nothing can be passed to him from the ground by hand."},
-   {ap:110,m:"The stout twine rises and falls short. The strongest things are the hardest to send up."},
-   {ap:215,m:"The silken thread drifts, and settles on the ground. It is light enough to be carried up, but not thrown. Something else would have to carry it."}
+   {ap:70,m:"It cannot be thrown up from the ground."},
+   {ap:150,m:"It cannot be thrown up from the ground."},
+   {ap:110,m:"It cannot be thrown up from the ground."},
+   {ap:215,m:"It cannot be thrown up from the ground."}
   ];
   function tween(ms,fn,done){
     if(RM){fn(1);if(done)done();return}
@@ -628,10 +621,7 @@ if(tw){
   function doPush(){
     if(st.busy)return;
     var m=$("min");m.classList.add("press");setTimeout(function(){m.classList.remove("press")},600);
-    amp=Math.min(amp+5,24);var ss=$("seesaw");ss.style.setProperty("--amp",amp+7);
-    ss.querySelector(".plank").style.setProperty("--amp",amp+7);
-    ss.classList.add("on");clearTimeout(ssT);ssT=setTimeout(function(){ss.classList.remove("on")},5000);
-    say("aMsg","He pushes at the walls with all his strength, and the tower does not notice. The wider the see-saw swings, the same lesson as sūtra 3: more effort to “get out” is more lateral oscillation, one more turn of the same loop.");
+        say("aMsg","He pushes at the walls with all his strength, and the tower does not notice.");
   }
   $("throws").addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;var i=+b.getAttribute("data-i");if(i===4)doPush();else doThrow(i)});
 
@@ -651,7 +641,6 @@ if(tw){
   $("bPlace").addEventListener("click",function(){
     if(!(st.a&&st.h)||st.placed)return;
     st.placed=true;updateB();
-    $("seesaw").classList.remove("on");
     say("bMsg","She turns it to face upward and sets it on the wall. That is the last thing she does. There is no button for the climb, because the story gives none: it creeps on “in the hope of reaching the honey”, drawn, not driven.",true);
     desc("The beetle climbs the tower wall by itself, a silken thread trailing behind it.");
     var gen=st.gen;
@@ -679,7 +668,7 @@ if(tw){
   }
   var HINT={
    2:"Not yet. The twine is stronger than anything the minister holds, and what is stronger cannot be sent up first. It can only follow the link before it. Which thread is he holding?",
-   3:"Not yet. The rope is the strongest thing, strong enough to bear a person, and for that reason it cannot be handed up. It can only follow the links that come before it."
+   3:"Not yet."
   };
   var TIE={1:"She ties the pack thread to the foot of the silken thread. He draws it up.",2:"She ties the twine to the foot of the pack thread. He draws it up.",3:"She ties the rope to the foot of the twine. He draws it up."};
   $("links").addEventListener("click",function(e){
@@ -701,7 +690,7 @@ if(tw){
     st.gen++;st.a=false;st.h=false;st.placed=false;st.arrived=false;st.links=0;st.busy=false;amp=0;
     ln.forEach(function(l){setA(l,{y1:BOT,y2:BOT});l.setAttribute("opacity","0")});
     beetle.setAttribute("opacity","1");setBeetle(BX,BY0,90);$("honeyDots").setAttribute("opacity","0");$("scent").setAttribute("opacity","0");
-    $("hand").setAttribute("opacity","0");$("flyer").setAttribute("opacity","0");$("seesaw").classList.remove("on");
+    $("hand").setAttribute("opacity","0");$("flyer").setAttribute("opacity","0");
     ["aMsg","bMsg","cMsg"].forEach(function(i){say(i,"")});
     $("arr").innerHTML="";$("who").hidden=true;
     var ps=document.querySelectorAll(".pill");for(var i=0;i<ps.length;i++)ps[i].classList.remove("on");
@@ -807,14 +796,11 @@ if(hsv){
     $("hLab").textContent=m==="g"?"slipping again":"held";
     $("dLab").textContent=m==="g"?"thick":"light";
     $("hText").textContent=HT[m];
-    $("gripBtn").hidden=(m!=="g");$("gripMsg").textContent="";
+    
     $("hsv").querySelector("title").textContent=m==="g"?"The thread slipping in the hands":"The thread held steady in the hands";
   }
   $("hSeg").addEventListener("click",function(e){var b=e.target.closest("button");if(b)setMode(b.getAttribute("data-m"))});
-  $("gripBtn").addEventListener("click",function(){
-    var h=$("hnd");h.setAttribute("class","hnd");void h.getBoundingClientRect();h.setAttribute("class","hnd shake");
-    $("gripMsg").textContent="More gripping is the same effort again. In the lesson’s account what changes the slipping is upstream, in the hours outside the sitting.";
-  });
+  
   setMode("g");
 
   /* sorter */

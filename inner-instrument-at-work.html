@@ -168,7 +168,7 @@ body[data-part]{padding-block:10px 18px}
 <header>
   <div class="eyebrow">The Mind in the Light of Modern and Spiritual Sciences · Lesson 2.2</div>
   <h1>The inner instrument at work</h1>
-  <p class="lede">The mind is not one thing. It is one inner instrument, the antaḥkaraṇa, with four functions: manas, buddhi, ahaṅkāra and chitta. Here you will follow a single ordinary moment through all four, then learn to locate a difficulty in the function where it belongs, and finally see the four as one.</p>
+  <p class="lede">The mind is not one thing. It is one inner instrument, the antaḥkaraṇa, with four functions: manas, buddhi, ahaṁkāra and chitta. Here you will follow a single ordinary moment through all four, then learn to locate a difficulty in the function where it belongs, and finally see the four as one.</p>
   <nav class="parts" aria-label="Parts of this page"><a href="#s1">I. Build the moment</a><a href="#s2">II. Which function is disturbed?</a><a href="#s3">III. One river</a></nav>
 </header>
 
@@ -231,7 +231,7 @@ body[data-part]{padding-block:10px 18px}
   <p class="intro">The four are not four organs sitting side by side. They are four modes of functioning within one inner instrument, like currents at different depths and speeds in a single river.</p>
   <div class="panel">
     <div class="bar"><div class="seg" id="rvSeg" role="group" aria-label="View"><button data-v="four" aria-pressed="true">Four functions</button><button data-v="one" aria-pressed="false">One instrument</button></div></div>
-    <svg id="river" viewBox="0 0 700 230" role="img" aria-labelledby="rvT rvD"><title id="rvT">Four currents merging into one river</title><desc id="rvD">Four coloured currents labelled manas, buddhi, ahaṅkāra and chitta, which can be viewed separately or merged into one band labelled antaḥkaraṇa.</desc></svg>
+    <svg id="river" viewBox="0 0 700 230" role="img" aria-labelledby="rvT rvD"><title id="rvT">Four currents merging into one river</title><desc id="rvD">Four coloured currents labelled manas, buddhi, ahaṁkāra and chitta, which can be viewed separately or merged into one band labelled antaḥkaraṇa.</desc></svg>
     <p class="readout" id="rvText"></p>
   </div>
   <div class="balance">
@@ -354,7 +354,7 @@ function place(i,node){
   if(placed[i])return;
   if(!sel){msg.textContent="Choose a function first.";msg.className="msg";return}
   if(sel===ORDER[i]){placed[i]=sel;sel=null;msg.textContent="";msg.className="msg";render();
-    if(placed.every(Boolean)){msg.textContent="Yes. That is the flow of §5: manas, then buddhi, then ahaṅkāra, then chitta.";msg.className="msg ok";setTimeout(function(){var r=$("replay");try{r.scrollIntoView({behavior:"smooth",block:"nearest"})}catch(e){}},300)}}
+    if(placed.every(Boolean)){msg.textContent="Yes. That is the flow of §5: manas, then buddhi, then ahaṁkāra, then chitta.";msg.className="msg ok";setTimeout(function(){var r=$("replay");try{r.scrollIntoView({behavior:"smooth",block:"nearest"})}catch(e){}},300)}}
   else{msg.textContent=HINT[i];msg.className="msg";node.classList.remove("wrong");void node.offsetWidth;node.classList.add("wrong")}
 }
 $("bShow").addEventListener("click",function(){placed=ORDER.slice();sel=null;msg.textContent="";render()});
@@ -363,7 +363,7 @@ $("bReset").addEventListener("click",function(){placed=[null,null,null,null];sel
 /* replay */
 var LV=[
  {g:15,m:"Detects the buzz and samples the sender's name.",b:"Reads the message. It could go either way.",a:"Claims it, with some sting.",c:"Stores a light trace.",t:"A first time. Each function does its work, and the trace is faint."},
- {g:55,m:"Catches the cue sooner, because what chitta holds tells it what to look for.",b:"Reaches the same reading more readily: this might be bad news.",a:"Tags it as about me with less delay.",c:"The trace joins a pattern. Each new instance deepens the groove.",t:"What chitta retained now influences how manas attends, how buddhi interprets and how ahaṅkāra claims. The system is recursive."},
+ {g:55,m:"Catches the cue sooner, because what chitta holds tells it what to look for.",b:"Reaches the same reading more readily: this might be bad news.",a:"Tags it as about me with less delay.",c:"The trace joins a pattern. Each new instance deepens the groove.",t:"What chitta retained now influences how manas attends, how buddhi interprets and how ahaṁkāra claims. The system is recursive."},
  {g:95,m:"Is on the cue almost before attention is chosen.",b:"The reading arrives ready-made.",a:"The pattern feels like who she is.",c:"A deep groove, quickly reactivated.",t:"Repeated patterns become so familiar that they feel like “who I am”. Bondage begins when they are misread as the Self. Liberation runs the same mechanism in reverse: awareness that watches the whole process without being caught in it, so that the loop begins to loosen."}
 ];
 function setLv(n){
@@ -385,7 +385,7 @@ var CASES=[
  {t:"Tom hears every sound in the open-plan office: a door, a laugh, a ringing phone. By afternoon he has finished nothing and feels wrung out.",p:"manas",why:"Manas is hijacked by each stimulus, jumping from one to the next without settling. It is “fast, mobile, and restless by nature” until trained (§4.1).",also:"Steadiness of manas comes first; the other functions can only work with what it hands them."},
  {t:"Leo's workplace makes group decisions, and for him each one turns on whether his part was noticed. He counts who was thanked, and who was thanked more.",p:"aham",why:"Appropriation, differentiation and comparison: everything is organised around a centre of self-reference. Attachment, pride and endless comparison root here (§4.3).",also:"Chitta will hold the sting of each comparison."},
  {t:"Daniel keeps choosing whatever feels exciting and calls it good judgment. Each time it costs him, he looks back and finds he had misjudged what the situation was.",p:"buddhi",why:"Discrimination is clouded, here by desire, so decisions are poor and meanings misplaced. Buddhi is the faculty that resolves and decides (§4.2, §9).",also:"What buddhi gets wrong is then claimed and stored downstream."},
- {t:"Every January a familiar dread returns for Hugh, though nothing in his life now accounts for it. It comes, passes, and returns the next year.",p:"chitta",why:"Old fears can be triggered decades after the original event. A deep impression is reactivating on its own schedule (§4.4).",also:"Nothing needs to be wrong in manas, buddhi or ahaṅkāra for this to recur."}
+ {t:"Every January a familiar dread returns for Hugh, though nothing in his life now accounts for it. It comes, passes, and returns the next year.",p:"chitta",why:"Old fears can be triggered decades after the original event. A deep impression is reactivating on its own schedule (§4.4).",also:"Nothing needs to be wrong in manas, buddhi or ahaṁkāra for this to recur."}
 ];
 var NEEDS={
  manas:"Scattered attention needs steadying practices.",
@@ -444,7 +444,7 @@ var currents=[],labs=[],band=null,bandLab=null,bandBg=null;
 function sv(t,a,p){var e=document.createElementNS(NS,t);for(var k in a)e.setAttribute(k,a[k]);if(p)p.appendChild(e);return e}
 function pathAt(amp,ph){var d="";for(var x=150;x<=690;x+=10){var y=Math.sin((x-150)/540*Math.PI*2*1.4+ph)*amp;d+=(x===150?"M ":" L ")+x+" "+y.toFixed(1)}return d}
 function buildRiver(){
-  svg.innerHTML="";var t=sv("title",{id:"rvT"},svg);t.textContent="Four currents merging into one river";var d=sv("desc",{id:"rvD"},svg);d.textContent="Four coloured currents labelled manas, buddhi, ahaṅkāra and chitta, which can be viewed separately or merged into one band labelled antaḥkaraṇa.";
+  svg.innerHTML="";var t=sv("title",{id:"rvT"},svg);t.textContent="Four currents merging into one river";var d=sv("desc",{id:"rvD"},svg);d.textContent="Four coloured currents labelled manas, buddhi, ahaṁkāra and chitta, which can be viewed separately or merged into one band labelled antaḥkaraṇa.";
   band=sv("rect",{x:140,y:72,width:550,height:100,rx:50,fill:"none",stroke:Core.col["--ink"],"stroke-width":1.5,opacity:0,class:"cur"},svg);
   bandBg=sv("rect",{x:335,y:CY-19,width:160,height:34,rx:17,fill:Core.col["--surface"],opacity:0,class:"cur"},svg);
   bandLab=sv("text",{x:415,y:CY+5,"text-anchor":"middle","font-family":"Spectral, Georgia, serif","font-size":22,fill:Core.col["--ink"],opacity:0,class:"lab"},svg);bandLab.textContent="antaḥkaraṇa";
