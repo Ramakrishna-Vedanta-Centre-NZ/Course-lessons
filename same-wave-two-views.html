@@ -1,0 +1,964 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Same Wave, Two Views</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Source+Sans+3:ital,wght@0,400;0,600;1,400&family=Spectral:ital,wght@0,400;0,500;1,400&display=swap">
+<style>
+:root{
+  --bg:#F2F5F9; --surface:#FFFFFF; --ink:#13203A; --muted:#58647D; --line:#D3DAE6; --tint:#E7EDF6;
+  --obj:#0B8686; --att:#C95F06; --res:#2E3192; --env:#C0245B; --ok:#1B7A52;
+  --display:"Spectral",Georgia,"Times New Roman",serif;
+  --body:"Source Sans 3",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0B1120; --surface:#121A2D; --ink:#E7ECF6; --muted:#9AA6BF; --line:#26324D; --tint:#1A2540;
+    --obj:#46CFC6; --att:#F5A04D; --res:#A3AAFF; --env:#FF7BA9; --ok:#5BD59B; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0B1120; --surface:#121A2D; --ink:#E7ECF6; --muted:#9AA6BF; --line:#26324D; --tint:#1A2540;
+  --obj:#46CFC6; --att:#F5A04D; --res:#A3AAFF; --env:#FF7BA9; --ok:#5BD59B; color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;
+  padding-left:max(14px,env(safe-area-inset-left,0px));padding-right:max(14px,env(safe-area-inset-right,0px));padding-block:22px 40px}
+.wrap{max-width:900px;margin:0 auto;display:flex;flex-direction:column;gap:32px}
+h1,h2,h3{font-family:var(--display);font-weight:500;text-wrap:balance;margin:0;letter-spacing:-.01em}
+h1{font-size:clamp(30px,5.4vw,44px);line-height:1.06}
+h2{font-size:clamp(23px,3.4vw,29px);line-height:1.15}
+h3{font-size:19px;line-height:1.25}
+p{margin:0}
+sub{font-size:.72em;line-height:0}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.lede{font-size:17.5px;max-width:64ch}
+.intro{max-width:66ch;color:var(--muted)}
+header{display:flex;flex-direction:column;gap:12px}
+section{display:flex;flex-direction:column;gap:18px;min-width:0}
+.sym{font-family:var(--mono);font-size:.92em;white-space:nowrap}
+.k-obj{color:var(--obj)} .k-att{color:var(--att)} .k-res{color:var(--res)} .k-env{color:var(--env)}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px;display:flex;flex-direction:column;gap:14px;min-width:0}
+.bar{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;justify-content:space-between}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--bg)}
+.seg button{font:inherit;font-size:14px;color:var(--muted);background:transparent;border:0;padding:8px 13px;cursor:pointer}
+.seg button+button{border-left:1px solid var(--line)}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--surface)}
+button:focus-visible,input:focus-visible{outline:2px solid var(--res);outline-offset:2px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{font:inherit;font-size:14px;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:7px 13px;cursor:pointer;display:inline-flex;gap:8px;align-items:center}
+.chip i{font-style:normal;font-family:var(--mono);font-size:11px;color:var(--muted)}
+.chip[aria-pressed="true"]{background:var(--res);border-color:var(--res);color:#fff}
+.chip[aria-pressed="true"] i{color:#fff;opacity:.8}
+.chip:disabled{cursor:default}
+.chip.reached:not([aria-pressed="true"]){border-color:var(--res)}
+.btn{font:inherit;font-size:14px;color:var(--ink);background:var(--surface);border:1px solid var(--ink);border-radius:8px;padding:8px 16px;cursor:pointer}
+.btn.primary{background:var(--ink);color:var(--surface)}
+.btn.ghost{border-color:var(--line);color:var(--muted)}
+.scope-wrap{position:relative;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--bg)}
+canvas{display:block;width:100%}
+.playbtn{position:absolute;right:8px;bottom:8px;font:inherit;font-size:12px;background:var(--surface);color:var(--muted);border:1px solid var(--line);border-radius:6px;padding:4px 10px;cursor:pointer}
+.box{border:1px solid var(--line);border-radius:8px;background:var(--bg);padding:10px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.box .cap{font-size:12px;color:var(--muted)}
+.meters{display:flex;flex-direction:column;gap:9px}
+.meter{display:grid;grid-template-columns:1fr auto;gap:2px 8px;font-size:13px;align-items:baseline}
+.meter b{font-weight:600}
+.meter output{font-family:var(--mono);font-size:12px;color:var(--muted)}
+.meter .track{grid-column:1/-1;height:7px;background:var(--line);border-radius:4px;overflow:hidden}
+.meter .fill{height:100%;width:0;background:var(--res);border-radius:4px}
+.meter.f2 .fill{background:var(--env)} .meter.f3 .fill{background:var(--obj)}
+.slider{display:flex;align-items:center;gap:10px;flex:1 1 280px;min-width:0}
+.slider label{font-size:14px;min-width:0}
+.slider input[type=range]{flex:1;min-width:60px;accent-color:var(--res)}
+.slider small{color:var(--muted);font-size:12px;white-space:nowrap}
+.slider output{font-family:var(--mono);font-size:12.5px;color:var(--muted);min-width:46px;text-align:right}
+.readout{font-size:14px;color:var(--muted)}
+.readout b{color:var(--ink)}
+.tag{font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);border:1px solid var(--line);border-radius:4px;padding:2px 6px}
+.note{font-size:13px;color:var(--muted);max-width:70ch}
+.balance{background:var(--tint);border-radius:10px;padding:16px 18px;display:flex;flex-direction:column;gap:8px;max-width:78ch}
+footer{font-size:13px;color:var(--muted);max-width:76ch;border-top:1px solid var(--line);padding-top:12px}
+@media (max-width:640px){.panel{padding:12px}.wrap{gap:26px}}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
+
+:root{--c1:#0B8686;--c2:#C95F06;--c3:#2E3192;--c4:#C0245B;--c5:#1B7A52;--c6:#8A6D00}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--c1:#46CFC6;--c2:#F5A04D;--c3:#A3AAFF;--c4:#FF7BA9;--c5:#5BD59B;--c6:#E2C14B}}
+:root[data-theme="dark"]{--c1:#46CFC6;--c2:#F5A04D;--c3:#A3AAFF;--c4:#FF7BA9;--c5:#5BD59B;--c6:#E2C14B}
+nav.parts{display:flex;flex-wrap:wrap;gap:8px 20px;margin-top:4px}
+nav.parts a{color:var(--ink);text-decoration:none;border-bottom:1px solid var(--line);padding-bottom:2px;font-size:15px}
+nav.parts a:hover,nav.parts a:focus-visible{border-color:var(--res);color:var(--res)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.cap-live{min-height:3.1em;color:var(--muted);max-width:68ch;font-size:15px}
+.viewhead{display:flex;flex-wrap:wrap;align-items:center;gap:4px 12px}
+.viewhead h3{font-size:18px}
+.vtag{font-family:var(--mono);font-size:11px;letter-spacing:.04em;color:var(--muted)}
+.vctl{display:inline-flex;gap:8px;margin-left:auto}
+.btn.small{font-size:13px;padding:5px 11px}
+.btn[aria-pressed="false"].toggle{color:var(--muted)}
+#cT1,#cS1{height:210px}
+#cT2,#cS2{height:190px}
+#cS1,#cS2{touch-action:pan-y}
+.notes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.ncell{border:1.5px solid var(--line);border-radius:10px;background:var(--bg);padding:8px 10px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.ncell.on{background:var(--surface)}
+.ntog{font:inherit;color:var(--ink);background:transparent;border:0;padding:2px 0;display:flex;gap:8px;align-items:baseline;cursor:pointer;text-align:left}
+.ntog .dot{width:11px;height:11px;border-radius:50%;border:2px solid currentColor;flex:none;align-self:center}
+.ntog[aria-pressed="true"] .dot{background:currentColor}
+.ntog b{font-family:var(--display);font-weight:500;font-size:18px}
+.ntog span{font-family:var(--mono);font-size:11.5px;color:var(--muted)}
+.ncell input[type=range]{width:100%;margin:0;accent-color:var(--res)}
+.ncell[data-i="0"] .ntog{color:var(--c1)} .ncell[data-i="1"] .ntog{color:var(--c2)} .ncell[data-i="2"] .ntog{color:var(--c3)}
+.ncell[data-i="3"] .ntog{color:var(--c4)} .ncell[data-i="4"] .ntog{color:var(--c5)} .ncell[data-i="5"] .ntog{color:var(--c6)}
+.ncell .ntog b{color:inherit}
+.soundbar .vol{flex:0 1 220px}
+.fn{font-size:13px;color:var(--muted);max-width:76ch}
+.stepbar{display:flex;flex-wrap:wrap;gap:10px 14px;align-items:center}
+.rebchoice{display:flex;flex-wrap:wrap;gap:8px 10px;align-items:center}
+.eq{font-family:var(--mono);font-size:13px;color:var(--muted);border:1px dashed var(--line);border-radius:6px;padding:4px 9px;transition:all .25s}
+.eq.lit{color:var(--ink);border-style:solid;border-color:var(--res);background:var(--tint)}
+.btn:disabled{opacity:.4;cursor:default}
+.result{min-height:5.4em;font-size:15px;display:flex;flex-direction:column;gap:6px}
+.result .big{font-family:var(--display);font-size:19px}
+.result .num{font-family:var(--mono);font-size:13px;color:var(--muted)}
+.seg button:disabled{opacity:.4;cursor:default}
+.seg button:focus-visible{outline-offset:-2px}
+
+/* Part III */
+.case{font-family:var(--display);font-size:20px;line-height:1.45;max-width:60ch}
+.choices{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}
+.choice{font:inherit;text-align:left;border:1.5px solid var(--line);border-top-width:4px;border-radius:10px;background:var(--bg);color:var(--ink);padding:9px 11px;cursor:pointer;display:flex;flex-direction:column;gap:2px;min-width:0}
+.choice b{font-family:var(--display);font-size:18px;font-weight:500}
+.choice span{font-size:12.5px;color:var(--muted);line-height:1.3}
+.choice:disabled{cursor:default}
+.choice.pick{box-shadow:0 0 0 2px var(--ink)}
+.choice.right{background:color-mix(in srgb,var(--ok) 11%,var(--surface))}
+.choice[data-k="pramana"]{border-top-color:var(--c1)} .choice[data-k="viparyaya"]{border-top-color:var(--c2)}
+.choice[data-k="vikalpa"]{border-top-color:var(--c3)} .choice[data-k="nidra"]{border-top-color:var(--c4)} .choice[data-k="smriti"]{border-top-color:var(--c5)}
+.guidebox{display:flex;flex-direction:column;gap:8px;align-items:flex-start}
+#gBody{border-left:3px solid var(--line);padding:2px 0 2px 12px;display:flex;flex-direction:column;gap:8px}
+.gq{font-family:var(--display);font-size:18px}
+.gbar{justify-content:flex-start}
+.fb{display:none;border-top:1px solid var(--line);padding-top:12px;font-size:15px;flex-direction:column;gap:8px}
+.fb.show{display:flex}
+.fb .verdict{font-family:var(--display);font-size:19px}
+.fb .ref{font-family:var(--mono);font-size:11px;color:var(--muted)}
+.light{background:var(--tint);border-radius:8px;padding:9px 12px}
+.five{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px}
+.five>div{border-top:4px solid var(--line);padding-top:8px;display:flex;flex-direction:column;gap:3px;font-size:14px;color:var(--muted)}
+.five b{font-family:var(--display);font-size:18px;font-weight:500;color:var(--ink)}
+.five i{font-style:normal;font-family:var(--mono);font-size:10.5px}
+.five>div[data-k="pramana"]{border-color:var(--c1)} .five>div[data-k="viparyaya"]{border-color:var(--c2)}
+.five>div[data-k="vikalpa"]{border-color:var(--c3)} .five>div[data-k="nidra"]{border-color:var(--c4)} .five>div[data-k="smriti"]{border-color:var(--c5)}
+.missed{display:flex;flex-direction:column;gap:8px;font-size:15px}
+.missed div{border-left:3px solid var(--line);padding-left:11px}
+.missed small{display:block;color:var(--muted);font-size:13px}
+
+@media (max-width:860px){.choices,.five{grid-template-columns:repeat(2,minmax(0,1fr))}.choice:last-child:nth-child(odd){grid-column:1/-1}}
+@media (max-width:640px){.notes{grid-template-columns:repeat(2,minmax(0,1fr))}#cT1,#cS1{height:190px}.vctl{margin-left:0}.cap-live{min-height:6.2em}}
+@media (max-width:420px){.choices,.five{grid-template-columns:minmax(0,1fr)}.case{font-size:18px}#cT2,#cS2{height:170px}.seg{flex-wrap:wrap}}
+@media (prefers-reduced-motion: reduce){.eq{transition:none}}
+
+body[data-part] header,body[data-part] footer.gfoot{display:none}
+body[data-part="1"] #s2,body[data-part="1"] #s3,
+body[data-part="2"] #s1,body[data-part="2"] #s3,
+body[data-part="3"] #s1,body[data-part="3"] #s2{display:none}
+body[data-part]{padding-block:10px 18px}
+.muted{color:var(--muted)}
+[hidden]{display:none!important}
+
+</style></head><body>
+<div class="wrap">
+<header>
+  <div class="eyebrow">The Mind in the Light of Modern and Spiritual Sciences · Lesson 3.1</div>
+  <h1>Same wave, two views</h1>
+  <p class="lede">A chord on a piano can be heard as it unfolds in time, or described as a short list of frequencies. Both descriptions are complete, and they describe one wave. Build a chord and watch both views move together, rebuild a wave from its spectrum alone, then practise telling the five kinds of vṛtti apart.</p>
+  <nav class="parts" aria-label="Parts of this page"><a href="#s1">I. One chord, two views</a><a href="#s2">II. Nothing is lost</a><a href="#s3">III. Name that vṛtti</a></nav>
+</header>
+
+<section id="s1">
+  <h2>I. One chord, two views</h2>
+  <p class="intro">A wave can be described as it unfolds in time, <span class="sym">ψ(t)</span>, or as the frequencies it contains, <span class="sym">Ψ(f)</span> (§3). Switch notes on and off, change how strong each one is, and watch both views. They are always the same wave.</p>
+  <div class="panel">
+    <div class="chips" id="presets" role="group" aria-label="Chords to try"></div>
+    <p class="cap-live" id="presetCap" aria-live="polite"></p>
+
+    <div class="viewhead">
+      <h3>Time view <span class="sym">ψ(t)</span></h3>
+      <span class="vtag">sequential · local · causal</span>
+      <span class="vctl">
+        <button class="btn ghost small" id="parts" aria-pressed="true">Show the separate notes</button>
+        <button class="btn ghost small" id="play" aria-pressed="true">Pause</button>
+      </span>
+    </div>
+    <div class="scope-wrap"><canvas id="cT1" role="img" aria-label="Time view"></canvas></div>
+
+    <div class="viewhead">
+      <h3>Spectrum <span class="sym">Ψ(f)</span></h3>
+      <span class="vtag">simultaneous · distributed · holistic</span>
+    </div>
+    <div class="scope-wrap"><canvas id="cS1" role="img" aria-label="Spectrum"></canvas></div>
+    <p class="note" id="dragHelp">Drag a line up or down to change its height, or tap at the height you want. The note controls below do the same.</p>
+
+    <div class="notes" id="notes" role="group" aria-label="The six notes"></div>
+    <p class="readout" id="rd1" aria-live="polite"></p>
+
+    <div class="bar soundbar">
+      <button class="btn primary" id="snd" aria-pressed="false">Sound on</button>
+      <div class="slider vol"><label for="vol">Volume</label><input type="range" id="vol" min="0" max="100" value="35"></div>
+    </div>
+    <p class="note">Sound is off until you press the button, and starts at a low level. Please set your device volume before you begin. Each note is a pure tone, so this is a simplified chord, not a piano. The time view is drawn in slow motion: the real window is 24 thousandths of a second.</p>
+  </div>
+  <p class="fn">The chord is a sound standing in for any vṛtti, as in the lesson's own example. The notes are the equal-tempered pitches, rounded to 0.2 Hz so that the transform lands exactly on its bins (C4 261.6, E4 329.6, G4 392.0 Hz).</p>
+</section>
+
+<section id="s2">
+  <h2>II. Nothing is lost</h2>
+  <p class="intro">The lesson says the two views are completely equivalent: apply the Fourier transform, apply it backwards, and the same wave returns (§7). Try it. Choose a wave, transform it, then rebuild it from the spectrum alone. After that, see what happens when only part of the spectrum is kept.</p>
+  <div class="panel">
+    <div class="chips" id="waves" role="group" aria-label="Choose a wave"></div>
+    <div class="slider" id="durRow" hidden><label for="dur">How long it lasts</label><input type="range" id="dur" min="4" max="16" step="1" value="10"><output id="durV">10 ms</output></div>
+
+    <div class="viewhead">
+      <h3>Time view <span class="sym">ψ(t)</span></h3>
+      <div class="seg" id="vseg" role="group" aria-label="Which wave to draw">
+        <button data-v="orig" aria-pressed="false">Original</button>
+        <button data-v="reb" aria-pressed="false">Rebuilt</button>
+        <button data-v="both" aria-pressed="true">Both</button>
+      </div>
+    </div>
+    <div class="scope-wrap"><canvas id="cT2" role="img" aria-label="Time view of the chosen wave"></canvas></div>
+
+    <div class="stepbar">
+      <button class="btn primary" id="bFwd">Transform to the spectrum ↓</button>
+      <span class="eq" id="eqF"><span class="sym">F{ψ(t)} = Ψ(f)</span></span>
+    </div>
+
+    <div class="viewhead">
+      <h3>Spectrum <span class="sym">Ψ(f)</span></h3>
+    </div>
+    <div class="scope-wrap"><canvas id="cS2" role="img" aria-label="Spectrum of the chosen wave"></canvas></div>
+
+    <div class="stepbar">
+      <div class="rebchoice">
+        <span class="tag">Rebuild from</span>
+        <div class="seg" id="mseg" role="group" aria-label="What to rebuild from">
+          <button data-m="all" aria-pressed="true">Every line, with phases</button>
+          <button data-m="tall" aria-pressed="false">Only the tallest parts</button>
+          <button data-m="phase" aria-pressed="false">Heights, phases scrambled</button>
+        </div>
+      </div>
+      <button class="btn primary" id="bBack" disabled>Rebuild the wave ↑</button>
+      <span class="eq" id="eqB"><span class="sym">F⁻¹{Ψ(f)} = ψ(t)</span></span>
+    </div>
+
+    <div class="result" id="res2" aria-live="polite"></div>
+  </div>
+
+  <div class="balance">
+    <h3>What this shows, and what it does not</h3>
+    <p><b>It shows</b> that for any wave, the time description and the spectrum are two complete descriptions of one signal. Nothing is added and nothing is lost in going either way, provided the whole spectrum is kept, phases included.</p>
+    <p><b>It does not show</b> that the mind is made of fixed sine waves, or that Consciousness is a spectrum. The lesson reads ordinary experience as the temporal view and the traditions' timeless ground as a spectral-domain description. That reading is the lesson's teaching. This page gives only the mathematics it is built on. A vṛtti also arises, lasts and subsides, so its spectrum is spread over a range, as the last wave shows.</p>
+  </div>
+</section>
+
+<section id="s3">
+  <h2>III. Name that vṛtti</h2>
+  <p class="intro">The Yoga Sūtras sort every vṛtti into five kinds (§5). They are told apart by their relation to an object, not by how vivid they feel. Read each moment and say which kind of vṛtti it is.</p>
+  <div class="panel" id="nm">
+    <div class="bar"><span class="tag" id="nmProg"></span><span class="note">Everyday moments, written for learning. Not an assessment.</span></div>
+    <p class="case" id="nmCase"></p>
+    <div class="choices" id="nmChoices" role="group" aria-label="Choose a kind of vṛtti"></div>
+    <div class="guidebox">
+      <button class="btn ghost small" id="gBtn" aria-expanded="false" aria-controls="gBody">Need a hand? Ask the questions</button>
+      <div id="gBody" hidden>
+        <p class="gq" id="gQ" aria-live="polite"></p>
+        <div class="bar gbar"><span class="seg" id="gYN" role="group" aria-label="Your answer"><button data-a="yes">Yes</button><button data-a="no">No</button></span><button class="btn ghost small" id="gAgain" hidden>Ask again</button></div>
+      </div>
+    </div>
+    <div class="fb" id="nmFb" role="status" aria-live="polite"></div>
+    <div class="bar"><button class="btn primary" id="nmNext" hidden>Next moment</button></div>
+  </div>
+  <div id="nmEnd" hidden>
+    <div class="panel">
+      <h3 id="nmScore"></h3>
+      <div id="nmMissed"></div>
+      <div class="bar"><button class="btn primary" id="nmAgain">Go again, shuffled</button></div>
+    </div>
+    <div class="panel">
+      <h3>The five, by relation to the object</h3>
+      <div class="five" id="five"></div>
+      <p class="note">The point of learning the five is not to file your experiences but to recognise them: to notice a vṛtti as something the mind produces, and so to be no longer identified with it (§5, Recognizing vṛttis). Real life is less tidy than these moments: the boundaries blur, and a worry can turn out to be right. The moments here were chosen to be clear under the lesson's own criteria.</p>
+    </div>
+  </div>
+</section>
+
+<footer class="gfoot">A learning aid based on Lesson 3.1. Notation follows the lesson: ψ(t) is a wave in time and Ψ(f) is its spectrum. Both are used here for an ordinary sound wave, as in the lesson's chord. Nothing on this page diagnoses or advises on any person's situation.</footer>
+</div>
+
+<script>
+window.Core=(function(){
+"use strict";
+var TAU=Math.PI*2;
+try{var q=new URLSearchParams(location.search).get("theme");if(q==="light"||q==="dark")document.documentElement.setAttribute("data-theme",q)}catch(e){}
+function lerp(a,b,t){return a+(b-a)*t}
+function clamp(x,a,b){return Math.max(a,Math.min(b,x))}
+function el(id){return document.getElementById(id)}
+var col={},subs=[];
+function readColors(){
+  var cs=getComputedStyle(document.documentElement);
+  ["--bg","--surface","--ink","--muted","--line","--tint","--obj","--att","--res","--env","--ok"].forEach(function(k){col[k]=cs.getPropertyValue(k).trim()});
+  subs.forEach(function(f){try{f()}catch(e){}});
+}
+readColors();
+try{window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change",readColors)}catch(e){}
+new MutationObserver(readColors).observe(document.documentElement,{attributes:true,attributeFilter:["data-theme"]});
+function onTheme(f){subs.push(f)}
+var dpr=Math.max(1,Math.min(2,window.devicePixelRatio||1));
+function fit(c){
+  var w=c.clientWidth,h=c.clientHeight;
+  if(!w||!h)return null;
+  var bw=Math.round(w*dpr),bh=Math.round(h*dpr);
+  if(c.width!==bw||c.height!==bh){c.width=bw;c.height=bh}
+  var g=c.getContext("2d");g.setTransform(dpr,0,0,dpr,0,0);return {g:g,w:w,h:h};
+}
+var FONT="500 11.5px 'Source Sans 3',system-ui,sans-serif";
+function label(g,t,x,y,color,align,pill){
+  g.font=FONT;g.textAlign=align||"left";g.textBaseline="alphabetic";
+  if(pill){var w=g.measureText(t).width,x0=(align==="right")?x-w:(align==="center"?x-w/2:x);
+    g.save();g.globalAlpha=.82;g.fillStyle=col["--surface"];g.fillRect(x0-5,y-12,w+10,17);g.restore()}
+  g.fillStyle=color;g.fillText(t,x,y)}
+/* ring-buffer trace: arr, head index, length N */
+function trace(g,arr,head,N,x0,w,cy,sc,color,lw,alpha,dash){
+  g.save();g.globalAlpha=alpha==null?1:alpha;g.strokeStyle=color;g.lineWidth=lw;g.lineJoin="round";if(dash)g.setLineDash(dash);
+  g.beginPath();
+  for(var i=0;i<N;i++){var v=arr[(head+i)%N];var x=x0+w*i/(N-1),y=cy-v*sc;if(i)g.lineTo(x,y);else g.moveTo(x,y)}
+  g.stroke();g.restore();
+}
+/* shaded envelope band around a lane centre */
+function envelope(g,E,head,N,W,cy,sc,color,alpha){
+  g.save();g.globalAlpha=alpha;
+  g.beginPath();
+  for(var i=0;i<N;i++){var e=E[(head+i)%N],x=W*i/(N-1),y=cy-e*sc;if(i)g.lineTo(x,y);else g.moveTo(x,y)}
+  for(var j=N-1;j>=0;j--){var e2=E[(head+j)%N],x2=W*j/(N-1);g.lineTo(x2,cy+e2*sc)}
+  g.closePath();g.fillStyle=color;g.globalAlpha=.09*alpha;g.fill();g.restore();
+  g.save();g.globalAlpha=alpha;g.strokeStyle=color;g.lineWidth=1.6;g.setLineDash([6,4]);
+  [1,-1].forEach(function(sg){g.beginPath();for(var i2=0;i2<N;i2++){var ee=E[(head+i2)%N]*sg,xx=W*i2/(N-1),yy=cy-ee*sc;if(i2)g.lineTo(xx,yy);else g.moveTo(xx,yy)}g.stroke()});
+  g.restore();
+}
+return {TAU:TAU,lerp:lerp,clamp:clamp,el:el,col:col,onTheme:onTheme,fit:fit,label:label,trace:trace,envelope:envelope,FONT:FONT};
+})();
+
+</script>
+<script>
+(function(){
+"use strict";
+var C=window.Core,$=C.el,col=C.col,TAU=C.TAU,clamp=C.clamp;
+try{var pt=new URLSearchParams(location.search).get("part");if(pt==="1"||pt==="2"||pt==="3")document.body.setAttribute("data-part",pt)}catch(e){}
+var reduced=false;try{reduced=window.matchMedia("(prefers-reduced-motion: reduce)").matches}catch(e){}
+function mk(tag,cls,html){var e=document.createElement(tag);if(cls)e.className=cls;if(html!=null)e.innerHTML=html;return e}
+function setPressed(btns,test){for(var i=0;i<btns.length;i++)btns[i].setAttribute("aria-pressed",test(btns[i],i)?"true":"false")}
+
+/* ===================== shared: colours, FFT ===================== */
+var cc=[];
+function readCC(){var cs=getComputedStyle(document.documentElement);for(var i=0;i<6;i++)cc[i]=cs.getPropertyValue("--c"+(i+1)).trim()}
+readCC();
+var dirty1=true,dirty2=true;
+C.onTheme(function(){readCC();dirty1=dirty2=true});
+window.addEventListener("resize",function(){dirty1=dirty2=true});
+
+var N=32768,FS=6553.6,BIN=FS/N;            /* 5 s of signal, 0.2 Hz per bin */
+var rev=new Uint16Array(N),cosT=new Float64Array(N/2),sinT=new Float64Array(N/2);
+(function(){
+  var bits=15,i,j,x,r;
+  for(i=0;i<N;i++){x=i;r=0;for(j=0;j<bits;j++){r=(r<<1)|(x&1);x>>=1}rev[i]=r}
+  for(i=0;i<N/2;i++){cosT[i]=Math.cos(TAU*i/N);sinT[i]=-Math.sin(TAU*i/N)}
+})();
+function fft(re,im,inv){
+  var i,j,k,a,b,t,size,half,step,wr,wi,tr,ti;
+  for(i=0;i<N;i++){j=rev[i];if(j>i){t=re[i];re[i]=re[j];re[j]=t;t=im[i];im[i]=im[j];im[j]=t}}
+  for(size=2;size<=N;size<<=1){
+    half=size>>1;step=N/size;
+    for(i=0;i<N;i+=size){
+      for(j=0,k=0;j<half;j++,k+=step){
+        wr=cosT[k];wi=inv?-sinT[k]:sinT[k];a=i+j;b=a+half;
+        tr=re[b]*wr-im[b]*wi;ti=re[b]*wi+im[b]*wr;
+        re[b]=re[a]-tr;im[b]=im[a]-ti;re[a]+=tr;im[a]+=ti;
+      }
+    }
+  }
+  if(inv){for(i=0;i<N;i++){re[i]/=N;im[i]/=N}}
+}
+var NOTES=[
+  {n:"C3",f:130.8,ph:0.3},{n:"C4",f:261.6,ph:0},{n:"E4",f:329.6,ph:1.2},
+  {n:"G4",f:392.0,ph:2.4},{n:"B♭4",f:466.2,ph:0.7},{n:"C5",f:523.2,ph:1.9}
+];
+NOTES.forEach(function(o){o.k=Math.round(o.f/BIN)});
+function axisTicks(g,x0,x1,y,fmax,step,unitLast){
+  for(var f=0;f<=fmax;f+=step){
+    var x=x0+(x1-x0)*f/fmax;
+    g.strokeStyle=col["--line"];g.lineWidth=1;g.beginPath();g.moveTo(x+.5,y);g.lineTo(x+.5,y+4);g.stroke();
+    var t=String(f);
+    C.label(g,t,x,y+15,col["--muted"],f===0?"left":(f===fmax?"right":"center"));
+  }
+}
+
+/* ===================== Part I: one chord, two views ===================== */
+var S1={on:[0,1,1,1,0,0],amp:[.8,.8,.8,.8,.8,.8],show:true,playing:!reduced,now:reduced?1:0,vol:.35,preset:2};
+var WIN1=0.024,WN1=Math.round(WIN1*FS);
+var sig1=new Float64Array(N),re1=new Float64Array(N),im1=new Float64Array(N),mag1=[0,0,0,0,0,0];
+var yMax1=1,yTarget1=1;
+var cT1=$("cT1"),cS1=$("cS1");
+
+function recompute1(){
+  var i,n,a,w,ph;
+  sig1.fill(0);
+  for(i=0;i<6;i++){
+    if(!S1.on[i])continue;
+    a=S1.amp[i];w=TAU*NOTES[i].f/FS;ph=NOTES[i].ph;
+    for(n=0;n<N;n++)sig1[n]+=a*Math.sin(w*n+ph);
+  }
+  re1.set(sig1);im1.fill(0);fft(re1,im1,false);
+  for(i=0;i<6;i++){var k=NOTES[i].k;mag1[i]=2*Math.hypot(re1[k],im1[k])/N}
+  var mx=0;for(n=0;n<WN1;n++)mx=Math.max(mx,Math.abs(sig1[n]));
+  yTarget1=Math.max(.6,mx*1.08);
+  var on=[],hz=[];
+  for(i=0;i<6;i++)if(S1.on[i]){on.push(NOTES[i].n);hz.push(NOTES[i].f.toFixed(1))}
+  cT1.setAttribute("aria-label",on.length?"Time view: the sum of "+on.join(", ")+", drawn over 24 milliseconds. A curve that "+(on.length>1?"is irregular":"is a smooth sine wave")+".":"Time view: a flat line, silence.");
+  cS1.setAttribute("aria-label",on.length?"Spectrum: "+on.length+" line"+(on.length>1?"s":"")+" at "+hz.join(", ")+" hertz.":"Spectrum: empty, no lines.");
+  readout1();
+}
+function readout1(){
+  var on=[];for(var i=0;i<6;i++)if(S1.on[i])on.push(i);
+  var t;
+  if(!on.length)t="Silence. A flat line in time and an empty spectrum: the same wave, nothing, in both views.";
+  else if(on.length===1)t="One note. A smooth sine wave in time, and a single line in the spectrum at "+NOTES[on[0]].f.toFixed(1)+" Hz.";
+  else{
+    var hz=on.map(function(i){return NOTES[i].f.toFixed(1)});
+    t=on.length+" notes. An irregular curve in time, and "+on.length+" clean lines in the spectrum, at "+hz.slice(0,-1).join(", ")+" and "+hz[hz.length-1]+" Hz. One wave, two descriptions.";
+  }
+  $("rd1").innerHTML=t+" <span class=\"muted\">Move one line and the wave changes at every moment, not at one place.</span>";
+}
+
+/* presets */
+var PRE=[
+  {n:"One note",on:[0,1,0,0,0,0],a:.9,t:"A single note is a smooth, regular wave in time, and a single line in the spectrum. There is nothing else to say about it."},
+  {n:"Two notes",on:[0,1,0,1,0,0],a:.8,t:"Add a second and the time curve is no longer a simple wave: it swells and thins as the two drift in and out of step. The spectrum says it plainly: two lines."},
+  {n:"The triad (C, E, G)",on:[0,1,1,1,0,0],a:.8,t:"The lesson's chord. In time you hear a single unified sound with a complicated shape. In the spectrum you read three frequencies, 261.6, 329.6 and 392.0 Hz, all present at once."},
+  {n:"Six notes",on:[1,1,1,1,1,1],a:.5,t:"A much more tangled wave in time, and still just six lines. The tangle is nothing but the six simple waves added together."},
+  {n:"Silence",on:[0,0,0,0,0,0],a:.8,t:"No lines, no wave. Switch a note on and a wave appears in time and a line appears in the spectrum, together."}
+];
+var presetBtns=[];
+PRE.forEach(function(p,i){
+  var b=mk("button","chip","<span>"+p.n+"</span>");b.setAttribute("aria-pressed","false");
+  b.addEventListener("click",function(){
+    S1.on=p.on.slice();S1.amp=S1.amp.map(function(){return p.a});S1.preset=i;
+    syncUI1();$("presetCap").textContent=p.t;recompute1();dirty1=true;post();
+  });
+  $("presets").appendChild(b);presetBtns.push(b);
+});
+
+/* note cells */
+var cells=[];
+NOTES.forEach(function(o,i){
+  var c=mk("div","ncell");c.setAttribute("data-i",i);
+  var tog=mk("button","ntog",'<i class="dot"></i><b>'+o.n+'</b><span>'+o.f.toFixed(1)+' Hz</span>');
+  tog.setAttribute("aria-pressed","false");
+  var lab=mk("label","sr","Height of "+o.n);lab.setAttribute("for","amp"+i);
+  var sl=mk("input");sl.type="range";sl.id="amp"+i;sl.min=".05";sl.max="1";sl.step=".05";sl.value=".8";
+  c.appendChild(tog);c.appendChild(lab);c.appendChild(sl);$("notes").appendChild(c);
+  tog.addEventListener("click",function(){
+    S1.on[i]=S1.on[i]?0:1;if(S1.on[i]&&S1.amp[i]<.05)S1.amp[i]=.8;touched1();
+  });
+  sl.addEventListener("input",function(){S1.amp[i]=+sl.value;S1.on[i]=1;touched1()});
+  cells.push({c:c,tog:tog,sl:sl});
+});
+function syncUI1(){
+  cells.forEach(function(x,i){
+    x.tog.setAttribute("aria-pressed",S1.on[i]?"true":"false");
+    x.sl.value=S1.amp[i];x.c.classList.toggle("on",!!S1.on[i]);
+  });
+  setPressed(presetBtns,function(b,i){return i===S1.preset});
+}
+function touched1(){S1.preset=-1;$("presetCap").textContent="";syncUI1();recompute1();dirty1=true;post()}
+
+/* controls */
+var playBtn=$("play"),partsBtn=$("parts");
+function syncPlay(){playBtn.textContent=S1.playing?"Pause":"Let it unfold";playBtn.setAttribute("aria-pressed",String(S1.playing))}
+playBtn.addEventListener("click",function(){S1.playing=!S1.playing;if(S1.playing&&S1.now>=1)S1.now=0;syncPlay();dirty1=true});
+partsBtn.addEventListener("click",function(){S1.show=!S1.show;partsBtn.setAttribute("aria-pressed",String(S1.show));dirty1=true});
+partsBtn.classList.add("toggle");
+
+/* spectrum geometry and pointer interaction */
+var FMAX1=600;
+function geo1(W,H){return {x0:12,x1:W-12,top:24,base:H-26}}
+function slotX(i,W){var g=geo1(W,0);return g.x0+(g.x1-g.x0)*NOTES[i].f/FMAX1}
+function setAmpFromY(i,y,H){
+  var g=geo1(0,H),a=Math.round(clamp((g.base-y)/(g.base-g.top),0,1)*20)/20;
+  if(a<.05){S1.on[i]=0}else{S1.on[i]=1;S1.amp[i]=a}
+  touched1();
+}
+var drag=-1,tdown=null;
+function nearest(x,W){var best=-1,bd=1e9;for(var i=0;i<6;i++){var d=Math.abs(x-slotX(i,W));if(d<bd){bd=d;best=i}}return bd<=20?best:-1}
+cS1.addEventListener("pointerdown",function(e){
+  var r=cS1.getBoundingClientRect(),x=e.clientX-r.left,y=e.clientY-r.top,i=nearest(x,r.width);
+  if(i<0)return;
+  if(e.pointerType==="touch"){tdown={i:i,x:e.clientX,y:e.clientY,yy:y};return}
+  drag=i;try{cS1.setPointerCapture(e.pointerId)}catch(_){}
+  setAmpFromY(i,y,r.height);e.preventDefault();
+});
+cS1.addEventListener("pointermove",function(e){
+  var r=cS1.getBoundingClientRect();
+  if(drag>=0){setAmpFromY(drag,e.clientY-r.top,r.height);return}
+  cS1.style.cursor=nearest(e.clientX-r.left,r.width)>=0?"ns-resize":"default";
+});
+function endDrag(e){
+  if(tdown&&e.type==="pointerup"&&Math.hypot(e.clientX-tdown.x,e.clientY-tdown.y)<8){
+    setAmpFromY(tdown.i,tdown.yy,cS1.getBoundingClientRect().height);
+  }
+  tdown=null;drag=-1;
+}
+cS1.addEventListener("pointerup",endDrag);cS1.addEventListener("pointercancel",endDrag);
+
+/* drawing */
+function drawT1(){
+  var f=C.fit(cT1);if(!f)return;
+  var g=f.g,W=f.w,H=f.h;g.clearRect(0,0,W,H);
+  var x0=12,x1=W-12,top=26,bot=H-26,yc=(top+bot)/2,hh=(bot-top)/2,sc=hh*.94/yMax1,i,n;
+  g.strokeStyle=col["--line"];g.lineWidth=1;
+  g.beginPath();g.moveTo(x0,yc+.5);g.lineTo(x1,yc+.5);g.stroke();
+  g.save();g.setLineDash([2,4]);g.globalAlpha=.7;
+  for(var m=1;m<4;m++){var xx=x0+(x1-x0)*m/4;g.beginPath();g.moveTo(xx+.5,top);g.lineTo(xx+.5,bot);g.stroke()}
+  g.restore();
+  for(var q=0;q<=4;q++){var xt=x0+(x1-x0)*q/4;C.label(g,(q*6)+(q===4?" ms":""),xt,H-9,col["--muted"],q===0?"left":(q===4?"right":"center"))}
+  C.label(g,"ψ(t)",x0,top-8,col["--ink"],"left");
+  g.save();g.beginPath();g.rect(0,top-4,W,bot-top+8);g.clip();
+  if(S1.show){
+    for(i=0;i<6;i++){
+      if(!S1.on[i])continue;
+      g.beginPath();g.strokeStyle=cc[i];g.lineWidth=1.5;g.globalAlpha=.6;
+      var a=S1.amp[i],w=TAU*NOTES[i].f/FS,ph=NOTES[i].ph;
+      for(n=0;n<WN1;n++){var x=x0+(x1-x0)*n/(WN1-1),y=yc-a*Math.sin(w*n+ph)*sc;if(n)g.lineTo(x,y);else g.moveTo(x,y)}
+      g.stroke();
+    }
+    g.globalAlpha=1;
+  }
+  var idx=Math.round(clamp(S1.now,0,1)*(WN1-1));
+  function seg(a0,a1,alpha){
+    g.beginPath();g.strokeStyle=col["--ink"];g.lineWidth=2.4;g.lineJoin="round";g.globalAlpha=alpha;
+    for(var j=a0;j<=a1;j++){var x=x0+(x1-x0)*j/(WN1-1),y=yc-sig1[j]*sc;if(j===a0)g.moveTo(x,y);else g.lineTo(x,y)}
+    g.stroke();g.globalAlpha=1;
+  }
+  seg(0,idx,1);
+  if(idx<WN1-1)seg(idx,WN1-1,.28);
+  g.restore();
+  if(S1.now<1||S1.playing){
+    var xn=x0+(x1-x0)*idx/(WN1-1);
+    g.save();g.setLineDash([3,3]);g.strokeStyle=col["--muted"];g.beginPath();g.moveTo(xn+.5,top);g.lineTo(xn+.5,bot);g.stroke();g.restore();
+    g.fillStyle=col["--ink"];g.beginPath();g.arc(xn,yc-sig1[idx]*sc,4.5,0,TAU);g.fill();
+    C.label(g,"now",clamp(xn,x0+48,x1-14),top-8,col["--muted"],"center");
+  }
+}
+function drawS1(){
+  var f=C.fit(cS1);if(!f)return;
+  var g=f.g,W=f.w,H=f.h;g.clearRect(0,0,W,H);
+  var G=geo1(W,H);
+  g.strokeStyle=col["--line"];g.lineWidth=1;
+  g.beginPath();g.moveTo(G.x0,G.base+.5);g.lineTo(G.x1,G.base+.5);g.stroke();
+  g.save();g.setLineDash([2,4]);g.beginPath();g.moveTo(G.x0,G.top+.5);g.lineTo(G.x1,G.top+.5);g.stroke();g.restore();
+  axisTicks(g,G.x0,G.x1,G.base,FMAX1,100,true);
+  C.label(g,"Ψ(f)   height of each line",G.x0,G.top-9,col["--ink"],"left");C.label(g,"frequency, Hz",G.x1,G.top-9,col["--muted"],"right");
+  for(var i=0;i<6;i++){
+    var x=slotX(i,W);
+    if(S1.on[i]){
+      var y=G.base-clamp(mag1[i],0,1)*(G.base-G.top);
+      g.strokeStyle=cc[i];g.lineWidth=3;g.lineCap="round";g.beginPath();g.moveTo(x,G.base);g.lineTo(x,y);g.stroke();g.lineCap="butt";
+      g.fillStyle=cc[i];g.beginPath();g.arc(x,y,5.5,0,TAU);g.fill();
+      C.label(g,NOTES[i].n,x,Math.max(G.top+10,y-10),cc[i],"center",true);
+    }else{
+      g.strokeStyle=cc[i];g.globalAlpha=.55;g.lineWidth=1.5;g.beginPath();g.arc(x,G.base,4.5,0,TAU);g.stroke();g.globalAlpha=1;
+      C.label(g,NOTES[i].n,x,G.base-10,col["--muted"],"center");
+    }
+  }
+}
+
+/* ---------- audio ---------- */
+function makeGen(sr){
+  var TAU=Math.PI*2,F=[130.8,261.6,329.6,392.0,466.2,523.2],PH=[0.3,0,1.2,2.4,0.7,1.9];
+  var p={a:[0,0,0,0,0,0],vol:0,run:0},c={a:[0,0,0,0,0,0],vol:0},th=[0,0,0,0,0,0];
+  var ka=1-Math.exp(-1/(sr*0.04)),kv=1-Math.exp(-1/(sr*0.08));
+  return {
+    set:function(q){for(var n in q)p[n]=q[n]},
+    fill:function(L){
+      for(var n=0;n<L.length;n++){
+        var s=0,sum=0;
+        for(var i=0;i<6;i++){
+          c.a[i]+=(p.a[i]-c.a[i])*ka;th[i]+=TAU*F[i]/sr;if(th[i]>TAU)th[i]-=TAU;
+          s+=c.a[i]*Math.sin(th[i]+PH[i]);sum+=c.a[i];
+        }
+        c.vol+=((p.run?p.vol:0)-c.vol)*kv;
+        L[n]=c.vol*s/Math.max(1,sum);
+      }
+    }
+  };
+}
+var ctx=null,node=null,gen=null,soundOn=false,audioFail=false;
+function post(){
+  var msg={a:S1.on.map(function(o,i){return o?S1.amp[i]:0}),vol:.02+S1.vol*.16,run:soundOn?1:0};
+  if(gen)gen.set(msg);
+  if(node&&node.port)node.port.postMessage(msg);
+}
+function startAudio(cb){
+  if(ctx){ctx.resume().then(cb,cb);return}
+  var AC=window.AudioContext||window.webkitAudioContext;
+  if(!AC){audioFail=true;cb();return}
+  try{ctx=new AC()}catch(e){audioFail=true;cb();return}
+  var done=function(){ctx.resume().then(cb,cb)};
+  if(ctx.audioWorklet&&window.Blob&&window.URL){
+    var src="var makeGen="+makeGen.toString()+";class G extends AudioWorkletProcessor{constructor(){super();this.g=makeGen(sampleRate);this.port.onmessage=function(e){this.g.set(e.data)}.bind(this)}process(i,o){var ch=o[0];this.g.fill(ch[0]);for(var k=1;k<ch.length;k++)ch[k].set(ch[0]);return true}}registerProcessor('gen',G);";
+    var url=URL.createObjectURL(new Blob([src],{type:"application/javascript"}));
+    ctx.audioWorklet.addModule(url).then(function(){
+      node=new AudioWorkletNode(ctx,"gen",{numberOfInputs:0,outputChannelCount:[2]});
+      node.connect(ctx.destination);post();done();
+    }).catch(function(){fallback();done()});
+  }else{fallback();done()}
+}
+function fallback(){
+  try{
+    gen=makeGen(ctx.sampleRate);
+    var sp=ctx.createScriptProcessor(2048,0,2);
+    sp.onaudioprocess=function(e){var a=e.outputBuffer.getChannelData(0);gen.fill(a);e.outputBuffer.getChannelData(1).set(a)};
+    sp.connect(ctx.destination);node=null;post();
+  }catch(e){audioFail=true}
+}
+var snd=$("snd");
+function setSound(on){
+  if(on){
+    startAudio(function(){
+      soundOn=!audioFail;post();
+      snd.textContent=audioFail?"Sound is not available here":"Sound off";snd.setAttribute("aria-pressed",String(!audioFail));
+    });
+  }else{
+    soundOn=false;post();snd.textContent="Sound on";snd.setAttribute("aria-pressed","false");
+    setTimeout(function(){if(!soundOn&&ctx&&ctx.state==="running")ctx.suspend()},500);
+  }
+}
+snd.addEventListener("click",function(){setSound(!soundOn)});
+$("vol").addEventListener("input",function(e){S1.vol=+e.target.value/100;post()});
+
+/* ===================== Part II: nothing is lost ===================== */
+var WV=[
+  {id:"triad",n:"The triad",fmax:600,win:.024,step:100,t:"The lesson's chord (C, E, G), with the notes at unequal strength, as one wave in time."},
+  {id:"rich",n:"A richer chord",fmax:600,win:.024,step:100,t:"Six notes of unequal strength: a more tangled wave."},
+  {id:"burst",n:"A wave that arises and subsides",fmax:300,win:.1,step:50,t:"Like a vṛtti (§1), this wave rises, lasts a while and subsides. It is not a steady tone, so its spectrum will be a spread, not a few lines."}
+];
+var LINES={triad:[[1,1],[2,.75],[3,.5]],rich:[[0,.6],[1,1],[2,.7],[3,.5],[4,.35],[5,.25]]};
+var S2={w:0,dur:10,st:0,mode:"all",view:"both"};
+var orig=new Float64Array(N),xRe=new Float64Array(N),xIm=new Float64Array(N);
+var yRe=new Float64Array(N),yIm=new Float64Array(N),reb=new Float64Array(N);
+var magO=new Float64Array(N/2),magK=new Float64Array(N/2),maxMag=1,diff=0,winMax=1;
+var cT2=$("cT2"),cS2=$("cS2");
+
+function build2(){
+  var w=WV[S2.w],i,n;
+  orig.fill(0);
+  if(w.id==="burst"){
+    var s=S2.dur/1000,c0=.05,wc=TAU*120/FS;
+    for(n=0;n<Math.round(.1*FS);n++){var t=n/FS-c0;orig[n]=Math.exp(-t*t/(2*s*s))*Math.cos(TAU*120*t)}
+  }else{
+    LINES[w.id].forEach(function(p){
+      var o=NOTES[p[0]],a=p[1],ww=TAU*o.f/FS;
+      for(n=0;n<N;n++)orig[n]+=a*Math.sin(ww*n+o.ph);
+    });
+  }
+  var nW=Math.round(w.win*FS),mx=0;
+  for(n=0;n<nW;n++)mx=Math.max(mx,Math.abs(orig[n]));
+  winMax=Math.max(.2,mx*1.12);
+}
+function magsOf(re,im,out){
+  var k,mx=0;
+  for(k=0;k<N/2;k++){var m=2*Math.hypot(re[k],im[k])/N;out[k]=m;if(m>mx)mx=m}
+  return mx;
+}
+function transform2(){
+  xRe.set(orig);xIm.fill(0);fft(xRe,xIm,false);
+  maxMag=magsOf(xRe,xIm,magO);
+  magK.set(magO);
+}
+var seed=1;
+function rnd(){seed=(seed*1664525+1013904223)>>>0;return seed/4294967296}
+function rebuild2(){
+  var k;
+  yRe.set(xRe);yIm.set(xIm);
+  if(S2.mode==="tall"){
+    var thr=.65*maxMag;
+    for(k=0;k<=N/2;k++){
+      var m=(k<N/2?magO[k]:0);
+      if(m<thr){yRe[k]=0;yIm[k]=0;if(k>0&&k<N/2){yRe[N-k]=0;yIm[N-k]=0}}
+    }
+  }else if(S2.mode==="phase"){
+    seed=12345;
+    for(k=1;k<N/2;k++){
+      var mm=Math.hypot(xRe[k],xIm[k]),th=TAU*rnd();
+      yRe[k]=mm*Math.cos(th);yIm[k]=mm*Math.sin(th);yRe[N-k]=yRe[k];yIm[N-k]=-yIm[k];
+    }
+  }
+  magsOf(yRe,yIm,magK);
+  fft(yRe,yIm,true);
+  reb.set(yRe);
+  var d=0,o=0;
+  for(k=0;k<N;k++){d=Math.max(d,Math.abs(reb[k]-orig[k]));o=Math.max(o,Math.abs(orig[k]))}
+  diff=d/o;
+}
+function fmtDiff(){
+  if(diff<1e-8){
+    var e=Math.floor(Math.log10(Math.max(diff,1e-300))),sp="⁰¹²³⁴⁵⁶⁷⁸⁹",ds=String(Math.abs(e)).split("").map(function(d){return sp[+d]}).join("");
+    return "none beyond rounding (about 10⁻"+ds.replace(/^/,"")+" of the wave's height)";
+  }
+  return Math.round(diff*100)+"% of the wave's height";
+}
+var MTXT={
+  all:function(){return '<div class="big">The same wave came back.</div><p>Rebuilt from every line with its height and phase. Largest difference from the original: <b>'+fmtDiff()+'</b>. Numbers this small are the computer\'s rounding, not a difference between the two descriptions.</p>'},
+  tall:function(){return '<div class="big">A different wave, because information was thrown away.</div><p>Rebuilt from only the tallest parts (the faded ones were removed). Largest difference: <b>'+fmtDiff()+'</b>. The lossless claim is about the whole spectrum, not a part of it.</p>'},
+  phase:function(){return '<div class="big">Same heights, different wave.</div><p>Every height is kept but the phases are scrambled. Largest difference: <b>'+fmtDiff()+'</b>. A spectrum is complete only with its phases: phase is the timing of each part (§6)'+(WV[S2.w].id==="burst"?', so here the wave no longer sits where it was':'')+'.</p>'}
+};
+function sync2(){
+  var w=WV[S2.w];
+  $("durRow").hidden=w.id!=="burst";
+  $("durV").textContent=S2.dur+" ms";
+  setPressed(waveBtns,function(b,i){return i===S2.w});
+  $("bBack").disabled=S2.st<1;
+  $("eqF").classList.toggle("lit",S2.st>=1);$("eqB").classList.toggle("lit",S2.st>=2);
+  setPressed($("mseg").querySelectorAll("button"),function(b){return b.getAttribute("data-m")===S2.mode});
+  var vb=$("vseg").querySelectorAll("button");
+  for(var i=0;i<vb.length;i++)vb[i].disabled=S2.st<2;
+  setPressed(vb,function(b){return b.getAttribute("data-v")===S2.view});
+  var r=$("res2");
+  if(S2.st===0)r.innerHTML='<div class="big">'+w.t+'</div><p>Press <b>Transform</b> to find the frequencies hidden in the curve.</p>';
+  else if(S2.st===1)r.innerHTML='<div class="big">'+(w.id==="burst"?"A spread of frequencies.":"The lines were there all along.")+'</div><p>'+(w.id==="burst"?"A wave that arises and subsides has no single frequency. Its spectrum is a hump, and the shorter the wave lasts, the wider the hump. ":"The curve that looked complicated is a few simple frequencies. ")+'Now press <b>Rebuild</b> to go back to time using the spectrum alone.</p>';
+  else r.innerHTML=MTXT[S2.mode]();
+  cT2.setAttribute("aria-label","Time view of "+w.n.toLowerCase()+(S2.st>=2?", original and rebuilt":""));
+  cS2.setAttribute("aria-label",S2.st>=1?"Spectrum of "+w.n.toLowerCase():"Spectrum, not yet computed");
+  dirty2=true;
+}
+var waveBtns=[];
+WV.forEach(function(w,i){
+  var b=mk("button","chip","<span>"+w.n+"</span>");b.setAttribute("aria-pressed","false");
+  b.addEventListener("click",function(){S2.w=i;S2.st=0;build2();sync2()});
+  $("waves").appendChild(b);waveBtns.push(b);
+});
+$("dur").addEventListener("input",function(e){
+  S2.dur=+e.target.value;S2.st=0;build2();sync2();
+});
+$("bFwd").addEventListener("click",function(){transform2();S2.st=Math.max(S2.st,1);if(S2.st>=2)rebuild2();sync2()});
+$("bBack").addEventListener("click",function(){if(S2.st<1)return;rebuild2();S2.st=2;sync2()});
+$("mseg").addEventListener("click",function(e){
+  var b=e.target.closest("button");if(!b)return;
+  S2.mode=b.getAttribute("data-m");
+  if(S2.st>=2)rebuild2();
+  else if(S2.st>=1){magK.set(magO)}
+  sync2();
+});
+$("vseg").addEventListener("click",function(e){var b=e.target.closest("button");if(b&&!b.disabled){S2.view=b.getAttribute("data-v");sync2()}});
+
+function drawT2(){
+  var f=C.fit(cT2);if(!f)return;
+  var g=f.g,W=f.w,H=f.h;g.clearRect(0,0,W,H);
+  var w=WV[S2.w],nW=Math.round(w.win*FS);
+  var x0=12,x1=W-12,top=26,bot=H-26,yc=(top+bot)/2,sc=(bot-top)/2*.94/winMax;
+  g.strokeStyle=col["--line"];g.lineWidth=1;g.beginPath();g.moveTo(x0,yc+.5);g.lineTo(x1,yc+.5);g.stroke();
+  var ms=w.win*1000,step=w.win===.1?25:6;
+  for(var q=0;q*step<=ms;q++){var xt=x0+(x1-x0)*q*step/ms;C.label(g,(q*step)+(q*step===ms?" ms":""),xt,H-9,col["--muted"],q===0?"left":(q*step===ms?"right":"center"))}
+  C.label(g,"ψ(t)",x0,top-8,col["--ink"],"left");
+  g.save();g.beginPath();g.rect(0,top-4,W,bot-top+8);g.clip();
+  function line(arr,color,lw,alpha,dash){
+    g.beginPath();g.strokeStyle=color;g.lineWidth=lw;g.globalAlpha=alpha;g.lineJoin="round";g.setLineDash(dash||[]);
+    for(var j=0;j<nW;j++){var x=x0+(x1-x0)*j/(nW-1),y=yc-arr[j]*sc;if(j)g.lineTo(x,y);else g.moveTo(x,y)}
+    g.stroke();g.setLineDash([]);g.globalAlpha=1;
+  }
+  var showO=S2.st<2||S2.view!=="reb",showR=S2.st>=2&&S2.view!=="orig";
+  if(showO)line(orig,col["--ink"],S2.view==="both"&&showR?4:2.4,S2.view==="both"&&showR?.3:1);
+  if(showR)line(reb,col["--env"],2,1,S2.view==="both"?[6,4]:null);
+  g.restore();
+  if(S2.st>=2){
+    var lx=x1;
+    if(showO&&showR){C.label(g,"original (grey) and rebuilt (dashed)",lx,top-8,col["--muted"],"right")}
+    else if(showR)C.label(g,"rebuilt from the spectrum",lx,top-8,col["--env"],"right");
+    else C.label(g,"original",lx,top-8,col["--muted"],"right");
+  }
+}
+function drawS2(){
+  var f=C.fit(cS2);if(!f)return;
+  var g=f.g,W=f.w,H=f.h;g.clearRect(0,0,W,H);
+  var w=WV[S2.w],x0=12,x1=W-12,top=26,base=H-26;
+  g.strokeStyle=col["--line"];g.lineWidth=1;g.beginPath();g.moveTo(x0,base+.5);g.lineTo(x1,base+.5);g.stroke();
+  axisTicks(g,x0,x1,base,w.fmax,w.step,true);
+  C.label(g,"Ψ(f)",x0,top-8,col["--ink"],"left");C.label(g,"frequency, Hz",x1,top-8,col["--muted"],"right");
+  if(S2.st<1){
+    g.font="500 14px 'Source Sans 3',system-ui,sans-serif";g.textAlign="center";g.fillStyle=col["--muted"];
+    g.fillText("The spectrum appears when you press Transform.",W/2,(top+base)/2);return;
+  }
+  var pw=x1-x0,ymax=maxMag*1.08,isLine=w.id!=="burst",cols=Math.floor(pw),peaks=[];
+  function colMax(arr,c){
+    var k0=Math.floor(w.fmax*c/pw/BIN),k1=Math.max(k0+1,Math.floor(w.fmax*(c+1)/pw/BIN)),m=0;
+    for(var k=k0;k<k1;k++)if(arr[k]>m)m=arr[k];return m;
+  }
+  var vals=new Float64Array(cols+1);
+  for(var c=0;c<=cols;c++)vals[c]=colMax(magO,c);
+  g.lineWidth=isLine?3:1.4;
+  g.strokeStyle=col["--muted"];g.globalAlpha=S2.st>=2&&S2.mode==="tall"?.35:.5;
+  g.beginPath();for(c=0;c<=cols;c++){var h=vals[c]/ymax*(base-top);if(h>.6){g.moveTo(x0+c,base);g.lineTo(x0+c,base-h)}}g.stroke();
+  g.globalAlpha=1;
+  g.strokeStyle=col["--res"];
+  g.beginPath();
+  for(c=0;c<=cols;c++){var km=colMax(magK,c),hk=km/ymax*(base-top);if(hk>.6){g.moveTo(x0+c,base);g.lineTo(x0+c,base-hk)}}
+  g.stroke();
+  /* peak labels */
+  var lastX=-99;
+  for(c=0;c<=cols;c++){
+    var v=vals[c];if(v<.12*maxMag)continue;
+    var isPk=true;for(var d=-6;d<=6;d++){if(c+d>=0&&c+d<=cols&&vals[c+d]>v)isPk=false;if(d<0&&c+d>=0&&vals[c+d]===v)isPk=false}
+    if(isPk&&x0+c-lastX>34){
+      var k0=Math.floor(w.fmax*c/pw/BIN),k1=Math.max(k0+1,Math.floor(w.fmax*(c+1)/pw/BIN)),k=k0;
+      for(var kk=k0;kk<k1;kk++)if(magO[kk]>magO[k])k=kk;
+      var fq=k*BIN;
+      C.label(g,fq.toFixed(1),x0+c,base-v/ymax*(base-top)-8,col["--ink"],"center",true);lastX=x0+c;
+    }
+  }
+}
+
+/* ===================== Part III: name that vṛtti ===================== */
+var TY={
+  pramana:{n:"Pramāṇa",g:"valid cognition",rel:"An object is there and the wave matches it. It arises through perception, inference or testimony."},
+  viparyaya:{n:"Viparyaya",g:"error",rel:"An object is there, but the wave does not match it. It feels just like pramāṇa until light is brought."},
+  vikalpa:{n:"Vikalpa",g:"imagination",rel:"No external object at all. The mind builds the wave, often through language, and it can still feel very real."},
+  nidra:{n:"Nidrā",g:"sleep",rel:"No clear content, yet still a vṛtti. It is not a state below vṛttis."},
+  smriti:{n:"Smṛti",g:"memory",rel:"The object is not present now. The wave is built from impressions (saṁskāras) laid down by past vṛttis."}
+};
+var KEYS=["pramana","viparyaya","vikalpa","nidra","smriti"];
+var SC=[
+  {t:"You look across the table and there is a cup of water in front of you. The cup is really there.",k:"pramana",
+   why:"A wave that corresponds to what is the case, here through direct perception: the object is present and the vṛtti matches it.",near:"If the cup had not been there, it would be viparyaya."},
+  {t:"In dim light you see a coiled shape on the path. Fear rises: a snake. Your heart pounds.",k:"viparyaya",
+   why:"A well-formed wave that feels entirely real but misrepresents what is there. The vṛtti does not announce that it is false.",near:"It felt exactly like pramāṇa while it lasted.",
+   light:"You bring a torch. It is a coiled rope."},
+  {t:"You sit on a bus and picture the holiday you hope to take: the beach, the room, the first morning.",k:"vikalpa",
+   why:"There is no external object to which the scene corresponds. The mind builds it, through imagery and concept.",near:"It is not a misperception, so it is not viparyaya. It is simply a construct."},
+  {t:"The ground outside is wet and the gutters are running. You conclude that it rained in the night, and it did.",k:"pramana",
+   why:"Inference is one of the three channels of valid cognition, and here the conclusion matches what happened.",near:"Had it been a burst pipe and not rain, the same reasoning would have yielded viparyaya."},
+  {t:"In the small hours there is no dream, no sight, no sound, nothing clear before the mind.",k:"nidra",
+   why:"There is no clear content, but a wave-formation is still present. The Yoga Sūtras list sleep as one of the five.",near:"Nidrā is often taken for a non-vṛtti state. The lesson says it is not."},
+  {t:"A friend makes a passing remark. You take it as a slight and feel hurt, though she meant no harm.",k:"viparyaya",
+   why:"A real remark was met by a wave that did not correspond to what was meant. The hurt is genuine, and the reading is mistaken.",near:"It is not vikalpa, because there was a real object: the remark.",
+   light:"You ask her. She meant it kindly."},
+  {t:"You recall your childhood home: the colour of the walls, the smell of the kitchen, the feeling of the hallway.",k:"smriti",
+   why:"The wave arising now is built from impressions laid down by past vṛttis. The walls are not before you, so it is not pramāṇa.",near:"It is not viparyaya either, because the walls really were there."},
+  {t:"A trusted friend tells you she has passed her exam. She has.",k:"pramana",
+   why:"Testimony from a reliable source is the third channel of valid cognition, and the wave corresponds to what is the case.",near:"The trust matters: the same words from an unreliable source would not secure pramāṇa."},
+  {t:"You are worrying about a meeting next week. In your head you hear exactly how it will go wrong. None of it has happened.",k:"vikalpa",
+   why:"A worry about something that has not happened is a mental construct with no corresponding external fact.",near:"It can still raise real stress. A vṛtti can be strong and vivid with nothing out there."},
+  {t:"Across the table a colleague's face looks stern. You decide he is angry with you. He was only concentrating.",k:"viparyaya",
+   why:"The reading of the face did not correspond to what was the case. It was vivid and convincing, which is why error is so persistent.",near:"It is not smṛti: nothing is being recalled.",
+   light:"He was reading a long email."},
+  {t:"A poet turns a line over in her mind, picturing a city of glass that exists nowhere.",k:"vikalpa",
+   why:"A poem, a fantasy and a philosophical hypothesis are all vikalpa: pure creativity, with no external object.",near:"Vikalpa is not falsehood. Nobody is mistaken here."},
+  {t:"You remember a conversation from last week. Telling it again today, it comes out a little differently from last month.",k:"smriti",
+   why:"Each recall is a fresh wave built from stored impressions, coloured by your present mood, attention and values.",near:"Memory is not objective retrieval, which is why the same event can come back differently."}
+];
+var GQ=[
+  {q:"Is anything clear before the mind at all: some content, an object, a scene?",no:"nidra"},
+  {q:"Is the mind bringing back something it took in earlier?",yes:"smriti"},
+  {q:"Is there something actually there, now, that the wave is about?",no:"vikalpa"},
+  {q:"Does the wave match what is actually there?",yes:"pramana",no:"viparyaya"}
+];
+var order=SC.map(function(_,i){return i}),qi=0,res3=[],answered=false,gi=0;
+var nmCh=$("nmChoices"),nmFb=$("nmFb"),nmNext=$("nmNext");
+KEYS.forEach(function(k){
+  var b=mk("button","choice","<b>"+TY[k].n+"</b><span>"+TY[k].g+"</span>");b.setAttribute("data-k",k);
+  b.addEventListener("click",function(){answer(k,b)});nmCh.appendChild(b);
+});
+function shuffle(a){var b=a.slice();for(var i=b.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=b[i];b[i]=b[j];b[j]=t}return b}
+function guideReset(){
+  gi=0;$("gAgain").hidden=true;$("gYN").hidden=false;$("gQ").textContent=GQ[0].q;
+}
+function guideAnswer(a){
+  var q=GQ[gi],out=q[a];
+  if(out){
+    $("gQ").innerHTML="These answers point to <b>"+TY[out].n+"</b>. Check that against the moment, then choose.";
+    $("gYN").hidden=true;$("gAgain").hidden=false;
+  }else{gi++;$("gQ").textContent=GQ[gi].q}
+}
+$("gYN").addEventListener("click",function(e){var b=e.target.closest("button");if(b)guideAnswer(b.getAttribute("data-a"))});
+$("gAgain").addEventListener("click",guideReset);
+$("gBtn").addEventListener("click",function(){
+  var open=$("gBody").hidden;$("gBody").hidden=!open;$("gBtn").setAttribute("aria-expanded",String(open));
+  if(open)guideReset();
+});
+function showCase(){
+  var s=SC[order[qi]];answered=false;
+  $("nmProg").textContent="Moment "+(qi+1)+" of "+SC.length;
+  $("nmCase").textContent=s.t;
+  var all=nmCh.querySelectorAll("button");for(var i=0;i<all.length;i++){all[i].disabled=false;all[i].classList.remove("pick","right")}
+  nmFb.className="fb";nmFb.innerHTML="";nmNext.hidden=true;
+  $("gBody").hidden=true;$("gBtn").setAttribute("aria-expanded","false");$("gBtn").hidden=false;
+}
+function answer(k,btn){
+  if(answered)return;answered=true;
+  var s=SC[order[qi]];
+  var all=nmCh.querySelectorAll("button");
+  for(var i=0;i<all.length;i++){all[i].disabled=true;if(all[i].getAttribute("data-k")===s.k)all[i].classList.add("right")}
+  btn.classList.add("pick");
+  $("gBtn").hidden=true;$("gBody").hidden=true;
+  var ok=k===s.k;res3.push({i:order[qi],k:k,ok:ok});
+  var v=ok?"Yes: "+TY[s.k].n+".":"Not quite. This is "+TY[s.k].n+", not "+TY[k].n+".";
+  var html='<div class="verdict">'+v+'</div><p>'+s.why+'</p><p class="note">'+s.near+'</p>';
+  if(s.light)html+='<div><button class="btn ghost small" id="lightBtn">Bring light</button></div><p class="light" id="lightTxt" hidden><b>What was actually there.</b> '+s.light+' Until then, this wave felt exactly like pramāṇa.</p>';
+  html+='<p class="ref">Lesson 3.1, §5: '+TY[s.k].n+'. '+TY[s.k].rel+'</p>';
+  nmFb.innerHTML=html;nmFb.className="fb show";
+  var lb=$("lightBtn");if(lb)lb.addEventListener("click",function(){$("lightTxt").hidden=false;lb.hidden=true});
+  nmNext.textContent=qi<SC.length-1?"Next moment":"See the five together";nmNext.hidden=false;
+  try{nmNext.focus({preventScroll:true})}catch(e){}
+}
+nmNext.addEventListener("click",function(){
+  if(qi<SC.length-1){qi++;showCase()}
+  else finish3();
+});
+function finish3(){
+  var good=res3.filter(function(r){return r.ok}).length;
+  $("nmScore").textContent="You named "+good+" of "+SC.length+" on the first try.";
+  var ms=res3.filter(function(r){return !r.ok}),m=$("nmMissed");m.innerHTML="";
+  if(ms.length){
+    var box=mk("div","missed");
+    ms.forEach(function(r){var s=SC[r.i];box.appendChild(mk("div",null,s.t+"<small>You chose "+TY[r.k].n+". It is "+TY[s.k].n+": "+s.why+"</small>"))});
+    m.appendChild(mk("p","note","The ones to look at again:"));m.appendChild(box);
+  }else m.appendChild(mk("p","note","Every one matched the lesson's criteria."));
+  $("nm").hidden=true;$("nmEnd").hidden=false;
+  try{$("nmEnd").scrollIntoView({behavior:reduced?"auto":"smooth",block:"nearest"})}catch(e){}
+}
+$("nmAgain").addEventListener("click",function(){
+  order=shuffle(order);qi=0;res3=[];$("nm").hidden=false;$("nmEnd").hidden=true;showCase();
+  try{$("nm").scrollIntoView({behavior:reduced?"auto":"smooth",block:"nearest"})}catch(e){}
+});
+var five=$("five");
+KEYS.forEach(function(k){var d=mk("div",null,"<i>"+TY[k].g+"</i><b>"+TY[k].n+"</b><p>"+TY[k].rel+"</p>");d.setAttribute("data-k",k);five.appendChild(d)});
+
+/* ===================== frame loop ===================== */
+var last=performance.now();
+function frame(now){
+  var dt=Math.min(.1,(now-last)/1000);last=now;
+  if(S1.playing){S1.now+=dt/8;if(S1.now>=1.05)S1.now=0;dirty1=true}
+  if(Math.abs(yTarget1-yMax1)>.003){yMax1+=(yTarget1-yMax1)*(reduced?1:.25);dirty1=true}
+  if(dirty1){dirty1=false;drawT1();drawS1()}
+  if(dirty2){dirty2=false;drawT2();drawS2()}
+  requestAnimationFrame(frame);
+}
+if(window.ResizeObserver){var ro=new ResizeObserver(function(){dirty1=dirty2=true});[cT1,cS1,cT2,cS2].forEach(function(c){ro.observe(c)})}
+syncPlay();syncUI1();
+$("presetCap").textContent=PRE[2].t;
+recompute1();yMax1=yTarget1;
+build2();sync2();showCase();
+requestAnimationFrame(frame);
+})();
+
+</script>
+</body></html>

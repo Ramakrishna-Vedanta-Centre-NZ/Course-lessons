@@ -1,0 +1,851 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Draw Up the Rope</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Source+Sans+3:ital,wght@0,400;0,600;1,400&family=Spectral:ital,wght@0,400;0,500;1,400&display=swap">
+<style>
+:root{
+  --bg:#F2F5F9; --surface:#FFFFFF; --ink:#13203A; --muted:#58647D; --line:#D3DAE6; --tint:#E7EDF6;
+  --obj:#0B8686; --att:#C95F06; --res:#2E3192; --env:#C0245B; --ok:#1B7A52;
+  --display:"Spectral",Georgia,"Times New Roman",serif;
+  --body:"Source Sans 3",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0B1120; --surface:#121A2D; --ink:#E7ECF6; --muted:#9AA6BF; --line:#26324D; --tint:#1A2540;
+    --obj:#46CFC6; --att:#F5A04D; --res:#A3AAFF; --env:#FF7BA9; --ok:#5BD59B; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0B1120; --surface:#121A2D; --ink:#E7ECF6; --muted:#9AA6BF; --line:#26324D; --tint:#1A2540;
+  --obj:#46CFC6; --att:#F5A04D; --res:#A3AAFF; --env:#FF7BA9; --ok:#5BD59B; color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;
+  padding-left:max(14px,env(safe-area-inset-left,0px));padding-right:max(14px,env(safe-area-inset-right,0px));padding-block:22px 40px}
+.wrap{max-width:900px;margin:0 auto;display:flex;flex-direction:column;gap:32px}
+h1,h2,h3{font-family:var(--display);font-weight:500;text-wrap:balance;margin:0;letter-spacing:-.01em}
+h1{font-size:clamp(30px,5.4vw,44px);line-height:1.06}
+h2{font-size:clamp(23px,3.4vw,29px);line-height:1.15}
+h3{font-size:19px;line-height:1.25}
+p{margin:0}
+sub{font-size:.72em;line-height:0}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.lede{font-size:17.5px;max-width:64ch}
+.intro{max-width:66ch;color:var(--muted)}
+header{display:flex;flex-direction:column;gap:12px}
+section{display:flex;flex-direction:column;gap:18px;min-width:0}
+.sym{font-family:var(--mono);font-size:.92em;white-space:nowrap}
+.k-obj{color:var(--obj)} .k-att{color:var(--att)} .k-res{color:var(--res)} .k-env{color:var(--env)}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px;display:flex;flex-direction:column;gap:14px;min-width:0}
+.bar{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;justify-content:space-between}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--bg)}
+.seg button{font:inherit;font-size:14px;color:var(--muted);background:transparent;border:0;padding:8px 13px;cursor:pointer}
+.seg button+button{border-left:1px solid var(--line)}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--surface)}
+button:focus-visible,input:focus-visible{outline:2px solid var(--res);outline-offset:2px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{font:inherit;font-size:14px;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:7px 13px;cursor:pointer;display:inline-flex;gap:8px;align-items:center}
+.chip i{font-style:normal;font-family:var(--mono);font-size:11px;color:var(--muted)}
+.chip[aria-pressed="true"]{background:var(--res);border-color:var(--res);color:#fff}
+.chip[aria-pressed="true"] i{color:#fff;opacity:.8}
+.chip:disabled{cursor:default}
+.chip.reached:not([aria-pressed="true"]){border-color:var(--res)}
+.btn{font:inherit;font-size:14px;color:var(--ink);background:var(--surface);border:1px solid var(--ink);border-radius:8px;padding:8px 16px;cursor:pointer}
+.btn.primary{background:var(--ink);color:var(--surface)}
+.btn.ghost{border-color:var(--line);color:var(--muted)}
+.scope-wrap{position:relative;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--bg)}
+canvas{display:block;width:100%}
+.playbtn{position:absolute;right:8px;bottom:8px;font:inherit;font-size:12px;background:var(--surface);color:var(--muted);border:1px solid var(--line);border-radius:6px;padding:4px 10px;cursor:pointer}
+.box{border:1px solid var(--line);border-radius:8px;background:var(--bg);padding:10px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.box .cap{font-size:12px;color:var(--muted)}
+.meters{display:flex;flex-direction:column;gap:9px}
+.meter{display:grid;grid-template-columns:1fr auto;gap:2px 8px;font-size:13px;align-items:baseline}
+.meter b{font-weight:600}
+.meter output{font-family:var(--mono);font-size:12px;color:var(--muted)}
+.meter .track{grid-column:1/-1;height:7px;background:var(--line);border-radius:4px;overflow:hidden}
+.meter .fill{height:100%;width:0;background:var(--res);border-radius:4px}
+.meter.f2 .fill{background:var(--env)} .meter.f3 .fill{background:var(--obj)}
+.slider{display:flex;align-items:center;gap:10px;flex:1 1 280px;min-width:0}
+.slider label{font-size:14px;min-width:0}
+.slider input[type=range]{flex:1;min-width:60px;accent-color:var(--res)}
+.slider small{color:var(--muted);font-size:12px;white-space:nowrap}
+.slider output{font-family:var(--mono);font-size:12.5px;color:var(--muted);min-width:46px;text-align:right}
+.readout{font-size:14px;color:var(--muted)}
+.readout b{color:var(--ink)}
+.tag{font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);border:1px solid var(--line);border-radius:4px;padding:2px 6px}
+.note{font-size:13px;color:var(--muted);max-width:70ch}
+.balance{background:var(--tint);border-radius:10px;padding:16px 18px;display:flex;flex-direction:column;gap:8px;max-width:78ch}
+footer{font-size:13px;color:var(--muted);max-width:76ch;border-top:1px solid var(--line);padding-top:12px}
+@media (max-width:640px){.panel{padding:12px}.wrap{gap:26px}}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
+
+:root{--c-silk:var(--obj);--c-pack:var(--att);--c-twine:var(--env);--c-rope:var(--res);--honey:#B9780A;--stone:#E3E8F1;--stone2:#C7D0E0}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--honey:#F2C14E;--stone:#1D2946;--stone2:#34456B}}
+:root[data-theme="dark"]{--honey:#F2C14E;--stone:#1D2946;--stone2:#34456B}
+nav.parts{display:flex;flex-wrap:wrap;gap:8px 20px;margin-top:4px}
+nav.parts a{color:var(--ink);text-decoration:none;border-bottom:1px solid var(--line);padding-bottom:2px;font-size:15px}
+nav.parts a:hover,nav.parts a:focus-visible{border-color:var(--res);color:var(--res)}
+.sans{font-size:19px}
+/* tower grid */
+.tw-grid{display:grid;grid-template-columns:minmax(0,300px) minmax(0,1fr);gap:22px;align-items:start}
+.scene-col{display:flex;flex-direction:column;gap:10px;min-width:0}
+#tw{width:100%;height:auto;display:block;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.sk{fill:var(--tint)} .gd{fill:var(--line)}
+.twr{fill:var(--stone);stroke:var(--ink);stroke-width:1.2}
+.mortar line{stroke:var(--stone2);stroke-width:1}
+.win{fill:var(--bg);stroke:var(--ink);stroke-width:1.2}
+.ledge{fill:var(--ink)}
+.fig{fill:var(--ink)} .arms{stroke:var(--ink);stroke-width:2.2;fill:none;stroke-linecap:round}
+.minister .arms{opacity:0;transition:opacity .2s}
+.minister.press .arms{opacity:1}
+.minister.press{animation:pr .5s}
+@keyframes pr{25%{transform:translateX(-1.5px)}75%{transform:translateX(1.5px)}}
+.th{stroke-linecap:round}
+.th.silk{stroke:var(--c-silk);stroke-width:1.4} .th.pack{stroke:var(--c-pack);stroke-width:2.5}
+.th.twine{stroke:var(--c-twine);stroke-width:4} .th.rope{stroke:var(--c-rope);stroke-width:6.5}
+.hand{fill:var(--ink)}
+.knots circle{fill:var(--surface);stroke:var(--ink);stroke-width:1.2}
+.flyer{fill:var(--ink)}
+.bt{fill:var(--ink)} .bl{stroke:var(--ink);stroke-width:1.1;fill:none;stroke-linecap:round}
+.hon{fill:var(--honey)}
+.scent path{fill:none;stroke:var(--honey);stroke-width:1.4;stroke-linecap:round;animation:sc 1.8s ease-in-out infinite}
+@keyframes sc{0%,100%{opacity:.25}50%{opacity:1}}
+.seesaw{opacity:0;transition:opacity .5s}
+.seesaw.on{opacity:1}
+.seesaw .plank{transform-origin:262px 64px;animation:sw 1.6s ease-in-out infinite alternate;transform:rotate(calc(var(--amp,8) * -1deg))}
+@keyframes sw{from{transform:rotate(calc(var(--amp,8) * -1deg))}to{transform:rotate(calc(var(--amp,8) * 1deg))}}
+.plk{stroke:var(--ink);stroke-width:3;stroke-linecap:round}
+.ed1{fill:var(--obj)} .ed2{fill:var(--att)}
+.piv{fill:var(--muted)}
+.sstxt{font:500 10.5px "Source Sans 3",system-ui,sans-serif;fill:var(--muted)}
+/* strip */
+.strip{display:flex;flex-wrap:wrap;gap:5px 4px;align-items:center;font-size:12px}
+.strip i{font-style:normal;color:var(--muted)}
+.pill{border:1px solid var(--line);border-radius:999px;padding:2px 8px;color:var(--muted);background:var(--bg);transition:background .4s,color .4s}
+.pill.on[data-k="0"]{background:var(--c-silk);border-color:var(--c-silk);color:var(--bg)}
+.pill.on[data-k="1"]{background:var(--c-pack);border-color:var(--c-pack);color:var(--bg)}
+.pill.on[data-k="2"]{background:var(--c-twine);border-color:var(--c-twine);color:var(--bg)}
+.pill.on[data-k="3"]{background:var(--c-rope);border-color:var(--c-rope);color:var(--bg)}
+.pill.fin{border-style:dashed}
+/* stages */
+.ctl-col{display:flex;flex-direction:column;gap:14px;min-width:0}
+.stage{border:1px solid var(--line);border-radius:10px;padding:12px 14px;display:flex;flex-direction:column;gap:9px;background:var(--bg);min-width:0}
+.stage.locked{opacity:.55}
+.stage h3{font-size:18px}
+.steps{display:flex;flex-direction:column;gap:8px;align-items:flex-start}
+.steps .btn{text-align:left}
+.btn:disabled{opacity:.45;cursor:default}
+.btn.done{border-color:var(--ok);color:var(--ok)}
+.btn.primary.done{background:var(--ok);border-color:var(--ok);color:var(--surface)}
+.msg{min-height:1.4em;font-size:15px;line-height:1.45}
+.msg.ok{color:var(--ok)}
+.dot{width:10px;height:10px;border-radius:50%;display:inline-block}
+.dot.silk{background:var(--c-silk)} .dot.pack{background:var(--c-pack)} .dot.twine{background:var(--c-twine)} .dot.rope{background:var(--c-rope)}
+.arrivals{display:flex;flex-direction:column;gap:10px}
+.arr{border:1px solid var(--line);border-left-width:5px;border-radius:8px;padding:10px 14px;background:var(--bg);display:flex;flex-direction:column;gap:3px;font-size:14.5px;animation:fadein .5s}
+.arr b{font-family:var(--display);font-size:18px;font-weight:500}
+.arr .m{font-family:var(--mono);font-size:11.5px;color:var(--muted)}
+.arr[data-k="0"]{border-left-color:var(--c-silk)} .arr[data-k="1"]{border-left-color:var(--c-pack)}
+.arr[data-k="2"]{border-left-color:var(--c-twine)} .arr[data-k="3"]{border-left-color:var(--c-rope)}
+@keyframes fadein{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.who{background:var(--tint);border-radius:10px;padding:14px 16px;display:flex;flex-direction:column;gap:10px}
+.who-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.who-col{display:flex;flex-direction:column;gap:6px;font-size:14.5px}
+.who-col ul{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:3px}
+.who-col.lift{border-left:3px solid var(--honey);padding-left:12px}
+.who .quote{font-family:var(--display);font-size:16.5px;font-style:italic}
+/* part 2 */
+.ex{display:grid;grid-template-columns:minmax(0,230px) minmax(0,1fr);gap:20px;align-items:start}
+.chain{position:relative;display:flex;flex-direction:column;gap:8px;padding-left:26px}
+.chain::before{content:"";position:absolute;left:8px;top:22px;bottom:22px;width:2px;background:var(--line)}
+.axis{position:absolute;left:-2px;font-family:var(--mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.axis.top{top:-4px;display:none} .axis.bot{bottom:-4px;display:none}
+.lk{font:inherit;text-align:left;border:1.5px solid var(--line);border-left-width:6px;border-radius:10px;background:var(--bg);color:var(--ink);padding:9px 12px;cursor:pointer;display:flex;flex-direction:column;gap:1px;min-width:0}
+.lk b{font-family:var(--display);font-weight:500;font-size:18px}
+.lk span{font-size:13px;color:var(--muted)}
+.lk[aria-pressed="true"]{background:var(--surface);box-shadow:0 0 0 2px var(--ink)}
+.lk[data-k="0"]{border-left-color:var(--c-silk)} .lk[data-k="1"]{border-left-color:var(--c-pack)}
+.lk[data-k="2"]{border-left-color:var(--c-twine)} .lk[data-k="3"]{border-left-color:var(--c-rope)}
+.lk.seen:not([aria-pressed="true"])::after{content:"opened";font-family:var(--mono);font-size:10px;color:var(--muted)}
+.detail{display:flex;flex-direction:column;gap:12px;min-width:0;border-top:4px solid var(--line);padding-top:10px}
+.detail h3{font-size:22px}
+.row{display:grid;grid-template-columns:130px minmax(0,1fr);gap:4px 14px;font-size:15px}
+.row .lb{font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding-top:3px}
+.row .sk2{color:var(--muted)}
+.row.eq{background:var(--tint);border-radius:8px;padding:8px 10px}
+.row .ill{font-family:var(--display);font-style:italic;font-size:16.5px}
+.takecare{border-left:3px solid var(--att);padding:6px 12px;font-size:14px;color:var(--muted)}
+.case{font-family:var(--display);font-size:19px;line-height:1.45}
+.choices{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}
+.choices.three{grid-template-columns:repeat(3,minmax(0,1fr))}
+.choice{font:inherit;text-align:left;border:1.5px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);padding:9px 11px;cursor:pointer;display:flex;flex-direction:column;gap:2px;min-width:0;font-size:14.5px}
+.choice b{font-family:var(--display);font-size:16.5px;font-weight:500}
+.choice span{font-size:12.5px;color:var(--muted);line-height:1.3}
+.choice:disabled{cursor:default}
+.choice.pick{box-shadow:0 0 0 2px var(--ink)}
+.choice.right{border-color:var(--ok);background:color-mix(in srgb,var(--ok) 10%,var(--surface))}
+.fb{display:none;border-top:1px solid var(--line);padding-top:12px;font-size:15px;flex-direction:column;gap:8px}
+.fb.show{display:flex}
+.fb .verdict{font-family:var(--display);font-size:19px}
+.fb .ref{font-family:var(--mono);font-size:11px;color:var(--muted)}
+.xt{display:flex;flex-direction:column;gap:0;border:1px solid var(--line);border-radius:8px;overflow:hidden;font-size:14px}
+.xr{display:grid;grid-template-columns:1.1fr 1.1fr 1.2fr 1.2fr;min-width:0}
+.xr>div{padding:8px 10px;border-top:1px solid var(--line);min-width:0}
+.xr.h>div{border-top:0;background:var(--tint);font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.xr>div:first-child{border-left:5px solid var(--line)}
+.xr[data-k="0"]>div:first-child{border-left-color:var(--c-silk)} .xr[data-k="1"]>div:first-child{border-left-color:var(--c-pack)}
+.xr[data-k="2"]>div:first-child{border-left-color:var(--c-twine)} .xr[data-k="3"]>div:first-child{border-left-color:var(--c-rope)}
+.xr.dash>div{border-top-style:dashed;color:var(--muted)}
+.xr .rl{display:none}
+.xr .att2{background:color-mix(in srgb,var(--att) 12%,transparent)}
+/* part 3 */
+.h-grid{display:grid;grid-template-columns:minmax(0,220px) minmax(0,1fr);gap:20px;align-items:center}
+.hfig{margin:0;display:flex;flex-direction:column;gap:6px;min-width:0}
+.hfig figcaption{font-size:12.5px;color:var(--muted)}
+#hsv,#dsv{width:100%;height:auto;display:block;border:1px solid var(--line);border-radius:10px;background:var(--bg)}
+#dsv{padding:6px}
+.hd{fill:var(--tint);stroke:var(--ink);stroke-width:1.5}
+.hthr.slip{animation:slip 2.6s ease-in infinite}
+@keyframes slip{0%{transform:translateY(0)}55%{transform:translateY(30px)}60%{transform:translateY(30px)}72%{transform:translateY(0)}100%{transform:translateY(0)}}
+.hnd.shake{animation:shk .5s linear infinite}
+@keyframes shk{25%{transform:translateX(-1.4px)}75%{transform:translateX(1.4px)}}
+.ghostln{stroke:var(--muted);stroke-width:1;stroke-dasharray:3 5;opacity:0}
+.hlab{font:500 11.5px "Source Sans 3",system-ui,sans-serif;fill:var(--muted)}
+.tk circle{fill:var(--surface);stroke:var(--c-silk);stroke-width:1.2}
+.sit{fill:var(--ok)}
+.rest{transition:fill .5s}
+.rest.g{fill:var(--env);opacity:.55} .rest.o{fill:var(--obj);opacity:.5}
+.filt{transition:height .6s,opacity .6s,fill .6s}
+.filt.g{height:34px;fill:var(--ink);opacity:.8} .filt.o{height:7px;fill:var(--obj);opacity:.6}
+.dt{font:500 12px "Source Sans 3",system-ui,sans-serif;fill:var(--muted)}
+.arw{stroke:var(--muted);stroke-width:1.5;fill:none}
+.choices.three .choice b{font-size:16px}
+@media (max-width:760px){
+  .tw-grid{grid-template-columns:minmax(0,1fr)}
+  .scene-col{max-width:300px;margin:0 auto;width:100%}
+  .ex{grid-template-columns:minmax(0,1fr)}
+  .chain{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));padding-left:0;gap:8px}
+  .chain::before{display:none}
+  .choices{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .choices.three{grid-template-columns:minmax(0,1fr)}
+  .h-grid{grid-template-columns:minmax(0,1fr)}
+  .hfig:first-child{max-width:220px;margin:0 auto;width:100%}
+  .xr{grid-template-columns:minmax(0,1fr)}
+  .xr.h{display:none}
+  .xr .rl{display:block;font-family:var(--mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+  .xr>div{border-top:0;padding:4px 10px}
+  .xr>div:first-child{border-top:1px solid var(--line);padding-top:8px}
+  .xr[data-k] > div:first-child,.xr.dash>div:first-child{border-left-width:5px}
+  .row{grid-template-columns:minmax(0,1fr)}
+  .who-grid{grid-template-columns:minmax(0,1fr)}
+}
+@media (max-width:420px){.choices{grid-template-columns:minmax(0,1fr)}.chain{grid-template-columns:minmax(0,1fr)}}
+@media (prefers-reduced-motion: reduce){
+  .hthr.slip,.hnd.shake,.minister.press,.seesaw .plank,.scent path,.arr{animation:none}
+  .hthr.slip{transform:translateY(30px)}
+  .rest,.filt,.pill,.seesaw{transition:none}
+}
+body[data-part] header{display:none}
+body[data-part="1"] #s2,body[data-part="1"] #s3,body[data-part="1"] footer,
+body[data-part="2"] #s1,body[data-part="2"] #s3,body[data-part="2"] footer,
+body[data-part="3"] #s1,body[data-part="3"] #s2{display:none}
+body[data-part]{padding-block:10px 18px}
+.row .sym,.xr .sym{white-space:normal}
+.hlab{paint-order:stroke;stroke:var(--bg);stroke-width:4px}
+
+</style></head><body>
+<div class="wrap">
+<header>
+  <div class="eyebrow">The Mind in the Light of Modern and Spiritual Sciences · Lesson 5.6</div>
+  <h1>Draw up the rope</h1>
+  <p class="lede">Swami Vivekananda tells of a minister shut at the top of a tower, freed by a beetle, a drop of honey and four threads of growing strength. The lesson reads the story as the working image of why the practices are taken up in sequence, from the most accessible to the most subtle. Here you try to help him, read the four links against the four practice-families, and see where the steadiness of the hands comes in.</p>
+  <nav class="parts" aria-label="Parts of this page"><a href="#s1">I. The tower and the rope</a><a href="#s2">II. The four links</a><a href="#s3">III. The steadiness of the hands</a></nav>
+</header>
+
+<section id="s1">
+  <h2>I. The tower and the rope</h2>
+  <p class="intro">The minister has no stair, and no one can hand him the rope. His wife stands below with a long rope, stout twine, pack thread, silken thread, a beetle and a little honey. You are her hands. Try what anyone would try, then do what the story does, and notice what you can set and what you cannot.</p>
+  <div class="panel" id="tower">
+    <div class="tw-grid">
+      <div class="scene-col">
+        <svg id="tw" viewBox="0 0 320 450" role="img" aria-labelledby="twT twD">
+          <title id="twT">The tower</title>
+          <desc id="twD">A tall stone tower with the minister at a window near the top, his wife at the foot, and a beetle waiting on the ground.</desc>
+          <rect class="sk" x="0" y="0" width="320" height="410"/>
+          <rect class="gd" x="0" y="408" width="320" height="42"/>
+          <g id="seesaw" class="seesaw" aria-hidden="true">
+            <text class="sstxt" x="262" y="20" text-anchor="middle">the lateral see-saw</text>
+            <g class="plank"><line x1="226" y1="64" x2="298" y2="64" class="plk"/><circle cx="226" cy="64" r="4" class="ed1"/><circle cx="298" cy="64" r="4" class="ed2"/></g>
+            <path d="M255 82 L262 66 L269 82 Z" class="piv"/>
+            <text class="sstxt" x="226" y="98" text-anchor="middle">iḍā</text>
+            <text class="sstxt" x="298" y="98" text-anchor="middle">piṅgalā</text>
+          </g>
+          <rect class="twr" x="112" y="78" width="96" height="332"/>
+          <g id="mortar" class="mortar"></g>
+          <path class="twr" d="M106 78 V60 H122 V70 H134 V60 H150 V70 H170 V60 H186 V70 H198 V60 H214 V78 Z"/>
+          <path class="win" d="M142 136 V110 a18 18 0 0 1 36 0 V136 Z"/>
+          <rect class="ledge" x="136" y="136" width="48" height="5" rx="1"/>
+          <g id="min" class="minister">
+            <circle cx="160" cy="112" r="6.5" class="fig"/>
+            <path d="M149 136 Q149 120 160 120 Q171 120 171 136 Z" class="fig"/>
+            <path id="arms" class="arms" d="M150 130 L143 122 M170 130 L177 122"/>
+          </g>
+          <line id="ln1" class="th pack" x1="156" y1="406" x2="156" y2="406"/>
+          <line id="ln2" class="th twine" x1="164" y1="406" x2="164" y2="406"/>
+          <line id="ln3" class="th rope" x1="174" y1="406" x2="174" y2="406"/>
+          <line id="ln0" class="th silk" x1="148" y1="406" x2="148" y2="406" opacity="0"/>
+          <circle id="hand" class="hand" cx="148" cy="144" r="3.4" opacity="0"/>
+          <g id="knots" class="knots"></g>
+          <g id="wife" class="wife">
+            <circle cx="84" cy="378" r="7" class="fig"/>
+            <path d="M84 386 L69 408 L99 408 Z" class="fig"/>
+            <path d="M90 392 L140 402" class="arms"/>
+          </g>
+          <g id="beetle" transform="translate(148 398) rotate(90)">
+            <g id="scent" class="scent" opacity="0"><path d="M-7 -17 q3 -3 0 -6 t0 -6 M7 -17 q3 -3 0 -6 t0 -6 M0 -19 q3 -3 0 -6 t0 -6"/></g>
+            <ellipse cx="0" cy="2" rx="5.5" ry="7.5" class="bt"/>
+            <circle cx="0" cy="-7" r="3" class="bt"/>
+            <path class="bl" d="M-5 -1 L-9 -3 M-5 3 L-9 5 M-5 6 L-8 9 M5 -1 L9 -3 M5 3 L9 5 M5 6 L8 9 M-1.5 -9 L-4 -14 M1.5 -9 L4 -14"/>
+            <g id="honeyDots" opacity="0"><circle cx="-4" cy="-14" r="2" class="hon"/><circle cx="4" cy="-14" r="2" class="hon"/></g>
+          </g>
+          <circle id="flyer" class="flyer" r="5" cx="140" cy="402" opacity="0"/>
+        </svg>
+        <div class="strip" id="strip" aria-label="The chain, as it is drawn up">
+          <span class="pill" data-k="0">Breath</span><i aria-hidden="true">→</i><span class="pill" data-k="1">Nerve currents</span><i aria-hidden="true">→</i><span class="pill" data-k="2">Thoughts</span><i aria-hidden="true">→</i><span class="pill" data-k="3">Prāṇa</span><i aria-hidden="true">→</i><span class="pill fin" title="Not delivered by this page">freedom</span>
+        </div>
+      </div>
+
+      <div class="ctl-col">
+        <div class="stage" id="stA">
+          <h3>1. At the foot of the tower</h3>
+          <p class="note">Send each thing up to him by hand, then let him try the walls himself.</p>
+          <div class="chips" id="throws" role="group" aria-label="Send up by hand">
+            <button class="chip" data-i="3"><span class="dot silk" aria-hidden="true"></span>Silken thread</button>
+            <button class="chip" data-i="1"><span class="dot pack" aria-hidden="true"></span>Pack thread</button>
+            <button class="chip" data-i="2"><span class="dot twine" aria-hidden="true"></span>Stout twine</button>
+            <button class="chip" data-i="0"><span class="dot rope" aria-hidden="true"></span>Rope</button>
+            <button class="chip" data-i="4" id="pushBtn">He pushes at the walls</button>
+          </div>
+          <p class="msg" id="aMsg" role="status" aria-live="polite"></p>
+        </div>
+
+        <div class="stage" id="stB">
+          <h3>2. Set the conditions</h3>
+          <p class="note">The husband told her what to do with the beetle. Do each of these. The first two can go in either order.</p>
+          <div class="steps">
+            <button class="btn" id="bAttach">Tie the silken thread firmly to the beetle</button>
+            <button class="btn" id="bHoney">Smear a drop of honey on its horns</button>
+            <button class="btn primary" id="bPlace" disabled>Point it upward and set it on the wall</button>
+          </div>
+          <p class="msg" id="bMsg" role="status" aria-live="polite"></p>
+        </div>
+
+        <div class="stage locked" id="stC">
+          <h3>3. Follow the thread</h3>
+          <p class="note" id="cNote">Once the minister holds the silken thread, tie the next link to its foot and he will draw it up. Which comes next?</p>
+          <div class="chips" id="links" role="group" aria-label="Tie on the next link">
+            <button class="chip" data-k="1" disabled><span class="dot pack" aria-hidden="true"></span>Pack thread</button>
+            <button class="chip" data-k="2" disabled><span class="dot twine" aria-hidden="true"></span>Stout twine</button>
+            <button class="chip" data-k="3" disabled><span class="dot rope" aria-hidden="true"></span>Rope</button>
+          </div>
+          <p class="msg" id="cMsg" role="status" aria-live="polite"></p>
+        </div>
+        <div class="bar"><button class="btn ghost" id="tReset">Start again</button></div>
+      </div>
+    </div>
+
+    <div class="arrivals" id="arr" aria-live="polite"></div>
+
+    <div class="who" id="who" hidden>
+      <h3>Who did what</h3>
+      <div class="who-grid">
+        <div class="who-col">
+          <span class="tag">What was set</span>
+          <ul>
+            <li>The silken thread tied to the beetle.</li>
+            <li>A drop of honey, and the beetle pointed upward.</li>
+            <li>Each next link tied on and followed up, always the frailest still available.</li>
+          </ul>
+        </div>
+        <div class="who-col lift">
+          <span class="tag">What lifted</span>
+          <ul>
+            <li>The beetle’s climb. You had no button for it: it was drawn by the scent, not driven.</li>
+          </ul>
+          <p class="quote">“The ego cannot climb the tower; the ego is the tower. What climbs is something drawn from above, using the threads the practitioner has patiently put in place.”</p>
+        </div>
+      </div>
+      <p class="note">The rope is at the window. In the story the minister now climbs down it and is free. This page does not show that, and cannot: the lesson places the last link at the verge of the {9} → {0} threshold, and what lies beyond it is not something a screen delivers. The order was fixed by accessibility: the frailest first, the strongest last, and the strongest could never have been sent up first.</p>
+    </div>
+  </div>
+</section>
+
+<section id="s2">
+  <h2>II. The four links and the four families</h2>
+  <p class="intro">Three sources say one thing: the story, the sūtra and the practice-families you already hold. Open each link in turn and read across. Then test your ear on the lesson’s own examples.</p>
+  <div class="panel">
+    <div class="ex">
+      <div class="chain" id="chain" role="group" aria-label="The four links, from the most accessible to the most subtle">
+      </div>
+      <div class="detail" id="detail" aria-live="polite"></div>
+    </div>
+  </div>
+
+  <div class="panel" id="mq">
+    <div class="bar"><h3>Which link is it?</h3><span class="tag" id="mProg"></span></div>
+    <p class="note">Each card is a moment from Lesson 5.6 or its neighbours. Choose the link it belongs to, or say it is not a link at all.</p>
+    <p class="case" id="mCase"></p>
+    <div class="choices" id="mChoices" role="group" aria-label="Choose a link"></div>
+    <div class="fb" id="mFb" role="status" aria-live="polite"></div>
+    <div class="bar"><button class="btn primary" id="mNext" hidden>Next</button></div>
+  </div>
+
+  <div class="panel">
+    <h3>Read across the chain</h3>
+    <div class="xt" id="xt" role="table" aria-label="The three sources side by side"></div>
+    <p class="note">Two things to notice. Attention appears twice, at the pack thread and at the rope: the second is its deepest register. And action appears nowhere in the four rows. It is not a fifth link; it is the subject of the next part.</p>
+  </div>
+</section>
+
+<section id="s3">
+  <h2>III. The steadiness of the hands</h2>
+  <p class="intro">One practice-family has no link of its own. The Technology of Action and Offering (5.4) does the work upstream, in the fifteen or sixteen waking hours outside formal practice. The lesson’s phrase is that karma yoga is the steadiness of the hands that hold the chain. Compare two ways the same hours can be lived. Nothing here is counted or scored.</p>
+  <div class="panel" id="hands">
+    <div class="bar"><div class="seg" id="hSeg" role="group" aria-label="How the hours outside the sitting are lived"><button data-m="g" aria-pressed="true">Grasping, reactive, fruit-attached</button><button data-m="o" aria-pressed="false">Action offered</button></div></div>
+    <div class="h-grid">
+      <figure class="hfig">
+        <svg id="hsv" viewBox="0 0 220 210" role="img" aria-labelledby="hT hD">
+          <title id="hT">The thread in the hands</title>
+          <desc id="hD">A thread held between two hands. In one state it slips down repeatedly; in the other it is held steady.</desc>
+          <g id="hthr" class="hthr slip">
+            <line x1="110" y1="0" x2="110" y2="210" class="th silk"/>
+            <g class="tk"><circle cx="110" cy="20" r="2.6"/><circle cx="110" cy="52" r="2.6"/><circle cx="110" cy="84" r="2.6"/><circle cx="110" cy="148" r="2.6"/><circle cx="110" cy="180" r="2.6"/></g>
+          </g>
+          <line id="ghost" x1="110" y1="0" x2="110" y2="210" class="ghostln"/>
+          <g id="hnd" class="hnd shake">
+            <rect x="88" y="100" width="19" height="36" rx="9" class="hd"/>
+            <rect x="113" y="100" width="19" height="36" rx="9" class="hd"/>
+          </g>
+          <text id="hLab" class="hlab" x="110" y="200" text-anchor="middle"></text>
+        </svg>
+        <figcaption>The silken thread, as the minister holds it.</figcaption>
+      </figure>
+      <figure class="hfig wide">
+        <svg id="dsv" viewBox="0 0 380 190" role="img" aria-labelledby="dT dD">
+          <title id="dT">A waking day and the filter</title>
+          <desc id="dD">A short segment for formal practice and a long one for the other waking hours. What is done in the long segment writes into a band called the filter, which is thick or thin.</desc>
+          <rect x="0" y="26" width="24" height="30" rx="4" class="sit"/>
+          <rect id="rest" x="30" y="26" width="350" height="30" rx="4" class="rest g"/>
+          <text class="dt" x="0" y="74">formal practice</text>
+          <text class="dt" x="380" y="74" text-anchor="end">the hours outside it</text>
+          <path d="M120 80 V102 M115 97 L120 104 L125 97" class="arw"/>
+          <text class="dt" x="132" y="96">each action writes into the filter</text>
+          <rect id="filt" x="0" y="110" width="380" height="34" rx="4" class="filt g"/>
+          <text class="dt" x="0" y="168">h(t), the saṁskāra filter</text>
+          <text class="dt" id="dLab" x="380" y="168" text-anchor="end"></text>
+        </svg>
+        <figcaption>Picture of a direction, not a measure.</figcaption>
+      </figure>
+    </div>
+    <p class="readout" id="hText"></p>
+    <div class="bar"><button class="btn ghost" id="gripBtn">Grip harder</button><span class="msg" id="gripMsg" role="status" aria-live="polite"></span></div>
+  </div>
+
+  <div class="panel" id="sq">
+    <div class="bar"><h3>Setting conditions, or being lifted?</h3><span class="tag" id="sProg"></span></div>
+    <p class="note">The lesson’s principle is that the practitioner sets the conditions and consents, and the lift is anugraha. Sort a few moments from the story and the emblem’s motto.</p>
+    <p class="case" id="sCase"></p>
+    <div class="choices three" id="sChoices" role="group" aria-label="Choose"></div>
+    <div class="fb" id="sFb" role="status" aria-live="polite"></div>
+    <div class="bar"><button class="btn primary" id="sNext" hidden>Next</button></div>
+  </div>
+
+  <div class="balance">
+    <h3>The motto beneath the emblem</h3>
+    <p class="sans">तन्नो हंसः प्रचोदयात् <span class="sym">tan no haṃsaḥ pracodayāt</span></p>
+    <p>“May that Swan, the Supreme Self, awaken our higher understanding.” The verse does not say “may we climb”; it says “may the Swan awaken us.” The four Yogas are our consent. The lifting is from above, and the Swan is not produced by the four.</p>
+    <p class="note">Lesson 5.3 adds the recognitional reading: the operative power is “the same self-luminous awareness that is operating right now as you read these words.” Both readings stand in the lesson.</p>
+  </div>
+</section>
+<footer>A learning aid based on Lesson 5.6. It illustrates the lesson’s image and cannot give the experience the image points to. Nothing here measures, scores or advises on anyone’s practice.</footer>
+</div>
+
+<script>
+window.Core=(function(){
+"use strict";
+var TAU=Math.PI*2;
+try{var q=new URLSearchParams(location.search).get("theme");if(q==="light"||q==="dark")document.documentElement.setAttribute("data-theme",q)}catch(e){}
+function lerp(a,b,t){return a+(b-a)*t}
+function clamp(x,a,b){return Math.max(a,Math.min(b,x))}
+function el(id){return document.getElementById(id)}
+var col={},subs=[];
+function readColors(){
+  var cs=getComputedStyle(document.documentElement);
+  ["--bg","--surface","--ink","--muted","--line","--tint","--obj","--att","--res","--env","--ok"].forEach(function(k){col[k]=cs.getPropertyValue(k).trim()});
+  subs.forEach(function(f){try{f()}catch(e){}});
+}
+readColors();
+try{window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change",readColors)}catch(e){}
+new MutationObserver(readColors).observe(document.documentElement,{attributes:true,attributeFilter:["data-theme"]});
+function onTheme(f){subs.push(f)}
+var dpr=Math.max(1,Math.min(2,window.devicePixelRatio||1));
+function fit(c){
+  var w=c.clientWidth,h=c.clientHeight;
+  if(!w||!h)return null;
+  var bw=Math.round(w*dpr),bh=Math.round(h*dpr);
+  if(c.width!==bw||c.height!==bh){c.width=bw;c.height=bh}
+  var g=c.getContext("2d");g.setTransform(dpr,0,0,dpr,0,0);return {g:g,w:w,h:h};
+}
+var FONT="500 11.5px 'Source Sans 3',system-ui,sans-serif";
+function label(g,t,x,y,color,align,pill){
+  g.font=FONT;g.textAlign=align||"left";g.textBaseline="alphabetic";
+  if(pill){var w=g.measureText(t).width,x0=(align==="right")?x-w:(align==="center"?x-w/2:x);
+    g.save();g.globalAlpha=.82;g.fillStyle=col["--surface"];g.fillRect(x0-5,y-12,w+10,17);g.restore()}
+  g.fillStyle=color;g.fillText(t,x,y)}
+/* ring-buffer trace: arr, head index, length N */
+function trace(g,arr,head,N,x0,w,cy,sc,color,lw,alpha,dash){
+  g.save();g.globalAlpha=alpha==null?1:alpha;g.strokeStyle=color;g.lineWidth=lw;g.lineJoin="round";if(dash)g.setLineDash(dash);
+  g.beginPath();
+  for(var i=0;i<N;i++){var v=arr[(head+i)%N];var x=x0+w*i/(N-1),y=cy-v*sc;if(i)g.lineTo(x,y);else g.moveTo(x,y)}
+  g.stroke();g.restore();
+}
+/* shaded envelope band around a lane centre */
+function envelope(g,E,head,N,W,cy,sc,color,alpha){
+  g.save();g.globalAlpha=alpha;
+  g.beginPath();
+  for(var i=0;i<N;i++){var e=E[(head+i)%N],x=W*i/(N-1),y=cy-e*sc;if(i)g.lineTo(x,y);else g.moveTo(x,y)}
+  for(var j=N-1;j>=0;j--){var e2=E[(head+j)%N],x2=W*j/(N-1);g.lineTo(x2,cy+e2*sc)}
+  g.closePath();g.fillStyle=color;g.globalAlpha=.09*alpha;g.fill();g.restore();
+  g.save();g.globalAlpha=alpha;g.strokeStyle=color;g.lineWidth=1.6;g.setLineDash([6,4]);
+  [1,-1].forEach(function(sg){g.beginPath();for(var i2=0;i2<N;i2++){var ee=E[(head+i2)%N]*sg,xx=W*i2/(N-1),yy=cy-ee*sc;if(i2)g.lineTo(xx,yy);else g.moveTo(xx,yy)}g.stroke()});
+  g.restore();
+}
+return {TAU:TAU,lerp:lerp,clamp:clamp,el:el,col:col,onTheme:onTheme,fit:fit,label:label,trace:trace,envelope:envelope,FONT:FONT};
+})();
+
+</script>
+<script>
+(function(){
+"use strict";
+var $=Core.el;
+try{var pt=new URLSearchParams(location.search).get("part");if(pt==="1"||pt==="2"||pt==="3")document.body.setAttribute("data-part",pt)}catch(e){}
+var RM=false;try{RM=window.matchMedia("(prefers-reduced-motion: reduce)").matches}catch(e){}
+function lc(s){return s.toLowerCase().replace('prāṇa','Prāṇa')}
+function mk(tag,cls,html){var e=document.createElement(tag);if(cls)e.className=cls;if(html!=null)e.innerHTML=html;return e}
+var NS="http://www.w3.org/2000/svg";
+function setA(e,a){for(var k in a)e.setAttribute(k,a[k])}
+
+/* ---------- link data, as the lesson gives it ---------- */
+var LK=[
+ {k:0,n:"Silken thread",s:"The breath",
+  means:"Vāha-cheda",
+  mg:"The cutting, or cessation, of the vāha: the dualistic flow of prāṇa and apāna through piṅgalā and iḍā. It interrupts the see-saw, and so opens the possibility of the energy gathering into the centre. Its operational core is the natural turning-point of the breath, where neither prāṇa nor apāna is moving. The practitioner does not force the breath to stop; the stillness is already there at the hinge of every breath.",
+  fam:"Technology of Rhythm and Sound (5.2): the Breath Shortcut",
+  works:"G(t), the amplitude of the attention wave",
+  lift:"Lift 1: from the doubling loop {1, 2, 4, 8, 7, 5} toward the rhythm axis {3, 6}",
+  why:"The most accessible, not the deepest. The breath is already happening in every person, needs no special belief and no prior attainment, and is directly connected to the whole system. It is the one thread frail enough, and near enough, to be taken hold of from inside the tower.",
+  ill:"A practitioner sits, lets the breath slow without strain, and rests attention on the small pause between in-breath and out-breath. At first the pauses are barely noticed. Within minutes they begin to feel like the most settled moments in the cycle. Nothing dramatic occurs. But the system has begun to gather, and the first thread is in hand.",
+  short:"Cutting of the dualistic prāṇa and apāna flow."},
+ {k:1,n:"Pack thread",s:"The nerve currents",
+  means:"Śakti-saṅkoca-vikāsa",
+  mg:"One paired movement of the Power, with two phases, not two practices. Saṅkoca is contraction: the energy that streams outward through the senses is drawn back toward its source. Vikāsa is expansion: awareness is held open, so the senses keep working as usual. The eyes stay open and the world is met, but the energy behind the seeing and hearing is not dispersed into it.",
+  fam:"Technology of Attention (5.3): pratyāhāra deepening into dhāraṇā",
+  works:"ψₘ, the tuning of attention",
+  lift:"Lift 2: from the rhythm axis {3, 6} toward the integrating axis {9}",
+  why:"The next link up. Where the breath is the gross handle, the nerve currents are the channels through which sensation and attention actually move. To grasp this thread is to hold the root of attention steady while the senses are engaged. The lesson’s name for the mature form is bhairavī mudrā.",
+  ill:"A practitioner walks through a busy street, sees everything, hears everything, misses nothing, yet a part of the attention does not leave its centre. The street is fully met. The practitioner is not dragged out into it. The pack thread is in hand.",
+  short:"Contraction and expansion of the Power."},
+ {k:2,n:"Stout twine",s:"The thoughts",
+  means:"Vikalpa-kṣaya",
+  mg:"The dissolution of thought-constructs, the mind’s incessant labelling, comparing, judging and interpreting. It is not suppression: forcing a thought down is itself another vikalpa. The dissolution comes through viveka, the steady recognition that every vikalpa is a construct arising within awareness, not a fact about the Self.",
+  fam:"Technology of Knowledge (5.5), through viveka",
+  works:"h(t), the saṁskāra filter",
+  lift:"",
+  why:"Subtler than the nerve currents: the level of the thought-stream itself. Thinking harder does not dissolve a vikalpa; thinking harder is more vikalpa. As the recognition deepens, h(t) lightens in consequence and the mind becomes less sticky.",
+  ill:"A wave of self-criticism arises: I always fail at this. Without viveka, the thought is taken as a report on reality. With viveka, the same thought arises and is seen as a thought, a construct passing through awareness, neither true nor false about the one in whom it appears. It loses its weight and dissolves. The twine is in hand.",
+  short:"Dissolution of thought-constructs."},
+ {k:3,n:"Rope",s:"The psychic Prāṇa",
+  means:"Ādyanta-koṭi-nibhālana",
+  mg:"Vivid, sustained attention (nibhālana) rested at the beginning and ending points (ādyanta-koṭi) of any movement of awareness. In the breath, these are the same two turning-points named under vāha-cheda, now attended with full depth. In thought, each arising has a point where it emerges from the substrate and a point where it subsides back into it. Attention rests at the junctures, not on the arising.",
+  fam:"Technology of Attention (5.3), its deepest register",
+  works:"the resultant at full resonance, at the {9} → {0} verge",
+  lift:"The approach to the {9} → {0} threshold of the Ritam Diagram",
+  why:"The strongest thread, the one finally able to bear the practitioner’s full weight. It could not be grasped first: only after the breath is steadied, the attention gathered and the thought-stream quieted does attention rest, with genuine vividness, at the junctures.",
+  ill:"A practitioner who has settled the breath and quieted the mind watches the precise moment one thought ends and before the next begins. Instead of letting the mind rush to fill the gap, attention rests in the gap, vividly, without grasping. The gap begins to feel less like an absence and more like a presence. The rope is in hand.",
+  care:"This is the approach to the verge. The lesson does not say any of the four means delivers what lies at {0}, and its close says the four Yogas do not produce the Swan. Nor is this a feat to attempt out of order: the rope could not be grasped first.",
+  short:"Attention at the beginning and ending points."}
+];
+var CARD=[
+ "Frail enough, and near enough, to be taken hold of from inside the tower.",
+ "The next link up: the flow of attentional energy through the system.",
+ "Subtler still: the level of the thought-stream itself. Not suppression.",
+ "The strongest, the one that bears the full weight. It could not be grasped first."
+];
+
+/* =============== PART I : the tower =============== */
+var tw=$("tw");
+if(tw){
+  var mortar=$("mortar");
+  for(var r=0;r<9;r++){var y=100+r*34;var l=document.createElementNS(NS,"line");setA(l,{x1:112,x2:208,y1:y,y2:y});mortar.appendChild(l);
+    for(var c=0;c<3;c++){var x=124+((c*32+(r%2)*16));var v=document.createElementNS(NS,"line");setA(v,{x1:x,x2:x,y1:y,y2:y+34});mortar.appendChild(v)}}
+  var BX=148,BY0=398,TOP=146,BOT=406;
+  var beetle=$("beetle"),ln=[$("ln0"),$("ln1"),$("ln2"),$("ln3")];
+  var st={a:false,h:false,placed:false,arrived:false,links:0,busy:false,gen:0};
+  var amp=0,ssT=null;
+  var THROW=[
+   {ap:70,m:"She heaves the rope. It is far too heavy to throw so high, and it comes down in a heap. The rope is strong enough to bear a person, and for that very reason no one can hand it to him at the top of the tower."},
+   {ap:150,m:"The pack thread goes a little way up and falls back. Nothing can be passed to him from the ground by hand."},
+   {ap:110,m:"The stout twine rises and falls short. The strongest things are the hardest to send up."},
+   {ap:215,m:"The silken thread drifts, and settles on the ground. It is light enough to be carried up, but not thrown. Something else would have to carry it."}
+  ];
+  function tween(ms,fn,done){
+    if(RM){fn(1);if(done)done();return}
+    var t0=null,gen=st.gen;
+    function f(t){if(gen!==st.gen)return;if(t0==null)t0=t;var p=Math.min(1,(t-t0)/ms);fn(p);if(p<1)requestAnimationFrame(f);else if(done)done()}
+    requestAnimationFrame(f);
+  }
+  function say(id,t,ok){var e=$(id);e.textContent=t;e.className="msg"+(ok?" ok":"")}
+  function desc(t){$("twD").textContent=t}
+  function setBeetle(x,y,rot){beetle.setAttribute("transform","translate("+x+" "+y+") rotate("+rot+")")}
+  function setSilk(y){setA(ln[0],{x1:BX,y1:Math.min(y+8,BOT),x2:BX,y2:BOT});}
+
+  function doThrow(i){
+    if(st.busy)return;
+    var T=THROW[i];st.busy=true;
+    var f=$("flyer");
+    var col=["--c-rope","--c-pack","--c-twine","--c-silk"][i];
+    f.style.fill="var("+col+")";f.setAttribute("opacity","1");
+    say("aMsg","");
+    tween(1500,function(p){
+      var x=140+p*10,y=402-(T.ap)*4*p*(1-p)*1.0;
+      if(i===3){x=140+Math.sin(p*9)*8+p*20;y=402-T.ap*4*p*(1-p)}
+      setA(f,{cx:x,cy:y});
+    },function(){f.setAttribute("opacity","0");say("aMsg",T.m);st.busy=false});
+  }
+  function doPush(){
+    if(st.busy)return;
+    var m=$("min");m.classList.add("press");setTimeout(function(){m.classList.remove("press")},600);
+    amp=Math.min(amp+5,24);var ss=$("seesaw");ss.style.setProperty("--amp",amp+7);
+    ss.querySelector(".plank").style.setProperty("--amp",amp+7);
+    ss.classList.add("on");clearTimeout(ssT);ssT=setTimeout(function(){ss.classList.remove("on")},5000);
+    say("aMsg","He pushes at the walls with all his strength, and the tower does not notice. The wider the see-saw swings, the same lesson as sūtra 3: more effort to “get out” is more lateral oscillation, one more turn of the same loop.");
+  }
+  $("throws").addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;var i=+b.getAttribute("data-i");if(i===4)doPush();else doThrow(i)});
+
+  function updateB(){
+    $("bAttach").disabled=st.a||st.placed;$("bAttach").classList.toggle("done",st.a);
+    $("bHoney").disabled=st.h||st.placed;$("bHoney").classList.toggle("done",st.h);
+    $("bPlace").disabled=!(st.a&&st.h)||st.placed;$("bPlace").classList.toggle("done",st.placed);
+  }
+  $("bAttach").addEventListener("click",function(){
+    st.a=true;ln[0].setAttribute("opacity","1");setSilk(BY0);
+    say("bMsg","She ties the silken thread firmly to the beetle."+(st.h?"":" Now the honey."));updateB();
+  });
+  $("bHoney").addEventListener("click",function(){
+    st.h=true;$("honeyDots").setAttribute("opacity","1");$("scent").setAttribute("opacity","1");
+    say("bMsg","A drop of honey on its horns."+(st.a?"":" Now the thread."));updateB();
+  });
+  $("bPlace").addEventListener("click",function(){
+    if(!(st.a&&st.h)||st.placed)return;
+    st.placed=true;updateB();
+    $("seesaw").classList.remove("on");
+    say("bMsg","She turns it to face upward and sets it on the wall. That is the last thing she does. There is no button for the climb, because the story gives none: it creeps on “in the hope of reaching the honey”, drawn, not driven.",true);
+    desc("The beetle climbs the tower wall by itself, a silken thread trailing behind it.");
+    var gen=st.gen;
+    tween(500,function(p){setBeetle(BX,BY0,90*(1-p))},function(){
+      tween(7000,function(p){
+        var y=BY0+(TOP-BY0)*p;setBeetle(BX+Math.sin(p*70)*1.3,y,0);setSilk(y);
+      },function(){arrive()});
+    });
+  });
+  function addCard(k){
+    var L=LK[k];
+    var d=mk("div","arr","<b>"+L.n+": "+lc(L.s)+"</b><span>"+L.means+" · "+L.fam+"</span><span>"+CARD[k]+"</span>");
+    d.setAttribute("data-k",k);$("arr").appendChild(d);
+    var p=document.querySelector('.pill[data-k="'+k+'"]');if(p)p.classList.add("on");
+  }
+  function arrive(){
+    st.arrived=true;beetle.setAttribute("opacity","0");$("hand").setAttribute("opacity","1");
+    setSilk(TOP-8);
+    say("bMsg","The beetle reaches the top. The minister takes it and holds the silken thread. The frailest thing has gone all the way up.",true);
+    addCard(0);
+    var sc=$("stC");sc.classList.remove("locked");
+    var bs=$("links").querySelectorAll("button");for(var i=0;i<bs.length;i++)bs[i].disabled=false;
+    desc("The silken thread now hangs from the minister’s window to the ground.");
+    try{sc.scrollIntoView({behavior:RM?"auto":"smooth",block:"nearest"})}catch(e){}
+  }
+  var HINT={
+   2:"Not yet. The twine is stronger than anything the minister holds, and what is stronger cannot be sent up first. It can only follow the link before it. Which thread is he holding?",
+   3:"Not yet. The rope is the strongest thing, strong enough to bear a person, and for that reason it cannot be handed up. It can only follow the links that come before it."
+  };
+  var TIE={1:"She ties the pack thread to the foot of the silken thread. He draws it up.",2:"She ties the twine to the foot of the pack thread. He draws it up.",3:"She ties the rope to the foot of the twine. He draws it up."};
+  $("links").addEventListener("click",function(e){
+    var b=e.target.closest("button");if(!b||b.disabled||st.busy||!st.arrived)return;
+    var k=+b.getAttribute("data-k");
+    if(k!==st.links+1){say("cMsg",HINT[k]||"");return}
+    st.busy=true;say("cMsg",TIE[k]);b.disabled=true;ln[k].setAttribute("opacity","1");
+    var x=[148,156,164,174][k],l=ln[k];
+    tween(2300,function(p){setA(l,{y1:BOT-(BOT-139)*p})},function(){
+      st.links=k;st.busy=false;addCard(k);
+      if(k===3){
+        say("cMsg","The rope hangs at the window.",true);$("who").hidden=false;
+        desc("Four links now hang from the window to the ground: silken thread, pack thread, stout twine and rope.");
+        try{$("who").scrollIntoView({behavior:RM?"auto":"smooth",block:"nearest"})}catch(e){}
+      }else{say("cMsg","Drawn up. "+(k===1?"Now the next, stronger link.":"One more."))}
+    });
+  });
+  function resetTower(){
+    st.gen++;st.a=false;st.h=false;st.placed=false;st.arrived=false;st.links=0;st.busy=false;amp=0;
+    ln.forEach(function(l){setA(l,{y1:BOT,y2:BOT});l.setAttribute("opacity","0")});
+    beetle.setAttribute("opacity","1");setBeetle(BX,BY0,90);$("honeyDots").setAttribute("opacity","0");$("scent").setAttribute("opacity","0");
+    $("hand").setAttribute("opacity","0");$("flyer").setAttribute("opacity","0");$("seesaw").classList.remove("on");
+    ["aMsg","bMsg","cMsg"].forEach(function(i){say(i,"")});
+    $("arr").innerHTML="";$("who").hidden=true;
+    var ps=document.querySelectorAll(".pill");for(var i=0;i<ps.length;i++)ps[i].classList.remove("on");
+    $("stC").classList.add("locked");var bs=$("links").querySelectorAll("button");for(i=0;i<bs.length;i++)bs[i].disabled=true;
+    updateB();desc("A tall stone tower with the minister at a window near the top, his wife at the foot, and a beetle waiting on the ground.");
+  }
+  $("tReset").addEventListener("click",resetTower);
+  resetTower();
+}
+
+/* =============== PART II : the four links =============== */
+var chain=$("chain");
+if(chain){
+  var seen={};
+  LK.forEach(function(L){
+    var b=mk("button","lk","<b>"+L.n+"</b><span>"+L.s+"</span>");b.setAttribute("data-k",L.k);b.setAttribute("aria-pressed","false");chain.appendChild(b);
+  });
+  function row(lb,v,cls){return '<div class="row'+(cls?" "+cls:"")+'"><div class="lb">'+lb+'</div><div>'+v+'</div></div>'}
+  function showLink(k){
+    var L=LK[k];seen[k]=true;
+    var bs=chain.querySelectorAll(".lk");for(var i=0;i<bs.length;i++){bs[i].setAttribute("aria-pressed",i===k?"true":"false");bs[i].classList.toggle("seen",!!seen[i])}
+    var d=$("detail");
+    d.style.borderTopColor="var(--c-"+["silk","pack","twine","rope"][k]+")";
+    var h='<h3>'+L.n+': '+lc(L.s)+'</h3>';
+    h+=row("Means in sūtra 18","<b>"+L.means+"</b><br>"+L.mg);
+    h+=row("Practice-family",L.fam);
+    h+=row("Why it comes here",L.why);
+    h+=row("The lesson’s illustration",'<span class="ill">'+L.ill+'</span>');
+    h+=row("In the mind-wave equation","<span class='sym'>"+L.works+"</span>"+(L.lift?"<br><span class='sk2'>"+L.lift+"</span>":"<br><span class='sk2'>The lesson names no lift here. It says h(t) lightens in consequence, the beat shrinks and the equation approaches resonance.</span>"),"eq");
+    if(L.care)h+='<p class="takecare">'+L.care+'</p>';
+    if(k===3)h+='<p class="takecare">Look back at the silken thread: the turning-points of the breath are the same two points, there attended gently to settle the system, here attended with full depth.</p>';
+    d.innerHTML=h;
+  }
+  chain.addEventListener("click",function(e){var b=e.target.closest(".lk");if(b)showLink(+b.getAttribute("data-k"))});
+  showLink(0);seen={};chain.querySelector(".lk").classList.remove("seen");
+
+  /* matcher */
+  var Q=[
+   {t:"A wave of self-criticism arises: “I always fail at this.” It is seen as a thought, a construct passing through awareness, and it loses its weight.",a:2,why:"Seeing a vikalpa as a vikalpa, through viveka, is the dissolution of the thought-constructs: the stout twine, vikalpa-kṣaya.",ref:"§4.3"},
+   {t:"A practitioner sits, lets the breath slow without strain, and rests attention on the small pause between in-breath and out-breath. At first the pauses are barely noticed.",a:0,why:"The still turning-points of the breath are the operational core of vāha-cheda: the silken thread. It is taught first because it is the most accessible, not the deepest.",ref:"§4.1"},
+   {t:"Through the waking hours outside the sitting, each task is begun with a quiet question: to whom or what am I offering this?",a:4,why:"Not a link. It is the Technology of Action and Offering, and it lightens h(t) in the midst of daily life so that, when the practitioner sits, the thread can be taken hold of and kept. The steadiness of the hands that hold the chain.",ref:"§5, and 5.4 §3.1"},
+   {t:"Having settled the breath and quieted the mind, attention rests, vividly and without grasping, in the gap where one thought has ended and the next has not begun.",a:3,why:"Attention at the beginning and ending point of an arising is ādyanta-koṭi-nibhālana: the rope, the deepest register of attention. It could not have been grasped first.",ref:"§4.4"},
+   {t:"Walking down a busy street, a practitioner sees everything and hears everything, yet a part of the attention does not leave its centre.",a:1,why:"Śakti-saṅkoca-vikāsa: the Power drawn inward while the senses stay open. The pack thread, the level of the nerve currents. Its home is the Technology of Attention.",ref:"§4.2"},
+   {t:"A practitioner tries to force a thought down by will, so as to have a quiet mind.",a:5,why:"Not a link, and not a means at all. Forcing a thought down is itself another vikalpa, another act of the dividing mind. The dissolution comes through viveka, not suppression.",ref:"§4.3"}
+  ];
+  var qi=0,qans=false;
+  var OPT=[["Silken thread","the breath"],["Pack thread","the nerve currents"],["Stout twine","the thoughts"],["Rope","the psychic Prāṇa"],["Not a link","the hands, or not a means"]];
+  function showQ(){
+    var q=Q[qi];qans=false;
+    $("mProg").textContent="Card "+(qi+1)+" of "+Q.length;$("mCase").textContent=q.t;
+    var ch=$("mChoices");ch.innerHTML="";$("mFb").className="fb";$("mFb").innerHTML="";$("mNext").hidden=true;
+    OPT.forEach(function(o,i){
+      var b=mk("button","choice","<b>"+o[0]+"</b><span>"+o[1]+"</span>");b.setAttribute("data-i",i);
+      b.addEventListener("click",function(){ansQ(i,b)});ch.appendChild(b);
+    });
+  }
+  function ansQ(i,b){
+    if(qans)return;qans=true;var q=Q[qi],right=(i===q.a)||(q.a===5&&i===4);
+    var target=q.a===5?4:q.a;
+    var all=$("mChoices").querySelectorAll("button");for(var j=0;j<all.length;j++){all[j].disabled=true;if(j===target)all[j].classList.add("right")}
+    b.classList.add("pick");
+    $("mFb").innerHTML='<div class="verdict">'+(right?"Yes.":"Not quite.")+'</div><p>'+q.why+'</p><span class="ref">Lesson 5.6 '+q.ref+'</span>';
+    $("mFb").className="fb show";
+    $("mNext").textContent=qi<Q.length-1?"Next card":"Go through them again";$("mNext").hidden=false;
+    try{$("mNext").focus({preventScroll:true})}catch(e){}
+  }
+  $("mNext").addEventListener("click",function(){qi=(qi+1)%Q.length;showQ()});
+  showQ();
+
+  /* crosswalk */
+  var XR=[["Story","Sūtra 18 means","Practice-family","What it works on"]];
+  var xt=$("xt");
+  var hd=mk("div","xr h");XR[0].forEach(function(t){hd.appendChild(mk("div",null,t))});xt.appendChild(hd);
+  var FAMS=["Rhythm and Sound (5.2)","Attention (5.3)","Knowledge (5.5)","Attention (5.3), deepest register"];
+  var WK=["G(t), the amplitude of the attention wave","ψₘ, the tuning of attention","h(t), the saṁskāra filter","the resultant at full resonance, at the {9} → {0} verge"];
+  LK.forEach(function(L,i){
+    var r=mk("div","xr");r.setAttribute("data-k",i);
+    var cells=[L.n+": "+lc(L.s),L.means,FAMS[i],WK[i]];
+    var lbs=XR[0];
+    cells.forEach(function(c,j){var d=mk("div",(i===1||i===3)&&j===2?"att2":null,'<span class="rl">'+lbs[j]+'</span>'+c);r.appendChild(d)});
+    xt.appendChild(r);
+  });
+  var rr=mk("div","xr dash");
+  ["Not a link","none","Action and Offering (5.4)","h(t) and n(t), upstream: the steadiness of the hands that hold the chain"].forEach(function(c,j){rr.appendChild(mk("div",null,'<span class="rl">'+XR[0][j]+'</span>'+c))});
+  xt.appendChild(rr);
+}
+
+/* =============== PART III : the hands =============== */
+var hsv=$("hsv");
+if(hsv){
+  var mode="g";
+  var HT={
+   g:"Across the fifteen or sixteen waking hours outside formal practice, every action writes into the filter h(t). When those hours deposit grasping, reactive, fruit-attached impressions, the filter thickens faster than formal practice can lighten it, and the silken thread keeps slipping from the practitioner’s grasp.",
+   o:"Action-as-offering reverses this. It lightens h(t) in the midst of daily life, so that when the practitioner sits, the system is light enough to take hold of the thread and keep hold of it. Karma yoga is not a link in the chain. It is the steadiness of the hands that hold it."
+  };
+  function setMode(m){
+    mode=m;
+    var b=$("hSeg").querySelectorAll("button");for(var i=0;i<b.length;i++)b[i].setAttribute("aria-pressed",b[i].getAttribute("data-m")===m?"true":"false");
+    $("hthr").setAttribute("class","hthr"+(m==="g"?" slip":""));
+    $("hnd").setAttribute("class","hnd"+(m==="g"?" shake":""));
+    $("rest").setAttribute("class","rest "+m);$("filt").setAttribute("class","filt "+m);
+    $("ghost").style.opacity=(m==="g"&&RM)?1:0;
+    $("hLab").textContent=m==="g"?"slipping again":"held";
+    $("dLab").textContent=m==="g"?"thick":"light";
+    $("hText").textContent=HT[m];
+    $("gripBtn").hidden=(m!=="g");$("gripMsg").textContent="";
+    $("hsv").querySelector("title").textContent=m==="g"?"The thread slipping in the hands":"The thread held steady in the hands";
+  }
+  $("hSeg").addEventListener("click",function(e){var b=e.target.closest("button");if(b)setMode(b.getAttribute("data-m"))});
+  $("gripBtn").addEventListener("click",function(){
+    var h=$("hnd");h.setAttribute("class","hnd");void h.getBoundingClientRect();h.setAttribute("class","hnd shake");
+    $("gripMsg").textContent="More gripping is the same effort again. In the lesson’s account what changes the slipping is upstream, in the hours outside the sitting.";
+  });
+  setMode("g");
+
+  /* sorter */
+  var S=[
+   {t:"Tying the silken thread firmly to the beetle.",a:0,why:"The practitioner’s part is to set the conditions: to attach the thread, to point the beetle upward, to follow what is drawn up."},
+   {t:"Smearing honey on its horns and pointing it upward.",a:0,why:"Every one of the four means is a setting of conditions, a consenting, an orienting of the system toward what is above it."},
+   {t:"The beetle’s climb up the wall.",a:1,why:"It is not driven up by force. It is drawn up by the scent of honey placed above it. The tradition’s name for this is anugraha, grace."},
+   {t:"Taking hold of each next link and following it up.",a:0,why:"The practitioner follows the thread; the Power does the lifting. Following is part of the consent."},
+   {t:"Offering the day’s actions, so that the hands stay steady.",a:0,why:"It does the upstream work that makes the whole chain graspable: it lightens the filter so the threads can be held without slipping."},
+   {t:"Hauling oneself up the wall by force of will.",a:2,why:"The ego cannot climb the tower; the ego is the tower. Every move made on the tower’s terms is one more turn of the same loop."},
+   {t:"The Swan awakening our higher understanding.",a:1,why:"The verse does not say “may we climb”; it says “may the Swan awaken us.” The lifting is from above."}
+  ];
+  var SO=[["Ours","setting conditions, consenting"],["Drawn from above","anugraha, the lift"],["Cannot be done","not available at all"]];
+  var si=0,sans=false;
+  function showS(){
+    var q=S[si];sans=false;$("sProg").textContent="Moment "+(si+1)+" of "+S.length;$("sCase").textContent=q.t;
+    var ch=$("sChoices");ch.innerHTML="";$("sFb").className="fb";$("sFb").innerHTML="";$("sNext").hidden=true;
+    SO.forEach(function(o,i){var b=mk("button","choice","<b>"+o[0]+"</b><span>"+o[1]+"</span>");b.setAttribute("data-i",i);b.addEventListener("click",function(){ansS(i,b)});ch.appendChild(b)});
+  }
+  function ansS(i,b){
+    if(sans)return;sans=true;var q=S[si],ok=i===q.a;
+    var all=$("sChoices").querySelectorAll("button");for(var j=0;j<all.length;j++){all[j].disabled=true;if(j===q.a)all[j].classList.add("right")}
+    b.classList.add("pick");
+    $("sFb").innerHTML='<div class="verdict">'+(ok?"Yes.":"Not quite.")+'</div><p>'+q.why+'</p>';$("sFb").className="fb show";
+    $("sNext").textContent=si<S.length-1?"Next":"Go through them again";$("sNext").hidden=false;
+    try{$("sNext").focus({preventScroll:true})}catch(e){}
+  }
+  $("sNext").addEventListener("click",function(){si=(si+1)%S.length;showS()});
+  showS();
+}
+})();
+
+</script>
+</body></html>

@@ -1,0 +1,445 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>What Is Missing?</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Source+Sans+3:ital,wght@0,400;0,600;1,400&family=Spectral:ital,wght@0,400;0,500;1,400&display=swap">
+<style>
+:root{
+  --bg:#F2F5F9; --surface:#FFFFFF; --ink:#13203A; --muted:#58647D; --line:#D3DAE6; --tint:#E7EDF6;
+  --obj:#0B8686; --att:#C95F06; --res:#2E3192; --env:#C0245B; --ok:#1B7A52;
+  --display:"Spectral",Georgia,"Times New Roman",serif;
+  --body:"Source Sans 3",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0B1120; --surface:#121A2D; --ink:#E7ECF6; --muted:#9AA6BF; --line:#26324D; --tint:#1A2540;
+    --obj:#46CFC6; --att:#F5A04D; --res:#A3AAFF; --env:#FF7BA9; --ok:#5BD59B; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0B1120; --surface:#121A2D; --ink:#E7ECF6; --muted:#9AA6BF; --line:#26324D; --tint:#1A2540;
+  --obj:#46CFC6; --att:#F5A04D; --res:#A3AAFF; --env:#FF7BA9; --ok:#5BD59B; color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;
+  padding-left:max(14px,env(safe-area-inset-left,0px));padding-right:max(14px,env(safe-area-inset-right,0px));padding-block:22px 40px}
+.wrap{max-width:900px;margin:0 auto;display:flex;flex-direction:column;gap:32px}
+h1,h2,h3{font-family:var(--display);font-weight:500;text-wrap:balance;margin:0;letter-spacing:-.01em}
+h1{font-size:clamp(30px,5.4vw,44px);line-height:1.06}
+h2{font-size:clamp(23px,3.4vw,29px);line-height:1.15}
+h3{font-size:19px;line-height:1.25}
+p{margin:0}
+sub{font-size:.72em;line-height:0}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.lede{font-size:17.5px;max-width:64ch}
+.intro{max-width:66ch;color:var(--muted)}
+header{display:flex;flex-direction:column;gap:12px}
+section{display:flex;flex-direction:column;gap:18px;min-width:0}
+.sym{font-family:var(--mono);font-size:.92em;white-space:nowrap}
+.k-obj{color:var(--obj)} .k-att{color:var(--att)} .k-res{color:var(--res)} .k-env{color:var(--env)}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px;display:flex;flex-direction:column;gap:14px;min-width:0}
+.bar{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;justify-content:space-between}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--bg)}
+.seg button{font:inherit;font-size:14px;color:var(--muted);background:transparent;border:0;padding:8px 13px;cursor:pointer}
+.seg button+button{border-left:1px solid var(--line)}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--surface)}
+button:focus-visible,input:focus-visible{outline:2px solid var(--res);outline-offset:2px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{font:inherit;font-size:14px;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:7px 13px;cursor:pointer;display:inline-flex;gap:8px;align-items:center}
+.chip i{font-style:normal;font-family:var(--mono);font-size:11px;color:var(--muted)}
+.chip[aria-pressed="true"]{background:var(--res);border-color:var(--res);color:#fff}
+.chip[aria-pressed="true"] i{color:#fff;opacity:.8}
+.chip:disabled{cursor:default}
+.chip.reached:not([aria-pressed="true"]){border-color:var(--res)}
+.btn{font:inherit;font-size:14px;color:var(--ink);background:var(--surface);border:1px solid var(--ink);border-radius:8px;padding:8px 16px;cursor:pointer}
+.btn.primary{background:var(--ink);color:var(--surface)}
+.btn.ghost{border-color:var(--line);color:var(--muted)}
+.scope-wrap{position:relative;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--bg)}
+canvas{display:block;width:100%}
+.playbtn{position:absolute;right:8px;bottom:8px;font:inherit;font-size:12px;background:var(--surface);color:var(--muted);border:1px solid var(--line);border-radius:6px;padding:4px 10px;cursor:pointer}
+.box{border:1px solid var(--line);border-radius:8px;background:var(--bg);padding:10px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.box .cap{font-size:12px;color:var(--muted)}
+.meters{display:flex;flex-direction:column;gap:9px}
+.meter{display:grid;grid-template-columns:1fr auto;gap:2px 8px;font-size:13px;align-items:baseline}
+.meter b{font-weight:600}
+.meter output{font-family:var(--mono);font-size:12px;color:var(--muted)}
+.meter .track{grid-column:1/-1;height:7px;background:var(--line);border-radius:4px;overflow:hidden}
+.meter .fill{height:100%;width:0;background:var(--res);border-radius:4px}
+.meter.f2 .fill{background:var(--env)} .meter.f3 .fill{background:var(--obj)}
+.slider{display:flex;align-items:center;gap:10px;flex:1 1 280px;min-width:0}
+.slider label{font-size:14px;min-width:0}
+.slider input[type=range]{flex:1;min-width:60px;accent-color:var(--res)}
+.slider small{color:var(--muted);font-size:12px;white-space:nowrap}
+.slider output{font-family:var(--mono);font-size:12.5px;color:var(--muted);min-width:46px;text-align:right}
+.readout{font-size:14px;color:var(--muted)}
+.readout b{color:var(--ink)}
+.tag{font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);border:1px solid var(--line);border-radius:4px;padding:2px 6px}
+.note{font-size:13px;color:var(--muted);max-width:70ch}
+.balance{background:var(--tint);border-radius:10px;padding:16px 18px;display:flex;flex-direction:column;gap:8px;max-width:78ch}
+footer{font-size:13px;color:var(--muted);max-width:76ch;border-top:1px solid var(--line);padding-top:12px}
+@media (max-width:640px){.panel{padding:12px}.wrap{gap:26px}}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
+
+nav.parts{display:flex;flex-wrap:wrap;gap:8px 20px;margin-top:4px}
+nav.parts a{color:var(--ink);text-decoration:none;border-bottom:1px solid var(--line);padding-bottom:2px;font-size:15px}
+nav.parts a:hover,nav.parts a:focus-visible{border-color:var(--res);color:var(--res)}
+.intro b{color:var(--ink);font-weight:600}
+.rows{display:flex;flex-direction:column;gap:12px}
+.row{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 16px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.row.done{border-color:var(--line)}
+.row .top{display:flex;flex-wrap:wrap;gap:6px 12px;align-items:baseline;justify-content:space-between}
+.row h3{font-size:20px}
+.row .desc{font-family:var(--display);font-size:17px;line-height:1.4;color:var(--ink)}
+.row .kind{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.row.final{border-left:3px solid var(--ok)}
+.row .chips .chip{min-height:40px}
+.row .chip.none{border-style:dashed}
+.row .chip.hit:disabled{border-color:var(--ok);color:var(--ink);background:color-mix(in srgb,var(--ok) 12%,var(--surface))}
+.row .chip.hit i{color:var(--ok)}
+.row .chip[aria-pressed="true"].hit{background:color-mix(in srgb,var(--ok) 12%,var(--surface));color:var(--ink);border-color:var(--ok)}
+.row .chip.off:disabled{opacity:.55}
+.fb{display:none;border-top:1px solid var(--line);padding-top:12px;font-size:15px;flex-direction:column;gap:8px}
+.fb.show{display:flex}
+.fb .verdict{font-family:var(--display);font-size:19px;line-height:1.35}
+.fb .quote{font-family:var(--display);font-style:italic;font-size:16.5px;border-left:3px solid var(--line);padding-left:12px;color:var(--ink)}
+.fb .ref{font-family:var(--mono);font-size:11px;color:var(--muted)}
+.fb .has{color:var(--muted);font-size:14px}
+.sumlist{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:8px}
+.choices{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.choice{font:inherit;text-align:left;border:1.5px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);padding:10px 12px;cursor:pointer;display:flex;flex-direction:column;gap:3px;min-width:0}
+.choice b{font-family:var(--display);font-size:18px;font-weight:500}
+.choice span{font-size:13px;color:var(--muted);line-height:1.35}
+.choice:disabled{cursor:default}
+.choice.pick{box-shadow:0 0 0 2px var(--ink)}
+.choice.right{border-color:var(--ok);background:color-mix(in srgb,var(--ok) 10%,var(--surface))}
+.case-text{font-family:var(--display);font-size:19px;line-height:1.45}
+#field{width:100%;height:auto;display:block;border:1px solid var(--line);border-radius:8px;background:var(--bg)}
+#field text{font-family:var(--body);font-size:16px;fill:var(--muted)}
+#field text.nm{font-family:var(--display);font-size:19px;fill:var(--ink)}
+#field .lane{fill:none;stroke-linecap:round;transition:stroke-width .5s}
+#field .edge{fill:none;stroke:var(--line);stroke-linecap:round;transition:stroke-width .5s}
+.walk{display:flex;flex-wrap:wrap;gap:10px}
+.walk .btn{display:flex;flex-direction:column;align-items:flex-start;gap:1px;padding:9px 16px;text-align:left}
+.walk .btn span{font-size:12.5px;color:var(--muted)}
+.walk .btn b{font-weight:600}
+.g-read{min-height:3.2em;color:var(--ink)}
+@media (max-width:640px){.choices{grid-template-columns:minmax(0,1fr)}.row{padding:12px}}
+@media (prefers-reduced-motion: reduce){#field .lane,#field .edge{transition:none}}
+body[data-part] header{display:none}
+body[data-part="1"] #s2,body[data-part="1"] footer,
+body[data-part="2"] #s1{display:none}
+body[data-part]{padding-block:10px 18px}
+
+</style></head><body>
+<div class="wrap">
+<header>
+  <div class="eyebrow">The Mind in the Light of Modern and Spiritual Sciences · Lesson 1.3</div>
+  <h1>What is missing?</h1>
+  <p class="lede">Lesson 1.3 says awareness is luminous and alive, and that the two cannot be separated. Here you will test that by prediction. First, for six things, decide what is absent and see how the lesson answers. Then compare two pictures of the mind: one that only records, and one that is living and self-shaping.</p>
+  <nav class="parts" aria-label="Parts of this page"><a href="#s1">I. What is missing?</a><a href="#s2">II. Grooves</a></nav>
+</header>
+
+<section id="s1">
+  <h2>I. What is missing?</h2>
+  <p class="intro">Three things are in play: <b>it reveals</b>, <b>it knows it reveals</b>, and <b>it is felt as presence</b>. For each case below, mark what you think is absent. You may mark more than one, or choose that nothing is missing. Then check, and the lesson answers in its own words.</p>
+  <div id="rows" class="rows"></div>
+  <div id="sum" class="panel" hidden>
+    <h3>What the six show</h3>
+    <ul class="sumlist">
+      <li>A mirror, a screen and a camera each do something: reflect, display, record. Each lacks something the lesson names (§3).</li>
+      <li>Take away the knowing, and light that reveals is “a mechanical process”. Take away the revealing, and self-presence is “a closed point without content” (§4).</li>
+      <li>Awareness is both at once: “It illuminates, and it knows itself as illuminating” (§4). The light is Prakāśa, the living self-presence is Vimarśa, and the course names the one Reality Consciousness-Energy (§5).</li>
+      <li>They are not “two stages joined together” but “two aspects of one indivisible Reality”, as warmth and brightness are inseparable in a flame (§4).</li>
+    </ul>
+    <p class="note">This page illustrates an argument, and it speaks only of the lesson’s own examples. The discovery itself is in the two noticings of §8: that whatever is present is being known, and that you are here.</p>
+  </div>
+</section>
+
+<section id="s2">
+  <h2>II. Grooves</h2>
+  <p class="intro">Lesson 1.3 sets two pictures of the mind side by side (§7). In the first, the mind is a recording device. In the second, it is a living, self-modifying system. Try the same simple actions in each and watch what changes, and what does not.</p>
+  <div class="panel">
+    <div class="bar">
+      <div class="seg" id="gmSeg" role="group" aria-label="Picture of the mind">
+        <button data-m="rec" aria-pressed="true">A recording device</button>
+        <button data-m="liv" aria-pressed="false">A living, self-modifying system</button>
+      </div>
+      <button class="btn ghost" id="gReset">Start again</button>
+    </div>
+    <p class="note" id="gDef"></p>
+    <svg id="field" viewBox="0 0 700 270" role="img" aria-labelledby="fT fD"><title id="fT">Two paths through a moment</title><desc id="fD">A moment arises on the left and carries on to the right by one of two paths. Path A is the familiar, already worn way. Path B is a different way.</desc></svg>
+    <div class="walk">
+      <button class="btn" id="wA"><b>Take path A</b><span>the familiar, worn way</span></button>
+      <button class="btn" id="wB"><b>Take path B</b><span>a different way</span></button>
+    </div>
+    <p class="readout g-read" id="gRead" role="status" aria-live="polite"></p>
+  </div>
+  <div class="panel" id="gq">
+    <h3>Which picture is this?</h3>
+    <p class="case-text">Someone says: “These patterns were deposited in me, and the task is to get them out.” Which picture of the mind is that, according to §7?</p>
+    <div class="choices two-col" id="gqChoices">
+      <button class="choice" data-k="rec"><b>The recording device</b><span>Experiences happen to the mind and are stored.</span></button>
+      <button class="choice" data-k="liv"><b>The living, self-modifying system</b><span>The mind actively shapes and sustains its patterns.</span></button>
+    </div>
+    <div class="fb" id="gqFb" role="status" aria-live="polite"></div>
+  </div>
+  <div class="balance">
+    <h3>Hold it lightly</h3>
+    <p>This is a picture of what the lesson claims, not a measurement. It has no timelines and says nothing about how long any change takes. The lesson also says its convergence with neuroscience “is not proof of the spiritual teaching”: contemplative inquiry from the inside and research from the outside illuminate each other “without reducing to each other” (§6).</p>
+  </div>
+</section>
+<footer>A learning aid based on Lesson 1.3. It illustrates a teaching and does not diagnose or advise on any person's situation. For help with distress, please speak with a qualified professional or someone you trust.</footer>
+</div>
+
+<script>
+window.Core=(function(){
+"use strict";
+var TAU=Math.PI*2;
+try{var q=new URLSearchParams(location.search).get("theme");if(q==="light"||q==="dark")document.documentElement.setAttribute("data-theme",q)}catch(e){}
+function lerp(a,b,t){return a+(b-a)*t}
+function clamp(x,a,b){return Math.max(a,Math.min(b,x))}
+function el(id){return document.getElementById(id)}
+var col={},subs=[];
+function readColors(){
+  var cs=getComputedStyle(document.documentElement);
+  ["--bg","--surface","--ink","--muted","--line","--tint","--obj","--att","--res","--env","--ok"].forEach(function(k){col[k]=cs.getPropertyValue(k).trim()});
+  subs.forEach(function(f){try{f()}catch(e){}});
+}
+readColors();
+try{window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change",readColors)}catch(e){}
+new MutationObserver(readColors).observe(document.documentElement,{attributes:true,attributeFilter:["data-theme"]});
+function onTheme(f){subs.push(f)}
+var dpr=Math.max(1,Math.min(2,window.devicePixelRatio||1));
+function fit(c){
+  var w=c.clientWidth,h=c.clientHeight;
+  if(!w||!h)return null;
+  var bw=Math.round(w*dpr),bh=Math.round(h*dpr);
+  if(c.width!==bw||c.height!==bh){c.width=bw;c.height=bh}
+  var g=c.getContext("2d");g.setTransform(dpr,0,0,dpr,0,0);return {g:g,w:w,h:h};
+}
+var FONT="500 11.5px 'Source Sans 3',system-ui,sans-serif";
+function label(g,t,x,y,color,align,pill){
+  g.font=FONT;g.textAlign=align||"left";g.textBaseline="alphabetic";
+  if(pill){var w=g.measureText(t).width,x0=(align==="right")?x-w:(align==="center"?x-w/2:x);
+    g.save();g.globalAlpha=.82;g.fillStyle=col["--surface"];g.fillRect(x0-5,y-12,w+10,17);g.restore()}
+  g.fillStyle=color;g.fillText(t,x,y)}
+/* ring-buffer trace: arr, head index, length N */
+function trace(g,arr,head,N,x0,w,cy,sc,color,lw,alpha,dash){
+  g.save();g.globalAlpha=alpha==null?1:alpha;g.strokeStyle=color;g.lineWidth=lw;g.lineJoin="round";if(dash)g.setLineDash(dash);
+  g.beginPath();
+  for(var i=0;i<N;i++){var v=arr[(head+i)%N];var x=x0+w*i/(N-1),y=cy-v*sc;if(i)g.lineTo(x,y);else g.moveTo(x,y)}
+  g.stroke();g.restore();
+}
+/* shaded envelope band around a lane centre */
+function envelope(g,E,head,N,W,cy,sc,color,alpha){
+  g.save();g.globalAlpha=alpha;
+  g.beginPath();
+  for(var i=0;i<N;i++){var e=E[(head+i)%N],x=W*i/(N-1),y=cy-e*sc;if(i)g.lineTo(x,y);else g.moveTo(x,y)}
+  for(var j=N-1;j>=0;j--){var e2=E[(head+j)%N],x2=W*j/(N-1);g.lineTo(x2,cy+e2*sc)}
+  g.closePath();g.fillStyle=color;g.globalAlpha=.09*alpha;g.fill();g.restore();
+  g.save();g.globalAlpha=alpha;g.strokeStyle=color;g.lineWidth=1.6;g.setLineDash([6,4]);
+  [1,-1].forEach(function(sg){g.beginPath();for(var i2=0;i2<N;i2++){var ee=E[(head+i2)%N]*sg,xx=W*i2/(N-1),yy=cy-ee*sc;if(i2)g.lineTo(xx,yy);else g.moveTo(xx,yy)}g.stroke()});
+  g.restore();
+}
+return {TAU:TAU,lerp:lerp,clamp:clamp,el:el,col:col,onTheme:onTheme,fit:fit,label:label,trace:trace,envelope:envelope,FONT:FONT};
+})();
+
+</script>
+<script>
+(function(){
+"use strict";
+var $=Core.el;
+try{var pt=new URLSearchParams(location.search).get("part");if(pt==="1"||pt==="2")document.body.setAttribute("data-part",pt)}catch(e){}
+function mk(tag,cls,html){var e=document.createElement(tag);if(cls)e.className=cls;if(html!=null)e.innerHTML=html;return e}
+var reduce=false;try{reduce=window.matchMedia("(prefers-reduced-motion: reduce)").matches}catch(e){}
+
+/* ---------- Part I ---------- */
+var T={rev:"It reveals",kno:"It knows it reveals",fel:"It is felt as presence"};
+var KEYS=["rev","kno","fel"];
+var NAMES={rev:"that it reveals",kno:"that it knows it reveals",fel:"that it is felt as presence"};
+var ROWS=[
+ {n:"A mirror",kind:"Device",d:"A mirror reflects whatever is placed before it.",need:["kno"],ok:[],
+  has:"It does reflect what is put before it.",q:"the mirror does not know that it is reflecting.",ref:"§3",
+  v:"The lesson names the knowing as absent."},
+ {n:"A screen",kind:"Device",d:"A screen displays whatever image is projected on it.",need:["fel"],ok:[],
+  has:"It does display what is projected on it.",q:"the screen has no felt presence of its own.",ref:"§3",
+  v:"The lesson names felt presence as absent."},
+ {n:"A camera",kind:"Device",d:"A camera records.",need:["fel"],ok:[],
+  has:"It does record.",q:"the camera does not experience.",ref:"§3",
+  v:"The lesson says “does not experience”. Of your three, the nearest is felt presence."},
+ {n:"Light that reveals, known by no one",kind:"Thought experiment",d:"Imagine awareness that is purely luminous, with no self-presence. There would be illumination, but no one knowing the illumination.",need:["kno"],ok:["fel"],
+  has:"The revealing is there.",q:"Light that revealed without being known to reveal would not be awareness at all; it would be a mechanical process.",ref:"§4",
+  v:"The lesson names the knowing as absent. The self-presence is absent too, since the case is “purely luminous but with no self-presence”."},
+ {n:"Self-presence with nothing to be present to",kind:"Thought experiment",d:"Imagine awareness that is purely self-aware, with no illumination. There would be a felt sense of being present, but nothing would appear.",need:["rev"],ok:[],
+  has:"The felt presence is there, and so is the self-awareness.",q:"Self-presence without something to be present to would not be awareness; it would be a closed point without content.",ref:"§4",
+  v:"The lesson names the revealing as absent: “nothing would appear, nothing would be known”."},
+ {n:"Awareness, as you examined it",kind:"The lesson's subject",d:"The awareness in which experience appears, as examined in Sections 2 and 3.",need:[],ok:[],
+  has:"",q:"It illuminates, and it knows itself as illuminating. It reveals, and it lives in its own revealing.",ref:"§4",
+  v:"Nothing is missing. This is Prakāśa and Vimarśa together, the one Reality the course calls Consciousness-Energy (§5)."}
+];
+var rowsEl=$("rows"),doneN=0;
+function setHas(a,k){return a.indexOf(k)>=0}
+ROWS.forEach(function(r,i){
+  var art=mk("article","row"+(i===5?" final":""));
+  var top=mk("div","top");top.appendChild(mk("h3",null,r.n));top.appendChild(mk("span","kind",r.kind));art.appendChild(top);
+  art.appendChild(mk("p","desc",r.d));
+  var grp=mk("div","chips");grp.setAttribute("role","group");grp.setAttribute("aria-label","What is absent from "+r.n.toLowerCase()+"?");
+  var chips={};
+  KEYS.forEach(function(k){
+    var c=mk("button","chip",T[k]+" <i>absent?</i>");c.type="button";c.setAttribute("aria-pressed","false");c.setAttribute("data-k",k);
+    c.addEventListener("click",function(){
+      var on=c.getAttribute("aria-pressed")!=="true";c.setAttribute("aria-pressed",on?"true":"false");
+      if(on)chips.none.setAttribute("aria-pressed","false");upd()});
+    chips[k]=c;grp.appendChild(c)});
+  var none=mk("button","chip none","Nothing is missing");none.type="button";none.setAttribute("aria-pressed","false");
+  none.addEventListener("click",function(){
+    var on=none.getAttribute("aria-pressed")!=="true";none.setAttribute("aria-pressed",on?"true":"false");
+    if(on)KEYS.forEach(function(k){chips[k].setAttribute("aria-pressed","false")});upd()});
+  chips.none=none;grp.appendChild(none);art.appendChild(grp);
+  var bar=mk("div","bar");var chk=mk("button","btn primary","Check my prediction");chk.type="button";chk.disabled=true;bar.appendChild(chk);art.appendChild(bar);
+  var fb=mk("div","fb");fb.setAttribute("role","status");fb.setAttribute("aria-live","polite");art.appendChild(fb);
+  function sel(){var s=[];KEYS.forEach(function(k){if(chips[k].getAttribute("aria-pressed")==="true")s.push(k)});return s}
+  function any(){return sel().length>0||none.getAttribute("aria-pressed")==="true"}
+  function upd(){chk.disabled=!any()}
+  chk.addEventListener("click",function(){
+    var s=sel(),noneSel=none.getAttribute("aria-pressed")==="true",v;
+    var hits=s.filter(function(k){return setHas(r.need,k)}),
+        extras=s.filter(function(k){return !setHas(r.need,k)&&!setHas(r.ok,k)}),
+        missed=r.need.filter(function(k){return !setHas(s,k)});
+    function list(a){return a.map(function(k){return NAMES[k]}).join(" and ")}
+    if(r.need.length===0){
+      v=noneSel?"That matches the lesson.":"The lesson finds nothing missing here.";
+    }else if(noneSel){
+      v="You chose that nothing is missing. The lesson names "+list(r.need)+" as absent.";
+    }else if(!missed.length&&!extras.length){
+      v="That matches the lesson."+(s.length>r.need.length?" Both of your marks are in the lesson.":"");
+    }else if(!missed.length){
+      v="You have what the lesson names ("+list(r.need)+"). You also marked "+list(extras)+"; the lesson does not say that here, so treat it as your own addition.";
+    }else{
+      v="The lesson names "+list(missed)+" as absent here"+(hits.length?", besides what you marked":"")+".";
+    }
+    fb.innerHTML="";
+    fb.appendChild(mk("p","verdict",v));
+    fb.appendChild(mk("p","quote","“"+r.q+"” <span class=\"ref\">"+r.ref+"</span>"));
+    fb.appendChild(mk("p",null,r.v));
+    if(r.has)fb.appendChild(mk("p","has",r.has));
+    fb.classList.add("show");
+    KEYS.forEach(function(k){var c=chips[k];c.disabled=true;if(setHas(r.need,k))c.classList.add("hit");else if(c.getAttribute("aria-pressed")!=="true")c.classList.add("off")});
+    none.disabled=true;if(r.need.length===0)none.classList.add("hit");
+    chk.hidden=true;art.classList.add("done");
+    doneN++;if(doneN===ROWS.length){$("sum").hidden=false}
+  });
+  rowsEl.appendChild(art);
+});
+
+/* ---------- Part II ---------- */
+var NS="http://www.w3.org/2000/svg";
+var fld=$("field");
+function s(tag,at,txt){var e=document.createElementNS(NS,tag);for(var k in at)e.setAttribute(k,at[k]);if(txt!=null)e.textContent=txt;return e}
+var PA="M150 135 C 250 40, 450 40, 550 135",PB="M150 135 C 250 230, 450 230, 550 135";
+var WID=[2,6,11,17],LAB=["barely marked","lightly worn","worn","deeply worn"];
+var laneA,laneB,edgeA,edgeB,labA,labB,store,dot,pathA,pathB;
+function build(){
+  fld.innerHTML="";
+  fld.appendChild(s("path",{d:PA,"class":"edge",id:"eA","stroke-width":8}));fld.appendChild(s("path",{d:PB,"class":"edge",id:"eB","stroke-width":8}));
+  edgeA=fld.lastChild.previousSibling;edgeB=fld.lastChild;
+  laneA=s("path",{d:PA,"class":"lane",stroke:Core.col["--env"],"stroke-width":3});laneB=s("path",{d:PB,"class":"lane",stroke:Core.col["--obj"],"stroke-width":3});
+  fld.appendChild(laneA);fld.appendChild(laneB);pathA=laneA;pathB=laneB;
+  fld.appendChild(s("circle",{cx:150,cy:135,r:9,fill:Core.col["--ink"]}));
+  fld.appendChild(s("circle",{cx:550,cy:135,r:9,fill:"none",stroke:Core.col["--ink"],"stroke-width":2}));
+  ["A moment","arises"].forEach(function(w,i){fld.appendChild(s("text",{x:132,y:132+i*19,"text-anchor":"end","class":"nm"},w))});
+  ["The next","moment"].forEach(function(w,i){fld.appendChild(s("text",{x:568,y:132+i*19,"text-anchor":"start","class":"nm"},w))});
+  fld.appendChild(s("text",{x:350,y:30,"text-anchor":"middle"},"Path A (the familiar way)"));
+  fld.appendChild(s("text",{x:350,y:262,"text-anchor":"middle"},"Path B (a different way)"));
+  labA=s("text",{x:350,y:112,"text-anchor":"middle","class":"nm"},"");labB=s("text",{x:350,y:168,"text-anchor":"middle","class":"nm"},"");
+  fld.appendChild(labA);fld.appendChild(labB);
+  store=s("g",{});fld.appendChild(store);
+  dot=s("circle",{r:7,fill:Core.col["--att"],opacity:0,stroke:Core.col["--surface"],"stroke-width":2});fld.appendChild(dot);
+}
+var mode="rec";
+var st={rec:{A:4,B:0},liv:{A:3,B:0}};
+var DEF={
+ rec:"The mind is a recording device. Experiences happen to it, it stores them, and over time patterns harden. Suffering is something deposited in the system (§7).",
+ liv:"The mind is a living, self-modifying system. It is “actively constructing, interpreting, reinforcing, and shaping moment by moment”. A pattern is an ongoing process that the system continues to sustain (§7)."
+};
+var READ0={
+ rec:"Take a path and see what is stored. The paths themselves stay as they were.",
+ liv:"Take a path and see what the use does to it."
+};
+function draw(){
+  var c=st[mode];
+  if(mode==="liv"){
+    laneA.setAttribute("stroke-width",WID[c.A]);laneB.setAttribute("stroke-width",WID[c.B]);
+    edgeA.setAttribute("stroke-width",WID[c.A]+7);edgeB.setAttribute("stroke-width",WID[c.B]+7);
+    labA.textContent=LAB[c.A];labB.textContent=LAB[c.B];
+    store.innerHTML="";
+  }else{
+    laneA.setAttribute("stroke-width",3);laneB.setAttribute("stroke-width",3);
+    edgeA.setAttribute("stroke-width",8);edgeB.setAttribute("stroke-width",8);
+    labA.textContent="";labB.textContent="";
+    store.innerHTML="";
+    [["A",c.A,Core.col["--env"],86],["B",c.B,Core.col["--obj"],150]].forEach(function(p){
+      var n=Math.min(p[1],14);
+      for(var i=0;i<n;i++){
+        var cx=262+(i%7)*26,cy=p[3]+(i<7?0:19);
+        store.appendChild(s("rect",{x:cx,y:cy,width:18,height:14,rx:3,fill:p[2],opacity:.85}));
+      }
+      if(n)store.appendChild(s("text",{x:252,y:p[3]+12,"text-anchor":"end"},"stored"));
+    });
+  }
+}
+function setMode(m){
+  mode=m;
+  Array.prototype.forEach.call($("gmSeg").children,function(b){b.setAttribute("aria-pressed",b.getAttribute("data-m")===m?"true":"false")});
+  $("gDef").textContent=DEF[m];$("gRead").textContent=READ0[m];draw();
+}
+function msg(k){
+  var c=st[mode],t;
+  if(mode==="rec"){
+    t=k==="A"?"Another moment by the familiar path is stored. The path itself is unchanged. On this picture, the question is how to extract what was deposited or work around it (§7)."
+              :"The moment by a different path is stored too. Nothing about the paths has changed, and nothing here shapes what happens next (§7).";
+  }else if(k==="A"){
+    t=c.A>=3?"The familiar path is already deeply worn, and use keeps it so. “A person who repeatedly rehearses worry strengthens the neural circuits that generate worry” (§7)."
+            :"Use wears the path deeper (§7).";
+  }else{
+    t=c.B>=c.A?"Now there are two worn paths. Nothing was removed: “the same expressive power that wore them can wear different grooves” (§7)."
+              :"A different path, taken again, begins to wear its own groove: “the same self-modifying power that built them can build differently” (§7).";
+  }
+  $("gRead").textContent=t;
+}
+function walk(k){
+  var c=st[mode];
+  if(mode==="liv")c[k]=Math.min(3,c[k]+1);else c[k]=Math.min(14,c[k]+1);
+  var path=k==="A"?pathA:pathB;
+  function fin(){dot.setAttribute("opacity",0);draw();msg(k)}
+  if(reduce||!path.getTotalLength){fin();return}
+  var L=path.getTotalLength(),t0=null,D=800;
+  dot.setAttribute("opacity",1);
+  function step(ts){if(t0==null)t0=ts;var p=Math.min(1,(ts-t0)/D),pt=path.getPointAtLength(L*p);dot.setAttribute("cx",pt.x);dot.setAttribute("cy",pt.y);if(p<1)requestAnimationFrame(step);else fin()}
+  requestAnimationFrame(step);
+}
+Array.prototype.forEach.call($("gmSeg").children,function(b){b.addEventListener("click",function(){setMode(b.getAttribute("data-m"))})});
+$("wA").addEventListener("click",function(){walk("A")});
+$("wB").addEventListener("click",function(){walk("B")});
+$("gReset").addEventListener("click",function(){st={rec:{A:4,B:0},liv:{A:3,B:0}};setMode(mode)});
+build();setMode("rec");
+Core.onTheme(function(){var m=mode;build();setMode(m)});
+
+/* question */
+var gq=$("gqChoices"),gqFb=$("gqFb");
+Array.prototype.forEach.call(gq.children,function(b){b.addEventListener("click",function(){
+  var k=b.getAttribute("data-k");
+  Array.prototype.forEach.call(gq.children,function(x){x.disabled=true;if(x.getAttribute("data-k")==="rec")x.classList.add("right")});
+  b.classList.add("pick");
+  gqFb.innerHTML="";
+  gqFb.appendChild(mk("p","verdict",k==="rec"?"Yes, that is the recording picture.":"That is the first picture, the recording device."));
+  gqFb.appendChild(mk("p","quote","“On this picture, suffering is something that has been deposited in the system, and the question is how to extract it or work around it.” <span class=\"ref\">§7</span>"));
+  gqFb.appendChild(mk("p",null,"The second picture sees the same patterns as “ongoing processes that the system continues to sustain”, and so as something that “can be reshaped”. This is a description of two pictures, not a judgement of anyone who speaks in the first."));
+  gqFb.classList.add("show");
+})});
+})();
+
+</script>
+</body></html>

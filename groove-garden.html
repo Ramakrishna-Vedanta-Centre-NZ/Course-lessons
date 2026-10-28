@@ -1,0 +1,637 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Groove Garden</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Source+Sans+3:ital,wght@0,400;0,600;1,400&family=Spectral:ital,wght@0,400;0,500;1,400&display=swap">
+<style>
+:root{
+  --bg:#F2F5F9; --surface:#FFFFFF; --ink:#13203A; --muted:#58647D; --line:#D3DAE6; --tint:#E7EDF6;
+  --obj:#0B8686; --att:#C95F06; --res:#2E3192; --env:#C0245B; --ok:#1B7A52;
+  --display:"Spectral",Georgia,"Times New Roman",serif;
+  --body:"Source Sans 3",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0B1120; --surface:#121A2D; --ink:#E7ECF6; --muted:#9AA6BF; --line:#26324D; --tint:#1A2540;
+    --obj:#46CFC6; --att:#F5A04D; --res:#A3AAFF; --env:#FF7BA9; --ok:#5BD59B; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0B1120; --surface:#121A2D; --ink:#E7ECF6; --muted:#9AA6BF; --line:#26324D; --tint:#1A2540;
+  --obj:#46CFC6; --att:#F5A04D; --res:#A3AAFF; --env:#FF7BA9; --ok:#5BD59B; color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;
+  padding-left:max(14px,env(safe-area-inset-left,0px));padding-right:max(14px,env(safe-area-inset-right,0px));padding-block:22px 40px}
+.wrap{max-width:900px;margin:0 auto;display:flex;flex-direction:column;gap:32px}
+h1,h2,h3{font-family:var(--display);font-weight:500;text-wrap:balance;margin:0;letter-spacing:-.01em}
+h1{font-size:clamp(30px,5.4vw,44px);line-height:1.06}
+h2{font-size:clamp(23px,3.4vw,29px);line-height:1.15}
+h3{font-size:19px;line-height:1.25}
+p{margin:0}
+sub{font-size:.72em;line-height:0}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.lede{font-size:17.5px;max-width:64ch}
+.intro{max-width:66ch;color:var(--muted)}
+header{display:flex;flex-direction:column;gap:12px}
+section{display:flex;flex-direction:column;gap:18px;min-width:0}
+.sym{font-family:var(--mono);font-size:.92em;white-space:nowrap}
+.k-obj{color:var(--obj)} .k-att{color:var(--att)} .k-res{color:var(--res)} .k-env{color:var(--env)}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px;display:flex;flex-direction:column;gap:14px;min-width:0}
+.bar{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;justify-content:space-between}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--bg)}
+.seg button{font:inherit;font-size:14px;color:var(--muted);background:transparent;border:0;padding:8px 13px;cursor:pointer}
+.seg button+button{border-left:1px solid var(--line)}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--surface)}
+button:focus-visible,input:focus-visible{outline:2px solid var(--res);outline-offset:2px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{font:inherit;font-size:14px;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:7px 13px;cursor:pointer;display:inline-flex;gap:8px;align-items:center}
+.chip i{font-style:normal;font-family:var(--mono);font-size:11px;color:var(--muted)}
+.chip[aria-pressed="true"]{background:var(--res);border-color:var(--res);color:#fff}
+.chip[aria-pressed="true"] i{color:#fff;opacity:.8}
+.chip:disabled{cursor:default}
+.chip.reached:not([aria-pressed="true"]){border-color:var(--res)}
+.btn{font:inherit;font-size:14px;color:var(--ink);background:var(--surface);border:1px solid var(--ink);border-radius:8px;padding:8px 16px;cursor:pointer}
+.btn.primary{background:var(--ink);color:var(--surface)}
+.btn.ghost{border-color:var(--line);color:var(--muted)}
+.scope-wrap{position:relative;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--bg)}
+canvas{display:block;width:100%}
+.playbtn{position:absolute;right:8px;bottom:8px;font:inherit;font-size:12px;background:var(--surface);color:var(--muted);border:1px solid var(--line);border-radius:6px;padding:4px 10px;cursor:pointer}
+.box{border:1px solid var(--line);border-radius:8px;background:var(--bg);padding:10px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.box .cap{font-size:12px;color:var(--muted)}
+.meters{display:flex;flex-direction:column;gap:9px}
+.meter{display:grid;grid-template-columns:1fr auto;gap:2px 8px;font-size:13px;align-items:baseline}
+.meter b{font-weight:600}
+.meter output{font-family:var(--mono);font-size:12px;color:var(--muted)}
+.meter .track{grid-column:1/-1;height:7px;background:var(--line);border-radius:4px;overflow:hidden}
+.meter .fill{height:100%;width:0;background:var(--res);border-radius:4px}
+.meter.f2 .fill{background:var(--env)} .meter.f3 .fill{background:var(--obj)}
+.slider{display:flex;align-items:center;gap:10px;flex:1 1 280px;min-width:0}
+.slider label{font-size:14px;min-width:0}
+.slider input[type=range]{flex:1;min-width:60px;accent-color:var(--res)}
+.slider small{color:var(--muted);font-size:12px;white-space:nowrap}
+.slider output{font-family:var(--mono);font-size:12.5px;color:var(--muted);min-width:46px;text-align:right}
+.readout{font-size:14px;color:var(--muted)}
+.readout b{color:var(--ink)}
+.tag{font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);border:1px solid var(--line);border-radius:4px;padding:2px 6px}
+.note{font-size:13px;color:var(--muted);max-width:70ch}
+.balance{background:var(--tint);border-radius:10px;padding:16px 18px;display:flex;flex-direction:column;gap:8px;max-width:78ch}
+footer{font-size:13px;color:var(--muted);max-width:76ch;border-top:1px solid var(--line);padding-top:12px}
+@media (max-width:640px){.panel{padding:12px}.wrap{gap:26px}}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
+
+:root{--c-field:var(--obj);--c-seed:var(--att);--c-plant:var(--res);--c-react:var(--env);--c-clear:var(--att);--c-keep:var(--ok)}
+nav.parts{display:flex;flex-wrap:wrap;gap:8px 20px;margin-top:4px}
+nav.parts a{color:var(--ink);text-decoration:none;border-bottom:1px solid var(--line);padding-bottom:2px;font-size:15px}
+nav.parts a:hover,nav.parts a:focus-visible{border-color:var(--res);color:var(--res)}
+.scene{border-left:3px solid var(--line);padding:2px 0 2px 12px;display:flex;flex-direction:column;gap:6px;font-family:var(--display);font-size:18px}
+.msg{min-height:1.5em;font-size:15px}
+.msg.ok{color:var(--ok)}
+/* part 1 */
+.cardtray{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.sc{font:inherit;font-size:14.5px;line-height:1.4;text-align:left;border:1.5px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);padding:10px 12px;cursor:pointer;min-width:0}
+.sc[aria-pressed="true"]{background:var(--surface);box-shadow:0 0 0 2px var(--ink)}
+.sc.wrong{animation:shake .35s}
+@keyframes shake{25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
+.cardtray:empty::after{content:"All statements are placed.";color:var(--muted);font-size:14px}
+.bins{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.bin{font:inherit;text-align:left;border:1.5px dashed var(--line);border-top:4px solid var(--line);border-radius:10px;background:transparent;color:var(--ink);padding:10px 11px;cursor:pointer;display:flex;flex-direction:column;gap:6px;min-width:0;min-height:96px}
+.bin b{font-family:var(--display);font-size:18px;font-weight:500;line-height:1.2}
+.bin small{font-size:12.5px;color:var(--muted);line-height:1.35}
+.bin ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:5px}
+.bin li{font-size:12.5px;line-height:1.35;color:var(--ink);background:var(--tint);border-radius:6px;padding:4px 7px}
+.bin[data-b="field"]{border-top-color:var(--c-field)} .bin[data-b="field"] b{color:var(--c-field)}
+.bin[data-b="seed"]{border-top-color:var(--c-seed)} .bin[data-b="seed"] b{color:var(--c-seed)}
+.bin[data-b="plant"]{border-top-color:var(--c-plant)} .bin[data-b="plant"] b{color:var(--c-plant)}
+.bin[data-b="none"]{border-top-color:var(--muted)} .bin[data-b="none"] b{color:var(--muted)}
+.fig{width:100%;max-width:620px;height:auto;display:block;margin:0 auto}
+.soil{fill:var(--tint)} .surf{stroke:var(--muted);stroke-width:1.5}
+.seedA{fill:var(--c-seed)} .plantA{fill:none;stroke:var(--c-plant);stroke-width:4;stroke-linecap:round}
+.leafA{fill:var(--c-plant);opacity:.8} .plantTop{fill:var(--c-plant)}
+.legend3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.lg{border-top:3px solid var(--line);padding-top:7px;display:flex;flex-direction:column;gap:2px;font-size:13.5px;color:var(--muted)}
+.lg b{font-family:var(--display);font-size:17px;font-weight:500}
+.lg[data-k="field"]{border-color:var(--c-field)} .lg[data-k="field"] b{color:var(--c-field)}
+.lg[data-k="seed"]{border-color:var(--c-seed)} .lg[data-k="seed"] b{color:var(--c-seed)}
+.lg[data-k="plant"]{border-color:var(--c-plant)} .lg[data-k="plant"] b{color:var(--c-plant)}
+.lg[data-k="react"]{border-color:var(--c-react)} .lg[data-k="react"] b{color:var(--c-react)}
+.lg[data-k="clear"]{border-color:var(--c-clear)} .lg[data-k="clear"] b{color:var(--c-clear)}
+.lg[data-k="keep"]{border-color:var(--c-keep)} .lg[data-k="keep"] b{color:var(--c-keep)}
+/* garden */
+#garden .soilG{fill:var(--tint)} #garden .surfG{stroke:var(--muted);stroke-width:1.5}
+#garden .gcover{fill:var(--surface)} #garden .gwater{fill:var(--c-react);opacity:.14}
+#garden .gline{fill:none;stroke:var(--ink);stroke-width:1.6;stroke-linejoin:round}
+#garden .sdR{fill:var(--c-react)} #garden .sdC{fill:var(--c-clear)} #garden .sdK{fill:var(--c-keep)}
+#garden .stR{fill:none;stroke:var(--c-react);stroke-width:4;stroke-linecap:round}
+#garden .stC{fill:none;stroke:var(--c-clear);stroke-width:4;stroke-linecap:round}
+#garden .lfR{fill:var(--c-react);opacity:.8} #garden .lfC{fill:var(--c-clear);opacity:.85}
+#garden .drop{fill:var(--ink)}
+.states{display:flex;flex-wrap:wrap;gap:8px 26px;font-size:15px;align-items:baseline}
+.states b{font-family:var(--display);font-size:19px;font-weight:500}
+.history{display:flex;flex-direction:column;gap:4px}
+.hrow{height:38px;display:flex;align-items:flex-end;gap:4px;border-bottom:1px solid var(--line)}
+.hrow i{display:block;width:9px;border-radius:2px 2px 0 0;flex:0 0 auto}
+.hrow i.t{background:var(--c-react)} .hrow i.p{background:var(--c-clear)}
+.hrow i.s{background:var(--muted);opacity:.6;height:5px!important} .hrow i.q{background:transparent;border:1.5px solid var(--muted);height:7px!important;border-radius:4px}
+.acts{display:flex;flex-direction:column;gap:14px}
+.actgrp{display:flex;flex-direction:column;gap:8px}
+.actgrp .btn{text-align:left}
+.btn:disabled{opacity:.45;cursor:default}
+.fbbox{border-top:1px solid var(--line);padding-top:12px;display:flex;flex-direction:column;gap:8px;min-height:7.5em}
+.fbbox .verdict{font-family:var(--display);font-size:19px}
+.fbbox .ref{font-family:var(--mono);font-size:11px;color:var(--muted)}
+.loopstrip{display:flex;flex-direction:column;gap:6px}
+.loopstrip ol{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:6px}
+.loopstrip li{font-size:12.5px;border:1px solid var(--line);border-radius:999px;padding:3px 10px;color:var(--muted);background:var(--bg);transition:background .2s,color .2s,border-color .2s}
+.loopstrip li:not(:last-child)::after{content:"→";margin-left:8px;color:var(--muted)}
+.loopstrip li.on{background:var(--c-react);border-color:var(--c-react);color:#fff}
+.loopstrip li.on::after{color:var(--muted)}
+.eqs summary{cursor:pointer;font-size:15px;color:var(--ink)}
+.eqs summary:focus-visible{outline:2px solid var(--res);outline-offset:3px}
+.eqbody{display:flex;flex-direction:column;gap:10px;padding-top:10px}
+.eq{font-size:16px;white-space:normal}
+.eqlist{margin:0;padding-left:18px;font-size:14px;color:var(--muted);display:flex;flex-direction:column;gap:4px}
+.eqlist li.on{color:var(--ink)} .eqlist li.on b{color:var(--c-react)}
+/* part 3 */
+.field6{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;background:var(--tint);border-top:2px solid var(--muted);border-radius:4px 4px 10px 10px;padding:14px 10px 10px}
+.sd{background:var(--surface);border:1.5px solid var(--line);border-top-width:4px;border-radius:10px;padding:10px;display:flex;flex-direction:column;gap:6px;align-items:flex-start;min-width:0;font-size:14px;line-height:1.35;transition:opacity .4s,border-color .4s}
+.sd svg{width:34px;height:30px;flex:0 0 auto}
+.sd .st{font-family:var(--mono);font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.sd[data-k="react"]{border-top-color:var(--c-react)} .sd[data-k="react"] .gl{fill:var(--c-react)}
+.sd[data-k="keep"]{border-top-color:var(--c-keep)} .sd[data-k="keep"] .gl{fill:var(--c-keep)}
+.sd[data-k="clear"]{border-top-color:var(--c-clear)} .sd[data-k="clear"] .gl{fill:var(--c-clear)}
+.sd.weak{opacity:.55}
+.sd.weak .gl{opacity:.5}
+.sd.gone{background:transparent;border-style:dashed;border-top-style:dashed;border-top-color:var(--line);color:var(--muted)}
+.sd.gone .gl{fill:none;stroke:var(--line);stroke-width:1.5;stroke-dasharray:3 3}
+.cmp{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1fr) minmax(0,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:8px;overflow:hidden;font-size:14px}
+.cmp>div{background:var(--surface);padding:9px 10px;min-width:0}
+.cmp .h{font-family:var(--display);font-size:16px;background:var(--tint)}
+.cmp .rl{color:var(--muted)}
+@media (prefers-reduced-motion: reduce){.sc.wrong{animation:none}.loopstrip li,.sd{transition:none}}
+@media (max-width:760px){
+  .bins{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .legend3{grid-template-columns:minmax(0,1fr)}
+  .field6{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:520px){
+  .cardtray{grid-template-columns:minmax(0,1fr)}
+  .cmp{grid-template-columns:minmax(0,1fr)}
+  .cmp .h.corner{display:none}
+  .cmp .rl{background:var(--tint);font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.06em}
+  .cmp>div[data-col]::before{content:attr(data-col) ": ";font-weight:600}
+  .cmp .h{display:none}
+}
+body[data-part] header{display:none}
+body[data-part="1"] #s2,body[data-part="1"] #s3,
+body[data-part="2"] #s1,body[data-part="2"] #s3,
+body[data-part="3"] #s1,body[data-part="3"] #s2{display:none}
+body[data-part]{padding-block:10px 18px}
+
+.scene .tag{align-self:flex-start}
+
+</style></head><body>
+<div class="wrap">
+<header>
+  <div class="eyebrow">The Mind in the Light of Modern and Spiritual Sciences · Lesson 2.6</div>
+  <h1>Groove Garden</h1>
+  <p class="lede">Chitta is the mind-field in which experience leaves traces. Here you will first sort the three words the lesson holds together, then watch one small trigger meet one stored impression again and again, and finally compare two ways of imagining change: erasing the field, or replacing what is reactive in it.</p>
+  <nav class="parts" aria-label="Parts of this page"><a href="#s1">I. Field, seed or plant?</a><a href="#s2">II. The same trigger, again</a><a href="#s3">III. Erase or replace?</a></nav>
+</header>
+
+<section id="s1">
+  <h2>I. Field, seed or plant?</h2>
+  <p class="intro">The lesson relates three terms: chitta, saṁskāra and vṛtti. Take each statement below and place it where it belongs. A few statements describe something else entirely.</p>
+  <div class="panel">
+    <div class="bar"><span class="tag" id="sPro">0 of 10 placed</span><span class="note">Tap a statement, then tap its place.</span></div>
+    <div class="cardtray" id="sTray" aria-label="Statements to place"></div>
+    <div class="bins" id="sBins" role="group" aria-label="Places"></div>
+    <div id="sMsg" class="msg" role="status" aria-live="polite"></div>
+    <div class="bar"><button class="btn ghost" id="sShow">Show me</button><button class="btn ghost" id="sReset">Start again</button></div>
+  </div>
+  <div class="panel" id="sDone" hidden>
+    <h3>The field, the seed, the plant</h3>
+    <svg id="figA" class="fig" viewBox="0 0 480 190" role="img" aria-labelledby="faT faD"><title id="faT">A field with a buried seed and a plant growing from it</title><desc id="faD">A band of soil represents chitta. Seeds rest inside it, representing saṁskāras. One seed has sent up a wavy plant, representing a vṛtti that has been stirred.</desc>
+      <rect class="soil" x="0" y="112" width="480" height="78"/><line class="surf" x1="0" y1="112" x2="480" y2="112"/>
+      <ellipse class="seedA" cx="80" cy="152" rx="9" ry="6"/><ellipse class="seedA" cx="170" cy="164" rx="9" ry="6"/>
+      <ellipse class="seedA" cx="300" cy="150" rx="9" ry="6"/><ellipse class="seedA" cx="410" cy="166" rx="9" ry="6"/>
+      <path class="plantA" id="figStem" d="M 240 152 C 232 130 250 114 240 92 C 232 74 248 58 240 36"/>
+      <ellipse class="seedA" cx="240" cy="156" rx="9" ry="6"/>
+      <ellipse class="leafA" cx="226" cy="102" rx="12" ry="5" transform="rotate(-25 226 102)"/><ellipse class="leafA" cx="256" cy="72" rx="12" ry="5" transform="rotate(25 256 72)"/>
+      <circle class="plantTop" cx="240" cy="32" r="8"/>
+    </svg>
+    <div class="legend3">
+      <div class="lg" data-k="field"><b>Chitta, the field</b><span>The retentive ground. Not destroyed, and not to be.</span></div>
+      <div class="lg" data-k="seed"><b>Saṁskāra, the seed</b><span>The stored impression, latent beneath the surface.</span></div>
+      <div class="lg" data-k="plant"><b>Vṛtti, the plant</b><span>The active formation that grows when a seed is stirred.</span></div>
+    </div>
+    <p class="note">§3: “chitta is the field, saṁskāra is the seed, and vṛtti is the plant that grows from the seed when conditions are right.” The seed is stirred by present experience, memory, desire, fear or attention. It does not rise at random. Part II lets you stir one.</p>
+  </div>
+</section>
+
+<section id="s2">
+  <h2>II. The same trigger, again</h2>
+  <p class="intro">Here is a garden with one old impression in it, about making mistakes. It is faint to begin with. The trigger is always the same small thing. Watch what the field does with it, then try what the lesson says does and does not help.</p>
+  <div class="panel" id="gg">
+    <div class="scene"><span class="tag">The trigger</span><p>A small slip is noticed. No one is criticising.</p></div>
+    <svg id="garden" class="fig" viewBox="0 24 480 236" role="img" aria-labelledby="gT gD"><title id="gT">The garden</title><desc id="gD">A cross-section of the field.</desc></svg>
+    <div class="legend3 lg2">
+      <div class="lg" data-k="react"><b>An old impression</b><span>Reactive. Formed long ago, under conditions that are over.</span></div>
+      <div class="lg" data-k="clear"><b>Clearer impressions</b><span>Grown by practice. They appear only as you practise.</span></div>
+      <div class="lg" data-k="keep"><b>Kept in the field</b><span>Skill, calm, compassion. Untouched by all of this.</span></div>
+    </div>
+    <div class="states">
+      <div><span class="tag">groove in chitta</span> <b id="gGroove">faint</b></div>
+      <div><span class="tag">response to the same trigger</span> <b id="gResp">none yet</b></div>
+    </div>
+    <div class="history" aria-hidden="true"><div class="hrow" id="gHist"></div><span class="note">Each mark is one event: pink, how large the response was; grey, a moment of insight; amber, a session of practice; hollow, a quiet while. No units, no scores.</span></div>
+
+    <div class="acts">
+      <div class="actgrp"><span class="eyebrow">Let life happen</span>
+        <div class="chips"><button class="btn primary" id="aTrig">A small slip is noticed</button><button class="btn" id="aMany">Again, many times over</button><button class="btn" id="aQuiet">A quiet while: nothing stirs</button></div></div>
+      <div class="actgrp"><span class="eyebrow">Reflect</span>
+        <div class="chips"><button class="btn" id="aInsight">A moment of insight: “this reaction is out of proportion”</button></div></div>
+      <div class="actgrp"><span class="eyebrow">Practise (one session each)</span>
+        <div class="chips" id="aPrac"></div>
+        <div class="chips"><button class="btn" id="aLong">Keep practising for a long while</button><button class="btn ghost" id="aReset">Start again</button></div></div>
+    </div>
+    <div id="gMsg" class="msg fbbox" role="status" aria-live="polite"><p class="verdict">Nothing has happened yet.</p><p>The old impression is latent. Nothing grows until something stirs it. Begin with the trigger.</p></div>
+
+    <div class="loopstrip"><span class="eyebrow">§5.2 The pattern-continuity loop</span><ol id="gLoop"></ol></div>
+    <details class="eqs"><summary>Read it as the lesson’s two equations</summary>
+      <div class="eqbody">
+        <p class="eq sym">ψ<sub>exp</sub>(t) = f[ψ<sub>x</sub>(t), h(t), ψ<sub>m</sub>(t)]</p>
+        <p class="note">What you experience depends on what is happening, ψ<sub>x</sub>(t); on the state of the mind-field, h(t); and on where attention is directed, ψ<sub>m</sub>(t). Here the input is the same every time, and attention is not varied. What changes is the field, h(t).</p>
+        <p class="eq sym">h(t+1) = h(t) + new impressions − weakening or transformation</p>
+        <ul class="eqlist">
+          <li id="eqT"><b>A trigger:</b> a new reactive impression is added, and little is weakened.</li>
+          <li id="eqI"><b>A moment of insight:</b> almost nothing is weakened.</li>
+          <li id="eqP"><b>A session of practice:</b> a clearer impression is added, and a reactive one weakens a little.</li>
+        </ul>
+        <p class="note">A qualitative picture of the lesson’s model. It does not measure anyone.</p>
+      </div>
+    </details>
+  </div>
+  <div class="balance">
+    <h3>Hold this gently</h3>
+    <p>A deep groove is not a personal failing. The lesson frames persistent patterns as retained impressions, formed under particular conditions, that are now doing what impressions do (§8). “The person is not weak or broken.”</p>
+  </div>
+</section>
+
+<section id="s3">
+  <h2>III. Erase or replace?</h2>
+  <p class="intro">Imagine the field holds six impressions: three that are reactive, distorted or fear-based, and three worth keeping. Choose how change is to be imagined, then act on it.</p>
+  <div class="panel" id="er">
+    <div class="bar"><div class="seg" id="erSeg" role="group" aria-label="Way of changing the field"><button data-m="erase" aria-pressed="true">Erase everything</button><button data-m="replace" aria-pressed="false">Replace gradually</button></div></div>
+    <div class="field6" id="erField"></div>
+    <div class="bar"><div class="chips"><button class="btn primary" id="erGo">Erase the field</button><button class="btn" id="erFast" hidden>Keep practising</button><button class="btn ghost" id="erReset">Start again</button></div></div>
+    <div id="erMsg" class="msg fbbox" role="status" aria-live="polite"></div>
+  </div>
+  <div class="panel" id="erCmp" hidden>
+    <h3>Side by side</h3>
+    <div class="cmp" id="erTable"></div>
+  </div>
+  <div class="balance">
+    <h3>Chitta is the basis of both bondage and growth</h3>
+    <p>The same mind-field that retains painful patterns also retains spiritual insight, noble tendencies, devotional feeling, refined discrimination, the fruits of practice, the capacity for compassion and moments of genuine peace (§7). Chitta-śuddhi is understood “not as punishment or self-correction, but as the natural process by which the mind-field becomes progressively more transparent to the light of Consciousness” (§9.4).</p>
+  </div>
+</section>
+<footer>A learning aid based on Lesson 2.6, not an assessment. It illustrates the lesson’s qualitative model of the mind-field and does not measure, diagnose or advise on any person’s situation. For help with distress, please speak with a qualified professional or someone you trust.</footer>
+</div>
+
+<script>
+window.Core=(function(){
+"use strict";
+var TAU=Math.PI*2;
+try{var q=new URLSearchParams(location.search).get("theme");if(q==="light"||q==="dark")document.documentElement.setAttribute("data-theme",q)}catch(e){}
+function lerp(a,b,t){return a+(b-a)*t}
+function clamp(x,a,b){return Math.max(a,Math.min(b,x))}
+function el(id){return document.getElementById(id)}
+var col={},subs=[];
+function readColors(){
+  var cs=getComputedStyle(document.documentElement);
+  ["--bg","--surface","--ink","--muted","--line","--tint","--obj","--att","--res","--env","--ok"].forEach(function(k){col[k]=cs.getPropertyValue(k).trim()});
+  subs.forEach(function(f){try{f()}catch(e){}});
+}
+readColors();
+try{window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change",readColors)}catch(e){}
+new MutationObserver(readColors).observe(document.documentElement,{attributes:true,attributeFilter:["data-theme"]});
+function onTheme(f){subs.push(f)}
+var dpr=Math.max(1,Math.min(2,window.devicePixelRatio||1));
+function fit(c){
+  var w=c.clientWidth,h=c.clientHeight;
+  if(!w||!h)return null;
+  var bw=Math.round(w*dpr),bh=Math.round(h*dpr);
+  if(c.width!==bw||c.height!==bh){c.width=bw;c.height=bh}
+  var g=c.getContext("2d");g.setTransform(dpr,0,0,dpr,0,0);return {g:g,w:w,h:h};
+}
+var FONT="500 11.5px 'Source Sans 3',system-ui,sans-serif";
+function label(g,t,x,y,color,align,pill){
+  g.font=FONT;g.textAlign=align||"left";g.textBaseline="alphabetic";
+  if(pill){var w=g.measureText(t).width,x0=(align==="right")?x-w:(align==="center"?x-w/2:x);
+    g.save();g.globalAlpha=.82;g.fillStyle=col["--surface"];g.fillRect(x0-5,y-12,w+10,17);g.restore()}
+  g.fillStyle=color;g.fillText(t,x,y)}
+/* ring-buffer trace: arr, head index, length N */
+function trace(g,arr,head,N,x0,w,cy,sc,color,lw,alpha,dash){
+  g.save();g.globalAlpha=alpha==null?1:alpha;g.strokeStyle=color;g.lineWidth=lw;g.lineJoin="round";if(dash)g.setLineDash(dash);
+  g.beginPath();
+  for(var i=0;i<N;i++){var v=arr[(head+i)%N];var x=x0+w*i/(N-1),y=cy-v*sc;if(i)g.lineTo(x,y);else g.moveTo(x,y)}
+  g.stroke();g.restore();
+}
+/* shaded envelope band around a lane centre */
+function envelope(g,E,head,N,W,cy,sc,color,alpha){
+  g.save();g.globalAlpha=alpha;
+  g.beginPath();
+  for(var i=0;i<N;i++){var e=E[(head+i)%N],x=W*i/(N-1),y=cy-e*sc;if(i)g.lineTo(x,y);else g.moveTo(x,y)}
+  for(var j=N-1;j>=0;j--){var e2=E[(head+j)%N],x2=W*j/(N-1);g.lineTo(x2,cy+e2*sc)}
+  g.closePath();g.fillStyle=color;g.globalAlpha=.09*alpha;g.fill();g.restore();
+  g.save();g.globalAlpha=alpha;g.strokeStyle=color;g.lineWidth=1.6;g.setLineDash([6,4]);
+  [1,-1].forEach(function(sg){g.beginPath();for(var i2=0;i2<N;i2++){var ee=E[(head+i2)%N]*sg,xx=W*i2/(N-1),yy=cy-ee*sc;if(i2)g.lineTo(xx,yy);else g.moveTo(xx,yy)}g.stroke()});
+  g.restore();
+}
+return {TAU:TAU,lerp:lerp,clamp:clamp,el:el,col:col,onTheme:onTheme,fit:fit,label:label,trace:trace,envelope:envelope,FONT:FONT};
+})();
+
+</script>
+<script>
+(function(){
+"use strict";
+var $=Core.el;
+try{var pt=new URLSearchParams(location.search).get("part");if(pt==="1"||pt==="2"||pt==="3")document.body.setAttribute("data-part",pt)}catch(e){}
+var RM=false;try{RM=window.matchMedia("(prefers-reduced-motion: reduce)").matches}catch(e){}
+function mk(tag,cls,html){var e=document.createElement(tag);if(cls)e.className=cls;if(html!=null)e.innerHTML=html;return e}
+var NS="http://www.w3.org/2000/svg";
+function sv(t,a,p){var e=document.createElementNS(NS,t);for(var k in a)e.setAttribute(k,a[k]);if(p)p.appendChild(e);return e}
+function tween(ms,fn){return new Promise(function(res){
+  if(RM||ms<=0){fn(1);res();return}
+  var t0=null;function step(t){if(t0==null)t0=t;var u=Math.min(1,(t-t0)/ms);fn(u<.5?2*u*u:1-Math.pow(-2*u+2,2)/2);if(u<1)requestAnimationFrame(step);else res()}
+  requestAnimationFrame(step)})}
+function wait(ms){return new Promise(function(r){setTimeout(r,RM?0:ms)})}
+
+/* ===== Part I: sorter ===== */
+var BINS=[
+ {k:"field",n:"Chitta, the field",d:"The retentive mind-field"},
+ {k:"seed",n:"Saṁskāra, the seed",d:"The stored, latent impression"},
+ {k:"plant",n:"Vṛtti, the plant",d:"The active formation, arising now"},
+ {k:"none",n:"None of these",d:"Something else"}
+];
+var CARDS=[
+ {t:"A thought, image, emotion or reaction arising now",b:"plant",why:"Yes, a vṛtti: the active mental formation that arises in the field when stored impressions are stirred (§3).",hint:"This one is active and happening now, not stored. Look again at §3."},
+ {t:"The retentive dimension of the mind, where experience leaves traces",b:"field",why:"Yes, chitta: the retentive or store-bearing aspect of the mind, the subtle field in which experience leaves traces (§1, §3).",hint:"This describes the whole ground in which traces are left, not one trace. See §1 and §3."},
+ {t:"Consciousness itself",b:"none",why:"Right to set it apart. Chitta is not consciousness itself (§1), and neither are the seed or the plant: they are patterns within the mind-field.",hint:"The lesson says plainly what chitta is not. Look at the first lines of §1."},
+ {t:"A stored formative influence: it does not only record what happened, it shapes what happens next",b:"seed",why:"Yes, a saṁskāra. It is “not just a memory-image”: it is a stored formative influence (§2).",hint:"This is something kept, with a long reach. §2 says what a saṁskāra is more than a memory-image."},
+ {t:"A wave of anxiety about a small error, rising now",b:"plant",why:"Yes, a vṛtti. The stored impression (shame around imperfection) is the seed; the anxiety that rises when a small error is noticed is the plant (§2, §3).",hint:"The word “rising now” matters. Compare the anxiety with the impression that lies behind it (§2, §3)."},
+ {t:"The ground in which what manas, buddhi and ahaṁkāra produce is deposited and preserved",b:"field",why:"Yes, chitta: “the patterned field: the ground in which all the outputs of the other three functions are deposited and preserved” (§1).",hint:"This is the ground that holds everything the other functions produce, not a single item within it (§1)."},
+ {t:"The pattern of competence laid down by years of daily practice",b:"seed",why:"Yes, a saṁskāra, and not every saṁskāra is a burden: the practised musician carries “a pattern of competence” stored in chitta (§2).",hint:"It is stored, and it shows itself without deliberate thought when it is called on (§2)."},
+ {t:"The faculty that discriminates and decides",b:"none",why:"That is buddhi, a different function. Chitta is not the discriminative faculty (§1).",hint:"The lesson names four functions. Which of them is this? §1 sorts them out."},
+ {t:"What citta-vṛtti-nirodha aims to still",b:"plant",why:"Yes: the stilling of the active formations of the mind-field. Not the destruction of chitta, which is “neither possible nor desirable” (§3).",hint:"Nirodha means stilling, and the lesson says what is stilled and what is not. See §3."},
+ {t:"A latent impression, sunk beneath awareness, waiting to be stirred",b:"seed",why:"Yes, a saṁskāra: stored, latent, “waiting to be activated” (§2, §3).",hint:"Latent and waiting: not the field that holds it, not the wave that rises from it (§3)."}
+];
+var placed={},sel=null,N=CARDS.length;
+var tray=$("sTray"),binsEl=$("sBins"),sMsg=$("sMsg");
+function renderSort(){
+  tray.innerHTML="";
+  CARDS.forEach(function(c,i){
+    if(placed[i])return;
+    var b=mk("button","sc",c.t);b.type="button";b.setAttribute("aria-pressed",sel===i?"true":"false");
+    b.addEventListener("click",function(){sel=(sel===i?null:i);sMsg.className="msg";sMsg.textContent="";renderSort()});
+    tray.appendChild(b);
+  });
+  binsEl.innerHTML="";
+  BINS.forEach(function(B){
+    var b=mk("button","bin");b.type="button";b.setAttribute("data-b",B.k);
+    var items=[];CARDS.forEach(function(c,i){if(placed[i]===B.k)items.push("<li>"+c.t+"</li>")});
+    b.innerHTML="<b>"+B.n+"</b><small>"+B.d+"</small>"+(items.length?"<ul>"+items.join("")+"</ul>":"");
+    b.addEventListener("click",function(){drop(B.k,b)});
+    binsEl.appendChild(b);
+  });
+  var n=Object.keys(placed).length;
+  $("sPro").textContent=n+" of "+N+" placed";
+  $("sDone").hidden=(n<N);
+}
+function drop(bk,node){
+  if(sel==null){sMsg.textContent="Tap a statement first.";sMsg.className="msg";return}
+  var c=CARDS[sel];
+  if(c.b===bk){placed[sel]=bk;sel=null;sMsg.textContent=c.why;sMsg.className="msg ok";renderSort();
+    if(Object.keys(placed).length===N){sMsg.textContent=c.why+" All placed.";setTimeout(function(){try{$("sDone").scrollIntoView({behavior:RM?"auto":"smooth",block:"nearest"})}catch(e){}},300)}}
+  else{sMsg.textContent="Not there. "+c.hint;sMsg.className="msg";var sc=tray.querySelector('.sc[aria-pressed="true"]');if(sc){sc.classList.remove("wrong");void sc.offsetWidth;sc.classList.add("wrong")}}
+}
+$("sShow").addEventListener("click",function(){CARDS.forEach(function(c,i){placed[i]=c.b});sel=null;sMsg.textContent="";sMsg.className="msg";renderSort()});
+$("sReset").addEventListener("click",function(){placed={};sel=null;sMsg.textContent="";sMsg.className="msg";renderSort()});
+renderSort();
+
+/* ===== Part II: garden ===== */
+var svg=$("garden");
+var GY=150,CX=240;
+var S={g:.12,c:0,trig:0,hist:[],plantR:0,clearR:0,gShown:.12,cShown:0,last:""};
+var PRACS=["Japa","Meditation","Vigilance","Discrimination","Service","Study of sacred texts"];
+var LOOP=["Experience","Impression","Retention","Reactivation","Tendency","Repeated action","Strengthened impression"];
+var el={};
+function build(){
+  svg.innerHTML="";
+  var t=sv("title",{id:"gT"},svg);t.textContent="The garden: a field with a groove and a stored seed";
+  var d=sv("desc",{id:"gD"},svg);d.id="gD";
+  el.desc=d;
+  sv("rect",{class:"soilG",x:0,y:GY,width:480,height:110},svg);
+  sv("line",{class:"surfG",x1:0,y1:GY,x2:480,y2:GY},svg);
+  el.cover=sv("path",{class:"gcover"},svg);el.water=sv("path",{class:"gwater"},svg);el.line=sv("path",{class:"gline"},svg);
+  /* kept seeds */
+  [[44,188],[80,200],[116,188]].forEach(function(p){sv("ellipse",{class:"sdK",cx:p[0],cy:p[1],rx:9,ry:6},svg)});
+  /* clearer seeds */
+  el.cs=[[330,176],[352,190],[374,176],[396,190]].map(function(p){return sv("ellipse",{class:"sdC",cx:p[0],cy:p[1],rx:8,ry:5.5,opacity:0},svg)});
+  el.clearStem=sv("path",{class:"stC",opacity:0},svg);el.clearLeaf=sv("ellipse",{class:"lfC",rx:10,ry:4.5,opacity:0},svg);el.clearTop=sv("circle",{class:"sdC",r:6,opacity:0},svg);
+  el.stem=sv("path",{class:"stR",opacity:0},svg);el.lf1=sv("ellipse",{class:"lfR",rx:12,ry:5,opacity:0},svg);el.lf2=sv("ellipse",{class:"lfR",rx:12,ry:5,opacity:0},svg);el.top=sv("circle",{class:"sdR",r:7,opacity:0},svg);
+  el.seed=sv("ellipse",{class:"sdR",cx:CX,rx:10,ry:6.5},svg);
+  el.drop=sv("circle",{class:"drop",r:7,opacity:0},svg);
+}
+function depth(g){return 8+g*66}
+function drawGroove(g){
+  var d=depth(g),w=42+g*28,x0=CX-w-18,x1=CX+w+18;
+  var p="M "+x0+" "+GY+" C "+(CX-w+8)+" "+GY+" "+(CX-w*.55)+" "+(GY+d)+" "+CX+" "+(GY+d)+" C "+(CX+w*.55)+" "+(GY+d)+" "+(CX+w-8)+" "+GY+" "+x1+" "+GY;
+  el.line.setAttribute("d",p);el.cover.setAttribute("d",p+" Z");el.water.setAttribute("d",p+" Z");
+  var sy=GY+d-7;el.seed.setAttribute("cy",sy);el.seed.setAttribute("opacity",(.4+.6*g).toFixed(2));
+  el.seed.setAttribute("rx",(8+g*4).toFixed(1));
+  return sy;
+}
+function drawPlant(g,r,s){
+  var sy=GY+depth(g)-12;
+  if(r<=0||s<=0){[el.stem,el.lf1,el.lf2,el.top].forEach(function(n){n.setAttribute("opacity",0)});return}
+  var top=GY-8-(.12+.88*r)*105,y1=sy+(top-sy)*s,pts=[];
+  var amp=3+r*5;
+  for(var k=0;k<=12;k++){var u=k/12;pts.push((k?"L ":"M ")+(CX+Math.sin(u*7)*amp*(.4+u)).toFixed(1)+" "+(sy+(y1-sy)*u).toFixed(1))}
+  el.stem.setAttribute("d",pts.join(" "));el.stem.setAttribute("opacity",1);
+  function at(u){return {x:CX+Math.sin(u*7)*amp*(.4+u),y:sy+(y1-sy)*u}}
+  var a=at(.45),b=at(.72);
+  el.lf1.setAttribute("cx",a.x-11);el.lf1.setAttribute("cy",a.y);el.lf1.setAttribute("transform","rotate(-25 "+(a.x-11)+" "+a.y+")");el.lf1.setAttribute("opacity",s>.4?1:0);
+  el.lf2.setAttribute("cx",b.x+11);el.lf2.setAttribute("cy",b.y);el.lf2.setAttribute("transform","rotate(25 "+(b.x+11)+" "+b.y+")");el.lf2.setAttribute("opacity",s>.6?1:0);
+  var e=at(1);el.top.setAttribute("cx",e.x);el.top.setAttribute("cy",e.y);el.top.setAttribute("r",(4+r*6).toFixed(1));el.top.setAttribute("opacity",s>.8?1:0);
+}
+function drawClear(c,r,s){
+  var th=[.08,.25,.45,.7];
+  el.cs.forEach(function(n,i){n.setAttribute("opacity",c>=th[i]?1:0)});
+  if(r<=0||s<=0||c<.08){[el.clearStem,el.clearLeaf,el.clearTop].forEach(function(n){n.setAttribute("opacity",0)});return}
+  var bx=352,by=GY+22,top=by-12-r*62,y1=by+(top-by)*s,pts=[];
+  for(var k=0;k<=8;k++){var u=k/8;pts.push((k?"L ":"M ")+(bx+Math.sin(u*5)*3*u).toFixed(1)+" "+(by+(y1-by)*u).toFixed(1))}
+  el.clearStem.setAttribute("d",pts.join(" "));el.clearStem.setAttribute("opacity",1);
+  el.clearLeaf.setAttribute("cx",bx+9);el.clearLeaf.setAttribute("cy",by+(y1-by)*.55);el.clearLeaf.setAttribute("opacity",s>.5?1:0);
+  el.clearTop.setAttribute("cx",bx);el.clearTop.setAttribute("cy",y1);el.clearTop.setAttribute("r",(3+r*4).toFixed(1));el.clearTop.setAttribute("opacity",s>.8?1:0);
+}
+function drawAll(ps,cs){
+  drawGroove(S.gShown);drawPlant(S.gShown,S.plantR,ps==null?1:ps);drawClear(S.cShown,S.clearR,cs==null?1:cs);
+}
+function gWord(g){return g<.2?"faint":g<.4?"shallow":g<.6?"worn in":g<.8?"deep":"very deep"}
+function rWord(r){return r<=0?"none yet":r<.3?"a small flicker":r<.55?"a clear response":r<.8?"a strong response":"a large response to a small trigger"}
+function updWords(){
+  $("gGroove").textContent=gWord(S.g);
+  $("gResp").textContent=S.lastResp==null?"none yet":rWord(S.lastResp);
+  var desc="The groove is "+gWord(S.g)+".";if(S.plantR>0)desc+=" A plant of the old impression has grown: "+rWord(S.plantR)+".";if(S.c>=.08)desc+=" Clearer impressions are growing beside it.";
+  el.desc.textContent=desc;svg.setAttribute("aria-label",desc);
+}
+function addHist(k,h){
+  S.hist.push({k:k,h:h});if(S.hist.length>26)S.hist.shift();
+  var row=$("gHist");row.innerHTML="";
+  S.hist.forEach(function(e){var i=mk("i",e.k);if(e.k==="t"||e.k==="p")i.style.height=Math.round(6+e.h*30)+"px";row.appendChild(i)});
+}
+function msg(v,p,ref){$("gMsg").innerHTML='<p class="verdict">'+v+'</p><p>'+p+'</p>'+(ref?'<p class="ref">'+ref+'</p>':"")}
+function eqOn(id){["eqT","eqI","eqP"].forEach(function(i){$(i).classList.toggle("on",i===id)})}
+var loopEl=$("gLoop");LOOP.forEach(function(n){loopEl.appendChild(mk("li",null,n))});
+function loopLight(){var li=loopEl.children;
+  for(var i=0;i<li.length;i++)li[i].classList.remove("on");
+  return new Promise(function(res){
+    if(RM){for(var j=0;j<li.length;j++)li[j].classList.add("on");res();return}
+    var i2=0;(function nx(){if(i2<li.length){li[i2].classList.add("on");i2++;setTimeout(nx,70)}else res()})()})}
+var btns=["aTrig","aMany","aQuiet","aInsight","aLong"].map($);
+var pracBtns=[];
+PRACS.forEach(function(n){var b=mk("button","btn",n);b.type="button";b.addEventListener("click",function(){practise(n)});$("aPrac").appendChild(b);pracBtns.push(b)});
+var busy=false;
+function lock(v){busy=v;btns.concat(pracBtns).forEach(function(b){b.disabled=v})}
+function retractPlant(){
+  if(S.plantR<=0&&S.clearR<=0)return Promise.resolve();
+  return tween(240,function(u){drawPlant(S.gShown,S.plantR,1-u);drawClear(S.cShown,S.clearR,1-u)}).then(function(){S.plantR=0;S.clearR=0;drawAll()})
+}
+function setG(target,ms){var a=S.gShown;return tween(ms,function(u){S.gShown=a+(target-a)*u;drawGroove(S.gShown);drawPlant(S.gShown,S.plantR,1);drawClear(S.cShown,S.clearR,1)})}
+function setC(target,ms){var a=S.cShown;return tween(ms,function(u){S.cShown=a+(target-a)*u;drawClear(S.cShown,S.clearR,1)})}
+function dropTo(){
+  var sy=GY+depth(S.gShown)-20;
+  return tween(420,function(u){
+    var x=70+(CX-70)*u,y=34+(sy-34)*u*u+Math.sin(u*Math.PI)*-18;
+    el.drop.setAttribute("cx",x);el.drop.setAttribute("cy",y);el.drop.setAttribute("opacity",u<1?1:0)})
+}
+function trigger(quick){
+  var g0=S.g,r=g0,c0=S.c;
+  var first=S.trig===0;S.trig++;
+  return retractPlant().then(function(){return dropTo()}).then(function(){
+    S.plantR=r;S.clearR=c0>=.08?c0:0;S.lastResp=r;
+    return Promise.all([tween(quick?260:480,function(u){drawPlant(S.gShown,r,u);drawClear(S.cShown,S.clearR,u)}),loopLight()])
+  }).then(function(){
+    S.g=Math.min(.97,g0+(1-g0)*.16+.01);addHist("t",.12+.88*r);
+    return setG(S.g,quick?200:380)
+  }).then(function(){updWords()});
+}
+function trigMsg(first,g0){
+  var m;
+  if(first)m=["A seed was stirred.","Something happening now touched the old impression, and it rose as a vṛtti: a small reaction (§3). Nothing grew until the seed was stirred. And the reaction left a new trace behind: the groove is a little deeper (§5.2).","§3 · §5.2"];
+  else if(g0<.45)m=["The same trigger, a slightly larger response.","Each activation deposits a fresh impression, and stronger impressions are more easily activated (§5.2). Nothing about the trigger has changed.","§5.2"];
+  else if(g0<.75)m=["The trigger has not changed. The field has.","What is experienced depends on the input as filtered through the current state of the mind-field (§5.1). The same small slip now meets a worn-in groove.","§5.1"];
+  else m=["A small situation, a large response.","The situation is small, but it has touched a large stored pattern (§4). Without conscious intervention, the default direction is reinforcement: patterns that are activated tend to strengthen (§5.2).","§4 · §5.2"];
+  if(S.c>=.1)m[1]+=" The clearer impressions built by practice are part of the field now as well, and they rise alongside (§7).";
+  msg(m[0],m[1],m[2]);
+}
+$("aTrig").addEventListener("click",function(){if(busy)return;lock(true);var first=S.trig===0,g0=S.g;eqOn("eqT");S.last="t";
+  trigger(false).then(function(){trigMsg(first,g0);lock(false)})});
+$("aMany").addEventListener("click",function(){if(busy)return;lock(true);eqOn("eqT");
+  var n=0,first=S.trig===0;
+  (function nx(){if(n<8){n++;trigger(true).then(function(){return wait(60)}).then(nx)}else{
+    msg("Again and again, the same small trigger.","Every time, the seed was stirred and a new impression was laid down. Repeated experience strengthens the trace, and stronger traces activate more easily, so the response grew while the trigger did not (§5.2). This is how habits solidify and emotional patterns deepen (§5.2).","§5.2");lock(false)}})()});
+$("aQuiet").addEventListener("click",function(){if(busy)return;lock(true);eqOn("");
+  retractPlant().then(function(){addHist("q",0);updWords();
+    msg("Nothing stirred the seed, so nothing grew.","The impression is still there, latent, as deep as before (§3). A saṁskāra waits beneath the surface until present experience, memory, desire, fear or attention stirs it. Without any intervention the default direction is toward reinforcement, though some patterns do fade over time (§5.2).","§3 · §5.2");lock(false)})});
+$("aInsight").addEventListener("click",function(){if(busy)return;lock(true);eqOn("eqI");
+  retractPlant().then(function(){S.g=S.g*.97;addHist("s",0);return setG(S.g,300)}).then(function(){updWords();
+    msg("Seen clearly, and the groove is still there.","You can know perfectly well that the reaction is out of proportion and the pattern continues, because the saṁskāra operates at a deeper level than conscious thought (§4). Reflection can be part of how patterns change (§5.2), but a single insight does not erase a deep groove (§7). Try the trigger again to see.","§4 · §5.2 · §7");lock(false)})});
+function sess(){S.c=Math.min(.97,S.c+(1-S.c)*.06+.006);S.g=S.g*(1-(.008+.075*S.c))}
+function practise(name){if(busy)return;lock(true);eqOn("eqP");
+  retractPlant().then(function(){sess();addHist("p",S.c);return Promise.all([setG(S.g,300),setC(S.c,300)])}).then(function(){updWords();
+    var p;
+    if(S.c<.3)p=[name+": one session.","Practice works on the field itself, not only on surface thoughts (§7). A clearer impression is added and the reactive one weakens a little. But the groove hardly seems to change yet: deep grooves are not erased in one session. Transformation through practice is slow and calls for patience (§7).","§7"];
+    else if(S.g>.4)p=[name+", and again.","The clearer impressions are accumulating, and the old groove is beginning to give. This is the slow work of replacing reactive impressions with clearer ones (§7).","§7"];
+    else p=["The change is now visible.","The old groove has softened and the clearer impressions are well established. The reactive seed is weakened, not destroyed, and nothing else in the field was lost (§7). Practice changes the ground of the personality, not just its surface.","§7"];
+    msg(p[0],p[1],p[2]);lock(false)})}
+$("aLong").addEventListener("click",function(){if(busy)return;lock(true);eqOn("eqP");
+  retractPlant().then(function(){var n=0;(function nx(){if(n<24){n++;sess();addHist("p",S.c);Promise.all([setG(S.g,110),setC(S.c,110)]).then(function(){return wait(20)}).then(nx)}else{updWords();
+    msg("A long while of patient practice.","The old groove has silted in and clearer impressions have grown. Deep grooves are not erased by a single insight, but they can change with sustained practice. This is slow, and it is lasting, because it changes the field itself (§7). Try the trigger now.","§7");lock(false)}})()})});
+function reset(){
+  if(busy)return;
+  S.g=.12;S.c=0;S.trig=0;S.hist=[];S.plantR=0;S.clearR=0;S.gShown=.12;S.cShown=0;S.lastResp=null;
+  $("gHist").innerHTML="";drawAll();updWords();eqOn("");
+  Array.prototype.forEach.call(loopEl.children,function(l){l.classList.remove("on")});
+  msg("A fresh garden.","One faint impression, latent. Nothing grows until something stirs it.");
+}
+$("aReset").addEventListener("click",reset);
+build();drawAll();updWords();
+
+/* ===== Part III: erase or replace ===== */
+var ITEMS=[
+ {k:"react",n:"A reactive impression",c:"§7",r:"A clearer impression"},
+ {k:"react",n:"A distorted impression",c:"§7",r:"A more luminous impression"},
+ {k:"react",n:"A fear-based impression",c:"§7",r:"A clearer impression"},
+ {k:"keep",n:"The skill of years of practice",c:"§2"},
+ {k:"keep",n:"Calm and focus, painstakingly developed",c:"§2"},
+ {k:"keep",n:"The capacity for compassion",c:"§7"}
+];
+var mode="erase",stage=0,erased=false,seen={erase:false,replace:false};
+var STAGES=6;
+function glyph(){return '<svg viewBox="0 0 34 30" aria-hidden="true"><ellipse class="gl" cx="17" cy="20" rx="11" ry="7"/></svg>'}
+function renderEr(){
+  var f=$("erField");f.innerHTML="";
+  ITEMS.forEach(function(it,i){
+    var cls="sd",label=it.n,st=it.k==="react"?"reactive":"kept",k=it.k;
+    if(mode==="erase"&&erased){cls+=" gone";label=it.n;st="erased"}
+    else if(mode==="replace"&&it.k==="react"){
+      var s=stage-i*2; /* each reactive seed: weakens at 1, replaced at 2 */
+      if(s>=2){k="clear";label=it.r;st="replaced"}
+      else if(s>=1){cls+=" weak";st="weakened"}
+    }
+    var d=mk("div",cls,glyph()+'<span>'+label+'</span><span class="st">'+st+'</span>');d.setAttribute("data-k",k);f.appendChild(d);
+  });
+  var done=(mode==="replace"&&stage>=STAGES);
+  $("erGo").textContent=mode==="erase"?"Erase the field":"Practise once more";
+  $("erGo").disabled=(mode==="erase"?erased:done);
+  $("erFast").hidden=(mode!=="replace");$("erFast").disabled=done;
+  var segs=$("erSeg").querySelectorAll("button");for(var i=0;i<segs.length;i++)segs[i].setAttribute("aria-pressed",segs[i].getAttribute("data-m")===mode?"true":"false");
+  var m=$("erMsg");
+  if(mode==="erase"){
+    m.innerHTML=erased?'<p class="verdict">The painful patterns are gone, and so is everything else.</p><p>Erasing the field would erase “all learning, skill, and growth along with the painful patterns” (§7): the skill, the calm and the capacity for compassion are all lost with them. And chitta cannot be destroyed, nor should it be (§3). This is not what chitta-śuddhi means.</p><p class="ref">§3 · §7</p>':'<p class="verdict">Suppose you could wipe the field clean.</p><p>Choose “Erase the field” and see what goes.</p>';
+  }else{
+    var t=stage<=0?['Replace, rather than erase.','Choose “Practise once more”. The lesson describes purification as gradually replacing reactive, distorted and fear-based impressions with clearer, more luminous ones, through sustained practice, ethical living, devoted attention and the repeated cultivation of sattva (§7).','§7']:
+      stage<STAGES?['Slowly, one impression at a time.','Reactive impressions weaken and clearer ones take their place. The skill, the calm and the compassion are not touched. Deep grooves are not erased by a single insight, so this takes patience (§7).','§7']:
+      ['Replaced, not erased.','The reactive, distorted and fear-based impressions have been replaced by clearer, more luminous ones, and everything worth keeping is still in the field. Because this changes the ground of the personality, not just its surface expression, it is profound and lasting (§7).','§7'];
+    m.innerHTML='<p class="verdict">'+t[0]+'</p><p>'+t[1]+'</p><p class="ref">'+t[2]+'</p>';
+  }
+  if(mode==="erase"&&erased)seen.erase=true;
+  if(mode==="replace"&&done)seen.replace=true;
+  var cmp=$("erCmp");cmp.hidden=!(seen.erase&&seen.replace);
+}
+$("erSeg").addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;mode=b.getAttribute("data-m");renderEr()});
+$("erGo").addEventListener("click",function(){if(mode==="erase")erased=true;else if(stage<STAGES)stage++;renderEr()});
+$("erFast").addEventListener("click",function(){
+  var b=$("erFast");b.disabled=true;$("erGo").disabled=true;
+  (function nx(){if(stage<STAGES){stage++;renderEr();$("erFast").disabled=true;$("erGo").disabled=true;setTimeout(nx,RM?0:320)}else renderEr()})()});
+$("erReset").addEventListener("click",function(){stage=0;erased=false;renderEr()});
+var ROWS=[
+ ["The reactive, distorted and fear-based impressions","Gone","Gradually replaced by clearer, more luminous ones"],
+ ["Skill, calm, compassion, learning","Lost with them (§7)","Kept (§7)"],
+ ["Chitta itself","Wiped, though destroying chitta is neither possible nor desirable (§3)","Remains, and is purified (§7)"],
+ ["The way","Not what the lesson means by purification (§7)","Sustained practice, ethical living, devoted attention; slow, and needing patience (§7)"],
+ ["The result","The loss of what was worth having","A change in the ground of the personality: profound and lasting (§7)"]
+];
+var tb=$("erTable");
+tb.appendChild(mk("div","h corner",""));tb.appendChild(mk("div","h","Erase everything"));tb.appendChild(mk("div","h","Replace gradually"));
+ROWS.forEach(function(r){tb.appendChild(mk("div","rl",r[0]));var a=mk("div",null,r[1]),c2=mk("div",null,r[2]);a.setAttribute("data-col","Erase everything");c2.setAttribute("data-col","Replace gradually");tb.appendChild(a);tb.appendChild(c2)});
+renderEr();
+})();
+
+</script>
+</body></html>

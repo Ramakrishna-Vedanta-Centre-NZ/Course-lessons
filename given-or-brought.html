@@ -1,0 +1,523 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Given or Brought?</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Source+Sans+3:ital,wght@0,400;0,600;1,400&family=Spectral:ital,wght@0,400;0,500;1,400&display=swap">
+<style>
+:root{
+  --bg:#F2F5F9; --surface:#FFFFFF; --ink:#13203A; --muted:#58647D; --line:#D3DAE6; --tint:#E7EDF6;
+  --obj:#0B8686; --att:#C95F06; --res:#2E3192; --env:#C0245B; --ok:#1B7A52;
+  --display:"Spectral",Georgia,"Times New Roman",serif;
+  --body:"Source Sans 3",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0B1120; --surface:#121A2D; --ink:#E7ECF6; --muted:#9AA6BF; --line:#26324D; --tint:#1A2540;
+    --obj:#46CFC6; --att:#F5A04D; --res:#A3AAFF; --env:#FF7BA9; --ok:#5BD59B; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0B1120; --surface:#121A2D; --ink:#E7ECF6; --muted:#9AA6BF; --line:#26324D; --tint:#1A2540;
+  --obj:#46CFC6; --att:#F5A04D; --res:#A3AAFF; --env:#FF7BA9; --ok:#5BD59B; color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;
+  padding-left:max(14px,env(safe-area-inset-left,0px));padding-right:max(14px,env(safe-area-inset-right,0px));padding-block:22px 40px}
+.wrap{max-width:900px;margin:0 auto;display:flex;flex-direction:column;gap:32px}
+h1,h2,h3{font-family:var(--display);font-weight:500;text-wrap:balance;margin:0;letter-spacing:-.01em}
+h1{font-size:clamp(30px,5.4vw,44px);line-height:1.06}
+h2{font-size:clamp(23px,3.4vw,29px);line-height:1.15}
+h3{font-size:19px;line-height:1.25}
+p{margin:0}
+sub{font-size:.72em;line-height:0}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.lede{font-size:17.5px;max-width:64ch}
+.intro{max-width:66ch;color:var(--muted)}
+header{display:flex;flex-direction:column;gap:12px}
+section{display:flex;flex-direction:column;gap:18px;min-width:0}
+.sym{font-family:var(--mono);font-size:.92em;white-space:nowrap}
+.k-obj{color:var(--obj)} .k-att{color:var(--att)} .k-res{color:var(--res)} .k-env{color:var(--env)}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px;display:flex;flex-direction:column;gap:14px;min-width:0}
+.bar{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;justify-content:space-between}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--bg)}
+.seg button{font:inherit;font-size:14px;color:var(--muted);background:transparent;border:0;padding:8px 13px;cursor:pointer}
+.seg button+button{border-left:1px solid var(--line)}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--surface)}
+button:focus-visible,input:focus-visible{outline:2px solid var(--res);outline-offset:2px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{font:inherit;font-size:14px;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:7px 13px;cursor:pointer;display:inline-flex;gap:8px;align-items:center}
+.chip i{font-style:normal;font-family:var(--mono);font-size:11px;color:var(--muted)}
+.chip[aria-pressed="true"]{background:var(--res);border-color:var(--res);color:#fff}
+.chip[aria-pressed="true"] i{color:#fff;opacity:.8}
+.chip:disabled{cursor:default}
+.chip.reached:not([aria-pressed="true"]){border-color:var(--res)}
+.btn{font:inherit;font-size:14px;color:var(--ink);background:var(--surface);border:1px solid var(--ink);border-radius:8px;padding:8px 16px;cursor:pointer}
+.btn.primary{background:var(--ink);color:var(--surface)}
+.btn.ghost{border-color:var(--line);color:var(--muted)}
+.scope-wrap{position:relative;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--bg)}
+canvas{display:block;width:100%}
+.playbtn{position:absolute;right:8px;bottom:8px;font:inherit;font-size:12px;background:var(--surface);color:var(--muted);border:1px solid var(--line);border-radius:6px;padding:4px 10px;cursor:pointer}
+.box{border:1px solid var(--line);border-radius:8px;background:var(--bg);padding:10px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.box .cap{font-size:12px;color:var(--muted)}
+.meters{display:flex;flex-direction:column;gap:9px}
+.meter{display:grid;grid-template-columns:1fr auto;gap:2px 8px;font-size:13px;align-items:baseline}
+.meter b{font-weight:600}
+.meter output{font-family:var(--mono);font-size:12px;color:var(--muted)}
+.meter .track{grid-column:1/-1;height:7px;background:var(--line);border-radius:4px;overflow:hidden}
+.meter .fill{height:100%;width:0;background:var(--res);border-radius:4px}
+.meter.f2 .fill{background:var(--env)} .meter.f3 .fill{background:var(--obj)}
+.slider{display:flex;align-items:center;gap:10px;flex:1 1 280px;min-width:0}
+.slider label{font-size:14px;min-width:0}
+.slider input[type=range]{flex:1;min-width:60px;accent-color:var(--res)}
+.slider small{color:var(--muted);font-size:12px;white-space:nowrap}
+.slider output{font-family:var(--mono);font-size:12.5px;color:var(--muted);min-width:46px;text-align:right}
+.readout{font-size:14px;color:var(--muted)}
+.readout b{color:var(--ink)}
+.tag{font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);border:1px solid var(--line);border-radius:4px;padding:2px 6px}
+.note{font-size:13px;color:var(--muted);max-width:70ch}
+.balance{background:var(--tint);border-radius:10px;padding:16px 18px;display:flex;flex-direction:column;gap:8px;max-width:78ch}
+footer{font-size:13px;color:var(--muted);max-width:76ch;border-top:1px solid var(--line);padding-top:12px}
+@media (max-width:640px){.panel{padding:12px}.wrap{gap:26px}}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
+
+:root{--c-g:var(--obj);--c-b:var(--att);--c-r:var(--res)}
+nav.parts{display:flex;flex-wrap:wrap;gap:8px 20px;margin-top:4px}
+nav.parts a{color:var(--ink);text-decoration:none;border-bottom:1px solid var(--line);padding-bottom:2px;font-size:15px}
+nav.parts a:hover,nav.parts a:focus-visible{border-color:var(--res);color:var(--res)}
+.defs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.def{border:1px solid var(--line);border-left-width:4px;border-radius:10px;background:var(--surface);padding:11px 13px;display:flex;flex-direction:column;gap:6px;font-size:14.5px;color:var(--muted)}
+.def.g{border-left-color:var(--c-g)} .def.b{border-left-color:var(--c-b)}
+.def .tag{align-self:flex-start;color:var(--ink)}
+.scene{border-left:3px solid var(--line);padding:2px 0 2px 12px;font-family:var(--display);font-size:18px;display:flex;flex-direction:column;gap:6px}
+.pool{display:flex;flex-direction:column;gap:9px}
+.stm{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px 12px;align-items:center;border:1.5px solid var(--line);border-radius:10px;background:var(--bg);padding:9px 11px}
+.stm p{font-size:16px;line-height:1.4}
+.stm .acts{display:flex;gap:6px}
+.stm button{font:inherit;font-size:13.5px;border-radius:8px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);padding:7px 11px;cursor:pointer;white-space:nowrap}
+.stm button[data-k="g"]{border-color:var(--c-g)} .stm button[data-k="b"]{border-color:var(--c-b)}
+.stm button[data-k="g"]:hover{background:color-mix(in srgb,var(--c-g) 14%,var(--surface))}
+.stm button[data-k="b"]:hover{background:color-mix(in srgb,var(--c-b) 14%,var(--surface))}
+.stm.nope{animation:shake .35s;border-color:var(--muted)}
+@keyframes shake{25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
+.msg{min-height:1.5em;font-size:15px}
+.msg.ok{color:var(--ok)}
+.ledger{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.col{border-top:3px solid var(--line);padding-top:8px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.col.g{border-color:var(--c-g)} .col.b{border-color:var(--c-b)}
+.col ul,.box ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:8px}
+.col li{font-size:14.5px;border-radius:8px;padding:8px 10px;background:var(--bg);display:flex;flex-direction:column;gap:3px}
+.col.g li{border-left:3px solid var(--c-g)} .col.b li{border-left:3px solid var(--c-b)}
+.col li span{font-size:13px;color:var(--muted)}
+.col li em{font-style:normal;font-family:var(--mono);font-size:10.5px;color:var(--muted)}
+.close{border-top:1px solid var(--line);padding-top:12px;font-size:15px;display:flex;flex-direction:column;gap:8px}
+.close .verdict{font-family:var(--display);font-size:19px}
+.close .ref{font-family:var(--mono);font-size:11px;color:var(--muted)}
+.swapgrid{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:10px;align-items:stretch}
+.plus{align-self:center;font-family:var(--display);font-size:26px;color:var(--muted)}
+.gcard{border-top:3px solid var(--c-g)} .bcard{border-top:3px solid var(--c-b)}
+.box .tag{align-self:flex-start}
+.box li{font-size:14.5px;line-height:1.4}
+.box .cap{font-size:12.5px;color:var(--muted)}
+.bcard ul{transition:opacity .25s}
+.arrow{align-self:center;font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.arrow::before{content:"↓ "} .arrow::after{content:" ↓"}
+.ripplecard{border:1.5px solid var(--c-r);border-radius:10px;padding:12px 14px;display:flex;flex-direction:column;gap:6px;background:color-mix(in srgb,var(--c-r) 7%,var(--surface))}
+.ripplecard .tag{align-self:flex-start}
+.exp{font-family:var(--display);font-size:21px;line-height:1.35;transition:opacity .25s}
+.flash{opacity:.15}
+#wv{width:100%;height:auto;display:block;border:1px solid var(--line);border-radius:8px;background:var(--bg)}
+#wv .lab{font-family:var(--body);font-size:15px;font-weight:600}
+#wv .lane{transition:opacity .35s}
+.btn[aria-pressed="true"]{background:var(--ink);color:var(--surface)}
+.seg.wrapseg{flex-wrap:wrap}
+.seg button[disabled]{opacity:.5}
+@media (max-width:640px){
+  .defs,.ledger{grid-template-columns:minmax(0,1fr)}
+  .swapgrid{grid-template-columns:minmax(0,1fr)}
+  .plus{justify-self:center;font-size:22px;line-height:1}
+  .stm{grid-template-columns:minmax(0,1fr)}
+  .stm .acts{flex-wrap:wrap}
+  #wvSeg,#whoSeg,#wvWho{display:flex;flex-wrap:wrap}
+  #wvSeg button,#whoSeg button,#wvWho button{flex:1 1 45%;border-left:0}
+}
+@media (prefers-reduced-motion: reduce){.stm.nope{animation:none}.bcard ul,.exp,#wv .lane{transition:none}}
+body[data-part] header{display:none}
+body[data-part="1"] #s2,body[data-part="1"] #s3,
+body[data-part="2"] #s1,body[data-part="2"] #s3,
+body[data-part="3"] #s1,body[data-part="3"] #s2,
+body[data-part="1"] footer,body[data-part="2"] footer{display:none}
+body[data-part]{padding-block:10px 18px}
+.scene .tag{align-self:flex-start}
+@media (max-width:640px){#wv .lab{font-size:21px}}
+.ledger[hidden]{display:none}
+
+</style></head><body>
+<div class="wrap">
+<header>
+  <div class="eyebrow">The Mind in the Light of Modern and Spiritual Sciences · Lesson 1.1</div>
+  <h1>Given or brought?</h1>
+  <p class="lede">Every perception is a meeting of two things: what is given, <span class="sym k-obj">ψ<sub>x</sub></span>, and what you bring, <span class="sym k-att">ψ<sub>m</sub></span>. Here you will sort ordinary moments into the two, hold the same given while the person changes, and then watch the two waves of the lesson become one ripple.</p>
+  <nav class="parts" aria-label="Parts of this page"><a href="#s1">I. Sort the moment</a><a href="#s2">II. Same given, different brought</a><a href="#s3">III. Two waves, one ripple</a></nav>
+</header>
+
+<section id="s1">
+  <h2>I. Sort the moment</h2>
+  <p class="intro">Read each statement and decide whether it belongs to what is <b class="k-obj">given</b> or to what is <b class="k-att">brought</b>. Tap a button on the statement. You can try again as often as you like, and nothing is scored.</p>
+  <div class="defs">
+    <div class="def g"><span class="tag">Given · ψ<sub>x</sub></span><p>What you could write down as bare description: who said what, what happened, what was visible or audible. Descriptive, not interpretive (§13).</p></div>
+    <div class="def b"><span class="tag">Brought · ψ<sub>m</sub></span><p>Your mood, the memories it touches, what you expect, fear or hope, the labels and history you carry (§10, §13).</p></div>
+  </div>
+  <div class="panel" id="sorter">
+    <div class="chips" id="caseTabs" role="group" aria-label="Choose a moment"></div>
+    <div class="scene" id="scene"></div>
+    <div class="pool" id="pool" role="list" aria-label="Statements to sort"></div>
+    <div id="sMsg" class="msg" role="status" aria-live="polite"></div>
+    <div class="ledger" id="ledger">
+      <div class="col g"><h3>Given <span class="sym">ψ<sub>x</sub></span></h3><ul id="colG"></ul></div>
+      <div class="col b"><h3>Brought <span class="sym">ψ<sub>m</sub></span></h3><ul id="colB"></ul></div>
+    </div>
+    <div class="close" id="sClose" hidden></div>
+    <div class="bar"><button class="btn ghost" id="sShow">Show me</button><button class="btn ghost" id="sReset">Start this moment again</button></div>
+  </div>
+  <div class="balance" id="frame">
+    <h3>Two things the lesson says, held together</h3>
+    <p>Experience comes first, before it is named or judged (§9). And what feels like direct observation is always, at least partly, interpretation (§6, §14.2). So this sorting does not claim that a pure, unmixed given can ever be had. It is a practice of <i>description</i>: afterwards, you separate what you could simply state from what you added. In the living moment the two are already one ripple (§10).</p>
+    <p>Nor is <span class="sym">ψ<sub>m</sub></span> a fault to be removed. Memory, mood, expectation and meaning are part of how the mind knows (§10), and thought is “valuable, but partial” (§6).</p>
+  </div>
+</section>
+
+<section id="s2">
+  <h2>II. Same given, different brought</h2>
+  <p class="intro">“The scene in front of each person is essentially the same. What each one experiences is shaped by what they bring” (§10). Choose a scene, then switch the person. Watch which side changes and which side does not.</p>
+  <div class="panel" id="swap">
+    <div class="chips" id="scTabs" role="group" aria-label="Choose a scene"></div>
+    <div class="bar"><span class="tag">Who is perceiving?</span><div class="seg" id="whoSeg" role="group" aria-label="Choose a person"></div></div>
+    <div class="swapgrid">
+      <div class="box gcard" id="gCard"><span class="tag">Given · ψ<sub>x</sub></span><ul id="gList"></ul><p class="cap">Unchanged when the person changes.</p></div>
+      <div class="plus" aria-hidden="true">+</div>
+      <div class="box bcard" id="bCard"><span class="tag">Brought · ψ<sub>m</sub></span><ul id="bList"></ul><p class="cap" id="bCap"></p></div>
+    </div>
+    <div class="arrow" aria-hidden="true">meeting as one</div>
+    <div class="ripplecard" id="expCard"><span class="tag">What is experienced</span><p class="exp" id="expText" aria-live="polite"></p></div>
+    <p class="readout" id="swText"></p>
+  </div>
+  <div class="balance">
+    <h3>What this shows, and what it does not</h3>
+    <p>The same given can be met by different people and become different situations. That is the lesson's explanation of why “two people in the same room can have entirely different experiences” (§10). It does not say that one of them is wrong. The invitation of §14.4 is gentler: once you can see that a difficult experience is the meeting of an outer <span class="sym">ψ<sub>x</sub></span> and an inner <span class="sym">ψ<sub>m</sub></span>, it becomes workable, because you have a part in it.</p>
+  </div>
+</section>
+
+<section id="s3">
+  <h2>III. Two waves, one ripple</h2>
+  <p class="intro">The lesson's picture (§10, Figure 1.1.b): one wave comes in from outside, another arises from your own inner movement. Where they meet they combine into a single ripple, and that ripple is what you experience as “the situation”. It is not the original wave.</p>
+  <div class="panel" id="waves">
+    <div class="bar"><div class="seg" id="wvSeg" role="group" aria-label="What to show">
+      <button data-v="x" aria-pressed="false">Given only</button><button data-v="m" aria-pressed="false">Brought only</button><button data-v="both" aria-pressed="false">Both waves</button><button data-v="sum" aria-pressed="true">Both, and the ripple</button></div></div>
+    <div class="bar"><span class="tag">Whose ψ<sub>m</sub>?</span><div class="seg" id="wvWho" role="group" aria-label="Choose whose contribution to draw"></div></div>
+    <svg id="wv" viewBox="0 0 700 400" role="img" aria-labelledby="wvT wvD"><title id="wvT">Two waves combining into one ripple</title><desc id="wvD"></desc></svg>
+    <p class="readout" id="wvText"></p>
+    <div class="bar"><button class="btn ghost" id="wvPlay" aria-pressed="false">Let the waves drift</button></div>
+  </div>
+  <div class="balance">
+    <h3>A picture, not a measurement</h3>
+    <p>The shapes above are drawn for illustration. There is no scale, no unit and nothing measured: the lesson says only that the two combine into one ripple. How the picture is made precise comes later, in Module 3 (§3).</p>
+    <p>One question stays open, and this page does not try to close it. If every perception is <span class="sym">ψ<sub>x</sub></span> mixed with <span class="sym">ψ<sub>m</sub></span>, what is the knowing in which the mixing appears? The lesson says this “cannot be answered by more thinking” and that it has to be looked into (§11). That looking is the work of Lesson 1.2.</p>
+    <p>Your own turn comes on paper: the two-column experiment of §13, done with a real reaction of your own. A page cannot do that looking for you.</p>
+  </div>
+</section>
+<footer>A learning aid based on Lesson 1.1. The cases are fictional and drawn from the lesson. Nothing here is scored or assesses anyone. It illustrates a way of looking and does not diagnose or advise on any person's situation. For help with distress, please speak with a qualified professional or someone you trust.</footer>
+</div>
+
+<script>
+window.Core=(function(){
+"use strict";
+var TAU=Math.PI*2;
+try{var q=new URLSearchParams(location.search).get("theme");if(q==="light"||q==="dark")document.documentElement.setAttribute("data-theme",q)}catch(e){}
+function lerp(a,b,t){return a+(b-a)*t}
+function clamp(x,a,b){return Math.max(a,Math.min(b,x))}
+function el(id){return document.getElementById(id)}
+var col={},subs=[];
+function readColors(){
+  var cs=getComputedStyle(document.documentElement);
+  ["--bg","--surface","--ink","--muted","--line","--tint","--obj","--att","--res","--env","--ok"].forEach(function(k){col[k]=cs.getPropertyValue(k).trim()});
+  subs.forEach(function(f){try{f()}catch(e){}});
+}
+readColors();
+try{window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change",readColors)}catch(e){}
+new MutationObserver(readColors).observe(document.documentElement,{attributes:true,attributeFilter:["data-theme"]});
+function onTheme(f){subs.push(f)}
+var dpr=Math.max(1,Math.min(2,window.devicePixelRatio||1));
+function fit(c){
+  var w=c.clientWidth,h=c.clientHeight;
+  if(!w||!h)return null;
+  var bw=Math.round(w*dpr),bh=Math.round(h*dpr);
+  if(c.width!==bw||c.height!==bh){c.width=bw;c.height=bh}
+  var g=c.getContext("2d");g.setTransform(dpr,0,0,dpr,0,0);return {g:g,w:w,h:h};
+}
+var FONT="500 11.5px 'Source Sans 3',system-ui,sans-serif";
+function label(g,t,x,y,color,align,pill){
+  g.font=FONT;g.textAlign=align||"left";g.textBaseline="alphabetic";
+  if(pill){var w=g.measureText(t).width,x0=(align==="right")?x-w:(align==="center"?x-w/2:x);
+    g.save();g.globalAlpha=.82;g.fillStyle=col["--surface"];g.fillRect(x0-5,y-12,w+10,17);g.restore()}
+  g.fillStyle=color;g.fillText(t,x,y)}
+/* ring-buffer trace: arr, head index, length N */
+function trace(g,arr,head,N,x0,w,cy,sc,color,lw,alpha,dash){
+  g.save();g.globalAlpha=alpha==null?1:alpha;g.strokeStyle=color;g.lineWidth=lw;g.lineJoin="round";if(dash)g.setLineDash(dash);
+  g.beginPath();
+  for(var i=0;i<N;i++){var v=arr[(head+i)%N];var x=x0+w*i/(N-1),y=cy-v*sc;if(i)g.lineTo(x,y);else g.moveTo(x,y)}
+  g.stroke();g.restore();
+}
+/* shaded envelope band around a lane centre */
+function envelope(g,E,head,N,W,cy,sc,color,alpha){
+  g.save();g.globalAlpha=alpha;
+  g.beginPath();
+  for(var i=0;i<N;i++){var e=E[(head+i)%N],x=W*i/(N-1),y=cy-e*sc;if(i)g.lineTo(x,y);else g.moveTo(x,y)}
+  for(var j=N-1;j>=0;j--){var e2=E[(head+j)%N],x2=W*j/(N-1);g.lineTo(x2,cy+e2*sc)}
+  g.closePath();g.fillStyle=color;g.globalAlpha=.09*alpha;g.fill();g.restore();
+  g.save();g.globalAlpha=alpha;g.strokeStyle=color;g.lineWidth=1.6;g.setLineDash([6,4]);
+  [1,-1].forEach(function(sg){g.beginPath();for(var i2=0;i2<N;i2++){var ee=E[(head+i2)%N]*sg,xx=W*i2/(N-1),yy=cy-ee*sc;if(i2)g.lineTo(xx,yy);else g.moveTo(xx,yy)}g.stroke()});
+  g.restore();
+}
+return {TAU:TAU,lerp:lerp,clamp:clamp,el:el,col:col,onTheme:onTheme,fit:fit,label:label,trace:trace,envelope:envelope,FONT:FONT};
+})();
+
+</script>
+<script>
+(function(){
+"use strict";
+var $=Core.el,col=Core.col;
+try{var pt=new URLSearchParams(location.search).get("part");if(pt==="1"||pt==="2"||pt==="3")document.body.setAttribute("data-part",pt)}catch(e){}
+function mk(tag,cls,html){var e=document.createElement(tag);if(cls)e.className=cls;if(html!=null)e.innerHTML=html;return e}
+var PX='ψ<sub>x</sub>',PM='ψ<sub>m</sub>';
+function sy(s){return s.replace(/\{x\}/g,PX).replace(/\{m\}/g,PM)}
+var reduced=false;try{reduced=window.matchMedia("(prefers-reduced-motion: reduce)").matches}catch(e){}
+
+/* ================= Part I: sorter ================= */
+var CASES=[
+ {id:"friend",tab:"A friend walks in",ref:"§10",scene:"You walk into a room and see a friend.",
+  items:[
+   {t:"Your past with this person: every conversation, every disappointment, every kindness.",a:"b",why:"Your history with them is part of what you experience, but it is not in the doorway. You carry it in (§10)."},
+   {t:"Light from the room enters your eyes.",a:"g",why:"The incoming impression: light, and the shape of a face (§10)."},
+   {t:"The labels your mind has built up over time: trusted, complicated, family.",a:"b",why:"Labels are built over time by the mind and added to the face (§10)."},
+   {t:"A person stands in the doorway and says, “Hello.”",a:"g",why:"Who said what, with nothing read into it. This is the left column of the Try This (§13)."},
+   {t:"Your mood as you walked in.",a:"b",why:"Mood is one of the things you bring (§10, §13)."},
+   {t:"They are wearing a green coat.",a:"g",why:"Visible, and describable without reading anything into it (§13)."},
+   {t:"A small prediction of what they are about to say.",a:"b",why:"Expectation. The mind runs ahead of what has arrived (§10)."}
+  ],
+  close:{v:"“I see my friend” is not a clean reading.",t:"What you experienced was never just the face. It was {x} mixed with {m}, and in the moment it felt like one simple thing: your friend (§10).",r:"§10"}},
+ {id:"silence",tab:"The silence",ref:"§10",scene:"A parent sits in the kitchen. Upstairs, a teenager's room has gone quiet.",
+  items:[
+   {t:"Something must be wrong in there.",a:"b",why:"A reading of the silence, made from fear and expectation. The worried parent “experiences danger” (§10)."},
+   {t:"No sound comes from the room.",a:"g",why:"Silence is experienced before it is interpreted (§6). Here it is simply what is heard.",h:"Silence reaches you before any thought about it (§6)."},
+   {t:"That quiet means everything is fine.",a:"b",why:"Equally a reading. The relaxed parent hears the same silence and experiences peace (§10). Reassurance is brought just as worry is."},
+   {t:"The door is closed.",a:"g",why:"Visible and checkable. Nothing is added."},
+   {t:"A flash of the evening when a phone call brought bad news.",a:"b",why:"A memory the moment touches (§13: “the memories it touched”)."},
+   {t:"The music stopped a little while ago.",a:"g",why:"A plain fact about what was heard and when."}
+  ],
+  close:{v:"The same quiet, two opposite readings.",t:"“Something must be wrong” and “everything is fine” sit side by side in the brought column. Neither was in the silence. Part II holds the silence still and changes the parent (§10).",r:"§10"}},
+ {id:"menu",tab:"The menu",ref:"§10",scene:"A menu lies open on a restaurant table.",
+  items:[
+   {t:"A hunger that makes every dish look like a promise.",a:"b",why:"Hunger is a state you bring. The hungry person “notices only the food” (§10)."},
+   {t:"A soup, a salad and a burger with chips are listed.",a:"g",why:"What is printed, described without a verdict."},
+   {t:"A habit of weighing each dish as so many calories.",a:"b",why:"Training turned into a habit of attention. The nutritionist “notices only the calories” (§10)."},
+   {t:"The words are printed in dark ink on cream paper.",a:"g",why:"Visible, and describable without reading anything into it (§13)."},
+   {t:"The salad is the sensible choice.",a:"b",why:"A judgment of what is sensible comes from your concerns and history, not from the print (§8, §10).",h:"Is “sensible” printed on the page, or decided by the reader?"},
+   {t:"The burger is listed last.",a:"g",why:"Its position on the page, nothing more."}
+  ],
+  close:{v:"One menu, two readers.",t:"Even what you notice is shaped by what you bring: the hungry person sees food, the nutritionist sees calories. The page was the same (§10).",r:"§10"}},
+ {id:"photo",tab:"The photograph",ref:"§10",scene:"An old photograph lies on a table.",
+  items:[
+   {t:"She looks so happy there.",a:"b",why:"This reads a state of mind off a face. Compare the next kind of statement, which only describes what is visible (§13: “descriptive, not interpretive”).",h:"Compare “She looks happy” with a description of what the face actually shows."},
+   {t:"Two people stand on a beach.",a:"g",why:"What is visible in the picture."},
+   {t:"That was the last summer we had together.",a:"b",why:"Memory and grief. The grieving friend “feels loss” (§10)."},
+   {t:"Her mouth is turned up at the corners.",a:"g",why:"This describes what is visible. “She looks so happy” is a reading built on it (§13)."},
+   {t:"It is just an old snapshot, nothing in particular.",a:"b",why:"The stranger brings no history with these people, and meets only a picture. The scene is the same, the experience is not (§10).",h:"Is “nothing in particular” on the print, or in the one looking?"},
+   {t:"The corners of the paper are curling.",a:"g",why:"Visible, and describable without reading anything into it."}
+  ],
+  close:{v:"The photograph did not change. The viewer did.",t:"For the grieving friend the picture carries loss, for the stranger nothing in particular. The scene in front of each is essentially the same (§10). Notice, too, the two lines about her face: one describes, one interprets.",r:"§10, §13"}}
+];
+var cur=0,state={};
+CASES.forEach(function(c){state[c.id]={done:[]}});  /* done: item indexes in the order sorted */
+var tabsEl=$("caseTabs"),poolEl=$("pool"),sMsg=$("sMsg");
+function say(t,ok){sMsg.textContent=t;sMsg.className="msg"+(ok?" ok":"")}
+function renderTabs(){
+  tabsEl.innerHTML="";
+  CASES.forEach(function(c,i){
+    var n=state[c.id].done.length,tot=c.items.length;
+    var b=mk("button","chip","<span>"+c.tab+"</span>"+'<i>'+n+"/"+tot+"</i>");
+    b.setAttribute("aria-pressed",i===cur?"true":"false");
+    if(n===tot)b.classList.add("reached");
+    b.addEventListener("click",function(){cur=i;say("");render()});
+    tabsEl.appendChild(b);
+  });
+}
+function liFor(it){
+  var k=it.a==="g"?"Given":"Brought";
+  return '<em>'+k+'</em>'+it.t+'<span>'+sy(it.why)+'</span>';
+}
+function render(kbIdx){
+  var c=CASES[cur],st=state[c.id];
+  renderTabs();
+  $("scene").innerHTML='<span class="tag">The moment</span><p>'+c.scene+'</p>';
+  poolEl.innerHTML="";
+  var firstBtn=null;
+  c.items.forEach(function(it,i){
+    if(st.done.indexOf(i)>=0)return;
+    var row=mk("div","stm");row.setAttribute("role","listitem");
+    row.appendChild(mk("p",null,it.t));
+    var acts=mk("div","acts");
+    [["g","Given"],["b","Brought"]].forEach(function(p){
+      var b=mk("button",null,sy(p[1]+" "+(p[0]==="g"?"{x}":"{m}")));
+      b.setAttribute("data-k",p[0]);
+      b.setAttribute("aria-label",p[1]+": "+it.t);
+      b.addEventListener("click",function(ev){choose(i,p[0],row,ev.detail===0)});
+      acts.appendChild(b);if(!firstBtn)firstBtn=b;
+    });
+    row.appendChild(acts);poolEl.appendChild(row);
+  });
+  var G=$("colG"),B=$("colB");G.innerHTML="";B.innerHTML="";
+  st.done.forEach(function(i){var it=c.items[i];var li=mk("li",null,liFor(it));(it.a==="g"?G:B).appendChild(li)});
+  $("ledger").hidden=!st.done.length;
+  var all=st.done.length===c.items.length;
+  poolEl.hidden=all;
+  var cl=$("sClose");cl.hidden=!all;
+  if(all){cl.innerHTML='<div class="verdict">'+c.close.v+'</div><p>'+sy(c.close.t)+'</p><span class="ref">'+c.close.r+'</span>'}
+  if(kbIdx&&firstBtn)firstBtn.focus();
+}
+function choose(i,k,row,fromKb){
+  var c=CASES[cur],it=c.items[i],st=state[c.id];
+  if(it.a===k){
+    st.done.push(i);
+    say((k==="g"?"Given. ":"Brought. ")+it.why.replace(/\{x\}/g,"ψₓ").replace(/\{m\}/g,"ψₘ"),true);
+    render(fromKb);
+    if(st.done.length===c.items.length){
+      var cl=$("sClose");try{cl.scrollIntoView({behavior:reduced?"auto":"smooth",block:"nearest"})}catch(e){}
+    }
+  }else{
+    var base=it.a==="g"?"Not quite. Could you simply point to this, or hear it, with nothing read into it?":"Not quite. Is this in front of you, or is it something you add: a mood, a memory, an expectation or a label?";
+    say(base+(it.h?" "+it.h:""));
+    row.classList.remove("nope");void row.offsetWidth;row.classList.add("nope");
+  }
+}
+$("sShow").addEventListener("click",function(){
+  var c=CASES[cur],st=state[c.id];st.done=[];
+  /* show the sorted result in a fixed, readable order: given first, then brought */
+  c.items.forEach(function(it,i){if(it.a==="g")st.done.push(i)});
+  c.items.forEach(function(it,i){if(it.a==="b")st.done.push(i)});
+  say("");render();
+});
+$("sReset").addEventListener("click",function(){state[CASES[cur].id].done=[];say("");render()});
+render();
+
+/* ================= Part II: same given, different brought ================= */
+var SC=[
+ {id:"silence",tab:"The silence",
+  given:["No sound comes from the teenager's room.","The door is closed."],
+  who:[
+   {n:"Worried parent",b:["A memory: an evening when a quiet house ended in bad news.","An expectation: silence means trouble.","A mood: already tense after a long day."],e:"The silence is danger."},
+   {n:"Relaxed parent",b:["A memory: quiet usually means music in headphones.","An expectation: all is well.","A mood: easy, at the end of a good day."],e:"The silence is peace."}]},
+ {id:"menu",tab:"The menu",
+  given:["A soup, a salad and a burger with chips are listed.","The words are printed in dark ink on cream paper."],
+  who:[
+   {n:"Hungry person",b:["A state: hungry, with no lunch today.","Attention: drawn to the names of the dishes.","An expectation: something warm and filling."],e:"A list of food."},
+   {n:"Nutritionist",b:["Training: food is read as energy and nutrients.","A habit of attention: weighing each dish.","A concern: what she advises her clients to avoid."],e:"A column of calories."}]},
+ {id:"photo",tab:"The photograph",
+  given:["Two people stand on a beach.","The corners of the paper are curling."],
+  who:[
+   {n:"Grieving friend",b:["A memory: who is in the picture and the day it was taken.","A mood: heavy with missing them.","Attention: held by one face."],e:"Loss."},
+   {n:"Stranger",b:["No history with these people.","A mood: idle, passing the time.","Attention: a quick glance."],e:"Nothing in particular."}]}
+];
+var sc=0,who=0,seen={};
+function renderSwap(flash){
+  var S=SC[sc],W=S.who[who];
+  var tabs=$("scTabs");tabs.innerHTML="";
+  SC.forEach(function(s,i){var b=mk("button","chip",s.tab);b.setAttribute("aria-pressed",i===sc?"true":"false");
+    b.addEventListener("click",function(){sc=i;who=0;seen={};seen[0]=1;renderSwap(false)});tabs.appendChild(b)});
+  var seg=$("whoSeg");seg.innerHTML="";
+  S.who.forEach(function(w,i){var b=mk("button",null,w.n);b.setAttribute("aria-pressed",i===who?"true":"false");
+    b.addEventListener("click",function(){who=i;seen[i]=1;renderSwap(true)});seg.appendChild(b)});
+  var g=$("gList");g.innerHTML="";S.given.forEach(function(t){g.appendChild(mk("li",null,t))});
+  var bl=$("bList");bl.innerHTML="";W.b.forEach(function(t){bl.appendChild(mk("li",null,t))});
+  $("bCap").textContent="Changes with the person: "+W.n.toLowerCase()+".";
+  $("expText").textContent=W.e;
+  var both=seen[0]&&seen[1];
+  $("swText").innerHTML=both
+    ?"You have now seen both. The given list did not change. What was brought changed, and so did what is experienced: <b>“"+SC[sc].who[0].e.replace(/\.$/,"")+"”</b> and <b>“"+SC[sc].who[1].e.replace(/\.$/,"")+"”</b> (§10)."
+    :"Now switch the person and compare. Watch the left card.";
+  if(flash&&!reduced){[bl,$("expText")].forEach(function(n){n.classList.add("flash");setTimeout(function(){n.classList.remove("flash")},160)})}
+}
+seen[0]=1;renderSwap(false);
+
+/* ================= Part III: two waves ================= */
+var WHO=[
+ {n:"Worried parent",f:5.2,a:26,p:0.7,h:0.35,t:"Here the inner wave is drawn quicker and stronger."},
+ {n:"Relaxed parent",f:1.7,a:18,p:2.2,h:0,t:"Here the inner wave is drawn slower and gentler."},
+ {n:"Grieving friend",f:2.6,a:30,p:4.1,h:0.2,t:"Here the inner wave is drawn broad and heavy."}
+];
+var AX=24,FX=3.0,PX0=0.4;
+var vw="sum",wi=0,drift=0,playing=false,raf=0,last=0;
+var svg=$("wv"),NS="http://www.w3.org/2000/svg";
+var LC=[80,204,328],W0=40,W1=680,N=140;
+function sn(tag,at){var e=document.createElementNS(NS,tag);for(var k in at)e.setAttribute(k,at[k]);return e}
+function xFn(u,d){return AX*Math.sin(2*Math.PI*FX*u+PX0+d*0.9)}
+function mFn(u,d){var w=WHO[wi];return w.a*(Math.sin(2*Math.PI*w.f*u+w.p+d*1.7)+w.h*Math.sin(2*Math.PI*w.f*2.1*u+w.p*1.3+d*2.4))/(1+w.h*0.6)}
+function pathOf(fn,cy){var s="";for(var i=0;i<=N;i++){var u=i/N,x=W0+(W1-W0)*u,y=cy-fn(u,drift);s+=(i?"L":"M")+x.toFixed(1)+" "+y.toFixed(1)}return s}
+var P={};
+function build(){
+  var lanes=[["x","Given ψₓ: comes in from outside","--obj"],["m","Brought ψₘ: arises from your own inner movement","--att"],["s","The ripple: what you experience","--res"]];
+  lanes.forEach(function(L,i){
+    var g=sn("g",{"class":"lane","data-l":L[0]});
+    g.appendChild(sn("line",{x1:W0,x2:W1,y1:LC[i],y2:LC[i],stroke:"var(--line)","stroke-width":1}));
+    var t=sn("text",{x:W0,y:LC[i]-62,"class":"lab",fill:"var(--ink)"});t.textContent=L[1];g.appendChild(t);
+    if(L[0]==="s"){P.ghost=sn("path",{fill:"none","stroke-width":1.6,"stroke-dasharray":"5 5",stroke:"var(--obj)",opacity:.55});g.appendChild(P.ghost)}
+    P[L[0]]=sn("path",{fill:"none","stroke-width":L[0]==="s"?3:2.4,"stroke-linejoin":"round",stroke:"var(--"+L[2].slice(2)+")"});
+    g.appendChild(P[L[0]]);P["g"+L[0]]=g;svg.appendChild(g);
+  });
+}
+build();
+function drawWaves(){
+  P.x.setAttribute("d",pathOf(xFn,LC[0]));
+  P.m.setAttribute("d",pathOf(mFn,LC[1]));
+  P.s.setAttribute("d",pathOf(function(u,d){return xFn(u,d)+mFn(u,d)},LC[2]));
+  P.ghost.setAttribute("d",pathOf(xFn,LC[2]));
+}
+var VIEWTXT={
+ x:"Given only: one wave coming in from outside. On its own it is not an experience yet; the lesson pictures it as one of the two things that meet.",
+ m:"Brought only: the wave from your own inner movement, made of attention, memory, mood, expectation and meaning (§10).",
+ both:"Both waves, still apart. In the lesson's picture they are never found apart in actual experience; they are drawn apart here to see them.",
+ sum:"Where the two meet they interfere into one ripple. The dashed line marks the given wave: notice that the ripple is not the original wave (§10)."
+};
+var VIS={x:{x:1,m:0,s:0},m:{x:0,m:1,s:0},both:{x:1,m:1,s:0},sum:{x:1,m:1,s:1}};
+function applyView(){
+  var v=VIS[vw];
+  ["x","m","s"].forEach(function(k){P["g"+k].setAttribute("opacity",v[k]?1:0.12)});
+  P.ghost.setAttribute("opacity",vw==="sum"?.55:0);
+  var segs=$("wvSeg").querySelectorAll("button");
+  for(var i=0;i<segs.length;i++)segs[i].setAttribute("aria-pressed",segs[i].getAttribute("data-v")===vw?"true":"false");
+  var w=WHO[wi];
+  $("wvText").innerHTML=VIEWTXT[vw]+(vw!=="x"?" "+w.t+" This is an illustration of difference, not a claim about how any state looks.":"");
+  $("wvD").textContent="Three lanes. The first shows a regular wave labelled given. The second shows the inner wave of the "+w.n.toLowerCase()+". The third shows their sum, one ripple, with the given wave dashed behind it. "+(vw==="sum"?"All three are shown.":"Some lanes are faded.");
+}
+$("wvSeg").addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;vw=b.getAttribute("data-v");applyView()});
+function buildWho(){
+  var s=$("wvWho");s.innerHTML="";
+  WHO.forEach(function(w,i){var b=mk("button",null,w.n);b.setAttribute("aria-pressed",i===wi?"true":"false");
+    b.addEventListener("click",function(){wi=i;buildWho();drawWaves();applyView()});s.appendChild(b)});
+}
+buildWho();drawWaves();applyView();
+function tick(ts){
+  if(!playing)return;
+  if(last)drift+=Math.min(.05,(ts-last)/1000)*0.6;
+  last=ts;drawWaves();raf=requestAnimationFrame(tick);
+}
+$("wvPlay").addEventListener("click",function(){
+  playing=!playing;this.setAttribute("aria-pressed",playing?"true":"false");
+  this.textContent=playing?"Hold the waves still":"Let the waves drift";
+  last=0;if(playing)raf=requestAnimationFrame(tick);else cancelAnimationFrame(raf);
+});
+})();
+
+</script>
+</body></html>
