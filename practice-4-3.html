@@ -1,0 +1,542 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Practice: Lesson 4.3, What Can I Change, and How Fast?</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans:wght@400..700&family=Noto+Serif:ital,wght@0,400..700;1,400..700&display=swap">
+<style>
+:root{
+  --bg:#FBF5EA; --surface:#FFFDF8; --ink:#1E1E1E; --muted:#5A5A5A; --line:#E6DAC3; --tint:#F3EAD3; --navy:#12285A; --gold:#C9A24A; --goldt:#6B4E0E;
+  --obj:#0B8686; --att:#C95F06; --res:#2E3192; --env:#C0245B; --ok:#1B7A52;
+  --display:"Noto Serif",Georgia,"Times New Roman",serif;
+  --body:"Noto Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0B1A3D; --surface:#12285A; --ink:#FBF5EA; --muted:#C9C3B3; --line:#2B4686; --tint:#1D3770; --gold:#E6C36A; --goldt:#E6C36A;
+    --obj:#46CFC6; --att:#F5A04D; --res:#A3AAFF; --env:#FF7BA9; --ok:#5BD59B; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0B1A3D; --surface:#12285A; --ink:#FBF5EA; --muted:#C9C3B3; --line:#2B4686; --tint:#1D3770; --gold:#E6C36A; --goldt:#E6C36A;
+  --obj:#46CFC6; --att:#F5A04D; --res:#A3AAFF; --env:#FF7BA9; --ok:#5BD59B; color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;
+  padding-left:max(14px,env(safe-area-inset-left,0px));padding-right:max(14px,env(safe-area-inset-right,0px));padding-block:22px 40px}
+.wrap{max-width:900px;margin:0 auto;display:flex;flex-direction:column;gap:32px}
+h1,h2,h3{font-family:var(--display);font-weight:500;text-wrap:balance;margin:0;letter-spacing:-.01em}
+h1{font-size:clamp(30px,5.4vw,44px);line-height:1.06}
+h2{font-size:clamp(23px,3.4vw,29px);line-height:1.15}
+h3{font-size:19px;line-height:1.25}
+p{margin:0}
+sub{font-size:.72em;line-height:0}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.lede{font-size:17.5px;max-width:64ch}
+.intro{max-width:66ch;color:var(--muted)}
+header{display:flex;flex-direction:column;gap:12px}
+section{display:flex;flex-direction:column;gap:18px;min-width:0}
+.sym{font-family:var(--mono);font-size:.92em;white-space:nowrap}
+.k-obj{color:var(--obj)} .k-att{color:var(--att)} .k-res{color:var(--res)} .k-env{color:var(--env)}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px;display:flex;flex-direction:column;gap:14px;min-width:0}
+.bar{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;justify-content:space-between}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--bg)}
+.seg button{font:inherit;font-size:14px;color:var(--muted);background:transparent;border:0;padding:8px 13px;cursor:pointer}
+.seg button+button{border-left:1px solid var(--line)}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--surface)}
+button:focus-visible,input:focus-visible{outline:2px solid var(--res);outline-offset:2px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{font:inherit;font-size:14px;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:7px 13px;cursor:pointer;display:inline-flex;gap:8px;align-items:center}
+.chip i{font-style:normal;font-family:var(--mono);font-size:11px;color:var(--muted)}
+.chip[aria-pressed="true"]{background:var(--res);border-color:var(--res);color:#fff}
+.chip[aria-pressed="true"] i{color:#fff;opacity:.8}
+.chip:disabled{cursor:default}
+.chip.reached:not([aria-pressed="true"]){border-color:var(--res)}
+.btn{font:inherit;font-size:14px;color:var(--ink);background:var(--surface);border:1px solid var(--ink);border-radius:8px;padding:8px 16px;cursor:pointer}
+.btn.primary{background:var(--ink);color:var(--surface)}
+.btn.ghost{border-color:var(--line);color:var(--muted)}
+.scope-wrap{position:relative;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--bg)}
+canvas{display:block;width:100%}
+.playbtn{position:absolute;right:8px;bottom:8px;font:inherit;font-size:12px;background:var(--surface);color:var(--muted);border:1px solid var(--line);border-radius:6px;padding:4px 10px;cursor:pointer}
+.box{border:1px solid var(--line);border-radius:8px;background:var(--bg);padding:10px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.box .cap{font-size:12px;color:var(--muted)}
+.meters{display:flex;flex-direction:column;gap:9px}
+.meter{display:grid;grid-template-columns:1fr auto;gap:2px 8px;font-size:13px;align-items:baseline}
+.meter b{font-weight:600}
+.meter output{font-family:var(--mono);font-size:12px;color:var(--muted)}
+.meter .track{grid-column:1/-1;height:7px;background:var(--line);border-radius:4px;overflow:hidden}
+.meter .fill{height:100%;width:0;background:var(--res);border-radius:4px}
+.meter.f2 .fill{background:var(--env)} .meter.f3 .fill{background:var(--obj)}
+.slider{display:flex;align-items:center;gap:10px;flex:1 1 280px;min-width:0}
+.slider label{font-size:14px;min-width:0}
+.slider input[type=range]{flex:1;min-width:60px;accent-color:var(--res)}
+.slider small{color:var(--muted);font-size:12px;white-space:nowrap}
+.slider output{font-family:var(--mono);font-size:12.5px;color:var(--muted);min-width:46px;text-align:right}
+.readout{font-size:14px;color:var(--muted)}
+.readout b{color:var(--ink)}
+.tag{font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);border:1px solid var(--line);border-radius:4px;padding:2px 6px}
+.note{font-size:13px;color:var(--muted);max-width:70ch}
+.balance{background:var(--tint);border-radius:10px;padding:16px 18px;display:flex;flex-direction:column;gap:8px;max-width:78ch}
+footer{font-size:13px;color:var(--muted);max-width:76ch;border-top:1px solid var(--line);padding-top:12px}
+@media (max-width:640px){.panel{padding:12px}.wrap{gap:26px}}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
+
+[hidden]{display:none!important}
+:root{--c-h:var(--res);--c-ref:var(--obj);--c-over:var(--env);--c-settle:var(--att);--c-rip:var(--obj)}
+nav.parts{display:flex;flex-wrap:wrap;gap:8px 20px;margin-top:4px}
+nav.parts a{color:var(--ink);text-decoration:none;border-bottom:1px solid var(--line);padding-bottom:2px;font-size:15px}
+nav.parts a:hover,nav.parts a:focus-visible{border-color:var(--res);color:var(--res)}
+.msg{min-height:1.5em;font-size:15px}
+.fbbox{border-top:1px solid var(--line);padding-top:12px;display:flex;flex-direction:column;gap:8px;min-height:6.5em}
+.fbbox .verdict{font-family:var(--display);font-size:19px}
+.fbbox .ref{font-family:var(--mono);font-size:11px;color:var(--muted)}
+.fbbox q{font-style:italic;quotes:"“" "”"}
+.strikebar{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center}
+.chip:focus-visible,.pick:focus-visible,summary:focus-visible{outline:2px solid var(--res);outline-offset:2px}
+.scene{border-left:3px solid var(--line);padding:2px 0 2px 12px;font-family:var(--display);font-size:18.5px;line-height:1.45;min-height:5.6em}
+.picks{gap:10px}
+.pick{font:inherit;font-size:15px;color:var(--ink);background:var(--bg);border:1.5px solid var(--line);border-top-width:4px;border-radius:10px;padding:9px 14px;cursor:pointer;min-width:0}
+.pick[data-p="settle"]{border-top-color:var(--c-settle)}
+.pick[data-p="over"]{border-top-color:var(--c-over)}
+.pick[data-p="ripple"]{border-top-color:var(--c-rip)}
+.pick.wrong{opacity:.55}
+.pick.right{background:var(--surface);box-shadow:0 0 0 2px var(--ink)}
+.pick:disabled{cursor:default}
+.dots{display:flex;gap:6px}
+.dots i{width:10px;height:10px;border-radius:50%;border:1.5px solid var(--muted)}
+.dots i.done{background:var(--ink);border-color:var(--ink)}
+.dots i.cur{border-color:var(--ink);box-shadow:0 0 0 2px var(--line)}
+.brandhdr{background:#12285A;color:#FBF5EA;text-align:center;padding:18px 18px 20px;border-radius:14px;display:flex;flex-direction:column;align-items:center;gap:6px}
+.brandhdr .logos{display:flex;align-items:center;justify-content:center;gap:18px}
+.brandhdr .logos img{width:56px;height:66px;object-fit:contain;display:block}
+.brandhdr .logos img.rit{width:86px;height:65px}
+.brandhdr .eyebrow{color:#E6C36A;font-weight:700;letter-spacing:3px}
+.brandhdr h1{color:#FBF5EA;font-weight:700}
+.brandhdr .course{color:#E6C36A;font-weight:600;font-size:14px}
+.brandhdr .lede{color:#F1ECDF;font-size:15.5px;max-width:62ch}
+.brandhdr .scorenote{color:#F1ECDF;font-size:14.5px}
+nav.parts a{color:var(--ink)}
+.brandhdr nav.parts a{color:#FBF5EA;border-bottom:1px solid #E6C36A;background:none;padding-bottom:2px}
+.brandhdr nav.parts a:hover,.brandhdr nav.parts a:focus-visible{color:#E6C36A;border-color:#E6C36A}
+.tag.scored{color:var(--goldt);border-color:var(--gold)}
+.scorebox{border-left:5px solid var(--gold);background:var(--tint);border-radius:10px;padding:12px 14px;margin-bottom:14px}
+.scorebox .big{font-family:var(--display);font-size:30px;line-height:1.1;color:var(--ink)}
+.scorebox .band{font-family:var(--display);font-size:18px;margin:4px 0}
+.scorebox .band.good{color:var(--ok)}
+.scorebox .saved{font-size:13.5px;color:var(--muted)}
+.scorebox ul{margin:6px 0 0;padding-left:20px}
+
+/* PRACTICE TEMPLATE: one coloured "part" per section (part-1 .. part-4) */
+.part{--pc:#0E7A8A;--pcon:#FFFFFF;--pcbg:#E6F2F3;border:2px solid var(--pc);border-radius:14px;overflow:hidden;background:var(--pcbg)}
+.part-1{--pc:#0E7A8A;--pcbg:#E6F2F3}
+.part-2{--pc:#12285A;--pcbg:#EEF0F8}
+.part-3{--pc:#2F6B3A;--pcbg:#E6F0E3}
+.part-4{--pc:#7A2A5E;--pcbg:#F5E6F0}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .part{--pcbg:#0F2250;border-color:var(--pcl,var(--pc))}
+ :root:not([data-theme="light"]) .part-1{--pcl:#46CFC6} :root:not([data-theme="light"]) .part-2{--pcl:#E6C36A} :root:not([data-theme="light"]) .part-3{--pcl:#7FD08C} :root:not([data-theme="light"]) .part-4{--pcl:#F08CC8}}
+:root[data-theme="dark"] .part{--pcbg:#0F2250;border-color:var(--pcl,var(--pc))}
+:root[data-theme="dark"] .part-1{--pcl:#46CFC6} :root[data-theme="dark"] .part-2{--pcl:#E6C36A} :root[data-theme="dark"] .part-3{--pcl:#7FD08C} :root[data-theme="dark"] .part-4{--pcl:#F08CC8}
+.part-band{background:var(--pc);color:var(--pcon);padding:12px 16px;display:flex;align-items:center;flex-wrap:wrap;gap:6px 14px}
+.part-band h2{color:inherit;font-size:clamp(20px,3.4vw,26px);font-weight:600;flex:1 1 220px}
+.part-num{font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;font-weight:500;background:rgba(255,255,255,.18);border-radius:4px;padding:3px 9px}
+.part-band .tag{color:inherit;border-color:currentColor;background:rgba(255,255,255,.12)}
+.part-2 .part-band .tag,.part-2 .part-num{color:#E6C36A}
+.part-body{padding:16px;display:flex;flex-direction:column;gap:14px}
+.part .panel{background:var(--surface)}
+@media (max-width:640px){.part-body{padding:12px}}
+
+
+/* page-specific */
+q{font-style:italic;quotes:"“" "”"}
+.btn:disabled{opacity:.45;cursor:default}
+.btn[aria-pressed="true"]{background:var(--ink);color:var(--surface)}
+.controls{display:flex;flex-direction:column;gap:14px}
+.controls .slider{flex:0 0 auto;flex-wrap:wrap}
+.controls .slider label{font-weight:600;min-width:200px}
+.pick{font:inherit;font-size:15px;color:var(--ink);background:var(--bg);border:1.5px solid var(--line);border-radius:10px;padding:9px 14px;cursor:pointer;min-width:0}
+.pick.wrong{opacity:.55}
+.pick.right{background:var(--ok);border-color:var(--ok);color:#fff}
+.pick:disabled{cursor:default}
+.pick:focus-visible,.tok:focus-visible{outline:2px solid var(--res);outline-offset:2px}
+/* part 1: the annotated equation */
+.eq{display:flex;flex-wrap:wrap;align-items:center;gap:8px 6px;font-family:var(--mono);font-size:19px}
+.eq .op,.eq .br{color:var(--muted);padding:0 2px}
+.eq .br{font-size:26px;line-height:1}
+.tok{font:inherit;color:var(--ink);background:var(--bg);border:1.5px solid var(--line);border-bottom-width:4px;border-radius:8px;padding:6px 11px;cursor:pointer;white-space:nowrap}
+.tok[data-t="x"]{border-bottom-color:var(--obj)} .tok[data-t="h"]{border-bottom-color:var(--res)} .tok[data-t="G"],.tok[data-t="m"]{border-bottom-color:var(--att)} .tok[data-t="n"]{border-bottom-color:var(--env)} .tok[data-t="exp"]{border-bottom-color:var(--ink)}
+.tok[aria-pressed="true"]{background:var(--ink);color:var(--surface)}
+.tok.seen:not([aria-pressed="true"]){border-color:var(--ink)}
+.tok.ghost{border-style:dashed;border-bottom-style:dashed;border-bottom-width:1.5px;color:var(--muted);background:transparent;opacity:.8}
+.tok.ghost[aria-pressed="true"]{background:var(--tint);color:var(--ink);opacity:1}
+.eqnote{font-size:13px;color:var(--muted)}
+.dt{border:1px solid var(--line);border-radius:10px;background:var(--bg);padding:14px;display:flex;flex-direction:column;gap:10px;min-height:14em}
+.dt h3 .sym{font-size:1em}
+.dt dl{display:grid;grid-template-columns:minmax(7.5em,max-content) 1fr;gap:6px 14px;margin:0;font-size:15px}
+.dt dt{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding-top:3px}
+.dt dd{margin:0;min-width:0}
+.dt .ref{font-family:var(--mono);font-size:11px;color:var(--muted)}
+.mix .seg{flex-wrap:wrap;align-self:flex-start;max-width:100%}.mix .seg button{padding:8px 11px}
+.mix{border-top:1px solid var(--line);padding-top:10px;display:flex;flex-direction:column;gap:8px}
+.bars{display:flex;flex-direction:column;gap:6px}
+.bar3{display:grid;grid-template-columns:7.5em 1fr;gap:8px;align-items:center;font-size:13px}
+.bar3 .tr{height:9px;background:var(--line);border-radius:5px;overflow:hidden}
+.bar3 .fl{display:block;height:100%;width:34%;background:var(--muted);border-radius:5px;transition:width .35s}
+.bar3.lead .fl{width:100%;background:var(--res)}
+.sum{border-left:4px solid var(--gold);background:var(--tint);padding:10px 14px;border-radius:8px;display:flex;flex-direction:column;gap:6px}
+/* part 3: the bench */
+#cv3{height:330px}
+.legend{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:13px;color:var(--muted)}
+.legend span{display:inline-flex;align-items:center;gap:7px}
+.sw{display:inline-block;width:22px;height:0;border-top:2.5px solid var(--res)}
+.sw-x{border-top-color:var(--obj)} .sw-m{border-top-color:var(--att)} .sw-e{border-top:2px dashed var(--env)}
+.reads{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.rd{border-top:3px solid var(--line);padding-top:7px;display:flex;flex-direction:column;gap:3px;min-width:0}
+.rd .tag{align-self:flex-start}
+.rd b{font-family:var(--display);font-size:18px;font-weight:500;line-height:1.2}
+.rd[data-r="beat"]{border-color:var(--env)} .rd[data-r="full"]{border-color:var(--res)} .rd[data-r="amp"]{border-color:var(--att)}
+.beyond{color:var(--muted);border:1px dashed var(--line);border-radius:10px;padding:10px 14px;font-size:14px}
+@media (max-width:640px){
+  #cv3{height:290px}
+  .reads{grid-template-columns:minmax(0,1fr)}
+  .rd{flex-direction:row;flex-wrap:wrap;align-items:baseline;gap:4px 10px}
+  .controls .slider label{min-width:0;flex-basis:100%}
+  .scene{font-size:17px}
+  .eq{font-size:17px}
+  .mix .seg{display:flex;flex-direction:column;align-self:stretch}.mix .seg button+button{border-left:0;border-top:1px solid var(--line)}
+  .dt dl{grid-template-columns:1fr;gap:2px}
+  .dt dt{padding-top:8px}
+}
+body[data-part] header{display:none}
+body[data-part="1"] #s2,body[data-part="1"] #s3,body[data-part="2"] #s1,body[data-part="2"] #s3,body[data-part="3"] #s1,body[data-part="3"] #s2{display:none}
+body[data-part]{padding-block:10px 18px}
+</style></head><body>
+<div class="wrap">
+<header class="brandhdr">
+  <div class="logos"><img src="vedantanz-logo.png" alt="Ramakrishna Vedanta NZ emblem" width="56" height="66"><img class="rit" src="ritam-wordmark.png" alt="Ritam" width="86" height="65"></div>
+  <div class="eyebrow">Practice · Lesson 4.3</div>
+  <h1>What Can I Change, and How Fast?</h1>
+  <p class="course">The Mind in the Light of Modern and Spiritual Sciences · Advanced</p>
+  <p class="lede">Lesson 4.3 reads the wave equation as the framework in motion: each term has a role, something that sets it, and a pace at which it can change. Here you will tap through the terms, name each one from its role, and then watch two waves meet on a bench where only some dials change the beat.</p>
+  <p class="scorenote"><b>Part II</b> is scored: your first pick for each description counts. <b>Parts I and III</b> are practice and are not scored.</p>
+  <nav class="parts" aria-label="Parts of this page"><a href="#s1">I. The annotated equation</a><a href="#s2">II. Name the term</a><a href="#s3">III. The meeting bench</a></nav>
+</header>
+
+<section id="s1" class="part part-1">
+  <div class="part-band"><span class="part-num">Part I</span><h2>The annotated equation</h2><span class="tag">Practice: not scored</span></div>
+  <div class="part-body">
+  <p class="intro">Tap each term of the lesson’s equation to read what it is, what sets it, and how fast the lesson says it can change. Then look at the mix: every term carries all three strands, in different proportions.</p>
+  <div class="panel" id="annot">
+    <div class="eq" role="group" aria-label="The wave equation, one button per term">
+      <button class="tok" data-t="exp" aria-pressed="false">ψexp(t)</button><span class="op">=</span><span class="br" aria-hidden="true">[</span><button class="tok" data-t="x" aria-pressed="false">ψₓ(t)</button><span class="op">∗</span><button class="tok" data-t="h" aria-pressed="false">h(t)</button><span class="br" aria-hidden="true">]</span><span class="op">+</span><button class="tok" data-t="G" aria-pressed="false">G(t)</button><span class="op">·</span><button class="tok" data-t="m" aria-pressed="false">ψₘ(t)</button><span class="op">+</span><button class="tok" data-t="n" aria-pressed="false">n(t)</button>
+    </div>
+    <div class="eq" role="group" aria-label="The witness, shown apart from the equation">
+      <button class="tok ghost" data-t="w" aria-pressed="false">{0} the witness: not a term</button>
+    </div>
+    <p class="eqnote">The square brackets group the conditioned object-wave. The witness is drawn outside the equation and greyed, because the lesson says it is not one of its terms.</p>
+    <div class="dt" id="dt" aria-live="polite"><p class="note">Tap a term above.</p></div>
+    <div class="sum" id="sum" hidden>
+      <p><q>You cannot change ψₓ by wishing.</q> <q>What you can change is everything that meets it on the inside: the filter h(t), the attention wave, and over time the noise floor n(t).</q> <span class="note">(§3)</span></p>
+    </div>
+  </div>
+  <div class="balance">
+    <h3>A filter is not the enemy</h3>
+    <p><q>A filter is not, in itself, a problem. You need h(t).</q> <q>Without conditioning, you could not learn a language, recognise a friend, or play a musical instrument.</q> (§3)</p>
+  </div>
+  </div>
+</section>
+
+<section id="s2" class="part part-2">
+  <div class="part-band"><span class="part-num">Part II</span><h2>Name the term</h2><span class="tag scored">Scored: first pick counts</span></div>
+  <div class="part-body">
+  <p class="intro">Eight short descriptions, each taken from how the lesson places a term in the equation. Pick the term, layer or symbol the lesson means. Your first pick counts.</p>
+  <div class="panel" id="st">
+    <div class="bar"><span class="tag" id="stPro">Description 1 of 8</span><div class="dots" id="stDots" aria-hidden="true"></div></div>
+    <div class="scene"><p id="stText"></p></div>
+    <div class="chips picks" id="stPicks" role="group" aria-label="Your answer"></div>
+    <div id="stMsg" class="msg fbbox" role="status" aria-live="polite"><p class="note">Pick one.</p></div>
+    <div class="bar"><div class="chips"><button class="btn primary" id="stNext" hidden>Next description</button><button class="btn ghost" id="stShow">Show me</button><button class="btn ghost" id="stReset">Start again</button></div></div>
+  </div>
+  <div class="panel" id="stDone" hidden>
+    <div class="scorebox" id="scBox" aria-live="polite"></div>
+    <p><q>The guṇas are not labels you can attach to components one-to-one.</q> (§3) The score only shows where to look again in §3. It says nothing about you.</p>
+  </div>
+  </div>
+</section>
+
+<section id="s3" class="part part-3">
+  <div class="part-band"><span class="part-num">Part III</span><h2>The meeting bench</h2><span class="tag">Practice: not scored</span></div>
+  <div class="part-body">
+  <p class="intro">Two waves meet: the object wave ψₓ at its own frequency fₛ, and the attention wave. They are drawn with equal strength, as in the lesson’s teaching case. Move each dial on its own and watch what it changes in the resultant.</p>
+  <div class="panel" id="lab">
+    <div class="scope-wrap"><canvas id="cv3" role="img" aria-label="The object wave, the attention wave and their resultant"></canvas></div>
+    <div class="legend">
+      <span><i class="sw sw-x"></i>ψₓ, the object wave</span>
+      <span><i class="sw sw-m"></i>the attention wave</span>
+      <span><i class="sw"></i>the resultant</span>
+      <span><i class="sw sw-e"></i>its envelope</span>
+    </div>
+    <div class="reads" aria-live="polite">
+      <div class="rd" data-r="beat"><span class="tag">beat at |fₛ − fₘ|</span><b id="rdBeat">rapid</b></div>
+      <div class="rd" data-r="full"><span class="tag">fullness of the resultant</span><b id="rdFull">rises and falls with the beat</b></div>
+      <div class="rd" data-r="amp"><span class="tag">strength of both waves</span><b id="rdAmp">moderate</b></div>
+    </div>
+    <div class="controls">
+      <div class="slider"><label for="rE">Strength of both waves<small> a drawing, not a practice</small></label><small>less</small><input type="range" id="rE" min="0" max="100" value="45"><small>more</small></div>
+      <div class="slider"><label for="rF">fₘ toward fₛ<small> brought by manas</small></label><small>far from fₛ</small><input type="range" id="rF" min="0" max="100" value="8"><small>at fₛ</small></div>
+      <div class="slider"><label for="rP">The standing tilt Δφ<small> carried by ahaṁkāra, corrected by buddhi</small></label><small>marked tilt</small><input type="range" id="rP" min="0" max="100" value="25"><small>released</small></div>
+      <div class="chips"><button class="btn ghost" id="bReset3">Start again</button></div>
+      <p class="note">This is a drawing of the lesson’s mathematics. Moving a dial here is not a practice and says nothing about where anyone’s mind is. The object wave ψₓ is drawn stronger too, so the dial is only a picture: the lesson says <q>you cannot change ψₓ by wishing</q> (§3). Being slower or faster than fₛ is not better or worse: what the lesson asks is the match. The practices themselves are not taught on this page.</p>
+    </div>
+    <div id="labMsg" class="msg fbbox" role="status" aria-live="polite"></div>
+    <p class="beyond" id="beyond" hidden>The drawing ends here: <q>availability is not yet Self-Recognition</q>, and <q>that horizon lies beyond what the equation can describe.</q> (§3)</p>
+  </div>
+  <div class="balance">
+    <h3>Not a verdict on effort</h3>
+    <p>The lesson’s point is structural: <q>Each act of mental engagement that simply more strongly oscillates the existing duality is a doubling operation: it intensifies the loop without lifting out of it.</q> (§3) The bench shows only that: both waves can grow while the beat stays.</p>
+  </div>
+  </div>
+</section>
+<footer>Part II is scored, and only to show you where to look again. Parts I and III are practice and are not scored. Based on Lesson 4.3. This page illustrates the lesson’s model of the wave equation and does not measure, diagnose or advise on anyone’s mind or situation. If anything here touches something difficult for you, please be gentle with yourself, and consider speaking with someone you trust or a qualified professional.<br>Ritam · Ramakrishna Vedanta Centre NZ · <a href="https://www.vedanta.nz">www.vedanta.nz</a> Privacy: when you are signed in, your name, email, answers and score are saved to your member record. Only you and the course instructors can see them. They are not shared or ranked.</footer>
+</div>
+<script>
+(function(){
+"use strict";
+var $=function(id){return document.getElementById(id)};
+try{var q=new URLSearchParams(location.search).get("theme");if(q==="light"||q==="dark")document.documentElement.setAttribute("data-theme",q)}catch(e){}
+try{var pt=new URLSearchParams(location.search).get("part");if(pt==="1"||pt==="2"||pt==="3")document.body.setAttribute("data-part",pt)}catch(e){}
+var EMBED=/[?&]embed=1/.test(location.search);
+function send(m){if(EMBED){try{parent.postMessage(m,"*")}catch(e){}}}
+var RM=false;try{RM=window.matchMedia("(prefers-reduced-motion: reduce)").matches}catch(e){}
+var C={};
+function readColors(){var cs=getComputedStyle(document.documentElement);["--bg","--surface","--ink","--muted","--line","--obj","--att","--res","--env","--ok"].forEach(function(k){C[k]=cs.getPropertyValue(k).trim()})}
+readColors();
+var dpr=Math.max(1,Math.min(2,window.devicePixelRatio||1));
+function fit(c){var w=c.clientWidth,h=c.clientHeight;if(!w||!h)return null;var bw=Math.round(w*dpr),bh=Math.round(h*dpr);if(c.width!==bw||c.height!==bh){c.width=bw;c.height=bh}var g=c.getContext("2d");g.setTransform(dpr,0,0,dpr,0,0);return {g:g,w:w,h:h}}
+function label(g,t,x,y,color){g.font="500 11.5px 'Noto Sans',system-ui,sans-serif";g.textAlign="left";g.textBaseline="alphabetic";var w=g.measureText(t).width;g.save();g.globalAlpha=.85;g.fillStyle=C["--bg"];g.fillRect(x-4,y-12,w+8,16);g.restore();g.fillStyle=color;g.fillText(t,x,y)}
+
+/* ===== Part I: the annotated equation (not scored) ===== */
+var T={
+ exp:{sym:"ψexp(t)",name:"the lived moment of mental engagement",
+  role:"the whole experience you actually live through",
+  set:"The meeting of the two waves, with the noise term added.",
+  chg:"Not set on its own: it is what the terms below add up to, so it changes as they do.",
+  mix:null,ref:"§3"},
+ x:{sym:"ψₓ(t)",name:"the object-wave",
+  role:"what is actually present in the world: the external signal, with its own intrinsic frequency fₛ, before any mental engagement",
+  set:"The world. It <q>exists whether or not anyone attends to it.</q>",
+  chg:"<q>You cannot change ψₓ by wishing.</q> The world’s signal is <q>the one factor in the equation you cannot directly adjust.</q>",
+  mix:{sat:"<q>A sunset over the ocean</q>, in a particular sattvic-predominant mix.",raj:"<q>A sudden aggressive shout</q>, in a sharply rajasic-predominant mix.",tam:"<q>A grey, overcast, windless afternoon</q>, in a tamasic-predominant mix."},ref:"§3"},
+ h:{sym:"h(t)",name:"the impulse response (saṁskāric filter)",
+  role:"the form-loop of conditioning: the filter formed by chitta’s saṁskāras, pre-shaping what arrives",
+  set:"Chitta’s saṁskāras: <q>the structural store of saṁskāras</q> that pre-shape what a moment is allowed to look like.",
+  chg:"<q>It is mostly stable, slow to change.</q> You cannot reshape it <q>by deciding to (the saṁskāras are too deep)</q>. Over time its mix can be reshaped: <q>the gradual reshaping of its guṇa-mix.</q>",
+  mix:{sat:"<q>Grooves of clarity, equanimity, truthfulness, steady devotion.</q>",raj:"<q>Grooves of restlessness, ambition, craving, agitation.</q>",tam:"<q>Grooves of dullness, hopelessness, inertia, denial, defensive numbness.</q>"},ref:"§3"},
+ G:{sym:"G(t)",name:"the amplitude of the attention wave (time-varying gain)",
+  role:"the intensity of engagement, set by the body and prāṇa (arousal, breath, posture)",
+  set:"The body and prāṇa.",
+  chg:"Indirectly, through the body: it is the amplitude <q>that we can train indirectly through those same channels.</q> The breath is <q>the part of it that conscious attention can reach.</q>",
+  mix:{sat:"<q>Steady, moderate, well-modulated.</q>",raj:"<q>High-amplitude, unstable, over-driven.</q>",tam:"<q>Flattened, sluggish, under-driven.</q>"},ref:"§3"},
+ m:{sym:"ψₘ(t)",name:"the attention wave proper",
+  role:"manas’s tuning: the frequency fₘ of attention’s engagement; the wave also carries a standing offset Δφ (ahaṁkāra), which buddhi works to correct",
+  set:"<q>Manas governs the frequency</q>; buddhi’s discernment works to correct the phase.",
+  chg:"<q>You can shift the attention wave within a single breath.</q>",
+  mix:{sat:"A <q>meditative, steady</q> attention is sattvic-predominant.",raj:"A <q>scattered, anxious</q> attention is rajasic-predominant.",tam:"A <q>foggy, dull</q> attention is tamasic-predominant."},ref:"§3"},
+ n:{sym:"n(t)",name:"the noise term",
+  role:"drift from Ritam at the spectral level",
+  set:"How well the whole system fits the signal. When it is well fitted, <q>n(t) is small</q>; when misfitted, <q>n(t) grows.</q> <q>The mind is not broken when n(t) is high. It is misfitted.</q>",
+  chg:"The lesson lists it among what you can change <q>over time.</q>",
+  mix:{sat:"The lesson gives no example for this strand: in Ritam, <q>n(t) is small.</q>",raj:"Rajasic noise is <q>the static of sympathetic activation, mental chatter</q>.",tam:"Tamasic noise is <q>the heaviness of fog</q>."},ref:"§3"}
+};
+var ORDER=["x","h","G","m","n"];
+var seen={},cur=null,strand="sat";
+var SN={sat:"Sattvic-predominant",raj:"Rajasic-predominant",tam:"Tamasic-predominant"};
+function dtHTML(k){
+  if(k==="w")return '<h3>The witness-awareness</h3><p>It <q>does not appear as a term in this equation at all. It is the awareness in which the whole equation appears.</q></p><p><q>This is why the witness is unchanged by the changes in mental life: it is the awareness, not the contents.</q></p><p class="note">So there is nothing here to set or to speed up, and it is drawn apart from the terms.</p><p class="ref">§3</p>';
+  var d=T[k];
+  var h='<h3><span class="sym">'+d.sym+'</span>: '+d.name+'</h3><dl><dt>Its role</dt><dd>'+d.role+'</dd><dt>What sets it</dt><dd>'+d.set+'</dd><dt>How it changes</dt><dd>'+d.chg+'</dd></dl>';
+  if(d.mix){
+    h+='<div class="mix"><div class="seg" role="group" aria-label="Which strand predominates">'+["sat","raj","tam"].map(function(s){return '<button type="button" data-s="'+s+'" aria-pressed="'+(s===strand?"true":"false")+'">'+SN[s]+'</button>'}).join("")+'</div>'
+     +'<div class="bars" aria-hidden="true">'+[["sat","sattva (equilibrium)"],["raj","rajas (rhythm)"],["tam","tamas (form)"]].map(function(r){return '<div class="bar3'+(r[0]===strand?' lead':'')+'"><span>'+r[1]+'</span><span class="tr"><span class="fl"></span></span></div>'}).join("")+'</div>'
+     +'<p id="mixTxt">'+d.mix[strand]+'</p><p class="note">All three strands are present in every term; only which one predominates differs. <q>The same component can be sattvic-predominant in one person and at one moment, rajasic-predominant at another moment, and tamasic-predominant at a third.</q></p></div>';
+  }
+  return h+'<p class="ref">'+d.ref+'</p>';
+}
+function showTerm(k){
+  cur=k;if(k!=="w")seen[k]=true;
+  document.querySelectorAll("#annot .tok").forEach(function(b){var on=b.dataset.t===k;b.setAttribute("aria-pressed",on?"true":"false");if(seen[b.dataset.t])b.classList.add("seen")});
+  $("dt").innerHTML=dtHTML(k);
+  rebind();
+  $("sum").hidden=!ORDER.every(function(o){return seen[o]});
+}
+function rebind(){$("dt").querySelectorAll(".mix .seg button").forEach(function(b){b.addEventListener("click",function(){strand=b.dataset.s;$("dt").innerHTML=dtHTML(cur);rebind();var nb=$("dt").querySelector('.mix .seg button[data-s="'+strand+'"]');if(nb)nb.focus({preventScroll:true})})})}
+document.querySelectorAll("#annot .tok").forEach(function(b){b.addEventListener("click",function(){showTerm(b.dataset.t)})});
+
+/* ===== Part II: name the term (scored) ===== */
+var SH={
+ x:"the object-wave: what is actually present in the world, before any mental engagement",
+ h:"the saṁskāric filter, formed by chitta’s saṁskāras",
+ G:"the amplitude of the attention wave, set by the body and prāṇa",
+ m:"the attention wave proper, whose frequency fₘ manas governs",
+ n:"the noise term: drift from Ritam at the spectral level",
+ env:"the envelope, the clarity layer: the felt flicker of duality",
+ car:"the carrier, the content layer, jointly authored at the mean frequency",
+ vr:"the vṛtti: the whole resultant wave of the meeting, of which the envelope and the carrier are the two layers",
+ wit:"the witness-awareness, which <q>does not appear as a term in this equation at all</q>"
+};
+var SY={x:"ψₓ(t)",h:"h(t)",G:"G(t)",m:"ψₘ(t)",n:"n(t)",env:"The envelope",car:"The carrier",vr:"The whole resultant, the vṛtti",wit:"The witness-awareness"};
+var FIVE=["x","h","G","m","n"];
+var ITEMS=[
+ {t:"What is actually present in the world before any mental engagement: the external signal, with its own frequency fₛ.",o:FIVE,a:"x",
+  why:"This is ψₓ, the object-wave. <q>You cannot change ψₓ by wishing.</q>"},
+ {t:"The filter formed by chitta’s saṁskāras, pre-shaping what arrives. The lesson calls it mostly stable and slow to change.",o:FIVE,a:"h",
+  why:"This is h(t): <q>the filter formed by chitta’s saṁskāras</q>. <q>It is mostly stable, slow to change.</q>"},
+ {t:"The intensity of engagement, set by the body and prāṇa (arousal, breath, posture).",o:FIVE,a:"G",
+  why:"This is G(t): <q>the amplitude that the body and prāṇa set</q>. The lesson writes it as a separate factor in front of ψₘ(t)."},
+ {t:"The attention wave proper: the wave whose frequency fₘ manas governs.",o:FIVE,a:"m",
+  why:"This is ψₘ(t). <q>Manas governs the frequency</q>; G(t) is its amplitude, drawn out as its own factor."},
+ {t:"Drift from Ritam at the spectral level. It grows when the system is misfitted to the signal, and the lesson adds that a high value does not mean the mind is broken.",o:FIVE,a:"n",
+  why:"This is n(t). <q>The mind is not broken when n(t) is high. It is misfitted.</q> <q>This is not a moral failing.</q>"},
+ {t:"The lesson says you can shift this within a single breath.",o:["x","h","m"],a:"m",
+  hint:{x:"The lesson says of ψₓ: <q>you cannot change ψₓ by wishing.</q>",h:"The lesson says of h(t): <q>It is mostly stable, slow to change.</q>"},
+  why:"<q>You can shift the attention wave within a single breath.</q> That is ψₘ."},
+ {t:"The slow swelling and fading of the resultant, beating at |fₛ − fₘ|: the felt flicker of duality. Which is it?",o:["env","car","vr"],a:"env",
+  why:"This is the envelope, the clarity layer: <q>the felt flicker of duality</q>. The carrier is the content layer, and the whole resultant is the vṛtti."},
+ {t:"Which of these is not a term in the equation at all?",o:["G","n","wit","h"],a:"wit",
+  hint:{G:"G(t) is a term: it multiplies ψₘ(t).",n:"n(t) is a term: the noise added at the end.",h:"h(t) is a term: ψₓ is convolved with it."},
+  why:"The witness <q>does not appear as a term in this equation at all. It is the awareness in which the whole equation appears.</q>"}
+];
+var S={i:0,done:{},miss:{},sent:false};
+var stMsg=$("stMsg"),stPicks=$("stPicks");
+function dots(){var d=$("stDots");d.innerHTML="";ITEMS.forEach(function(_,k){var e=document.createElement("i");if(S.done[k])e.className="done";else if(k===S.i)e.className="cur";d.appendChild(e)})}
+function showItem(){
+  var s=ITEMS[S.i];$("stText").textContent=s.t;$("stPro").textContent="Description "+(S.i+1)+" of "+ITEMS.length;
+  var opts=s.o.slice();for(var z=opts.length-1;z>0;z--){var y=Math.floor(Math.random()*(z+1)),tmp=opts[z];opts[z]=opts[y];opts[y]=tmp}
+  stPicks.innerHTML=opts.map(function(k){return '<button class="pick" data-p="'+k+'" aria-pressed="false"><span class="sym">'+SY[k]+'</span></button>'}).join("");
+  stPicks.querySelectorAll(".pick").forEach(function(p){p.addEventListener("click",function(){onPick(p)})});
+  stMsg.innerHTML='<p class="note">Pick one.</p>';
+  $("stNext").hidden=true;$("stShow").hidden=false;dots();
+}
+function reveal(){
+  var s=ITEMS[S.i];S.done[S.i]=true;
+  stPicks.querySelectorAll(".pick").forEach(function(p){p.disabled=true;if(p.dataset.p===s.a){p.classList.add("right");p.setAttribute("aria-pressed","true")}});
+  stMsg.innerHTML='<p class="verdict">'+SY[s.a]+'.</p><p>'+s.why+'</p><p class="ref">§3</p>';
+  $("stShow").hidden=true;
+  if(S.i<ITEMS.length-1){$("stNext").hidden=false}else{$("stDone").hidden=false;finish()}
+  dots();
+}
+function onPick(p){
+  var s=ITEMS[S.i],k=p.dataset.p;
+  if(k===s.a){reveal()}
+  else{S.miss[S.i]=true;p.classList.add("wrong");p.disabled=true;
+    var hint=(s.hint&&s.hint[k])||("That is "+SH[k]+". Look at the description again.");
+    stMsg.innerHTML='<p class="verdict">Not this one.</p><p>'+hint+'</p>'}
+}
+$("stNext").addEventListener("click",function(){S.i++;showItem();try{stPicks.querySelector(".pick").focus({preventScroll:true})}catch(e){}});
+$("stShow").addEventListener("click",function(){S.miss[S.i]=true;reveal()});
+$("stReset").addEventListener("click",function(){S={i:0,done:{},miss:{},sent:S.sent};$("stDone").hidden=true;showItem()});
+
+/* ===== scoring for Part II, and hand-off to the host page when embedded ===== */
+var META={code:"ADV-P-4-3",title:"Practice: Lesson 4.3, What Can I Change, and How Fast? (Part II)",programme:"The Mind in the Light of Modern and Spiritual Sciences (Advanced)",cut:75};
+function plain(s){return String(s).replace(/<[^>]*>/g,"")}
+function finish(){
+  if(S.sent){return}
+  var n=ITEMS.length,right=0,ans=[],wrong=[];
+  ITEMS.forEach(function(it,k){var ok=!S.miss[k];if(ok){right++}else{wrong.push(k)}ans.push({q:k+1,ok:ok,given:SY[it.a]+(ok?" (first pick)":" (not on first pick)")})});
+  var pct=Math.round(100*right/n),good=pct>=META.cut;
+  var h='<div class="big">'+right+' of '+n+' on the first pick</div><p class="band '+(good?'good':'')+'">'+(good?'Well grasped':'Revisit these ideas')+'</p>';
+  if(wrong.length){h+='<p>Look again at §3 for:</p><ul>'+wrong.map(function(k){return '<li>Description '+(k+1)+': '+SY[ITEMS[k].a]+'</li>'}).join('')+'</ul>'}
+  else{h+='<p>Nothing to revisit here.</p>'}
+  h+='<p class="saved" id="scSaved">'+(EMBED?'Saving your result…':'Sign in on the course page to have your result saved.')+'</p>';
+  $("scBox").innerHTML=h;S.sent=true;
+  send({type:"quizResult",code:META.code,title:META.title,programme:META.programme,score:right,maxScore:n,percent:pct,questionsCorrect:right,questionCount:n,answers:ans});
+}
+window.addEventListener("message",function(e){
+  var d=e.data||{};if(!d||typeof d!=="object"){return}
+  var el=$("scSaved");if(!el){return}
+  if(d.type==="saved"){el.textContent="Your result has been saved to your member record."}
+  else if(d.type==="saveError"){el.textContent="Your result could not be saved this time."}
+  else if(d.type==="notMember"){el.textContent="Sign in as a member to have your result saved."}
+});
+
+/* ===== Part III: the meeting bench (not scored) ===== */
+var FS=10,TAU=Math.PI*2;
+var D={t:0,anim:0,last:0};
+var rE=$("rE"),rF=$("rF"),rP=$("rP"),cv3=$("cv3");
+function amp(){return .35+.65*(+rE.value)/100}
+function matched(){return +rF.value>=98}
+function released(){return +rP.value>=98}
+function fm(){return matched()?FS:FS*(1+.35*(100-(+rF.value))/100)}
+function dphi(){return released()?0:Math.PI*(100-(+rP.value))/100}
+function words(){
+  var d=(100-(+rF.value))/100,ph=dphi(),r=Math.cos(ph/2),ev=+rE.value;
+  var beat=matched()?"none":d>.55?"rapid":"slower";
+  var full=matched()?(r>.93?"full":r>.7?"somewhat reduced":"much reduced"):"rises and falls with the beat";
+  var a=ev<34?"low":ev<67?"moderate":"high";
+  var tilt=released()?"released":(+rP.value>=70?"a slight tilt":+rP.value>=35?"a marked tilt":"a strong tilt");
+  return {beat:beat,full:full,amp:a,tilt:tilt,r:r};
+}
+function draw3(){
+  var f=fit(cv3);if(!f)return;var g=f.g,W=f.w,H=f.h;
+  g.clearRect(0,0,W,H);g.fillStyle=C["--bg"];g.fillRect(0,0,W,H);
+  var x0=12,x1=W-12,n=Math.max(200,Math.round(W)),s=(H-70)/8.4,A=amp();
+  var c1=14+s+6,c2=c1+s+6+14+s+6,c3=c2+s+6+14+2*s+6;
+  var f2=fm(),ph=dphi(),T1=1;
+  function X(i){return x0+(x1-x0)*i/(n-1)}
+  function lane(cy,fn,color,lw){g.save();g.strokeStyle=color;g.lineWidth=lw;g.lineJoin="round";g.beginPath();for(var i=0;i<n;i++){var t=D.t+T1*i/(n-1),y=cy-s*fn(t);if(i)g.lineTo(X(i),y);else g.moveTo(X(i),y)}g.stroke();g.restore()}
+  g.strokeStyle=C["--line"];g.lineWidth=1;
+  [c1+s+7,c2+s+7].forEach(function(y){g.beginPath();g.moveTo(0,y);g.lineTo(W,y);g.stroke()});
+  lane(c1,function(t){return A*Math.cos(TAU*FS*t)},C["--obj"],1.8);
+  label(g,"ψₓ, fixed at fₛ",x0+4,c1-s+2,C["--obj"]);
+  lane(c2,function(t){return A*Math.cos(TAU*f2*t+ph)},C["--att"],1.8);
+  label(g,"the attention wave",x0+4,c2-s+2,C["--att"]);
+  g.save();g.strokeStyle=C["--env"];g.lineWidth=1.5;g.setLineDash([6,4]);
+  [1,-1].forEach(function(sg){g.beginPath();for(var i=0;i<n;i++){var t=D.t+T1*i/(n-1),e=2*A*Math.abs(Math.cos(Math.PI*(f2-FS)*t+ph/2)),y=c3-sg*s*e;if(i)g.lineTo(X(i),y);else g.moveTo(X(i),y)}g.stroke()});
+  g.restore();
+  lane(c3,function(t){return A*Math.cos(TAU*FS*t)+A*Math.cos(TAU*f2*t+ph)},C["--res"],2);
+  label(g,"the resultant",x0+4,c3-2*s+2,C["--res"]);
+  var w=words();
+  cv3.setAttribute("aria-label","Object wave fixed; attention wave with "+w.amp+" strength and "+w.tilt+"; beat "+w.beat+"; fullness "+w.full+".");
+}
+function reads(){var w=words();$("rdBeat").textContent=w.beat;$("rdFull").textContent=w.full;$("rdAmp").textContent=w.amp;
+  rE.setAttribute("aria-valuetext",w.amp);rP.setAttribute("aria-valuetext",w.tilt);
+  rF.setAttribute("aria-valuetext",matched()?"at fₛ":(100-(+rF.value))/100>.55?"far from fₛ":"nearer fₛ");
+  $("beyond").hidden=!(matched()&&released())}
+function loop(t){if(t-D.last>40){D.last=t;D.t+=.004;draw3()}D.anim=requestAnimationFrame(loop)}
+var msg3=$("labMsg");
+function say(v,body,ref){msg3.innerHTML=(v?'<p class="verdict">'+v+'</p>':'')+body+'<p class="ref">'+ref+'</p>'}
+function aligned(){
+  say("One wave at fₛ.","<p><q>The resultant becomes a single wave at the object’s own frequency, with doubled amplitude.</q> <q>The beat has ceased; the envelope is constant fullness; the content runs at the rhythm of the known.</q></p><p class=\"note\">R(t) = 2A · cos(2π fₛ t). This is the lesson’s mathematics of full alignment, drawn once.</p>","§3");
+}
+rE.addEventListener("input",function(){reads();draw3();
+  say("Both waves are stronger.","<p>The resultant grows. The beat has not moved: <q>it intensifies the loop without lifting out of it.</q> The page shows that the pace of the beat belongs to the match between fₘ and fₛ, not to the strength.</p>","§3")});
+rF.addEventListener("input",function(){reads();draw3();
+  if(matched()){if(released()){aligned()}else say("fₘ is at fₛ: the beat is gone.","<p><q>When Δf = 0, the envelope stops fluctuating altogether: a constant fullness in which the content streams whole.</q></p><p>The tilt now decides how full it is: the fullness is <b>"+words().full+"</b>.</p>","§3")}
+  else if((100-(+rF.value))/100>.55)say("Far from fₛ.","<p><q>When the mind is far out of resonance with its object (Δf large), the beat is rapid and pronounced.</q></p>","§3");
+  else say("Nearer fₛ.","<p><q>When the mind is close to resonance (Δf small), the beat slows and softens.</q></p>","§3")});
+rP.addEventListener("input",function(){reads();draw3();
+  if(matched()&&released())aligned();
+  else if(matched())say("The tilt: "+words().tilt+".","<p>With fₘ at fₛ, <q>the resultant’s fullness is scaled by the factor cos(Δφ/2): the larger the tilt of self-reference, the less of the world is allowed to arrive.</q> Here the fullness is <b>"+words().full+"</b>.</p><p class=\"note\">The tilt is not a flaw to be ashamed of: the lesson says ahaṁkāra <q>is not destroyed</q> in samādhi, and that its tilt <q>is released through buddhi’s correction.</q></p>","§3");
+  else say("The tilt: "+words().tilt+".","<p>While a beat is running, the tilt mostly shifts where the swells fall. Bring fₘ to fₛ to see what it does to the fullness: <q>with matched frequencies but a standing offset</q>, the fullness is scaled by cos(Δφ/2).</p>","§3")});
+function reset3(first){rE.value=45;rF.value=8;rP.value=25;reads();draw3();
+  say("",first?"<p>Three dials, each on its own. Start with the strength of both waves and watch what changes and what does not. Then try fₘ, then the tilt.</p>":"<p>Back to the start: moderate strength, fₘ far from fₛ, a marked tilt.</p>","§3")}
+$("bReset3").addEventListener("click",function(){reset3(false)});
+
+send({type:"ready"});
+(function(){
+  var last=0;
+  function h(){var d=document.documentElement,b=document.body;var v=Math.ceil(Math.max(d.scrollHeight,b.scrollHeight,b.offsetHeight));if(v&&Math.abs(v-last)>1){last=v;send({type:"height",height:v})}}
+  window.addEventListener("load",h);window.addEventListener("resize",h);
+  if(window.ResizeObserver)new ResizeObserver(h).observe(document.body);
+  setInterval(h,700);h();
+})();
+var rt=0;
+window.addEventListener("resize",function(){clearTimeout(rt);rt=setTimeout(draw3,80)});
+function retheme(){readColors();draw3()}
+try{window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change",retheme)}catch(e){}
+new MutationObserver(retheme).observe(document.documentElement,{attributes:true,attributeFilter:["data-theme"]});
+reset3(true);showItem();
+if(!RM){D.anim=requestAnimationFrame(loop)}
+})();
+</script>
+</body></html>

@@ -1,0 +1,916 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Practice: Lesson 4.4, Four Cases, Read Both Ways</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans:wght@400..700&family=Noto+Serif:ital,wght@0,400..700;1,400..700&display=swap">
+<style>
+:root{
+  --bg:#FBF5EA; --surface:#FFFDF8; --ink:#1E1E1E; --muted:#5A5A5A; --line:#E6DAC3; --tint:#F3EAD3; --navy:#12285A; --gold:#C9A24A; --goldt:#6B4E0E;
+  --obj:#0B8686; --att:#C95F06; --res:#2E3192; --env:#C0245B; --ok:#1B7A52;
+  --display:"Noto Serif",Georgia,"Times New Roman",serif;
+  --body:"Noto Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0B1A3D; --surface:#12285A; --ink:#FBF5EA; --muted:#C9C3B3; --line:#2B4686; --tint:#1D3770; --gold:#E6C36A; --goldt:#E6C36A;
+    --obj:#46CFC6; --att:#F5A04D; --res:#A3AAFF; --env:#FF7BA9; --ok:#5BD59B; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0B1A3D; --surface:#12285A; --ink:#FBF5EA; --muted:#C9C3B3; --line:#2B4686; --tint:#1D3770; --gold:#E6C36A; --goldt:#E6C36A;
+  --obj:#46CFC6; --att:#F5A04D; --res:#A3AAFF; --env:#FF7BA9; --ok:#5BD59B; color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;
+  padding-left:max(14px,env(safe-area-inset-left,0px));padding-right:max(14px,env(safe-area-inset-right,0px));padding-block:22px 40px}
+.wrap{max-width:900px;margin:0 auto;display:flex;flex-direction:column;gap:32px}
+h1,h2,h3{font-family:var(--display);font-weight:500;text-wrap:balance;margin:0;letter-spacing:-.01em}
+h1{font-size:clamp(30px,5.4vw,44px);line-height:1.06}
+h2{font-size:clamp(23px,3.4vw,29px);line-height:1.15}
+h3{font-size:19px;line-height:1.25}
+p{margin:0}
+sub{font-size:.72em;line-height:0}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.lede{font-size:17.5px;max-width:64ch}
+.intro{max-width:66ch;color:var(--muted)}
+header{display:flex;flex-direction:column;gap:12px}
+section{display:flex;flex-direction:column;gap:18px;min-width:0}
+.sym{font-family:var(--mono);font-size:.92em;white-space:nowrap}
+.k-obj{color:var(--obj)} .k-att{color:var(--att)} .k-res{color:var(--res)} .k-env{color:var(--env)}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px;display:flex;flex-direction:column;gap:14px;min-width:0}
+.bar{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;justify-content:space-between}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--bg)}
+.seg button{font:inherit;font-size:14px;color:var(--muted);background:transparent;border:0;padding:8px 13px;cursor:pointer}
+.seg button+button{border-left:1px solid var(--line)}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--surface)}
+button:focus-visible,input:focus-visible{outline:2px solid var(--res);outline-offset:2px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{font:inherit;font-size:14px;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:7px 13px;cursor:pointer;display:inline-flex;gap:8px;align-items:center}
+.chip i{font-style:normal;font-family:var(--mono);font-size:11px;color:var(--muted)}
+.chip[aria-pressed="true"]{background:var(--res);border-color:var(--res);color:#fff}
+.chip[aria-pressed="true"] i{color:#fff;opacity:.8}
+.chip:disabled{cursor:default}
+.chip.reached:not([aria-pressed="true"]){border-color:var(--res)}
+.btn{font:inherit;font-size:14px;color:var(--ink);background:var(--surface);border:1px solid var(--ink);border-radius:8px;padding:8px 16px;cursor:pointer}
+.btn.primary{background:var(--ink);color:var(--surface)}
+.btn.ghost{border-color:var(--line);color:var(--muted)}
+.scope-wrap{position:relative;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--bg)}
+canvas{display:block;width:100%}
+.playbtn{position:absolute;right:8px;bottom:8px;font:inherit;font-size:12px;background:var(--surface);color:var(--muted);border:1px solid var(--line);border-radius:6px;padding:4px 10px;cursor:pointer}
+.box{border:1px solid var(--line);border-radius:8px;background:var(--bg);padding:10px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.box .cap{font-size:12px;color:var(--muted)}
+.meters{display:flex;flex-direction:column;gap:9px}
+.meter{display:grid;grid-template-columns:1fr auto;gap:2px 8px;font-size:13px;align-items:baseline}
+.meter b{font-weight:600}
+.meter output{font-family:var(--mono);font-size:12px;color:var(--muted)}
+.meter .track{grid-column:1/-1;height:7px;background:var(--line);border-radius:4px;overflow:hidden}
+.meter .fill{height:100%;width:0;background:var(--res);border-radius:4px}
+.meter.f2 .fill{background:var(--env)} .meter.f3 .fill{background:var(--obj)}
+.slider{display:flex;align-items:center;gap:10px;flex:1 1 280px;min-width:0}
+.slider label{font-size:14px;min-width:0}
+.slider input[type=range]{flex:1;min-width:60px;accent-color:var(--res)}
+.slider small{color:var(--muted);font-size:12px;white-space:nowrap}
+.slider output{font-family:var(--mono);font-size:12.5px;color:var(--muted);min-width:46px;text-align:right}
+.readout{font-size:14px;color:var(--muted)}
+.readout b{color:var(--ink)}
+.tag{font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);border:1px solid var(--line);border-radius:4px;padding:2px 6px}
+.note{font-size:13px;color:var(--muted);max-width:70ch}
+.balance{background:var(--tint);border-radius:10px;padding:16px 18px;display:flex;flex-direction:column;gap:8px;max-width:78ch}
+footer{font-size:13px;color:var(--muted);max-width:76ch;border-top:1px solid var(--line);padding-top:12px}
+@media (max-width:640px){.panel{padding:12px}.wrap{gap:26px}}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
+
+[hidden]{display:none!important}
+:root{--c-self:var(--ok);--c-bud:var(--res);--c-man:var(--att);--c-sen:var(--obj);--c-body:var(--muted);--c-road:var(--muted)}
+nav.parts{display:flex;flex-wrap:wrap;gap:8px 20px;margin-top:4px}
+nav.parts a{color:var(--ink);text-decoration:none;border-bottom:1px solid var(--line);padding-bottom:2px;font-size:15px}
+nav.parts a:hover,nav.parts a:focus-visible{border-color:var(--res);color:var(--res)}
+.msg{min-height:1.5em;font-size:15px}
+.msg.ok{color:var(--ok)}
+.fbbox{border-top:1px solid var(--line);padding-top:12px;display:flex;flex-direction:column;gap:6px;min-height:6.5em}
+.fbbox .verdict{font-family:var(--display);font-size:19px}
+.ref{font-family:var(--mono);font-size:11px;color:var(--muted)}
+.scene{border-left:3px solid var(--line);padding:2px 0 2px 12px;display:flex;flex-direction:column;gap:6px}
+.scene p{font-family:var(--display);font-size:17.5px;line-height:1.45}
+.scene p.given{font-family:var(--body);font-size:14.5px;color:var(--muted)}
+.safety{font-size:14.5px;max-width:74ch;border:1px solid var(--line);border-left:4px solid var(--env);border-radius:8px;background:var(--surface);padding:10px 14px}
+.fig,.chariot{width:100%;height:auto;display:block}
+/* chariot */
+.chariotRow{display:grid;grid-template-columns:minmax(0,1.7fr) minmax(0,1fr);gap:14px;align-items:center}
+.figbox{border:1px solid var(--line);border-radius:8px;background:var(--bg);padding:6px;min-width:0}
+.chariot .ground{stroke:var(--muted);stroke-width:1.5}
+.chariot .road{stroke:var(--line);stroke-width:2;stroke-dasharray:10 8}
+.chariot .ink{stroke:var(--ink);fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+.chariot .gp{transition:opacity .3s}
+.chariot .g-body .wh{fill:none;stroke:var(--c-body);stroke-width:4}
+.chariot .g-body .sp{stroke:var(--c-body);stroke-width:2}
+.chariot .g-body .cart{fill:var(--tint);stroke:var(--c-body);stroke-width:3;stroke-linejoin:round}
+.chariot .g-body .pole{stroke:var(--c-body);stroke-width:4;stroke-linecap:round}
+.chariot .g-sen .hb{fill:var(--c-sen);stroke:none}
+.chariot .g-sen .hl{stroke:var(--c-sen);stroke-width:5;stroke-linecap:round;fill:none}
+.chariot .g-sen .back .hb{opacity:.45} .chariot .g-sen .back .hl{opacity:.45}
+.chariot .g-sen .mot{stroke:var(--c-sen);stroke-width:2;stroke-linecap:round;opacity:.6}
+.chariot .g-man .rein{fill:none;stroke:var(--c-man);stroke-width:3.2;stroke-linecap:round}
+.chariot .g-man .arr{fill:var(--c-man)}
+.chariot .g-bud .fig2{fill:none;stroke:var(--c-bud);stroke-width:4;stroke-linecap:round;stroke-linejoin:round}
+.chariot .g-bud .hd{fill:var(--c-bud)}
+.chariot .g-self .fig2{fill:none;stroke:var(--c-self);stroke-width:4;stroke-linecap:round;stroke-linejoin:round}
+.chariot .g-self .hd{fill:var(--c-self)}
+.chariot .g-self .halo{fill:none;stroke:var(--c-self);stroke-width:1.5;stroke-dasharray:3 4;opacity:.8}
+.chariot .g-road .road{stroke:var(--c-road)}
+.chariot .hl-ring{fill:none;stroke:var(--ink);stroke-width:2;stroke-dasharray:5 4;opacity:0;transition:opacity .25s}
+.chariot.sel-self .r-self,.chariot.sel-bud .r-bud,.chariot.sel-man .r-man,.chariot.sel-sen .r-sen,.chariot.sel-body .r-body,.chariot.sel-road .r-road{opacity:.9}
+.chariot[class*="sel-"] .gp{opacity:.35}
+.chariot.sel-self .g-self,.chariot.sel-bud .g-bud,.chariot.sel-man .g-man,.chariot.sel-sen .g-sen,.chariot.sel-body .g-body,.chariot.sel-road .g-road{opacity:1}
+.chariot .bob{animation:bob .5s ease-in-out infinite alternate}
+.chariot .bob2{animation:bob .42s ease-in-out infinite alternate}
+@keyframes bob{from{transform:translateY(0)}to{transform:translateY(-3px)}}
+.chain{display:flex;flex-direction:column;gap:0;align-items:stretch;font-size:14px}
+.chain .cap{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.chain .nd{border:1px solid var(--line);border-left:4px solid var(--line);border-radius:6px;background:var(--surface);padding:5px 9px}
+.chain .ar{text-align:center;color:var(--muted);font-size:14px;line-height:1.1;padding:1px 0}
+.chain .nd[data-k="self"]{border-left-color:var(--c-self)} .chain .nd[data-k="bud"]{border-left-color:var(--c-bud)}
+.chain .nd[data-k="man"]{border-left-color:var(--c-man)} .chain .nd[data-k="sen"]{border-left-color:var(--c-sen)}
+.chain .nd[data-k="body"]{border-left-color:var(--c-body)} .chain .nd.dim{opacity:.5}
+.chain .src{font-size:12.5px;color:var(--muted);margin-top:8px}
+.chip .sw{width:10px;height:10px;border-radius:50%;display:inline-block;background:var(--line)}
+.chip[data-k="self"] .sw{background:var(--c-self)} .chip[data-k="bud"] .sw{background:var(--c-bud)} .chip[data-k="man"] .sw{background:var(--c-man)}
+.chip[data-k="sen"] .sw{background:var(--c-sen)} .chip[data-k="body"] .sw{background:var(--c-body)} .chip[data-k="road"] .sw{background:transparent;border:2px dashed var(--c-road);width:12px;height:12px}
+.chip[aria-pressed="true"] .sw{box-shadow:0 0 0 2px #fff}
+/* cases */
+.caseTabs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.caseTabs button{font:inherit;font-size:14.5px;text-align:left;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--ink);padding:9px 11px;cursor:pointer;display:flex;flex-direction:column;gap:2px;min-width:0}
+.caseTabs button small{font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.caseTabs button[aria-pressed="true"]{border-color:var(--ink);box-shadow:inset 0 -3px 0 var(--ink)}
+.caseTabs button .st{font-size:12px;color:var(--muted)}
+.rows{display:flex;flex-direction:column;gap:0;border-top:1px solid var(--line)}
+.row{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.6fr);gap:6px 14px;padding:10px 0;border-bottom:1px solid var(--line);align-items:start}
+.row .rl b{font-weight:600;display:block}
+.row .rl span{font-size:12.5px;color:var(--muted)}
+.row .opts{display:flex;flex-wrap:wrap;gap:6px}
+.opt{font:inherit;font-size:13.5px;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:6px 12px;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
+.opt[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--surface)}
+.opt:disabled{cursor:default}
+.opt svg{width:30px;height:14px;flex:0 0 auto}
+.opt svg path{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.opt.lesson{box-shadow:0 0 0 2px var(--ok)}
+.row .given{grid-column:2;font-size:13.5px;color:var(--muted);font-style:italic}
+.row .rv{grid-column:1/-1;display:none;flex-direction:column;gap:3px;background:var(--tint);border-radius:8px;padding:8px 11px;font-size:14px}
+.reveal-on .row .rv{display:flex}
+.rv .lw{color:var(--ink)}
+.rv .fb{font-size:13.5px}
+.rv .fb b{font-weight:600}
+.rv .fb.same b{color:var(--ok)} .rv .fb.part b{color:var(--att)} .rv .fb.diff b{color:var(--env)} .rv .fb.open b{color:var(--muted)}
+.reveal{display:flex;flex-direction:column;gap:14px;border-top:1px solid var(--line);padding-top:14px}
+.revTop{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:14px;align-items:center}
+.diag{display:flex;flex-direction:column;gap:6px}
+.diag p{font-family:var(--display);font-size:17px;line-height:1.45}
+.travel{border-left:4px solid var(--att);background:var(--surface);border-radius:0 8px 8px 0;padding:10px 14px;display:flex;flex-direction:column;gap:6px;font-size:15px}
+.travel .eyebrow{color:var(--att)}
+.keypt{background:var(--tint);border-radius:10px;padding:12px 14px;font-size:15px;display:flex;flex-direction:column;gap:4px}
+.keypt b{font-family:var(--display);font-weight:500;font-size:17px}
+.tblwrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--line);border-radius:8px}
+.cmpT{border-collapse:collapse;width:100%;min-width:620px;font-size:13.5px}
+.cmpT th,.cmpT td{border-bottom:1px solid var(--line);padding:7px 9px;text-align:left;vertical-align:top}
+.cmpT thead th{font-family:var(--display);font-weight:500;font-size:15px;background:var(--tint)}
+.cmpT tbody th{font-weight:600;color:var(--muted);white-space:nowrap}
+.cmpT tr:last-child th,.cmpT tr:last-child td{border-bottom:0}
+.takeaways{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:8px;font-size:15px;max-width:76ch}
+/* part 3 */
+.eqLine{font-family:var(--mono);font-size:clamp(15px,2.6vw,21px);text-align:center;line-height:1.9;padding:10px 4px;border:1px solid var(--line);border-radius:8px;background:var(--bg);overflow-wrap:anywhere}
+.eqLine .t,.eqSub .t{border-radius:5px;padding:1px 3px;transition:background .25s,box-shadow .25s}
+.eqLine .op{color:var(--muted)}
+.eqLine .t.lit,.eqSub .t.lit{background:var(--tint);box-shadow:0 0 0 2px var(--res)}
+.eqSub{display:flex;flex-wrap:wrap;gap:6px 14px;justify-content:center;font-size:14px;color:var(--muted)}
+.eqSub .t.lit{color:var(--ink)}
+.cardtray{display:flex;flex-wrap:wrap;gap:8px}
+.cardtray:empty::after{content:"All functions are placed.";color:var(--muted);font-size:14px}
+.fc{font:inherit;font-size:15px;font-family:var(--display);border:1.5px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);padding:8px 14px;cursor:pointer}
+.fc[aria-pressed="true"]{background:var(--surface);box-shadow:0 0 0 2px var(--ink)}
+.fc.wrong{animation:shake .35s}
+@keyframes shake{25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
+.slots{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+.slot{font:inherit;text-align:left;border:1.5px dashed var(--line);border-radius:10px;background:transparent;color:var(--ink);padding:9px 11px;cursor:pointer;display:flex;flex-direction:column;gap:4px;min-width:0}
+.slot .sy{font-family:var(--mono);font-size:13px;color:var(--res)}
+.slot .sd2{font-size:13.5px;color:var(--muted);line-height:1.35}
+.slot .who{font-family:var(--display);font-size:16.5px;color:var(--ok)}
+.slot.filled{border-style:solid;border-color:var(--ok);background:var(--surface);cursor:default}
+.fdone{color:var(--ink)}
+.frqs{display:flex;flex-direction:column;gap:14px}
+.frq{display:flex;flex-direction:column;gap:7px;border-top:1px solid var(--line);padding-top:10px}
+.frq .qq{font-size:15.5px}
+.frq .qq b{font-weight:600}
+.frq .opts{display:flex;flex-direction:column;gap:6px}
+.fo{font:inherit;font-size:14px;text-align:left;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:7px 11px;cursor:pointer}
+.fo.right{border-color:var(--ok);box-shadow:inset 4px 0 0 var(--ok);background:var(--surface)}
+.fo.no{border-color:var(--line);color:var(--muted);text-decoration:line-through;text-decoration-color:var(--line)}
+.frq .fbk{font-size:13.5px;color:var(--muted)}
+@media (prefers-reduced-motion: reduce){.chariot .bob,.chariot .bob2{animation:none}.fc.wrong{animation:none}.chariot .gp,.chariot .hl-ring,.eqLine .t,.eqSub .t{transition:none}}
+@media (max-width:760px){
+  .chariotRow{grid-template-columns:minmax(0,1fr)}
+  .chain{flex-direction:column}
+  .caseTabs{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .revTop{grid-template-columns:minmax(0,1fr)}
+}
+@media (max-width:560px){
+  .row{grid-template-columns:minmax(0,1fr)}
+  .row .given{grid-column:1}
+  .slots{grid-template-columns:minmax(0,1fr)}
+  .seg{display:flex;flex-direction:column;width:100%}
+  .seg button+button{border-left:0;border-top:1px solid var(--line)}
+  .opt{padding:6px 10px}
+}
+
+.brandhdr{background:#12285A;color:#FBF5EA;text-align:center;padding:18px 18px 20px;border-radius:14px;display:flex;flex-direction:column;align-items:center;gap:6px}
+.brandhdr .logos{display:flex;align-items:center;justify-content:center;gap:18px}
+.brandhdr .logos img{width:56px;height:66px;object-fit:contain;display:block}
+.brandhdr .logos img.rit{width:86px;height:65px}
+.brandhdr .eyebrow{color:#E6C36A;font-weight:700;letter-spacing:3px}
+.brandhdr h1{color:#FBF5EA;font-weight:700}
+.brandhdr .course{color:#E6C36A;font-weight:600;font-size:14px}
+.brandhdr .lede{color:#F1ECDF;font-size:15.5px;max-width:62ch}
+.brandhdr .scorenote{color:#F1ECDF;font-size:14.5px}
+nav.parts a{color:var(--ink)}
+.brandhdr nav.parts a{color:#FBF5EA;border-bottom:1px solid #E6C36A;background:none;padding-bottom:2px}
+.brandhdr nav.parts a:hover,.brandhdr nav.parts a:focus-visible{color:#E6C36A;border-color:#E6C36A}
+.tag.scored{color:var(--goldt);border-color:var(--gold)}
+.scorebox{border-left:5px solid var(--gold);background:var(--tint);border-radius:10px;padding:12px 14px;margin-bottom:14px}
+.scorebox .big{font-family:var(--display);font-size:30px;line-height:1.1;color:var(--ink)}
+.scorebox .band{font-family:var(--display);font-size:18px;margin:4px 0}
+.scorebox .band.good{color:var(--ok)}
+.scorebox .saved{font-size:13.5px;color:var(--muted)}
+.scorebox ul{margin:6px 0 0;padding-left:20px}
+
+/* PRACTICE TEMPLATE: one coloured "part" per section (part-1 .. part-4) */
+.part{--pc:#0E7A8A;--pcon:#FFFFFF;--pcbg:#E6F2F3;border:2px solid var(--pc);border-radius:14px;overflow:hidden;background:var(--pcbg)}
+.part-1{--pc:#0E7A8A;--pcbg:#E6F2F3}
+.part-2{--pc:#12285A;--pcbg:#EEF0F8}
+.part-3{--pc:#2F6B3A;--pcbg:#E6F0E3}
+.part-4{--pc:#7A2A5E;--pcbg:#F5E6F0}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .part{--pcbg:#0F2250;border-color:var(--pcl,var(--pc))}
+ :root:not([data-theme="light"]) .part-1{--pcl:#46CFC6} :root:not([data-theme="light"]) .part-2{--pcl:#E6C36A} :root:not([data-theme="light"]) .part-3{--pcl:#7FD08C} :root:not([data-theme="light"]) .part-4{--pcl:#F08CC8}}
+:root[data-theme="dark"] .part{--pcbg:#0F2250;border-color:var(--pcl,var(--pc))}
+:root[data-theme="dark"] .part-1{--pcl:#46CFC6} :root[data-theme="dark"] .part-2{--pcl:#E6C36A} :root[data-theme="dark"] .part-3{--pcl:#7FD08C} :root[data-theme="dark"] .part-4{--pcl:#F08CC8}
+.part-band{background:var(--pc);color:var(--pcon);padding:12px 16px;display:flex;align-items:center;flex-wrap:wrap;gap:6px 14px}
+.part-band h2{color:inherit;font-size:clamp(20px,3.4vw,26px);font-weight:600;flex:1 1 220px}
+.part-num{font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;font-weight:500;background:rgba(255,255,255,.18);border-radius:4px;padding:3px 9px}
+.part-band .tag{color:inherit;border-color:currentColor;background:rgba(255,255,255,.12)}
+.part-2 .part-band .tag,.part-2 .part-num{color:#E6C36A}
+.part-body{padding:16px;display:flex;flex-direction:column;gap:14px}
+.part .panel{background:var(--surface)}
+@media (max-width:640px){.part-body{padding:12px}}
+.brandhdr .k-obj{color:#46CFC6} .brandhdr .k-att{color:#F5A04D} .brandhdr .k-res{color:#C3C8FF} .brandhdr .k-env{color:#FF9DBF}
+.op.word{font-family:var(--body);font-size:13px}
+
+.part{gap:0}
+.scorenote b{color:#FBF5EA}
+.supportline{margin-top:6px}
+.reading .ref,.fb .ref{font-family:var(--mono)}
+
+
+.rv .fb.diff b{color:var(--res)}
+body[data-part] header{display:none}
+body[data-part="1"] #s2,body[data-part="1"] #s3,
+body[data-part="2"] #s1,body[data-part="2"] #s3,
+body[data-part="3"] #s1,body[data-part="3"] #s2{display:none}
+body[data-part]{padding-block:10px 18px}
+
+</style></head><body>
+<div class="wrap">
+<header class="brandhdr">
+  <div class="logos"><img src="vedantanz-logo.png" alt="Ramakrishna Vedanta NZ emblem" width="56" height="66"><img class="rit" src="ritam-wordmark.png" alt="Ritam" width="86" height="65"></div>
+  <div class="eyebrow">Practice · Lesson 4.4</div>
+  <h1>Four Cases, Read Both Ways</h1>
+  <p class="course">The Mind in the Light of Modern and Spiritual Sciences · Advanced</p>
+  <p class="lede">The lesson reads every moment of mental life through two lenses at once: the wave equation, which says what is behaving, and the chariot of the Kaṭha Upaniṣad, which says who is in charge. Here you will look at the chariot, read the lesson’s four worked examples for yourself before seeing its reading, and then place each function of the inner instrument in the equation.</p>
+  <p class="scorenote"><b>Parts I and II</b> are practice and are not scored. <b>Part III</b> is scored: your first pick counts.</p>
+  <nav class="parts" aria-label="Parts of this page"><a href="#s1">I. Who is driving?</a><a href="#s2">II. Four cases, read both ways</a><a href="#s3">III. Place the function in the equation</a></nav>
+</header>
+
+<section id="s1" class="part part-1">
+  <div class="part-band"><span class="part-num">Part I</span><h2>Who is driving?</h2><span class="tag">Practice: not scored</span></div>
+  <div class="part-body">
+  <p class="intro">The body is the chariot, the senses the horses, the objects of the senses the roads, manas the reins, buddhi the charioteer, and the Self the master who simply rides (§3). Switch the direction of governance, and tap a name to see its place in the image.</p>
+  <div class="panel">
+    <div class="bar">
+      <div class="seg" id="dirSeg" role="group" aria-label="Direction of governance"><button type="button" data-d="td" aria-pressed="true">Top-down: the cultivated state</button><button type="button" data-d="bu" aria-pressed="false">Bottom-up: the default state</button></div>
+    </div>
+    <div class="chariotRow">
+      <div class="figbox"><svg id="chA" class="chariot" viewBox="60 32 510 206" role="img" aria-labelledby="chAT chAD"><title id="chAT">The chariot of the inner instrument</title><desc id="chAD">A chariot drawn by two horses, with a rider seated behind and a charioteer holding the reins.</desc></svg></div>
+      <div class="chain" id="chain" aria-live="polite"></div>
+    </div>
+    <div class="chips" id="partChips" role="group" aria-label="Parts of the image"></div>
+    <div id="chMsg" class="msg fbbox" role="status" aria-live="polite"></div>
+    <p class="note">The chariot shows who steadies what; it is not a serial chain, for the three functions act together in the field of chitta, and the body and prāṇa set G(t) (§3).</p>
+  </div>
+  <div class="balance">
+    <h3>Not a failure of character</h3>
+    <p>The lesson offers images for some familiar states: anxiety as the horses bolting, depression as the horses lying down, compulsive behaviour as the horses following an old groove of the road. These are the lesson’s images, not diagnoses. “None of these are failures of moral character. They are states in which the architecture’s hierarchy has temporarily inverted” (§3).</p>
+  </div>
+  </div>
+</section>
+
+<section id="s2" class="part part-2">
+  <div class="part-band"><span class="part-num">Part II</span><h2>Four cases, read both ways</h2><span class="tag">Practice: not scored</span></div>
+  <div class="part-body">
+  <p class="intro">The lesson works four examples (§5): anxious rumination, depressive shutdown, meditative clarity and a musician in flow. Choose a case, make your own reading of each component and of the chariot, then reveal the lesson’s reading. Each component carries all three guṇas; what you are reading is which one predominates. Choose one button in each row; &ldquo;mixed&rdquo; means two guṇas share the predominance, as in the lesson&rsquo;s sattvic-rajasic readings. You may skip rows, and you can reveal the lesson&rsquo;s reading at any time. Nothing here is scored.</p>
+  <p class="safety"><b>These are composite illustrations, not a diagnosis.</b> They are the lesson’s own worked examples, about made-up minds, not a way of reading a particular person or yourself. The lesson places the spectrum in “this particular hour” (§6), so a reading is of a moment, not of a person. If anything here touches something difficult for you, please be gentle with yourself, and consider speaking with someone you trust or a qualified professional.</p>
+  <div class="caseTabs" id="caseTabs" role="group" aria-label="Choose a case"></div>
+  <div class="panel" id="casePanel">
+    <div class="scene"><span class="tag" id="cTag">The case</span><p id="cScene"></p><p class="given" id="cGiven"></p></div>
+    <div class="rows" id="cRows"></div>
+    <div class="bar"><div class="chips"><button type="button" class="btn primary" id="cReveal">Reveal the lesson’s reading</button><button type="button" class="btn ghost" id="cClear">Clear my choices</button></div><span class="note" id="cHint"></span></div>
+    <div id="cOut" class="reveal" hidden>
+      <div class="revTop">
+        <div class="figbox small"><svg id="chB" class="chariot" viewBox="60 32 510 206" role="img" aria-labelledby="chBT chBD"><title id="chBT">The chariot in this case</title><desc id="chBD"></desc></svg></div>
+        <div class="diag"><span class="eyebrow">The architectural diagnosis</span><p id="cDiag"></p></div>
+      </div>
+      <div class="travel" id="cTravel"></div>
+      <div class="keypt" id="cKey"></div>
+    </div>
+  </div>
+  <div class="panel" id="cmpPanel" hidden>
+    <h3>The four, side by side</h3>
+    <div class="tblwrap"><table class="cmpT" id="cmpT"></table></div>
+    <ul class="takeaways">
+      <li><b>Predominance is not amplitude.</b> G(t) is high in the anxious mind and high in the musician. In one it is “over-driven, locked at high unstable amplitude, rajasic-predominant”; in the other “high, steady, sustained, sattvic-rajasic” (§5, Examples 1 and 4).</li>
+      <li><b>The same entry, opposite directions.</b> In the lesson’s readings of anxious rumination and depressive shutdown the entry is G(t), through the body: lowering the gain in one, lifting it in the other (§5, Examples 1 and 2).</li>
+      <li><b>Both lenses read the same moment.</b> The guṇa-mix in each component and the direction of flow in the chariot are two readings of one state (§5, “What the four examples share”).</li>
+    </ul>
+  </div>
+  <div class="balance">
+    <h3>Structural, not moral</h3>
+    <p>“Anṛta in this technical sense is not a moral state. It is the structural condition of the chariot when its hierarchy has inverted.” The spectrum from Ritam to anṛta “is not about being a good or bad person, a strong or weak person, a successful or failed person” (§6). “The mind is not broken when n(t) is high. It is misfitted. And misfit can be re-fitted.”</p>
+  </div>
+  </div>
+</section>
+
+<section id="s3" class="part part-3">
+  <div class="part-band"><span class="part-num">Part III</span><h2>Place the function in the equation</h2><span class="tag">Scored: first pick counts</span></div>
+  <div class="part-body">
+  <p class="intro">The antaḥkaraṇa says what does the behaving; the equation says what behaves (§4). Seven cards sit below the equation; ahaṁkāra appears twice because it has two faces. Tap a card, then tap the box that describes the place where it belongs. Each box says what happens there. A wrong tap gives a hint, and your first tap on each card is the one that counts. &ldquo;Show me&rdquo; places every remaining card and counts those cards as missed.</p>
+  <div class="panel">
+    <div class="eqLine" id="eqLine" aria-label="The wave equation">
+      <span class="t" data-t="psiexp">ψ<sub>exp</sub>(t)</span> <span class="op">=</span> <span class="t br" data-t="field">[</span><span class="t" data-t="psix">ψₓ(t)</span> <span class="op">∗</span> <span class="t k-obj" data-t="h">h(t)</span><span class="t br" data-t="field">]</span> <span class="op t" data-t="meet">+</span> <span class="t k-att" data-t="G">G(t)</span> <span class="op">·</span> <span class="t k-att" data-t="psim">ψₘ(t)</span> <span class="op">+</span> <span class="t" data-t="n">n(t)</span>
+    </div>
+    <div class="eqSub" id="eqSub"><span class="t" data-t="fm">ψₘ(t) is tuned at <b class="k-att">fₘ</b></span><span class="t" data-t="dphi">and carries a standing tilt <b class="k-env">Δφ</b> into every meeting</span><span class="t" data-t="tag">each meeting is tagged as mine, across time</span><span class="t" data-t="wit">the witness-awareness is not a term: the whole equation appears in it</span></div>
+    <div class="bar"><span class="tag" id="fPro">0 of 7 placed</span><span class="note">Tap a function, then tap its place.</span></div>
+    <div class="cardtray" id="fTray" aria-label="Functions to place"></div>
+    <div class="slots" id="fSlots" role="group" aria-label="Places in the equation"></div>
+    <div id="fMsg" class="msg" role="status" aria-live="polite"></div>
+    <div class="bar"><div class="chips"><button type="button" class="btn ghost" id="fShow">Show me</button><button type="button" class="btn ghost" id="fReset">Start again</button></div></div>
+    <p class="fdone note" id="fDone" hidden>All placed. “The wave equation describes what this architecture does. The antaḥkaraṇa describes what does it. The two are inseparable” (§4).</p>
+  </div>
+
+  <div class="panel" id="fronts">
+    <h3>Practice on all four fronts at once</h3>
+    <p class="intro">The lesson says (§4) that effective practice has to work on all four fronts simultaneously:</p>
+    <ul class="frlist">
+      <li><b>Manas-training</b> (attention)</li>
+      <li><b>Buddhi-training</b> (discernment)</li>
+      <li><b>Chitta-work</b> (saṁskāra reshaping)</li>
+      <li><b>Ahaṁkāra-softening</b></li>
+    </ul>
+    <p class="intro">The lesson pairs the fronts. When one is trained and its partner is left out, something specific goes missing. Below, four made-up practitioners each train one front and leave out another. Choose what the lesson says that practitioner ends up with. Your first choice for each counts.</p>
+    <div id="frQs" class="frqs"></div>
+    <div id="frMsg" class="msg" role="status" aria-live="polite"></div>
+    <div class="bar"><div class="chips"><button type="button" class="btn ghost" id="frReset">Start again</button></div></div>
+    <p class="note" id="frDone" hidden>“Integrated practice meets all four. Module 5 will show what this looks like across the four practice-families” (§4).</p>
+  </div>
+  <div class="panel" id="scDone" hidden>
+    <div class="scorebox" id="scBox" aria-live="polite"></div>
+    <h3>Both lenses, one moment</h3>
+    <p>“The wave equation describes what this architecture does. The antaḥkaraṇa describes what does it. The two are inseparable” (§4). Scoring here is only to show you where to look again, and says nothing about you.</p>
+  </div>
+  </div>
+</section>
+<footer>Parts I and II are practice and are not scored. Part III is scored, and only to show you where to look again. Based on Lesson 4.4. This page illustrates the lesson’s qualitative readings and does not measure, diagnose or advise on any person’s situation; the four cases are the lesson’s own composite illustrations, and a reading is of a moment, not of a person. If anything here touches something difficult for you, please be gentle with yourself, and consider speaking with someone you trust or a qualified professional.<br>Ritam · Ramakrishna Vedanta Centre NZ · <a href="https://www.vedanta.nz">www.vedanta.nz</a> Privacy: when you are signed in, your name, email, answers and score are saved to your member record. Only you and the course instructors can see them. They are not shared or ranked.</footer>
+</div>
+
+<script>
+window.Core=(function(){
+"use strict";
+var TAU=Math.PI*2;
+try{var q=new URLSearchParams(location.search).get("theme");if(q==="light"||q==="dark")document.documentElement.setAttribute("data-theme",q)}catch(e){}
+function lerp(a,b,t){return a+(b-a)*t}
+function clamp(x,a,b){return Math.max(a,Math.min(b,x))}
+function el(id){return document.getElementById(id)}
+var col={},subs=[];
+function readColors(){
+  var cs=getComputedStyle(document.documentElement);
+  ["--bg","--surface","--ink","--muted","--line","--tint","--obj","--att","--res","--env","--ok"].forEach(function(k){col[k]=cs.getPropertyValue(k).trim()});
+  subs.forEach(function(f){try{f()}catch(e){}});
+}
+readColors();
+try{window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change",readColors)}catch(e){}
+new MutationObserver(readColors).observe(document.documentElement,{attributes:true,attributeFilter:["data-theme"]});
+function onTheme(f){subs.push(f)}
+var dpr=Math.max(1,Math.min(2,window.devicePixelRatio||1));
+function fit(c){
+  var w=c.clientWidth,h=c.clientHeight;
+  if(!w||!h)return null;
+  var bw=Math.round(w*dpr),bh=Math.round(h*dpr);
+  if(c.width!==bw||c.height!==bh){c.width=bw;c.height=bh}
+  var g=c.getContext("2d");g.setTransform(dpr,0,0,dpr,0,0);return {g:g,w:w,h:h};
+}
+var FONT="500 11.5px 'Noto Sans',system-ui,sans-serif";
+function label(g,t,x,y,color,align,pill){
+  g.font=FONT;g.textAlign=align||"left";g.textBaseline="alphabetic";
+  if(pill){var w=g.measureText(t).width,x0=(align==="right")?x-w:(align==="center"?x-w/2:x);
+    g.save();g.globalAlpha=.82;g.fillStyle=col["--surface"];g.fillRect(x0-5,y-12,w+10,17);g.restore()}
+  g.fillStyle=color;g.fillText(t,x,y)}
+/* ring-buffer trace: arr, head index, length N */
+function trace(g,arr,head,N,x0,w,cy,sc,color,lw,alpha,dash){
+  g.save();g.globalAlpha=alpha==null?1:alpha;g.strokeStyle=color;g.lineWidth=lw;g.lineJoin="round";if(dash)g.setLineDash(dash);
+  g.beginPath();
+  for(var i=0;i<N;i++){var v=arr[(head+i)%N];var x=x0+w*i/(N-1),y=cy-v*sc;if(i)g.lineTo(x,y);else g.moveTo(x,y)}
+  g.stroke();g.restore();
+}
+/* shaded envelope band around a lane centre */
+function envelope(g,E,head,N,W,cy,sc,color,alpha){
+  g.save();g.globalAlpha=alpha;
+  g.beginPath();
+  for(var i=0;i<N;i++){var e=E[(head+i)%N],x=W*i/(N-1),y=cy-e*sc;if(i)g.lineTo(x,y);else g.moveTo(x,y)}
+  for(var j=N-1;j>=0;j--){var e2=E[(head+j)%N],x2=W*j/(N-1);g.lineTo(x2,cy+e2*sc)}
+  g.closePath();g.fillStyle=color;g.globalAlpha=.09*alpha;g.fill();g.restore();
+  g.save();g.globalAlpha=alpha;g.strokeStyle=color;g.lineWidth=1.6;g.setLineDash([6,4]);
+  [1,-1].forEach(function(sg){g.beginPath();for(var i2=0;i2<N;i2++){var ee=E[(head+i2)%N]*sg,xx=W*i2/(N-1),yy=cy-ee*sc;if(i2)g.lineTo(xx,yy);else g.moveTo(xx,yy)}g.stroke()});
+  g.restore();
+}
+return {TAU:TAU,lerp:lerp,clamp:clamp,el:el,col:col,onTheme:onTheme,fit:fit,label:label,trace:trace,envelope:envelope,FONT:FONT};
+})();
+
+</script>
+<script>
+(function(){
+"use strict";
+var $=Core.el;
+try{var pt=new URLSearchParams(location.search).get("part");if(pt==="1"||pt==="2"||pt==="3")document.body.setAttribute("data-part",pt)}catch(e){}
+var RM=false;try{RM=window.matchMedia("(prefers-reduced-motion: reduce)").matches}catch(e){}
+function mk(tag,cls,html){var e=document.createElement(tag);if(cls)e.className=cls;if(html!=null)e.innerHTML=html;return e}
+
+/* ===== The chariot (a diagram of the Katha image, not a model of a person) ===== */
+var GY=200;
+function horse(x,pose,back){
+  var y=GY,s="",head;
+  var cls='class="hrs'+(back?' back':'')+'"';
+  if(pose==="down"){
+    s+='<path class="hl" d="M'+(x+15)+','+(y-22)+' Q'+(x+2)+','+(y-14)+' '+(x+4)+','+(y-4)+'"/>';
+    s+='<ellipse class="hb" cx="'+(x+60)+'" cy="'+(y-18)+'" rx="46" ry="15"/>';
+    s+='<path class="hl" d="M'+(x+30)+','+(y-5)+' L'+(x+52)+','+(y-3)+' M'+(x+76)+','+(y-4)+' L'+(x+100)+','+(y-2)+'"/>';
+    s+='<polygon class="hb" points="'+(x+90)+','+(y-26)+' '+(x+108)+','+(y-42)+' '+(x+120)+','+(y-34)+' '+(x+102)+','+(y-10)+'"/>';
+    s+='<ellipse class="hb" cx="'+(x+126)+'" cy="'+(y-27)+'" rx="16" ry="7" transform="rotate(20 '+(x+126)+' '+(y-27)+')"/>';
+    head=[x+118,y-36];
+    return {s:'<g '+cls+'>'+s+'</g>',head:head,chest:[x+22,y-18]};
+  }
+  var gallop=(pose==="bolt"||pose==="speed");
+  s+='<path class="hl" d="M'+(x+17)+','+(y-76)+' Q'+(x+2)+','+(y-62)+' '+(x+6)+','+(y-40)+'"/>';
+  if(gallop){
+    s+='<path class="hl" d="M'+(x+30)+','+(y-60)+' L'+(x+4)+','+(y-12)+' M'+(x+40)+','+(y-58)+' L'+(x+22)+','+(y-4)+' M'+(x+84)+','+(y-60)+' L'+(x+116)+','+(y-26)+' M'+(x+94)+','+(y-62)+' L'+(x+126)+','+(y-38)+'"/>';
+  }else{
+    s+='<path class="hl" d="M'+(x+30)+','+(y-60)+' L'+(x+26)+','+y+' M'+(x+40)+','+(y-58)+' L'+(x+46)+','+y+' M'+(x+84)+','+(y-60)+' L'+(x+80)+','+y+' M'+(x+94)+','+(y-62)+' L'+(x+100)+','+y+'"/>';
+  }
+  s+='<ellipse class="hb" cx="'+(x+60)+'" cy="'+(y-70)+'" rx="44" ry="17"/>';
+  if(pose==="bolt"){
+    s+='<polygon class="hb" points="'+(x+88)+','+(y-84)+' '+(x+104)+','+(y-128)+' '+(x+118)+','+(y-124)+' '+(x+106)+','+(y-66)+'"/>';
+    s+='<ellipse class="hb" cx="'+(x+122)+'" cy="'+(y-130)+'" rx="16" ry="7" transform="rotate(-12 '+(x+122)+' '+(y-130)+')"/>';
+    head=[x+112,y-130];
+  }else{
+    s+='<polygon class="hb" points="'+(x+90)+','+(y-82)+' '+(x+106)+','+(y-118)+' '+(x+120)+','+(y-112)+' '+(x+104)+','+(y-66)+'"/>';
+    s+='<ellipse class="hb" cx="'+(x+124)+'" cy="'+(y-110)+'" rx="16" ry="7" transform="rotate(35 '+(x+124)+' '+(y-110)+')"/>';
+    head=[x+114,y-116];
+  }
+  var g='<g '+cls+'>'+s+'</g>';
+  if(pose==="bolt")g='<g transform="rotate(-7 '+(x+40)+' '+(y-40)+')">'+g+'</g>';
+  return {s:g,head:head,chest:[x+20,y-64]};
+}
+function arrowAt(p,q,t){
+  var x=p[0]+(q[0]-p[0])*t,y=p[1]+(q[1]-p[1])*t,a=Math.atan2(q[1]-p[1],q[0]-p[0])*180/Math.PI;
+  return '<path class="arr" d="M7,0 L-5,-5 L-5,5 Z" transform="translate('+x.toFixed(1)+' '+y.toFixed(1)+') rotate('+a.toFixed(1)+')"/>';
+}
+function qpt(p,c,q,t){var u=1-t;return [u*u*p[0]+2*u*t*c[0]+t*t*q[0],u*u*p[1]+2*u*t*c[1]+t*t*q[1]]}
+function drawChariot(svg,dir,pose){
+  var td=(dir==="td"),s="";
+  s+='<g class="gp g-road"><line class="road" x1="0" y1="'+(GY+18)+'" x2="600" y2="'+(GY+18)+'"/><line class="road" x1="30" y1="'+(GY+30)+'" x2="600" y2="'+(GY+30)+'"/></g>';
+  s+='<line class="ground" x1="0" y1="'+GY+'" x2="600" y2="'+GY+'"/>';
+  var hx=pose==="down"?352:360;
+  var hb=horse(hx-34,pose,true),hf=horse(hx,pose,false);
+  var mot="";
+  if(pose==="bolt")mot='<path class="mot" d="M'+(hx-56)+','+(GY-96)+' l-26,6 M'+(hx-50)+','+(GY-70)+' l-34,-4 M'+(hx-60)+','+(GY-44)+' l-22,8 M'+(hx-44)+','+(GY-120)+' l-18,-10"/>';
+  if(pose==="speed")mot='<path class="mot" d="M'+(hx-52)+','+(GY-92)+' l-26,0 M'+(hx-56)+','+(GY-72)+' l-34,0 M'+(hx-52)+','+(GY-52)+' l-26,0"/>';
+  var bobA=(!RM&&(pose==="bolt"||pose==="speed"))?' class="'+(pose==="bolt"?"bob2":"bob")+'"':"";
+  s+='<g class="gp g-sen">'+mot+'<g'+bobA+'>'+hb.s+hf.s+'</g></g>';
+  /* body: the chariot */
+  var poleEnd=pose==="down"?[hx-14,GY-18]:[hx-12,GY-66];
+  var b='<line class="pole" x1="222" y1="146" x2="'+poleEnd[0]+'" y2="'+poleEnd[1]+'"/>';
+  b+='<path class="cart" d="M92,150 L222,150 L230,96 L216,96 L208,138 L92,138 Z"/>';
+  b+='<circle class="wh" cx="150" cy="'+(GY-30)+'" r="30"/>';
+  for(var k=0;k<4;k++){var a=k*Math.PI/4;b+='<line class="sp" x1="'+(150+29*Math.cos(a)).toFixed(1)+'" y1="'+(GY-30+29*Math.sin(a)).toFixed(1)+'" x2="'+(150-29*Math.cos(a)).toFixed(1)+'" y2="'+(GY-30-29*Math.sin(a)).toFixed(1)+'"/>'}
+  s+='<g class="gp g-body">'+b+'</g>';
+  /* the Self: seated, simply rides */
+  s+='<g class="gp g-self"><circle class="halo" cx="116" cy="92" r="19"/><circle class="hd" cx="116" cy="92" r="9"/><path class="fig2" d="M116,103 L119,128 L142,132 M118,112 L134,120"/></g>';
+  /* buddhi: the charioteer */
+  var hand,bud;
+  if(td){bud='<circle class="hd" cx="182" cy="58" r="10"/><path class="fig2" d="M182,69 L184,116 M184,116 L176,136 M184,116 L193,136 M183,82 L212,96"/>';hand=[214,96]}
+  else if(pose==="down"){bud='<circle class="hd" cx="176" cy="84" r="10"/><path class="fig2" d="M178,94 Q175,110 184,124 M184,124 L176,136 M184,124 L193,136 M180,100 L195,120"/>';hand=[197,122]}
+  else{bud='<circle class="hd" cx="200" cy="66" r="10"/><path class="fig2" d="M196,76 L184,118 M184,118 L176,136 M184,118 L193,136 M193,88 L226,92"/>';hand=[228,92]}
+  s+='<g class="gp g-bud">'+bud+'</g>';
+  /* manas: the reins */
+  var r="",heads=[hb.head,hf.head];
+  heads.forEach(function(h,i){
+    if(pose==="down"){var c=[(hand[0]+h[0])/2,GY-4];r+='<path class="rein" d="M'+hand[0]+','+hand[1]+' Q'+c[0]+','+c[1]+' '+h[0]+','+h[1]+'"'+(i===0?' opacity=".5"':'')+'/>';
+      if(i===1){var p1=qpt(hand,c,h,.35),p2=qpt(hand,c,h,.4),p3=qpt(hand,c,h,.68),p4=qpt(hand,c,h,.73);r+=td?arrowAt(p1,p2,0):arrowAt(p2,p1,0);r+=td?arrowAt(p3,p4,0):arrowAt(p4,p3,0)}}
+    else{r+='<line class="rein" x1="'+hand[0]+'" y1="'+hand[1]+'" x2="'+h[0]+'" y2="'+h[1]+'"'+(i===0?' opacity=".5"':'')+'/>';
+      if(i===1){r+=td?arrowAt(hand,h,.38)+arrowAt(hand,h,.7):arrowAt(h,hand,.3)+arrowAt(h,hand,.62)}}
+  });
+  s+='<g class="gp g-man">'+r+'</g>';
+  /* highlight rings, used when a name is chosen */
+  s+='<ellipse class="hl-ring r-self" cx="122" cy="108" rx="34" ry="36"/>';
+  s+='<ellipse class="hl-ring r-bud" cx="'+(td?190:(pose==="down"?184:196))+'" cy="'+(td?96:100)+'" rx="30" ry="50"/>';
+  s+='<ellipse class="hl-ring r-man" cx="'+((hand[0]+hf.head[0])/2)+'" cy="'+((hand[1]+hf.head[1])/2+(pose==="down"?30:0))+'" rx="'+((hf.head[0]-hand[0])/2+16)+'" ry="34"/>';
+  s+='<ellipse class="hl-ring r-sen" cx="'+(hx+40)+'" cy="'+(pose==="down"?GY-24:GY-70)+'" rx="120" ry="'+(pose==="down"?34:72)+'"/>';
+  s+='<ellipse class="hl-ring r-body" cx="165" cy="160" rx="82" ry="48"/>';
+  s+='<rect class="hl-ring r-road" x="4" y="'+(GY+10)+'" width="592" height="28" rx="12"/>';
+  var keep=[];svg.querySelectorAll("title,desc").forEach(function(n){keep.push(n.outerHTML)});
+  svg.innerHTML=keep.join("")+s;
+}
+
+/* ===== Part I ===== */
+var PARTS=[
+ {k:"self",n:"The Self",td:"The Self is the master of the chariot, the one for whom the journey is undertaken and who simply rides (§3).",bu:"The same components are present in both regimes; what differs is which way the governance flows (§3)."},
+ {k:"bud",n:"buddhi, the charioteer",td:"Buddhi is the charioteer who holds the reins. Viveka (discrimination) is the cultivation of the charioteer (§3).",bu:"In the default state the charioteer loses grip: manas is captured by sensory salience before buddhi can discriminate (§3)."},
+ {k:"man",n:"manas, the reins",td:"Manas is the reins. The reins do not act on their own; they transmit the charioteer’s intention to the horses. Pratyāhāra and dhāraṇā are the cultivation of the reins, manas brought under buddhi’s direction (§3, §4).",bu:"The reins are pulled along by the horses; when buddhi loses grip, manas drifts and the reins go slack (§3, §4)."},
+ {k:"sen",n:"the senses, the horses",td:"The senses are the horses. Yama and niyama are the disciplining of the horses, so they no longer bolt down whatever road they please (§3).",bu:"The horses bolt, and the strongest of them sets the course (§3)."},
+ {k:"body",n:"the body, the chariot",td:"The body is the chariot. Āsana and prāṇāyāma are the conditioning of the chariot itself, so it can carry the journey (§3).",bu:"The chariot is dragged wherever the strongest impulse leads; the body’s autonomic activation drives manas before manas can govern it (§3)."},
+ {k:"road",n:"the objects, the roads",td:"The objects of the senses are the roads on which the horses run (§3).",bu:"The journey is no longer chosen; it is imposed by whichever horse pulls hardest (§3)."}
+];
+var dir="td",selPart=null;
+var chA=$("chA");
+function renderChain(){
+  var c=$("chain"),h="";
+  if(dir==="td"){
+    h='<div class="cap">Flow of governance</div>';
+    [["self","Self"],["bud","buddhi"],["man","manas"],["sen","senses"],["body","body"],["road","world"]].forEach(function(n,i){if(i)h+='<div class="ar" aria-hidden="true">↓</div>';h+='<div class="nd" data-k="'+n[0]+'">'+n[1]+'</div>'});
+    h+='<div class="src">Self → buddhi → manas → senses → body → world (§3)</div>';
+  }else{
+    h='<div class="cap">Flow, inverted</div>';
+    [["bud","buddhi, losing grip"],["man","manas, captured"],["body","body, driving"]].forEach(function(n,i){if(i)h+='<div class="ar" aria-hidden="true">↑</div>';h+='<div class="nd'+(n[0]==="bud"?" dim":"")+'" data-k="'+n[0]+'">'+n[1]+'</div>'});
+    h+='<div class="src">body → manas → buddhi, “with the proper hierarchy inverted” (§3)</div>';
+  }
+  c.innerHTML=h;
+  if(selPart)c.querySelectorAll('.nd[data-k="'+selPart+'"]').forEach(function(n){n.classList.add("on")});
+}
+function renderPartI(){
+  drawChariot(chA,dir,dir==="td"?"stride":"bolt");
+  $("chAD").textContent=dir==="td"?"Top-down: the charioteer stands upright holding taut reins; arrows on the reins run from the charioteer to the horses, which stand in stride.":"Bottom-up: the horses bolt with heads tossed; the charioteer is pulled forward; arrows on the reins run from the horses back to the charioteer.";
+  chA.setAttribute("class","chariot"+(selPart?" sel-"+selPart:""));
+  document.querySelectorAll("#dirSeg button").forEach(function(b){b.setAttribute("aria-pressed",b.getAttribute("data-d")===dir?"true":"false")});
+  document.querySelectorAll("#partChips .chip").forEach(function(b){b.setAttribute("aria-pressed",b.getAttribute("data-k")===selPart?"true":"false")});
+  renderChain();
+  var m=$("chMsg"),h;
+  if(dir==="td")h='<p class="verdict">Top-down: the cultivated state.</p><p>Buddhi sits above manas, manas above the senses, and the senses operate through the body. This hierarchy is what contemplative training establishes; “the whole architecture of yoga is the restoration of the chariot’s proper command structure” (§3).</p>';
+  else h='<p class="verdict">Bottom-up: the default state.</p><p>The hierarchy inverts. The lesson calls it “the state most human beings spend most of their lives in” (§3). “The work of practice is not to add new components; it is to restore the direction of flow” (§3).</p>';
+  if(selPart){var P=PARTS.filter(function(p){return p.k===selPart})[0];h+='<p><b>'+P.n.charAt(0).toUpperCase()+P.n.slice(1)+'.</b> '+(dir==="td"?P.td:P.bu)+'</p>'}
+  m.innerHTML=h;
+}
+PARTS.forEach(function(p){
+  var b=mk("button","chip",'<span class="sw" aria-hidden="true"></span>'+p.n);b.type="button";b.setAttribute("data-k",p.k);b.setAttribute("aria-pressed","false");
+  b.addEventListener("click",function(){selPart=(selPart===p.k?null:p.k);renderPartI()});
+  $("partChips").appendChild(b);
+});
+document.querySelectorAll("#dirSeg button").forEach(function(b){b.addEventListener("click",function(){dir=b.getAttribute("data-d");renderPartI()})});
+renderPartI();
+
+/* ===== Part II: four cases ===== */
+var GN={s:"sattvic",r:"rajasic",t:"tamasic",m:"mixed"};
+var G4=[["s","sattvic"],["r","rajasic"],["t","tamasic"],["m","mixed"]];
+var AMP=[["over","high and unstable","M1,7 L5,1 L8,13 L12,2 L15,12 L19,1 L23,11 L26,3 L29,8"],["coll","collapsed","M1,11 Q8,10 15,11 T29,11"],["mod","moderate and steady","M1,7 Q4.5,3 8,7 T15,7 T22,7 T29,7"],["hs","high and steady","M1,7 Q4.5,-5 8,7 T15,7 T22,7 T29,7"]];
+var DIRS=[["td","top-down"],["bu","bottom-up"]];
+var ROWS=[
+ {k:"psim",n:"ψₘ(t)",d:"the attention wave: which guṇa predominates",o:G4},
+ {k:"gamp",n:"G(t), its level",d:"how the gain stands",o:AMP},
+ {k:"g",n:"G(t), its guṇa",d:"which guṇa predominates in the gain",o:G4},
+ {k:"h",n:"h(t)",d:"the filter of saṁskāras: which guṇa predominates",o:G4},
+ {k:"n",n:"n(t)",d:"the noise: which guṇa predominates",o:G4},
+ {k:"env",n:"The envelope",d:"the felt flicker: which guṇa predominates",o:G4},
+ {k:"tilt",n:"The tilt Δφ",d:"ahaṁkāra: which guṇa predominates",o:G4},
+ {k:"dir",n:"The chariot",d:"which way governance is flowing",o:DIRS}
+];
+var CASES=[
+ {id:"anx",n:"Anxious rumination",ex:"Example 1",pose:"bolt",dir:"bu",
+  scene:"A worry has arrived, perhaps about a meeting tomorrow, a relationship strain, or a financial pressure. The mind cycles through it, again and again, reaching no resolution. Sleep does not come. The body is tense; the breath is shallow and fast.",
+  given:"Given, ψₓ(t): whatever has actually arrived, perhaps a difficult email or a piece of news. “The signal itself is not the problem.”",
+  key:{psim:{v:"r",w:"Strongly rajasic-predominant. fₘ is high and erratic; manas is darting from one variation of the worry to the next. Phase is scattered."},
+   gamp:{v:"over",w:"Over-driven, locked at high unstable amplitude. The effort to “figure this out” is feeding arousal, and so the gain, rather than letting it settle."},
+   g:{v:"r",w:"Rajasic-predominant. This is the parameter that is structurally easiest to address first."},
+   h:{v:"m",pair:["r","t"],w:"Dominated by rajasic and tamasic saṁskāras with little sattvic moderation: the catastrophic-interpretation pattern, the worst-case-scenario filter."},
+   n:{v:"r",also:"t",w:"High, with rajasic noise predominating (mental chatter); some tamasic noise too if the rumination has been going for hours."},
+   env:{v:"r",w:"Sharp, persistent, rajasic-predominant. Δf is large and unstable, so the felt flicker of duality is intense."},
+   tilt:{v:"m",pair:["r","t"],w:"Heavy, rajasic-tamasic, aggressively tagging: each moment is claimed as mine, adding charge to the suffering."},
+   dir:{v:"bu",w:"Bottom-up. The horses are bolting; the reins are being dragged behind them; buddhi has lost its grip."}},
+  diag:"The chariot’s hierarchy has inverted. The horses are bolting; the reins (manas) are being dragged behind them; buddhi has lost its grip. This is the bottom-up regime in its rajasic-predominant form.",
+  travelH:"What the architecture predicts: the direction only",
+  travel:"The lesson’s entry is G(t), the gain, which the body and prāṇa set. The direction is to lower it. As G(t) settles, manas regains traction, buddhi regains foothold, and the chariot’s hierarchy begins to restore (§5, Example 1).",
+  defer:true,
+  keyH:"Not a mood",
+  keyT:"“Anxiety, in framework terms, is not a mood”: it is a misfit between the strands, with a specific guṇa-mix signature and a specific direction-of-flow inversion (§5, Example 1).",
+  desc:"Bottom-up, horses bolting: the horses gallop with heads tossed, the charioteer is pulled forward, and the arrows on the reins run from the horses to the charioteer."},
+ {id:"dep",n:"Depressive shutdown",ex:"Example 2",pose:"down",dir:"bu",
+  scene:"Someone who has not been able to get out of bed for three days. Things that used to bring delight feel grey. Movement feels heavy. Speech is monotone. Engagement with anyone or anything is effortful and short-lived.",
+  given:"Given, ψₓ(t): whatever is arriving, though the system can barely register it. “The world is still there.”",
+  key:{psim:{v:"t",w:"Tamasic-predominant. fₘ is low and inert; manas is operating at minimal capacity. Phase is uncoordinated."},
+   gamp:{v:"coll",w:"Flattened, collapsed. Even when manas musters intention, the body cannot lift the gain."},
+   g:{v:"t",w:"Tamasic-predominant. This is the parameter that explains why “just try harder” does not work."},
+   h:{v:"t",also:"r",w:"Dominated by tamasic saṁskāras, with rajasic ones present in a depleted form: themes of futility and no-way-out, with little sattvic moderation."},
+   n:{v:"t",w:"Moderate but persistent, tamasic-predominant: the heavy quality of unprocessed weight rather than the static of activation."},
+   env:{v:"t",w:"Flattened, heavy, tamasic-predominant. Less sharp flicker than in anxiety, but a constant low-amplitude drag; Δf is not erratic, but stuck."},
+   tilt:{v:"m",pair:["t","r"],w:"Dim but rigidly tagged, tamasic-rajasic: heavy, fixed self-tagging, which paradoxically holds the system in its low state."},
+   dir:{v:"bu",w:"Bottom-up, inverted in the opposite direction from anxiety. The horses are lying down; the reins cannot pull them up."}},
+  diag:"The hierarchy has inverted in the opposite direction from anxiety. The horses are lying down; the reins (manas) cannot pull them up; buddhi has lost its operating axis. This is the bottom-up regime in its tamasic-predominant form.",
+  travelH:"What the architecture predicts: the direction only",
+  travel:"The entry is again G(t), through the body, but in the opposite direction: where anxiety needs the gain dropped, depression needs it lifted. “Rajas must be cultivated before sattva can be re-found, because manas cannot regain its grip on collapsed horses without first lifting their energy” (§5, Example 2).",
+  defer:true,
+  keyH:"Why trying harder is not the answer",
+  keyT:"The lesson places the difficulty in the gain, not in the person’s effort: “even when manas musters intention, the body cannot lift the gain” (§5, Example 2).",
+  desc:"Bottom-up, horses lying down: the horses lie on the ground, the reins sag, the charioteer is slumped, and the arrows on the reins run from the horses to the charioteer."},
+ {id:"med",n:"Meditative clarity",ex:"Example 3",pose:"stride",dir:"td",
+  scene:"A mind in deep meditative stillness. The breath has become long and even; the body is settled; thoughts arise sparsely, with space around them, and dissolve without grasping. There is a steadiness that feels almost luminous from the inside.",
+  given:"Given, ψₓ(t): whatever is arriving in this moment: the breath, the room, the subtle texture of thought-arisings.",
+  key:{psim:{v:"s",w:"Sattvic-predominant. fₘ has settled close to the object’s frequency; manas is not jumping. Phase is coherent."},
+   gamp:{v:"mod",w:"Moderate, steady, well-modulated: arousal is set precisely where the moment requires it, no higher and no lower."},
+   g:{v:"s",w:"Sattvic-predominant. G(t) is steady because the body and prāṇa are settled by years of practice."},
+   h:{v:"s",w:"Sattvic predominance. The conditioning is still there; chitta has not been emptied. What is active are equanimity-grooves, witness-grooves, devotional steadiness. The filter has become transparent."},
+   n:{given:"Not asked: the lesson gives no guṇa for it here. It says n(t) is minimal: “the noise floor has dropped close to zero in all guṇa-modes.”"},
+   env:{v:"s",w:"Near zero, sattvic-predominant. Δf has shrunk; the felt flicker of duality has softened into a steady, almost imperceptible hum."},
+   tilt:{v:"s",w:"Releasing, sattvic-predominant. As Δf and Δφ shrink, the sense of “me” becomes light and transparent. Ahaṁkāra is not absent; it is purified."},
+   dir:{v:"td",w:"Top-down. Buddhi is awake and holding the reins; the body is responding to the chariot rather than driving it."}},
+  diag:"Sattvic Ritam in the cultivated, top-down regime. Buddhi (charioteer) is awake and holding the reins; manas (reins) is calmly directing the horses; the body (chariot) is responsive and steady.",
+  travelH:"What the lesson says about this state",
+  travel:"The lesson says the contemplative methods that lead to this state “are not arbitrary; they engage every component of the equation in the direction of greater sattvic predominance” (§5, Example 3).",
+  defer:false,
+  keyH:"Not emptied, purified",
+  keyT:"Clarity here is a predominance pattern: “chitta has not been emptied”, and “ahaṁkāra is not absent; it is purified” (§5, Example 3).",
+  desc:"Top-down, horses in stride: the charioteer stands upright with taut reins, and the arrows on the reins run from the charioteer to the horses."},
+ {id:"mus",n:"The musician in flow",ex:"Example 4",pose:"speed",dir:"td",
+  scene:"A skilled musician deeply absorbed in playing or composing. Hands move with practiced ease; manas is highly active; there is a great deal of moment-to-moment engagement, but it is not anxious. It is rhythmically organised. Time appears to dilate.",
+  given:"Given, ψₓ(t): the music itself: its harmonic structure, the unfolding of phrase, the texture of sound.",
+  key:{psim:{v:"m",pair:["s","r"],w:"Sattvic-rajasic, locked onto the music. fₘ is tuned tightly to its rhythm and structure; phase is coherent. “Sattvic steadiness within rajasic engagement.”"},
+   gamp:{v:"hs",w:"High, steady, sustained. Breath is full and rhythmic, supporting the gain without forcing it."},
+   g:{v:"m",pair:["s","r"],w:"Sattvic-rajasic: enough energy to drive the playing, kept from tipping into anxiety."},
+   h:{v:"m",pair:["s","r"],w:"Dense, with sattvic and well-trained rajasic saṁskāras predominating. Thousands of hours of grooves, no longer aversive: the medium of expression."},
+   n:{given:"Not asked: the lesson gives no guṇa for it here. It says n(t) is low: self-doubt, comparison and distraction have dropped away."},
+   env:{given:"Not asked: the lesson gives no guṇa for it here. It says the envelope is “near zero, dynamically”: Δf is small even at high amplitude."},
+   tilt:{v:"s",w:"Light and transparent, sattvic-predominant. The “I am playing” pulse is intense, but the tagging function is quiet."},
+   dir:{v:"td",w:"Top-down, under demanding load. Manas is directing the horses through complex terrain; the chariot is moving at speed."}},
+  diag:"Sattvic Ritam in dynamic mode, the cultivated top-down regime under demanding load. Buddhi is awake and quietly holding the reins; manas is directing the horses through complex terrain; the horses are responding precisely; the chariot is moving at speed.",
+  travelH:"What the lesson says about this state",
+  travel:"Years of practice have made the chariot’s command structure so reliable that it holds even under demanding conditions: “Ritam in motion, with the chariot’s hierarchy intact at speed.” Module 5 will name the practices that train it (§5, Example 4).",
+  defer:false,
+  keyH:"Predominance is not amplitude",
+  keyT:"The gain is high here, as it is in anxious rumination, yet the lesson reads it as steady and sattvic-rajasic, not over-driven and rajasic. High engagement is not the same as agitation (§5, Examples 1 and 4).",
+  desc:"Top-down, horses at speed: the horses gallop in step, the charioteer stands upright with taut reins, and the arrows on the reins run from the charioteer to the horses."}
+];
+var cur=0,ST=CASES.map(function(){return {ch:{},rev:false}});
+var chB=$("chB");
+function glyph(d){return '<svg viewBox="0 0 30 14" aria-hidden="true"><path d="'+d+'"/></svg>'}
+function fb(row,key,ch,ref){
+  if(key.given)return null;
+  var u=ch[row.k];
+  if(row.k==="gamp"||row.k==="dir"){
+    if(!u)return ["open","Left open.",""];
+    if(u===key.v)return ["same","Same as the lesson’s reading.",""];
+    var lab=row.o.filter(function(o){return o[0]===key.v})[0][1];
+    return ["diff","The lesson reads this differently: "+lab+".",""];
+  }
+  if(!u)return ["open","Left open.",""];
+  if(key.v==="m"){
+    var pn=key.pair.map(function(x){return GN[x]}).join(" and ");
+    if(u==="m")return ["same","Same as the lesson’s reading: mixed, "+pn+".",""];
+    if(key.pair.indexOf(u)>=0)return ["part","Part of the lesson’s reading. It names two strands here, "+pn+".",""];
+    return ["diff","The lesson reads this differently: "+pn+".",""];
+  }
+  if(u===key.v)return ["same","Same as the lesson’s reading"+(key.also?". It adds that "+GN[key.also]+" is present too.":"."),""];
+  if(u==="m"&&key.also)return ["part","Close. The lesson names "+GN[key.v]+" as predominant, with "+GN[key.also]+" also present.",""];
+  if(u==="m")return ["diff","The lesson names one strand as predominant here: "+GN[key.v]+".",""];
+  if(key.also===u)return ["part","Present, but not predominant. The lesson names "+GN[key.v]+" as predominant, with "+GN[u]+" also present.",""];
+  return ["diff","The lesson reads this differently: "+GN[key.v]+"-predominant.",""];
+}
+function renderTabs(){
+  var t=$("caseTabs");t.innerHTML="";
+  CASES.forEach(function(c,i){
+    var b=mk("button",null,'<small>'+c.ex+'</small>'+c.n+'<span class="st">'+(ST[i].rev?"reading revealed":"not yet read")+'</span>');b.type="button";
+    b.setAttribute("aria-pressed",i===cur?"true":"false");
+    b.addEventListener("click",function(){cur=i;renderCase()});
+    t.appendChild(b);
+  });
+}
+function renderCase(){
+  renderTabs();
+  var C=CASES[cur],S=ST[cur],ref="§5, "+C.ex;
+  $("cTag").textContent=C.ex+": "+C.n;
+  $("cScene").textContent=C.scene;
+  $("cGiven").textContent=C.given;
+  var rows=$("cRows");rows.innerHTML="";
+  rows.classList.toggle("reveal-on",S.rev);
+  ROWS.forEach(function(R){
+    var K=C.key[R.k],d=mk("div","row");
+    d.appendChild(mk("div","rl","<b>"+R.n+"</b><span>"+R.d+"</span>"));
+    if(K.given){
+      d.appendChild(mk("p","given",K.given));
+      rows.appendChild(d);return;
+    }
+    var o=mk("div","opts");o.setAttribute("role","group");o.setAttribute("aria-label",R.n+", "+R.d);
+    R.o.forEach(function(op){
+      var b=mk("button","opt",(op[2]?glyph(op[2]):"")+op[1]);b.type="button";
+      b.setAttribute("aria-pressed",S.ch[R.k]===op[0]?"true":"false");
+      if(S.rev){b.disabled=true;if(op[0]===K.v){b.classList.add("lesson");b.setAttribute("aria-label",op[1]+" (the lesson’s reading)")}}
+      b.addEventListener("click",function(){if(S.rev)return;S.ch[R.k]=(S.ch[R.k]===op[0]?undefined:op[0]);renderCase()});
+      o.appendChild(b);
+    });
+    d.appendChild(o);
+    var rv=mk("div","rv");
+    if(S.rev){var f=fb(R,K,S.ch,ref);rv.innerHTML='<span class="lw">'+K.w+'</span><span class="fb '+f[0]+'"><b>'+f[1]+'</b></span><span class="ref">'+ref+'</span>'}
+    d.appendChild(rv);
+    rows.appendChild(d);
+  });
+  var asked=ROWS.filter(function(R){return !C.key[R.k].given}).length,made=ROWS.filter(function(R){return !C.key[R.k].given&&S.ch[R.k]}).length;
+  $("cHint").textContent=S.rev?"Clear your choices to read this case again.":(made<asked?made+" of "+asked+" readings made. You can reveal at any time.":"All readings made.");
+  $("cReveal").hidden=S.rev;
+  $("cClear").textContent=S.rev?"Read this case again":"Clear my choices";
+  var out=$("cOut");out.hidden=!S.rev;
+  if(S.rev){
+    drawChariot(chB,C.dir,C.pose);
+    chB.setAttribute("class","chariot");
+    $("chBD").textContent=C.desc;
+    $("cDiag").textContent=C.diag+" ("+ref+")";
+    var tv='<span class="eyebrow">'+C.travelH+'</span><p>'+C.travel+'</p>';
+    if(C.defer)tv+='<p class="note">This is the lesson’s direction of travel, not a protocol, and this page does not teach a practice. Module 5 develops the practices.</p>';
+    $("cTravel").innerHTML=tv;
+    $("cKey").innerHTML='<b>'+C.keyH+'</b><span>'+C.keyT+'</span>';
+  }
+  $("cmpPanel").hidden=!ST.every(function(s){return s.rev});
+}
+$("cReveal").addEventListener("click",function(){ST[cur].rev=true;renderCase();
+  var wasAll=ST.every(function(s){return s.rev});
+  setTimeout(function(){try{$("cOut").scrollIntoView({behavior:RM?"auto":"smooth",block:"nearest"})}catch(e){}},60)});
+$("cClear").addEventListener("click",function(){ST[cur]={ch:{},rev:false};renderCase()});
+/* comparison table */
+(function(){
+  var T={
+   psim:["strongly rajasic; fₘ high and erratic","tamasic; fₘ low and inert","sattvic; fₘ close to the object’s","sattvic-rajasic; locked onto the music"],
+   g:["over-driven, high and unstable; rajasic","flattened, collapsed; tamasic","moderate, steady; sattvic","high, steady, sustained; sattvic-rajasic"],
+   h:["rajasic and tamasic, little sattvic","tamasic, rajasic depleted","sattvic; the filter transparent","dense; sattvic and well-trained rajasic"],
+   n:["high; rajasic noise predominating","moderate, persistent; tamasic","minimal, close to zero","low"],
+   env:["sharp, persistent; rajasic; Δf large","flattened, heavy; tamasic; Δf stuck","near zero; sattvic","near zero, dynamically; Δf small"],
+   tilt:["heavy, rajasic-tamasic","dim but rigidly tagged, tamasic-rajasic","releasing, sattvic","light and transparent, sattvic"],
+   dir:["bottom-up: horses bolting","bottom-up: horses lying down","top-down: hierarchy intact","top-down: intact at speed"]
+  };
+  var L={psim:"ψₘ(t)",g:"G(t)",h:"h(t)",n:"n(t)",env:"envelope",tilt:"tilt Δφ",dir:"chariot"};
+  var h='<thead><tr><th scope="col">Component</th>'+CASES.map(function(c){return '<th scope="col">'+c.n+'</th>'}).join("")+'</tr></thead><tbody>';
+  Object.keys(T).forEach(function(k){h+='<tr><th scope="row">'+L[k]+'</th>'+T[k].map(function(v){return '<td>'+v+'</td>'}).join("")+'</tr>'});
+  $("cmpT").innerHTML=h+'</tbody>';
+})();
+renderCase();
+
+/* ===== Part III: place the function ===== */
+var SLOTS=[
+ {k:"fm",sy:"The frequency of attention (fₘ)",d:"Sets the frequency of the attention wave ψₘ(t); its steadiness is the heart of attention",lit:["psim","fm"]},
+ {k:"G",sy:"The strength of attention (G(t))",d:"Sets the amplitude of the attention wave",lit:["G"]},
+ {k:"field",sy:"Where the waves meet: [ψₓ(t) ∗ h(t)]",d:"The field in which the two waves meet; its saṁskāras form the filter h(t)",lit:["h","field"]},
+ {k:"meet",sy:"Acts on the meeting, with no term of its own",d:"Acts on the meeting: corrects the phase, bringing the tilt toward zero, and reads the carrier",lit:["meet"]},
+ {k:"dphi",sy:"The standing tilt (Δφ)",d:"The standing phase-offset the attention wave carries into every meeting, before the meeting begins",lit:["dphi"]},
+ {k:"tag",sy:"The tagging of each meeting as mine",d:"Tags each tilted meeting as mine and weaves a continuous self across time",lit:["tag"]},
+ {k:"wit",sy:"Not a component at all",d:"That in which the field, and the whole equation, appears",lit:["wit"]}
+];
+var FCARDS=[
+ {id:"manas",t:"manas",ok:["fm"],why:"Yes, manas: it deploys ψₘ(t), the attention wave, and sets its frequency fₘ. Train manas, and you train the steadiness of fₘ (§4, Manas).",hint:"Manas is the directing of attention, where the mind currently is. Which property of the attention wave does it set (§4, Manas)?"},
+ {id:"body",t:"the body and prāṇa",ok:["G"],why:"Yes: the wave’s amplitude G(t) is set by the body and prāṇa. Manas can reach it only indirectly, through practice, when manas is itself under buddhi’s direction (§4, Manas).",hint:"The lesson separates what tunes attention from what sets its strength (§4, Manas)."},
+ {id:"chitta",t:"chitta",ok:["field"],why:"Yes, chitta: not a fourth function alongside the others but the mind-field itself. The convolution is that record acting on the incoming signal (§4, Chitta).",hint:"Chitta is not a fourth function alongside the others. Look for the place where the waves meet and the record is held (§4, Chitta)."},
+ {id:"buddhi",t:"buddhi",ok:["meet"],why:"Yes, buddhi. It does not add a term; it acts on the meeting, correcting the phase of the attention wave and reading the carrier, assigning meaning to the content the meeting delivers (§4, Buddhi).",hint:"Buddhi does not add a term. Look for a place that acts on the meeting (§4, Buddhi)."},
+ {id:"ah1",t:"ahaṁkāra",ok:["dphi","tag"],why:null,hint:"Ahaṁkāra has two faces: one in the equation, one in the antaḥkaraṇa (§4, Ahaṁkāra)."},
+ {id:"ah2",t:"ahaṁkāra",ok:["dphi","tag"],why:null,hint:"Ahaṁkāra has two faces: one in the equation, one in the antaḥkaraṇa (§4, Ahaṁkāra)."},
+ {id:"wit",t:"the witness-awareness",ok:["wit"],why:"Yes. “Chitta is the field in which all of this unfolds, and the witness-awareness is that in which the field appears” (§4, The three and the field together).",hint:"The witness-awareness is not one of the components. Where does the lesson place it (§4, The three and the field together)?"}
+];
+var AHWHY={dphi:"Yes, ahaṁkāra as posture, its face in the equation: the standing tilt Δφ, brought to the meeting and not produced by it. The fullness of every resultant is scaled by it, the factor cos(Δφ/2) of Lesson 3.2 (§4, Face 1).",
+ tag:"Yes, ahaṁkāra as function, its face in the antaḥkaraṇa: it tags, appropriates and bounds. Each tilted meeting leaves its trace as a saṁskāra in chitta, which is how the tilt is renewed (§4, Face 2)."};
+
+/* ===== Scoring for Part III (first pick counts) and hand-off to the host page ===== */
+var EMBED=/[?&]embed=1/.test(location.search);
+var META={code:"ADV-P-4-4",title:"Practice: Lesson 4.4, Four Cases, Read Both Ways (Part III)",programme:"The Mind in the Light of Modern and Spiritual Sciences (Advanced)",cut:75};
+function send(m){if(EMBED){try{parent.postMessage(m,"*")}catch(e){}}}
+var SC={miss:{},sent:false};
+var CARDNAME={manas:"manas",body:"the body and prāṇa",chitta:"chitta",buddhi:"buddhi",ah1:"ahaṁkāra (first card)",ah2:"ahaṁkāra (second card)",wit:"the witness-awareness"};
+function allDone(){return FCARDS.every(function(c){return fPlaced[c.id]})&&FQ.every(function(Q,qi){return (frAns[qi]||[]).indexOf(Q.a)>=0})}
+function checkDone(){if(!SC.sent&&allDone())finish()}
+function finish(){
+  var items=[],ans=[],wrong=[],right=0,n=0;
+  FCARDS.forEach(function(c){items.push({key:"f:"+c.id,label:"Placing "+CARDNAME[c.id],given:CARDNAME[c.id]+" placed"})});
+  FQ.forEach(function(Q,qi){items.push({key:"q:"+qi,label:"Practitioner "+(qi+1)+": "+WHO[Q.a],given:"Practitioner "+(qi+1)})});
+  items.forEach(function(it,k){var ok=!SC.miss[it.key];n++;if(ok){right++}else{wrong.push(it.label)}ans.push({q:k+1,ok:ok,given:it.given+(ok?" (first pick)":" (not on first pick)")})});
+  var pct=Math.round(100*right/n),good=pct>=META.cut;
+  var h='<div class="big">'+right+' of '+n+' on the first pick</div>'+
+        '<p class="band '+(good?'good':'')+'">'+(good?'Well grasped':'Revisit these ideas')+'</p>';
+  if(wrong.length){h+='<p>Look again at §4 for:</p><ul>'+wrong.map(function(w){return '<li>'+w+'</li>'}).join('')+'</ul>'}
+  else{h+='<p>Nothing to revisit here.</p>'}
+  h+='<p class="saved" id="scSaved">'+(EMBED?'Saving your result…':'Sign in on the course page to have your result saved.')+'</p>';
+  $("scBox").innerHTML=h;$("scDone").hidden=false;SC.sent=true;
+  send({type:"quizResult",code:META.code,title:META.title,programme:META.programme,score:right,maxScore:n,percent:pct,questionsCorrect:right,questionCount:n,answers:ans});
+}
+function resetAll(){SC={miss:{},sent:false};fPlaced={};fSel=null;frAns={};$("fMsg").textContent="";$("fMsg").className="msg";$("frMsg").textContent="";$("frMsg").className="msg";$("scBox").innerHTML="";$("scDone").hidden=true;renderF();renderFr()}
+window.addEventListener("message",function(e){
+  var d=e.data||{};if(!d||typeof d!=="object"){return}
+  var el=$("scSaved");if(!el){return}
+  if(d.type==="saved"){el.textContent="Your result has been saved to your member record."}
+  else if(d.type==="saveError"){el.textContent="Your result could not be saved this time. You can start again and finish once more."}
+  else if(d.type==="notMember"){el.textContent="Sign in as a member to have your result saved."}
+});
+
+var TRAYORD=FCARDS.slice();
+(function(){var orig=TRAYORD.map(function(c){return c.id}).join();var tries=0;do{for(var i=TRAYORD.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=TRAYORD[i];TRAYORD[i]=TRAYORD[j];TRAYORD[j]=t}tries++}while(TRAYORD.map(function(c){return c.id}).join()===orig&&tries<20)})();
+var fPlaced={},fSel=null;
+function slotOwner(sk){for(var id in fPlaced)if(fPlaced[id]===sk)return id;return null}
+function renderF(){
+  var tray=$("fTray");tray.innerHTML="";
+  TRAYORD.forEach(function(c){
+    if(fPlaced[c.id])return;
+    var b=mk("button","fc",c.t);b.type="button";b.setAttribute("aria-pressed",fSel===c.id?"true":"false");
+    b.addEventListener("click",function(){fSel=(fSel===c.id?null:c.id);$("fMsg").textContent="";$("fMsg").className="msg";renderF()});
+    tray.appendChild(b);
+  });
+  var sl=$("fSlots");sl.innerHTML="";
+  var lit={};
+  SLOTS.forEach(function(S){
+    var own=slotOwner(S.k),b=mk("button","slot"+(own?" filled":""));b.type="button";
+    var who=own?FCARDS.filter(function(c){return c.id===own})[0].t:"";
+    b.innerHTML='<span class="sy">'+S.sy+'</span><span class="sd2">'+S.d+'</span>'+(own?'<span class="who">'+who+'</span>':"");
+    if(own){b.setAttribute("aria-disabled","true");S.lit.forEach(function(l){lit[l]=1})}
+    b.addEventListener("click",function(){if(!own)dropF(S.k)});
+    sl.appendChild(b);
+  });
+  document.querySelectorAll("#eqLine .t, #eqSub .t").forEach(function(t){t.classList.toggle("lit",!!lit[t.getAttribute("data-t")])});
+  var n=Object.keys(fPlaced).length;
+  $("fPro").textContent=n+" of "+FCARDS.length+" placed";
+  $("fDone").hidden=n<FCARDS.length;
+}
+function dropF(sk){
+  var m=$("fMsg");
+  if(!fSel){m.textContent="Tap a function first.";m.className="msg";return}
+  var c=FCARDS.filter(function(x){return x.id===fSel})[0];
+  if(c.ok.indexOf(sk)>=0){fPlaced[c.id]=sk;fSel=null;m.textContent=c.why||AHWHY[sk];m.className="msg ok";renderF();checkDone()}
+  else{SC.miss["f:"+c.id]=true;m.textContent="Not there. "+c.hint;m.className="msg";var e=document.querySelector('#fTray .fc[aria-pressed="true"]');if(e){e.classList.remove("wrong");void e.offsetWidth;e.classList.add("wrong")}}
+}
+$("fShow").addEventListener("click",function(){FCARDS.forEach(function(c){if(!fPlaced[c.id])SC.miss["f:"+c.id]=true});fPlaced={manas:"fm",body:"G",chitta:"field",buddhi:"meet",ah1:"dphi",ah2:"tag",wit:"wit"};fSel=null;$("fMsg").textContent="";renderF();checkDone()});
+$("fReset").addEventListener("click",function(){if(SC.sent){resetAll();return}fPlaced={};fSel=null;$("fMsg").textContent="";$("fMsg").className="msg";renderF()});
+renderF();
+
+/* four fronts */
+var OUT=["A steady mind that cannot tell what is worth attending to.","Clarity in the abstract that collapses under the pull of old grooves.","Insight that gets immediately appropriated by a defended self.","Openness with no capacity to direct itself."];
+var FQ=[
+ {q:"<b>Practitioner 1.</b> Trains: manas (attention). Leaves out: buddhi (discernment). What does this practitioner end up with?",a:0,order:[2,0,3,1]},
+ {q:"<b>Practitioner 2.</b> Trains: buddhi (discernment). Leaves out: chitta-work (reshaping saṁskāras). What does this practitioner end up with?",a:1,order:[1,3,0,2]},
+ {q:"<b>Practitioner 3.</b> Trains: chitta-work (reshaping saṁskāras). Leaves out: ahaṁkāra-softening. What does this practitioner end up with?",a:2,order:[3,2,1,0]},
+ {q:"<b>Practitioner 4.</b> Trains: ahaṁkāra-softening. Leaves out: manas (attention). What does this practitioner end up with?",a:3,order:[0,1,3,2]}
+];
+var WHO=["manas-training without buddhi-training","buddhi-training without chitta-work","chitta-work without ahaṁkāra-softening","ahaṁkāra-softening without manas-training"];
+var frAns={};
+function renderFr(){
+  var box=$("frQs");box.innerHTML="";
+  FQ.forEach(function(Q,qi){
+    var d=mk("div","frq");d.appendChild(mk("p","qq",Q.q));
+    var o=mk("div","opts");o.setAttribute("role","group");o.setAttribute("aria-label","Possible outcomes");
+    var tried=frAns[qi]||[],solved=tried.indexOf(Q.a)>=0;
+    Q.order.forEach(function(oi){
+      var b=mk("button","fo",OUT[oi]);b.type="button";
+      if(tried.indexOf(oi)>=0)b.classList.add(oi===Q.a?"right":"no");
+      if(solved&&oi!==Q.a)b.disabled=true;
+      b.addEventListener("click",function(){if(solved)return;(frAns[qi]=frAns[qi]||[]).push(oi);if(oi!==Q.a)SC.miss["q:"+qi]=true;
+        $("frMsg").textContent=oi===Q.a?"Yes. "+WHO[Q.a].charAt(0).toUpperCase()+WHO[Q.a].slice(1)+" gives: "+OUT[oi].charAt(0).toLowerCase()+OUT[oi].slice(1)+" (§4).":"Not this one. The lesson gives that outcome for "+WHO[oi]+". Which pairing is the one in the question? (§4)";
+        $("frMsg").className=oi===Q.a?"msg ok":"msg";renderFr()});
+      o.appendChild(b);
+    });
+    d.appendChild(o);
+    box.appendChild(d);
+  });
+  $("frDone").hidden=!FQ.every(function(Q,qi){return (frAns[qi]||[]).indexOf(Q.a)>=0});
+  checkDone();
+}
+$("frReset").addEventListener("click",function(){if(SC.sent){resetAll();return}frAns={};$("frMsg").textContent="";$("frMsg").className="msg";renderFr()});
+renderFr();
+
+var EMBED=/[?&]embed=1/.test(location.search);
+function send(m){if(EMBED){try{parent.postMessage(m,"*")}catch(e){}}}
+send({type:"ready"});
+/* tell the host page how tall this page is, so the embed grows instead of scrolling inside its frame */
+(function(){
+  var last=0;
+  function h(){var d=document.documentElement,b=document.body;var v=Math.ceil(Math.max(d.scrollHeight,b.scrollHeight,b.offsetHeight));if(v&&Math.abs(v-last)>1){last=v;send({type:"height",height:v})}}
+  window.addEventListener("load",h);window.addEventListener("resize",h);
+  if(window.ResizeObserver)new ResizeObserver(h).observe(document.body);
+  setInterval(h,700);h();
+})();
+
+})();
+</script>
+</body></html>

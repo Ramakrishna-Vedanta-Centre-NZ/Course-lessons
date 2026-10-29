@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Understanding Check: Lesson 4.1</title>
+<meta name="description" content="Eight questions on Lesson 4.1, From Source to Spectrum to Ritam, from The Mind in the Light of Modern and Spiritual Sciences.">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400..700;1,400..700&family=Noto+Sans:wght@400..700&display=swap">
+<style>
+:root{
+ --bg:#FBF5EA; --surface:#FFFDF8; --ink:#1E1E1E; --muted:#5A5A5A; --line:#E6DAC3; --tint:#F3EAD3;
+ --navy:#12285A; --gold:#C9A24A; --goldt:#6B4E0E; --qink:#13295B;
+ --res:#12285A; --ok:#2F5A2E; --okbg:#E3EDDF; --no:#C2557A; --nobg:#F6E3EA;
+ --display:"Noto Serif",Georgia,serif; --body:"Noto Sans",system-ui,-apple-system,"Segoe UI",sans-serif; --mono:"Noto Sans",system-ui,sans-serif;
+}
+@media (prefers-color-scheme: dark){
+ :root:not([data-theme="light"]){
+  --bg:#0B1A3D; --surface:#12285A; --ink:#FBF5EA; --muted:#C9C3B3; --line:#2B4686; --tint:#1D3770;
+  --goldt:#E6C36A; --qink:#FBF5EA; --res:#E6C36A; --ok:#8FD79A; --okbg:#1E3A2A; --no:#F08FB0; --nobg:#4A2236; color-scheme:dark;
+ }
+}
+:root[data-theme="dark"]{
+ --bg:#0B1A3D; --surface:#12285A; --ink:#FBF5EA; --muted:#C9C3B3; --line:#2B4686; --tint:#1D3770;
+ --goldt:#E6C36A; --qink:#FBF5EA; --res:#E6C36A; --ok:#8FD79A; --okbg:#1E3A2A; --no:#F08FB0; --nobg:#4A2236; color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;
+ padding:18px max(14px,env(safe-area-inset-right,0px)) 30px max(14px,env(safe-area-inset-left,0px))}
+.wrap{max-width:720px;margin:0 auto;display:flex;flex-direction:column;gap:16px}
+h1{font-family:var(--display);font-weight:500;font-size:clamp(24px,5vw,32px);line-height:1.15;margin:0}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.sub{color:var(--muted);margin:0}
+.bar{height:6px;background:var(--line);border-radius:3px;overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--res);transition:width .25s}
+.meta{display:flex;justify-content:space-between;font-size:13px;color:var(--muted)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:20px 18px;display:flex;flex-direction:column;gap:14px}
+.qn{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:0}
+.q{font-family:var(--display);font-size:clamp(19px,3.4vw,22px);line-height:1.35;margin:0}
+.opts{display:flex;flex-direction:column;gap:10px}
+.opt{font:inherit;text-align:left;color:var(--ink);background:var(--surface);border:2px solid var(--line);border-radius:10px;padding:12px 14px;cursor:pointer;width:100%}
+.opt:hover:not(:disabled){border-color:var(--res)}
+.opt.right{border-color:var(--ok);background:var(--okbg)}
+.opt.wrong{border-color:var(--no);background:var(--nobg)}
+.opt:disabled{cursor:default}
+input.fill{font:inherit;width:100%;padding:12px 14px;border:2px solid var(--line);border-radius:10px;background:var(--surface);color:var(--ink)}
+input.fill:focus{outline:none;border-color:var(--res)}
+.btn{font:inherit;font-weight:600;font-size:15px;color:var(--surface);background:var(--ink);border:0;border-radius:8px;padding:11px 20px;cursor:pointer;text-decoration:none;display:inline-block}
+.btn.alt{background:var(--surface);color:var(--ink);border:1px solid var(--ink)}
+button:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(--res);outline-offset:2px}
+.fb{display:none;padding:12px 14px;border-radius:10px;font-size:15.5px;line-height:1.5}
+.fb.ok{display:block;background:var(--okbg);border-left:5px solid var(--ok)}
+.fb.no{display:block;background:var(--nobg);border-left:5px solid var(--no)}
+.fb b{display:block;margin-bottom:2px}
+.nav{display:flex;justify-content:flex-end}
+.res{text-align:center}
+.score{font-family:var(--display);margin:4px 0}
+.score .big{font-size:60px;line-height:1}
+.score .of{font-size:26px;color:var(--muted)}
+.band{font-family:var(--display);font-size:22px;margin:0}
+.band.good{color:var(--ok)} .band.rev{color:var(--res)}
+.res p{margin:0}
+.revisit{text-align:left;background:var(--tint);border-radius:10px;padding:12px 14px}
+.revisit h2,.review h2{font-family:var(--display);font-size:18px;margin:0 0 6px}
+.revisit ul{margin:0;padding-left:20px}
+.review{text-align:left;display:flex;flex-direction:column;gap:8px}
+.review .item{padding:10px 12px;border-radius:8px;font-size:15px;line-height:1.45}
+.review .r{background:var(--okbg)} .review .w{background:var(--nobg)}
+.review .item small{display:block;color:var(--muted);margin-top:4px}
+.acts{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+.saved{font-size:14px;color:var(--muted)}
+footer{text-align:center;font-size:13px;color:var(--muted)}
+footer a{color:var(--res)}
+.wrap header{background:#12285A;color:#FBF5EA;text-align:center;padding:18px 16px 20px;border-radius:14px}
+.wrap header img{width:56px;height:66px;object-fit:contain;display:block}
+.wrap header .logos{display:flex;align-items:center;justify-content:center;gap:18px}
+.wrap header img.rit{width:86px;height:65px}
+.wrap header .eyebrow{color:#E6C36A;font-weight:700;letter-spacing:3px;margin:8px 0 0}
+.wrap header h1{color:#FBF5EA;font-weight:700;margin:6px 0 4px}
+.wrap header .course{font-size:14px;color:#E6C36A;margin:0 0 8px;font-weight:600}
+.wrap header .sub{color:#F1ECDF;font-size:15px}
+.bar i{background:var(--gold)!important}
+.opt:hover:not(:disabled){border-color:var(--gold)!important}
+input.fill:focus{border-color:var(--gold)!important}
+.q{color:var(--qink)}
+.qn{color:var(--goldt);font-weight:700}
+.btn{background:var(--navy)!important;color:#FBF5EA!important}
+.btn.alt{background:transparent!important;color:var(--ink)!important;border:1px solid var(--navy)!important}
+.card{box-shadow:0 2px 8px rgba(19,41,91,.08)}
+</style>
+</head>
+<body>
+<div class="wrap">
+ <header>
+  <div class="logos"><img src="vedantanz-logo.png" alt="Ramakrishna Vedanta NZ emblem" width="56" height="66"><img class="rit" src="ritam-wordmark.png" alt="Ritam" width="86" height="65"></div>
+  <p class="eyebrow">Understanding check · Lesson 4.1</p>
+  <h1>From Source to Spectrum to Ritam</h1>
+  <p class="course">The Mind in the Light of Modern and Spiritual Sciences · Advanced</p>
+  <p class="sub">Eight questions on the lesson. Take them as often as you like; each answer comes with its explanation.</p>
+ </header>
+ <div class="bar"><i id="prog"></i></div>
+ <div class="meta"><span id="pos"></span><span id="sc"></span></div>
+ <div id="app"></div>
+ <footer>Understanding check · <a href="https://www.vedanta.nz">www.vedanta.nz</a>. Privacy: when you are signed in, your name, email, answers and score are saved to your member record. Only you and the course instructors can see them. They are not shared or ranked.</footer>
+</div>
+<script>
+/* Question bank. Types: mc (options o, correct index a; options are shuffled on display), judge (statement q; a: 0 holds, 1 does not hold, 2 holds only in part), fill (accepted answers a[], show).
+   e = explanation, c = idea to revisit, s = lesson section reference (null = lesson as a whole). All content from the live text of Lesson 4.1, its key ideas and misconceptions. */
+var META={code:'ADV-4-1',lesson:'4.1',quizTitle:'Understanding check: Lesson 4.1, From Source to Spectrum to Ritam',programme:'The Mind in the Light of Modern and Spiritual Sciences (Advanced)',cut:75};
+var Q=[
+{t:'judge',q:'“On the lesson’s spectrum, the pause between breaths is closer to “0” than the breath itself, and there is no sharp line where the unmanifest ends and the manifest begins.”',a:0,
+ e:'It is a spectrum, not a binary. There is no sharp line where the unmanifest ends and the manifest begins; the spectrum runs from the most subtle (closest to source) to the most gross (most differentiated). Deep sleep is closer to “0” than waking, and the pause between breaths is closer to “0” than the breath itself.',c:'A spectrum, not a binary: subtle to gross, with no sharp line',s:'2'},
+{t:'mc',q:'The lesson compares “0” on the spectrum to the zero of the number system. What role does it say that zero plays?',o:['The position-holder that makes values possible, though it has none itself','A number meaning nothing, which is why the source is said to be empty of content','The smallest manifest quantity, from which all the other numbers are counted up','A dividing line between the manifest numbers and the unmanifest ones, kept apart'],a:0,
+ e:'The symbol 0 “is not a number meaning nothing; it is the position-holder that makes the entire number system function.” It carries no value of its own and yet is what makes value-bearing positions possible. The unmanifest source-pole plays the same role: it is not a thing, but the field of availability from which every specific thing arises.',c:'“0” as availability and position-holder, not as nothing',s:'3'},
+{t:'judge',q:'“The vacuum state of quantum field theory and the Atman of Vedanta are tracking the same underlying architecture, and so they are the same kind of thing.”',a:2,
+ e:'The first half holds: they are tracking the same underlying architecture, a substrate that is not itself any specific form, from which every specific form arises and into which every specific form eventually dissolves. The second half does not: the lesson says they are not the same kind of thing, since physics measures fields with instruments, while Vedanta accesses consciousness through direct experience.',c:'Same architecture, not the same kind of thing: instruments versus direct experience',s:'3'},
+{t:'judge',q:'“In the lesson’s reading of the Īśa Upaniṣad invocation, when the manifest world arises from the source, the source is diminished by what has arisen.”',a:1,
+ e:'The unmanifest source is whole (pūrṇam), and so is the manifest world that arises from it. Manifestation does not diminish source: what arises from the whole is itself the whole, expressed in a particular form. When manifestation dissolves back, the source is not augmented; the whole simply remains the whole.',c:'Pūrṇam: source and manifestation are both whole, and manifestation does not diminish source',s:'3'},
+{t:'mc',q:'Which statement matches the lesson’s diagnostic key about the outward (sṛṣṭi) and inward (laya) movement of the spectrum?',o:['Suffering is rarely about the point a person is at; it is about whether the breathing-movement works','Suffering comes from standing too far toward the gross end, and ends when attention rests at the source-pole','Suffering is the cost of outward movement, so health is mostly a matter of return to the source (laya)','Suffering shows that a person has left Being for Becoming, which only a return to Being would restore'],a:0,
+ e:'Both directions are continuous and necessary. “Health is the rhythm of the two.” Suffering is rarely about which point on the spectrum a person is at; it is about whether the breathing-movement between points is functioning. A person who suffers has not left Being for Becoming: both are continuously present in every moment of experience.',c:'Health is the living rhythm between outward (sṛṣṭi) and inward (laya), not a fixed point',s:'3'},
+{t:'fill',q:'The lesson says the most accurate single English word for Ritam is right-______.',a:['fittedness','rightfittedness'],show:'fittedness',
+ e:'Ritam is most commonly translated as “cosmic order” or “truth” or “rhythm.” But the most accurate single English word is right-fittedness: the inherent fitting of things into their proper relationships, which makes a coherent universe possible rather than a chaos.',c:'Ritam as right-fittedness',s:'5'},
+{t:'mc',q:'The lesson names three classical domains of Ritam. What does “ritual Ritam” refer to?',o:['The lawful timing of action, as in doing things at the right hour and season','The lawful order of nature itself, as in the seasons and the structure of an atom','The lawful fittedness of relationship, as in a promise kept between two people','The lawful repetition of a ceremony, whatever the hour or the season'],a:0,
+ e:'Ritual Ritam is the lawful timing of action: the classical Vedic ritual was designed to be performed at the right hour, in the right season, because action performed in fittedness has different effects than action performed out of fittedness. Physical Ritam is the lawful order of nature and ethical Ritam the fittedness of relationship; the three are not separate kinds but the same principle at different scales.',c:'Physical, ritual and ethical Ritam: one principle at different scales',s:'5'},
+{t:'mc',q:'In the closing section, what does the lesson name as the negation of Ritam?',o:['Anṛta, the dis-jointed or mis-fit','Ṛtu, the temporal expression of Ritam in season, day and breath','Laya, the inward return of forms toward the source','Pūrṇam, the whole that lacks nothing'],a:0,
+ e:'The negation of Ritam is anṛta, dis-jointed, mis-fit: the technical Vedantic term for what modern medicine calls dysregulation, what modern psychology calls fragmentation, and what every contemplative tradition has called suffering. When the body’s rhythms fall out of ṛtu, the temporal expression of Ritam, illness arises.',c:'Anṛta as the negation of Ritam: loss of fit',s:'7'}
+];
+(function(){
+ var q=new URLSearchParams(location.search);
+ if(q.get('theme')==='light')document.documentElement.setAttribute('data-theme','light');
+ if(q.get('theme')==='dark')document.documentElement.setAttribute('data-theme','dark');
+})();
+var i=0,right=0,ans=[],saved=false;
+var app=document.getElementById('app');
+var JL=['True','False','True only in part'];
+function norm(s){return s.normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().replace(/[^a-z]/g,'')}
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;')}
+function hdr(){
+ document.getElementById('pos').textContent=i<Q.length?'Question '+(i+1)+' of '+Q.length:'Finished';
+ document.getElementById('sc').textContent=i<Q.length?right+' right so far':'';
+ document.getElementById('prog').style.width=(100*Math.min(i,Q.length)/Q.length)+'%';
+}
+function send(m){try{window.parent.postMessage(m,'*')}catch(e){}}
+function ref(s){return s?'Lesson 4.1, section'+(/ and /.test(s)?'s ':' ')+s:'Lesson 4.1'}
+function show(){
+ hdr();
+ if(i>=Q.length){return result()}
+ var qq=Q[i];
+ var h='<div class="card"><p class="qn">Question '+(i+1)+'</p><p class="q">'+esc(qq.q)+'</p>';
+ if(qq.t==='mc'){h+='<div class="opts">';var ord=qq.o.map(function(o,k){return k});for(var r=ord.length-1;r>0;r--){var s2=Math.floor(Math.random()*(r+1)),t2=ord[r];ord[r]=ord[s2];ord[s2]=t2}ord.forEach(function(k,pos){h+='<button class="opt" data-k="'+k+'">'+String.fromCharCode(65+pos)+'. '+esc(qq.o[k])+'</button>'});h+='</div>'}
+ else if(qq.t==='judge'){h+='<div class="opts">';JL.forEach(function(o,k){h+='<button class="opt" data-k="'+k+'">'+o+'</button>'});h+='</div>'}
+ else{h+='<input class="fill" id="fill" type="text" autocomplete="off" autocapitalize="off" placeholder="Type your answer"><div><button class="btn" id="chk">Check answer</button></div>'}
+ h+='<div class="fb" id="fb" role="status"></div><div class="nav"><button class="btn" id="nx" style="display:none">'+(i===Q.length-1?'See my result':'Next question')+'</button></div></div>';
+ app.innerHTML=h;
+ if(qq.t!=='fill'){app.querySelectorAll('.opt').forEach(function(b){b.onclick=function(){mark(+b.dataset.k===qq.a,b)}})}
+ else{var f=document.getElementById('fill');
+  document.getElementById('chk').onclick=function(){
+   if(!f.value.trim()){f.focus();return}
+   var ok=qq.a.some(function(x){return norm(f.value)===norm(x)});
+   f.disabled=true;this.style.display='none';mark(ok,null,f.value)};
+  f.onkeydown=function(e){if(e.key==='Enter')document.getElementById('chk').click()};f.focus()}
+ document.getElementById('nx').onclick=function(){i++;show();window.scrollTo(0,0)};
+}
+function mark(ok,btn,typed){
+ started=true;
+ var qq=Q[i];if(ok)right++;ans.push({q:i+1,ok:ok,given:typed!==undefined?typed:(btn?btn.textContent:'')});
+ if(qq.t!=='fill'){app.querySelectorAll('.opt').forEach(function(b,k){b.disabled=true;if(+b.dataset.k===qq.a)b.classList.add('right')});if(!ok&&btn)btn.classList.add('wrong')}
+ var right_ans=qq.t==='mc'?qq.o[qq.a]:qq.t==='judge'?JL[qq.a]:qq.show;
+ var fb=document.getElementById('fb');fb.className='fb '+(ok?'ok':'no');
+ fb.innerHTML='<b>'+(ok?'Right.':'Not quite. The answer is: '+esc(right_ans))+'</b>'+esc(qq.e)+' <i>('+ref(qq.s)+'.)</i>';
+ document.getElementById('nx').style.display='inline-block';hdr();
+ send({type:'progress',code:META.code,state:{i:i+1,right:right,ans:ans}});
+}
+function result(){
+ var n=Q.length,p=Math.round(100*right/n),good=p>=META.cut;
+ var h='<div class="card res"><p class="qn">Your result</p><p class="score"><span class="big">'+p+'%</span></p>'+
+  '<p class="band '+(good?'good':'rev')+'">'+(good?'Well grasped':'Revisit these ideas')+'</p>'+
+  '<p>'+right+' of '+n+' questions right.</p>';
+ var miss=[];Q.forEach(function(qq,k){if(!ans[k]||!ans[k].ok)miss.push(qq)});
+ if(miss.length){h+='<div class="revisit"><h2>Ideas to revisit</h2><ul>';miss.forEach(function(qq){h+='<li>'+esc(qq.c)+' <i>('+ref(qq.s)+')</i></li>'});h+='</ul></div>'}
+ else{h+='<div class="revisit"><h2>Nothing to revisit</h2><p>Every idea in this check was answered correctly.</p></div>'}
+ h+='<div class="review"><h2>Every question, with its answer</h2>';
+ Q.forEach(function(qq,k){var ok=ans[k]&&ans[k].ok;var a=qq.t==='mc'?qq.o[qq.a]:qq.t==='judge'?JL[qq.a]:qq.show;
+  h+='<div class="item '+(ok?'r':'w')+'">'+(ok?'Right. ':'Not quite. ')+'<b>Q'+(k+1)+'</b> '+esc(qq.q)+'<br>Answer: '+esc(a)+'<small>'+esc(qq.e)+' ('+ref(qq.s)+')</small></div>'});
+ h+='</div><p class="saved" id="savedmsg"></p><div class="acts"><button class="btn" id="again">Take it again</button></div></div>';
+ app.innerHTML=h;
+ document.getElementById('again').onclick=function(){i=0;right=0;ans=[];saved=false;show();window.scrollTo(0,0)};
+ send({type:'quizResult',code:META.code,title:META.quizTitle,programme:META.programme,score:right,maxScore:n,percent:p,questionsCorrect:right,questionCount:n,answers:ans});
+ send({type:'progress',code:META.code,state:null});
+}
+window.addEventListener('message',function(ev){
+ var d=ev.data;if(!d||!d.type)return;
+ var m=document.getElementById('savedmsg');
+ if(d.type==='saved'&&m){m.textContent='Your result has been saved to your member record.'}
+ if(d.type==='saveError'&&m){m.textContent='Your result could not be saved this time. You can take the check again.'}
+ if(d.type==='notMember'&&m){m.textContent='Sign in as a member to have your result saved.'}
+ if(d.type==='resume'&&d.state&&d.state.i>0&&d.state.i<Q.length&&!started){offerResume(d.state)}
+});
+var started=false;
+function offerResume(st){
+ var h='<div class="card"><p class="qn">Welcome back</p><p class="q">You have answered '+st.i+' of '+Q.length+' questions so far.</p><p>Would you like to continue where you left off, or start again from the beginning?</p><div class="acts"><button class="btn" id="cont">Continue from question '+(st.i+1)+'</button><button class="btn alt" id="rest">Start again</button></div></div>';
+ app.innerHTML=h;
+ document.getElementById('cont').onclick=function(){i=st.i;right=st.right||0;ans=st.ans||[];started=true;show()};
+ document.getElementById('rest').onclick=function(){i=0;right=0;ans=[];started=true;show()};
+}
+show();
+send({type:'ready'});
+</script>
+</body>
+</html>

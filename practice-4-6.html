@@ -1,0 +1,664 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Practice: Lesson 4.6, What Are You Coupled To?</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans:wght@400..700&family=Noto+Serif:ital,wght@0,400..700;1,400..700&display=swap">
+<style>
+:root{
+  --bg:#FBF5EA; --surface:#FFFDF8; --ink:#1E1E1E; --muted:#5A5A5A; --line:#E6DAC3; --tint:#F3EAD3; --navy:#12285A; --gold:#C9A24A; --goldt:#6B4E0E;
+  --obj:#0B8686; --att:#C95F06; --res:#2E3192; --env:#C0245B; --ok:#1B7A52;
+  --display:"Noto Serif",Georgia,"Times New Roman",serif;
+  --body:"Noto Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0B1A3D; --surface:#12285A; --ink:#FBF5EA; --muted:#C9C3B3; --line:#2B4686; --tint:#1D3770; --gold:#E6C36A; --goldt:#E6C36A;
+    --obj:#46CFC6; --att:#F5A04D; --res:#A3AAFF; --env:#FF7BA9; --ok:#5BD59B; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0B1A3D; --surface:#12285A; --ink:#FBF5EA; --muted:#C9C3B3; --line:#2B4686; --tint:#1D3770; --gold:#E6C36A; --goldt:#E6C36A;
+  --obj:#46CFC6; --att:#F5A04D; --res:#A3AAFF; --env:#FF7BA9; --ok:#5BD59B; color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;
+  padding-left:max(14px,env(safe-area-inset-left,0px));padding-right:max(14px,env(safe-area-inset-right,0px));padding-block:22px 40px}
+.wrap{max-width:900px;margin:0 auto;display:flex;flex-direction:column;gap:32px}
+h1,h2,h3{font-family:var(--display);font-weight:500;text-wrap:balance;margin:0;letter-spacing:-.01em}
+h1{font-size:clamp(30px,5.4vw,44px);line-height:1.06}
+h2{font-size:clamp(23px,3.4vw,29px);line-height:1.15}
+h3{font-size:19px;line-height:1.25}
+p{margin:0}
+sub{font-size:.72em;line-height:0}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.lede{font-size:17.5px;max-width:64ch}
+.intro{max-width:66ch;color:var(--muted)}
+header{display:flex;flex-direction:column;gap:12px}
+section{display:flex;flex-direction:column;gap:18px;min-width:0}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px;display:flex;flex-direction:column;gap:14px;min-width:0}
+.bar{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;justify-content:space-between}
+button:focus-visible,input:focus-visible{outline:2px solid var(--res);outline-offset:2px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{font:inherit;font-size:14px;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:7px 13px;cursor:pointer;display:inline-flex;gap:8px;align-items:center}
+.chip[aria-pressed="true"]{background:var(--res);border-color:var(--res);color:#fff}
+.chip:disabled{cursor:default;opacity:.5}
+.btn{font:inherit;font-size:14px;color:var(--ink);background:var(--surface);border:1px solid var(--ink);border-radius:8px;padding:8px 16px;cursor:pointer}
+.btn.primary{background:var(--ink);color:var(--surface)}
+.btn.ghost{border-color:var(--line);color:var(--muted)}
+.scope-wrap{position:relative;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--bg)}
+canvas{display:block;width:100%}
+.slider{display:flex;align-items:center;gap:10px;flex:0 0 auto;min-width:0;flex-wrap:wrap}
+.slider label{font-size:14px;font-weight:600;min-width:150px}
+.slider input[type=range]{flex:1;min-width:60px;accent-color:var(--res)}
+.slider small{color:var(--muted);font-size:12px;white-space:nowrap}
+.tag{font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);border:1px solid var(--line);border-radius:4px;padding:2px 6px}
+.note{font-size:13px;color:var(--muted);max-width:70ch}
+.balance{background:var(--tint);border-radius:10px;padding:16px 18px;display:flex;flex-direction:column;gap:8px;max-width:78ch}
+footer{font-size:13px;color:var(--muted);max-width:76ch;border-top:1px solid var(--line);padding-top:12px}
+@media (max-width:640px){.panel{padding:12px}.wrap{gap:26px}.slider label{min-width:0;flex-basis:100%}}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
+[hidden]{display:none!important}
+nav.parts{display:flex;flex-wrap:wrap;gap:8px 20px;margin-top:4px}
+nav.parts a{color:var(--ink);text-decoration:none;border-bottom:1px solid var(--line);padding-bottom:2px;font-size:15px}
+.msg{min-height:1.5em;font-size:15px}
+.fbbox{border-top:1px solid var(--line);padding-top:12px;display:flex;flex-direction:column;gap:8px;min-height:6.5em}
+.fbbox .verdict{font-family:var(--display);font-size:19px}
+.fbbox .ref{font-family:var(--mono);font-size:11px;color:var(--muted)}
+.chip:focus-visible,.pick:focus-visible{outline:2px solid var(--res);outline-offset:2px}
+#cvA{height:300px}
+#cvB{height:300px}
+#cvC{height:300px}
+@media (max-width:640px){#cvA{height:430px}#cvB{height:400px}#cvC{height:410px}}
+.legend{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:13px;color:var(--muted)}
+.legend span{display:inline-flex;align-items:center;gap:7px}
+.sw{display:inline-block;width:22px;height:0;border-top:2.5px solid var(--res)}
+.dot{display:inline-block;width:11px;height:11px;border-radius:50%}
+/* meters */
+.meters{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 18px}
+.meter{display:flex;flex-direction:column;gap:4px;min-width:0}
+.meter .mh{display:flex;justify-content:space-between;gap:8px;font-size:13px;flex-wrap:wrap}
+.meter .mh b{font-weight:600}
+.meter .mh output{color:var(--muted);font-size:13px}
+.track{position:relative;height:9px;background:var(--line);border-radius:5px}
+.track .fill{position:absolute;left:0;top:0;bottom:0;width:0;background:var(--att);border-radius:5px}
+.track .fill.even{background:var(--muted)}
+.ticks{position:relative;height:18px;font-size:11px;color:var(--muted)}
+.ticks span{position:absolute;top:2px;transform:translateX(-50%);white-space:nowrap}
+.ticks span::before{content:"";position:absolute;left:50%;top:-11px;height:9px;border-left:1.5px solid var(--ink)}
+.ticks span.r{transform:translateX(-100%)} .ticks span.r::before{left:auto;right:0}
+.reads{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.read{border-top:3px solid var(--line);padding-top:7px;display:flex;flex-direction:column;gap:2px;min-width:0}
+.read .tag{align-self:flex-start}
+.read b{font-family:var(--display);font-size:18px;font-weight:500;line-height:1.25}
+.read[data-r="tog"]{border-color:var(--res)} .read[data-r="pace"]{border-color:var(--gold)} .read[data-r="far"]{border-color:var(--env)}
+@media (max-width:640px){.meters,.reads{grid-template-columns:minmax(0,1fr)}}
+/* questions */
+.scene{border-left:3px solid var(--line);padding:2px 0 2px 12px;font-family:var(--display);font-size:18.5px;line-height:1.45;min-height:3.2em}
+.picks{display:flex;flex-direction:column;gap:8px;align-items:stretch}
+.pick{font:inherit;font-size:15px;text-align:left;color:var(--ink);background:var(--bg);border:1.5px solid var(--line);border-left-width:4px;border-radius:10px;padding:9px 14px;cursor:pointer;min-width:0}
+.pick.wrong{opacity:.55}
+.pick.right{background:var(--surface);box-shadow:0 0 0 2px var(--ink);border-left-color:var(--ok)}
+.pick:disabled{cursor:default}
+.dots{display:flex;gap:6px}
+.dots i{width:10px;height:10px;border-radius:50%;border:1.5px solid var(--muted)}
+.dots i.done{background:var(--ink);border-color:var(--ink)}
+.dots i.cur{border-color:var(--ink);box-shadow:0 0 0 2px var(--line)}
+@media (max-width:640px){.scene{font-size:17px}}
+.paused{position:absolute;left:8px;top:8px;font-size:12px;color:var(--muted);background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:2px 8px}
+body[data-part] header{display:none}
+body[data-part="1"] #s2,body[data-part="1"] #s3,body[data-part="2"] #s1,body[data-part="2"] #s3,body[data-part="3"] #s1,body[data-part="3"] #s2{display:none}
+body[data-part]{padding-block:10px 18px}
+
+.brandhdr{background:#12285A;color:#FBF5EA;text-align:center;padding:18px 18px 20px;border-radius:14px;display:flex;flex-direction:column;align-items:center;gap:6px}
+.brandhdr .logos{display:flex;align-items:center;justify-content:center;gap:18px}
+.brandhdr .logos img{width:56px;height:66px;object-fit:contain;display:block}
+.brandhdr .logos img.rit{width:86px;height:65px}
+.brandhdr .eyebrow{color:#E6C36A;font-weight:700;letter-spacing:3px}
+.brandhdr h1{color:#FBF5EA;font-weight:700}
+.brandhdr .course{color:#E6C36A;font-weight:600;font-size:14px}
+.brandhdr .lede{color:#F1ECDF;font-size:15.5px;max-width:62ch}
+.brandhdr .scorenote{color:#F1ECDF;font-size:14.5px}
+.brandhdr nav.parts a{color:#FBF5EA;border-bottom:1px solid #E6C36A;background:none;padding-bottom:2px}
+.brandhdr nav.parts a:hover,.brandhdr nav.parts a:focus-visible{color:#E6C36A;border-color:#E6C36A}
+.tag.scored{color:var(--goldt);border-color:var(--gold)}
+.scorebox{border-left:5px solid var(--gold);background:var(--tint);border-radius:10px;padding:12px 14px;margin-bottom:14px}
+.scorebox .big{font-family:var(--display);font-size:30px;line-height:1.1;color:var(--ink)}
+.scorebox .band{font-family:var(--display);font-size:18px;margin:4px 0}
+.scorebox .band.good{color:var(--ok)}
+.scorebox .saved{font-size:13.5px;color:var(--muted)}
+.scorebox ul{margin:6px 0 0;padding-left:20px}
+
+/* PRACTICE TEMPLATE: one coloured "part" per section (part-1 .. part-4) */
+.part{--pc:#0E7A8A;--pcon:#FFFFFF;--pcbg:#E6F2F3;border:2px solid var(--pc);border-radius:14px;overflow:hidden;background:var(--pcbg)}
+.part-1{--pc:#0E7A8A;--pcbg:#E6F2F3}
+.part-2{--pc:#12285A;--pcbg:#EEF0F8}
+.part-3{--pc:#2F6B3A;--pcbg:#E6F0E3}
+.part-4{--pc:#7A2A5E;--pcbg:#F5E6F0}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .part{--pcbg:#0F2250;border-color:var(--pcl,var(--pc))}
+ :root:not([data-theme="light"]) .part-1{--pcl:#46CFC6} :root:not([data-theme="light"]) .part-2{--pcl:#E6C36A} :root:not([data-theme="light"]) .part-3{--pcl:#7FD08C} :root:not([data-theme="light"]) .part-4{--pcl:#F08CC8}}
+:root[data-theme="dark"] .part{--pcbg:#0F2250;border-color:var(--pcl,var(--pc))}
+:root[data-theme="dark"] .part-1{--pcl:#46CFC6} :root[data-theme="dark"] .part-2{--pcl:#E6C36A} :root[data-theme="dark"] .part-3{--pcl:#7FD08C} :root[data-theme="dark"] .part-4{--pcl:#F08CC8}
+.part-band{background:var(--pc);color:var(--pcon);padding:12px 16px;display:flex;align-items:center;flex-wrap:wrap;gap:6px 14px}
+.part-band h2{color:inherit;font-size:clamp(20px,3.4vw,26px);font-weight:600;flex:1 1 220px}
+.part-num{font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;font-weight:500;background:rgba(255,255,255,.18);border-radius:4px;padding:3px 9px}
+.part-band .tag{color:inherit;border-color:currentColor;background:rgba(255,255,255,.12)}
+.part-2 .part-band .tag,.part-2 .part-num{color:#E6C36A}
+.part-body{padding:16px;display:flex;flex-direction:column;gap:14px}
+.part .panel{background:var(--surface)}
+@media (max-width:640px){.part-body{padding:12px}}
+.reads.two{grid-template-columns:repeat(2,minmax(0,1fr))}
+.read[data-r="a"]{border-color:var(--att)} .read[data-r="b"]{border-color:var(--res)} .read[data-r="c"]{border-color:var(--gold)}
+@media (max-width:640px){.reads.two{grid-template-columns:minmax(0,1fr)}}
+.fill.res{background:var(--res)}
+.ticks span.c{transform:translateX(-50%)}
+.quote{border-left:3px solid var(--gold);padding:2px 0 2px 12px;font-family:var(--display);font-size:17px;line-height:1.45}
+.chip.on-demand{border-style:dashed}
+</style></head><body>
+<div class="wrap">
+<header class="brandhdr">
+  <div class="logos"><img src="vedantanz-logo.png" alt="Ramakrishna Vedanta NZ emblem" width="56" height="66"><img class="rit" src="ritam-wordmark.png" alt="Ritam" width="86" height="65"></div>
+  <div class="eyebrow">Practice · Lesson 4.6</div>
+  <h1>What Are You Coupled To?</h1>
+  <p class="course">The Mind in the Light of Modern and Spiritual Sciences · Advanced</p>
+  <p class="lede">Lesson 4.6 names three universal phenomena: resonance, entrainment and coherence (§4). Here you drive a swinging system past its natural rate, let a board of metronomes find one another, and then see what a group of oscillators does when it is coupled to a steady source and to an erratic one.</p>
+  <p class="scorenote"><b>Parts I and III</b> are practice and are not scored. <b>Part II</b> is scored: only its four questions count, and your first pick on each counts.</p>
+  <nav class="parts" aria-label="Parts of this page"><a href="#s1">I. Past the natural rate</a><a href="#s2">II. Metronomes on a board</a><a href="#s3">III. What are you coupled to?</a></nav>
+</header>
+
+<section id="s1" class="part part-1">
+  <div class="part-band"><span class="part-num">Part I</span><h2>Past the natural rate</h2><span class="tag">Practice: not scored</span></div>
+  <div class="part-body">
+  <p class="intro">A mass hangs from a spring, and the top of the spring is moved up and down by a small, steady push. The system has a natural rate at which it most readily swings. Move the slider to change the rate of the push, or let the page sweep it for you, and watch how far the mass swings. The push itself is the same size at every setting.</p>
+  <div class="panel" id="labA">
+    <div class="scope-wrap" id="wrapA"><canvas id="cvA" role="img" aria-label="A mass on a spring driven from above, and a curve of swing against drive rate"></canvas><span class="paused" id="pzA" hidden>Paused while off screen</span></div>
+    <div class="legend">
+      <span><i class="sw" style="border-color:var(--res)"></i>steady swing for each drive rate</span>
+      <span><i class="dot" style="background:var(--att)"></i>the swing now</span>
+    </div>
+    <div class="slider"><label for="rDrive">Drive rate</label><small>slower</small><input type="range" id="rDrive" min="0" max="100" value="20" aria-valuetext="well below the natural rate"><small>faster</small></div>
+    <div class="bar">
+      <div class="chips"><button class="chip" id="bSweep" aria-pressed="false">Sweep it for me</button><button class="btn ghost" id="bResetA">Start again</button></div>
+    </div>
+    <div class="meters">
+      <div class="meter"><div class="mh"><b>The push</b><output id="oPush">the same at every setting</output></div><div class="track"><div class="fill even" style="width:20%"></div></div></div>
+      <div class="meter"><div class="mh"><b>The swing</b><output id="oSwing">small</output></div><div class="track"><div class="fill" id="fSwing"></div></div></div>
+    </div>
+    <div id="msgA" class="msg fbbox" role="status" aria-live="polite"></div>
+    <p class="note">The curve is worked out for this spring and mass; the dot is the swing the model is making at this moment, so it takes a few seconds to settle after you move the slider. The model has one spring and one mass and nothing else.</p>
+  </div>
+  <div class="balance">
+    <h3>The lesson’s own picture</h3>
+    <p>“Every physical system has a natural frequency, the rate at which it most readily oscillates when disturbed. Strike a wine glass and it rings at a specific pitch” (§4, Resonance). In the lesson’s analogy, a system driven at that rate “draws” on the field around it. The model shows only the swing growing near the match. It does not model a source, and the analogy is not scored.</p>
+  </div>
+  </div>
+</section>
+
+<section id="s2" class="part part-2">
+  <div class="part-band"><span class="part-num">Part II</span><h2>Metronomes on a board</h2><span class="tag scored">Scored: first pick counts</span></div>
+  <div class="part-body">
+  <p class="intro">Five metronomes stand on a board that rests on two cans, as in the lesson’s picture (§4, Entrainment). Each ticks at a rate of its own. The slider sets how freely the board can roll, which is how strongly each metronome can feel the others. Only the four questions below are scored.</p>
+  <div class="panel" id="labB">
+    <div class="scope-wrap" id="wrapB"><canvas id="cvB" role="img" aria-label="Five metronomes on a rolling board, and a wheel showing where each one is in its cycle"></canvas><span class="paused" id="pzB" hidden>Paused while off screen</span></div>
+    <div class="slider"><label for="rK2">Coupling through the board</label><small>board held still</small><input type="range" id="rK2" min="0" max="100" value="0" aria-valuetext="none"><small>rolls freely</small></div>
+    <div class="bar">
+      <div class="chips" id="spChips" role="group" aria-label="How far apart the rates are">
+        <button class="chip" data-s="close" aria-pressed="true">Rates close together (as in the lesson)</button>
+        <button class="chip" data-s="wide" aria-pressed="false">Rates far apart</button>
+      </div>
+      <button class="btn ghost" id="bScr">Knock them out of step</button>
+    </div>
+    <div class="reads two" aria-live="polite">
+      <div class="read" data-r="a"><span class="tag">the metronomes</span><b id="rdTog">ticking apart</b></div>
+      <div class="read" data-r="b"><span class="tag">the board</span><b id="rdBoard">held still</b></div>
+    </div>
+    <div class="legend"><span>The wheel shows where each metronome is in its cycle. The arrow shows where they are as a group; it is long when they are in step.</span></div>
+    <div id="msgB" class="msg fbbox" role="status" aria-live="polite"></div>
+    <p class="note">This is a generic model of coupled oscillators. It does not model a person, a nervous system or a group of people.</p>
+  </div>
+
+  <div class="panel" id="qz">
+    <div class="bar"><span class="tag" id="qPro">Question 1 of 4</span><div class="dots" id="qDots" aria-hidden="true"></div></div>
+    <div class="scene"><p id="qText"></p></div>
+    <div class="picks" id="qPicks" role="group" aria-label="Answers"></div>
+    <div id="qMsg" class="msg fbbox" role="status" aria-live="polite"><p class="note">Pick one answer.</p></div>
+    <div class="bar"><div class="chips"><button class="btn primary" id="qNext" hidden>Next question</button><button class="btn" id="qDemo" hidden>Show this in the model</button><button class="btn ghost" id="qShow">Show me</button><button class="btn ghost" id="qReset">Start again</button></div></div>
+  </div>
+  <div class="panel" id="qDone" hidden>
+    <div class="scorebox" id="scBox" aria-live="polite"></div>
+    <h3>Coherence is not uniformity</h3>
+    <p>“In a coherent system, the rhythms are not identical; they maintain stable phase relationships; each knows, so to speak, where the others are in their cycle. Coherence is not uniformity. It is coordinated diversity” (§4, Coherence).</p>
+  </div>
+  </div>
+</section>
+
+<section id="s3" class="part part-3">
+  <div class="part-band"><span class="part-num">Part III</span><h2>What are you coupled to?</h2><span class="tag">Practice: not scored</span></div>
+  <div class="part-body">
+  <p class="intro">Ten oscillators, each with a natural rate of its own, are coupled to a source. Choose a steady source or an erratic one, and set the coupling. Then change the source and leave the coupling where it is. Nothing here is scored.</p>
+  <div class="panel" id="labC">
+    <div class="scope-wrap" id="wrapC"><canvas id="cvC" role="img" aria-label="A source and ten oscillators on a wheel, and the source's rhythm beside the group's rhythm over the last few seconds"></canvas><span class="paused" id="pzC" hidden>Paused while off screen</span></div>
+    <div class="legend">
+      <span><i class="sw" style="border-color:var(--gold)"></i>the source’s rhythm</span>
+      <span><i class="sw" style="border-color:var(--res)"></i>the group’s rhythm</span>
+    </div>
+    <div class="bar">
+      <div class="chips" id="srcChips" role="group" aria-label="The source">
+        <button class="chip" data-s="none" aria-pressed="true">No source</button>
+        <button class="chip" data-s="steady" aria-pressed="false">A steady source</button>
+        <button class="chip" data-s="erratic" aria-pressed="false">An erratic source</button>
+      </div>
+      <button class="btn ghost" id="bResetC">Start again</button>
+    </div>
+    <div class="slider"><label for="rK3">Coupling</label><small>none</small><input type="range" id="rK3" min="0" max="100" value="10" aria-valuetext="weak"><small>strong</small></div>
+    <div class="reads two" aria-live="polite">
+      <div class="read" data-r="c"><span class="tag">the source</span><b id="rcSrc">none</b></div>
+      <div class="read" data-r="b"><span class="tag">the group</span><b id="rcGrp">keeps its own rates</b></div>
+    </div>
+    <div id="msgC" class="msg fbbox" role="status" aria-live="polite"></div>
+    <p class="note">“Steady” means a rhythm that keeps one rate. “Erratic” means one whose rate keeps wandering. The source is not pulled by the group. This is a generic model: it does not model a person, a nervous system or any situation, and it takes no view on what anyone should couple to.</p>
+  </div>
+  <div class="balance">
+    <h3>Neutral, and then where it leads</h3>
+    <p>“The mechanism of resonance is neutral. It does not care what you couple to” (§4). “In every case, the system phase-locks with what holds it.” The lesson then goes on: “the direction of that flow depends entirely on what you are coupled to.” This page shows the first part only: the group follows whichever rhythm it is given. What each kind of source does to a living being is the lesson’s own account, and is not modelled here.</p>
+    <div class="quote">“Let a man lift his mind by his own Self alone; let him not lower his mind. The mind alone is one’s friend; the mind alone is one’s enemy.” <span class="note">Bhagavad Gītā 6.5, in the wording the lesson gives (§4).</span></div>
+  </div>
+  </div>
+</section>
+<footer>Part II is the only scored part, and only to show you where to look again. Parts I and III are practice. Based on Lesson 4.6. The spring, the metronomes and the oscillators are generic models of oscillating systems; they do not model or measure any person, nervous system or group. This page illustrates the lesson’s teaching and does not advise on anyone’s situation. If anything here touches something difficult for you, please be gentle with yourself, and consider speaking with someone you trust or a qualified professional.<br>Ritam · Ramakrishna Vedanta Centre NZ · <a href="https://www.vedanta.nz">www.vedanta.nz</a> Privacy: when you are signed in, your name, email, answers and score are saved to your member record. Only you and the course instructors can see them. They are not shared or ranked.</footer>
+</div>
+<script>
+(function(){
+"use strict";
+var TAU=Math.PI*2;
+try{var q=new URLSearchParams(location.search).get("theme");if(q==="light"||q==="dark")document.documentElement.setAttribute("data-theme",q)}catch(e){}
+try{var pt=new URLSearchParams(location.search).get("part");if(pt==="1"||pt==="2"||pt==="3")document.body.setAttribute("data-part",pt)}catch(e){}
+function $(id){return document.getElementById(id)}
+function clamp(x,a,b){return Math.max(a,Math.min(b,x))}
+var C={},subs=[];
+function readColors(){
+  var cs=getComputedStyle(document.documentElement);
+  ["--bg","--surface","--ink","--muted","--line","--tint","--obj","--att","--res","--env","--ok","--gold"].forEach(function(k){C[k]=cs.getPropertyValue(k).trim()});
+  subs.forEach(function(f){try{f()}catch(e){}});
+}
+readColors();
+try{window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change",readColors)}catch(e){}
+new MutationObserver(readColors).observe(document.documentElement,{attributes:true,attributeFilter:["data-theme"]});
+var dpr=Math.max(1,Math.min(2,window.devicePixelRatio||1));
+function fit(c){
+  var w=c.clientWidth,h=c.clientHeight;if(!w||!h)return null;
+  var bw=Math.round(w*dpr),bh=Math.round(h*dpr);
+  if(c.width!==bw||c.height!==bh){c.width=bw;c.height=bh}
+  var g=c.getContext("2d");g.setTransform(dpr,0,0,dpr,0,0);return {g:g,w:w,h:h};
+}
+function label(g,t,x,y,color,align){g.font="500 11.5px 'Noto Sans',system-ui,sans-serif";g.textAlign=align||"left";g.textBaseline="alphabetic";g.fillStyle=color;g.fillText(t,x,y)}
+/* animation loop: runs only while its element is on screen and the tab is visible */
+var RM=false;try{RM=window.matchMedia("(prefers-reduced-motion: reduce)").matches}catch(e){}
+function loop(target,step,onPause){
+  var on=false,vis=false,raf=0,last=0,self;
+  function frame(t){
+    if(!on||!vis||document.hidden){raf=0;return}
+    if(RM&&last&&t-last<200){raf=requestAnimationFrame(frame);return}
+    var dt=last?Math.min(0.1,(t-last)/1000):0;last=t;self.frames++;step(dt);raf=requestAnimationFrame(frame);
+  }
+  function kick(){if(on&&vis&&!document.hidden&&!raf){last=0;raf=requestAnimationFrame(frame)}onPause&&onPause(on&&!vis)}
+  if(window.IntersectionObserver){new IntersectionObserver(function(es){es.forEach(function(e){vis=e.isIntersecting});kick()},{threshold:0}).observe(target)}else{vis=true}
+  document.addEventListener("visibilitychange",kick);
+  self={frames:0,start:function(){on=true;kick()},stop:function(){on=false},running:function(){return !!raf}};
+  return self;
+}
+window.__labs={};
+
+/* ===== Part I: a driven spring ===== */
+var W0=TAU*0.6, ZETA=0.1, AMP=0.5;           /* natural rate 0.6 per second (slowed to be watchable); push size 0.5 */
+var RMIN=0.4, RSPAN=1.2;                       /* drive rate runs from 0.4 to 1.6 of the natural rate */
+var A={sv:0,x:0,v:0,t:0,env:0,r:0.64,sweep:false,pts:[],zone:""};
+var rDrive=$("rDrive"),loopA;
+function trans(r){var d=2*ZETA*r;return AMP*Math.sqrt(1+d*d)/Math.sqrt((1-r*r)*(1-r*r)+d*d)}
+function rFromSlider(){return RMIN+RSPAN*(+rDrive.value)/100}
+function zoneOf(r){return r<0.85?"below":r<=1.15?"near":"above"}
+function stepA(dt){
+  if(A.sweep){
+    A.sv+=dt*(100/20);var v=A.sv;
+    if(v>=100){v=100;A.sweep=false;$("bSweep").setAttribute("aria-pressed","false");$("bSweep").textContent="Sweep it for me"}
+    rDrive.value=v;
+  }
+  A.r=rFromSlider();
+  var om=A.r*W0,n=Math.max(1,Math.ceil(dt/0.008)),h=dt/n;
+  for(var i=0;i<n;i++){
+    var u=AMP*Math.cos(om*A.t);
+    var acc=-W0*W0*(A.x-u)-2*ZETA*W0*A.v;
+    A.v+=acc*h;A.x+=A.v*h;A.t+=h;
+  }
+  var f=A.r*0.6;A.env=Math.max(Math.abs(A.x),A.env*Math.exp(-dt*0.8*f));
+  if(A.sweep&&dt>0){var last=A.pts[A.pts.length-1];if(!last||Math.abs(last[0]-A.r)>0.012)A.pts.push([A.r,A.env])}
+  drawA();readA();
+}
+function drawA(){
+  var f=fit($("cvA"));if(!f)return;var g=f.g,w=f.w,h=f.h;
+  g.clearRect(0,0,w,h);
+  var wide=w>=560,aw=wide?w*0.34:w,ah=wide?h:h*0.5;
+  /* apparatus */
+  var cx=aw/2,top=24,SC=Math.min((0.42*ah-16)/2.7,(0.58*ah-62)/2.7),REST=0.42*ah;
+  g.save();
+  var u=AMP*Math.cos(A.r*W0*A.t);
+  var py=top+u*SC;
+  g.strokeStyle=C["--muted"];g.lineWidth=1;g.beginPath();g.moveTo(cx-34,top-8);g.lineTo(cx+34,top-8);g.stroke();
+  g.fillStyle=C["--ink"];g.fillRect(cx-26,py-8,52,8);
+    var mTop=py+REST+(A.x-u)*SC; mTop=Math.max(py+16,mTop);
+  g.strokeStyle=C["--ink"];g.lineWidth=1.6;g.beginPath();g.moveTo(cx,py);
+  var coils=9,y0=py,y1=mTop;
+  for(var k=1;k<=coils;k++){var yy=y0+(y1-y0)*k/(coils+1);g.lineTo(cx+(k%2?12:-12),yy)}
+  g.lineTo(cx,y1);g.stroke();
+  g.fillStyle=C["--att"];g.fillRect(cx-17,y1,34,26);
+  g.strokeStyle=C["--ink"];g.lineWidth=1;g.strokeRect(cx-17,y1,34,26);
+  g.restore();
+  label(g,"the push",cx+34,top+6,C["--muted"],"left");
+  label(g,"the swing",cx+24,y1+17,C["--muted"],"left");
+  /* curve */
+  var cx0,cy0,cw,chh;
+  if(wide){cx0=aw+34;cy0=26;cw=w-cx0-18;chh=h-26-44}else{cx0=36;cy0=ah+16;cw=w-cx0-16;chh=h-ah-16-44}
+  var YM=3;
+  g.save();g.strokeStyle=C["--line"];g.lineWidth=1;g.strokeRect(cx0,cy0,cw,chh);
+  var xr=function(r){return cx0+cw*(r-RMIN)/RSPAN},yv=function(a){return cy0+chh*(1-Math.min(a,YM)/YM)};
+  g.setLineDash([4,4]);g.strokeStyle=C["--muted"];g.beginPath();g.moveTo(xr(1),cy0);g.lineTo(xr(1),cy0+chh);g.stroke();g.setLineDash([]);
+  label(g,"natural rate",xr(1),cy0+chh+16,C["--muted"],"center");
+  label(g,"drive rate →",cx0+cw,cy0+chh+34,C["--muted"],"right");
+  g.save();g.translate(cx0-12,cy0+chh/2);g.rotate(-Math.PI/2);label(g,"swing",0,0,C["--muted"],"center");g.restore();
+  g.strokeStyle=C["--res"];g.lineWidth=2.2;g.beginPath();
+  for(var i=0;i<=120;i++){var r=RMIN+RSPAN*i/120,x=xr(r),y=yv(trans(r));if(i)g.lineTo(x,y);else g.moveTo(x,y)}
+  g.stroke();
+  g.fillStyle=C["--att"];g.globalAlpha=0.35;
+  A.pts.forEach(function(p){g.beginPath();g.arc(xr(p[0]),yv(p[1]),2.2,0,TAU);g.fill()});
+  g.globalAlpha=1;
+  g.beginPath();g.arc(xr(A.r),yv(A.env),6,0,TAU);g.fill();g.strokeStyle=C["--ink"];g.lineWidth=1.2;g.stroke();
+  g.restore();
+}
+function readA(){
+  var s=A.env/2.4;$("fSwing").style.width=Math.round(100*clamp(s,0,1))+"%";
+  var wd=A.env<0.9?"small":A.env<1.7?"larger":"the largest it gets";
+  if($("oSwing").textContent!==wd)$("oSwing").textContent=wd;
+  var z=zoneOf(A.r);
+  rDrive.setAttribute("aria-valuetext",z==="below"?"below the natural rate":z==="near"?"near the natural rate":"above the natural rate");
+  if(z!==A.zone){A.zone=z;sayA(z)}
+}
+function sayA(z){
+  var h;
+  if(z==="near")h='<p class="verdict">Near the natural rate: the swing is largest.</p><p>The push has not got bigger. It now arrives in time with the swing, so each push adds to the last. “A system driven at its natural frequency amplifies dramatically” (§4, Resonance).</p>';
+  else if(z==="below")h='<p class="verdict">Below the natural rate: a small swing.</p><p>The same push, arriving at a rate the system does not favour, makes only a small swing. Raise the drive rate towards the natural rate, marked in the middle.</p>';
+  else h='<p class="verdict">Above the natural rate: a small swing again.</p><p>Past the match the swing falls away. The peak is near the natural rate, not at the fastest or the slowest push.</p>';
+  $("msgA").innerHTML=h+'<p class="ref">§4 · Resonance</p>';
+}
+rDrive.addEventListener("input",function(){A.sweep=false;$("bSweep").setAttribute("aria-pressed","false");$("bSweep").textContent="Sweep it for me";A.r=rFromSlider();drawA();readA()});
+$("bSweep").addEventListener("click",function(){
+  if(A.sweep){A.sweep=false;this.setAttribute("aria-pressed","false");this.textContent="Sweep it for me";return}
+  A.pts=[];rDrive.value=0;A.sv=0;A.sweep=true;this.setAttribute("aria-pressed","true");this.textContent="Stop the sweep";
+});
+function resetA(){A.x=0;A.v=0;A.t=0;A.env=0;A.pts=[];A.sweep=false;$("bSweep").setAttribute("aria-pressed","false");$("bSweep").textContent="Sweep it for me";rDrive.value=20;A.r=rFromSlider();A.zone="";stepA(0.016)}
+$("bResetA").addEventListener("click",resetA);
+loopA=loop($("labA"),stepA,function(p){$("pzA").hidden=!p});
+window.__labs.A=loopA;resetA();loopA.start();
+
+/* ===== Part II: five metronomes on a board ===== */
+var NB=5,B={th:[],w:[],r:0,rs:0,psi:0,K:0,spread:"close",ox:0,can:0};
+var BASE=TAU*0.8,KMAX=1.7;
+var OFF={close:[-1,-0.5,0,0.5,1],wide:[-1,-0.5,0,0.5,1]};
+function spreadAmt(){return B.spread==="close"?0.30:1.15}     /* half-range in rad/s: close = about 7% of the base rate */
+function setRates(){for(var i=0;i<NB;i++)B.w[i]=BASE+OFF.close[i]*spreadAmt()}
+function scramble(){for(var tries=0;tries<200;tries++){var c=0,sn=0,i;for(i=0;i<NB;i++){B.th[i]=Math.random()*TAU;c+=Math.cos(B.th[i]);sn+=Math.sin(B.th[i])}var r=Math.sqrt(c*c+sn*sn)/NB;if(r>0.15&&r<0.45)return}}
+var rK2=$("rK2"),loopB;
+function setK2(){var v=+rK2.value;B.K=KMAX*v/100;rK2.setAttribute("aria-valuetext",v<4?"none":v<35?"weak":v<70?"moderate":"strong")}
+function stepB(dt){
+  var n=Math.max(1,Math.ceil(dt/0.01)),h=dt/n;
+  for(var s=0;s<n;s++){
+    var d=[];
+    for(var i=0;i<NB;i++){var c=0;for(var j=0;j<NB;j++)c+=Math.sin(B.th[j]-B.th[i]);d[i]=B.w[i]+B.K/NB*c}
+    for(i=0;i<NB;i++)B.th[i]+=d[i]*h;
+  }
+  var cs=0,sn=0,ms=0;for(var k=0;k<NB;k++){cs+=Math.cos(B.th[k]);sn+=Math.sin(B.th[k]);ms+=Math.sin(B.th[k])}
+  B.r=Math.sqrt(cs*cs+sn*sn)/NB;B.psi=Math.atan2(sn,cs);
+  B.rs+=(B.r-B.rs)*Math.min(1,dt*3);
+  B.ox=(B.K/KMAX)*15*ms/NB;
+  drawB();readB();
+}
+function drawB(){
+  var f=fit($("cvB"));if(!f)return;var g=f.g,w=f.w,h=f.h;g.clearRect(0,0,w,h);
+  var wide=w>=560,bw=wide?w*0.64:w,bh=wide?h:h*0.56;
+  var pad=22,x0=pad,x1=bw-pad,yb=bh-34,pw=(x1-x0)/NB;
+  /* cans and board */
+  var cr=11,cans=[x0+(x1-x0)*0.2,x0+(x1-x0)*0.8];
+  g.save();g.strokeStyle=C["--muted"];g.lineWidth=1.5;
+  cans.forEach(function(cx){g.beginPath();g.arc(cx,yb+8+cr,cr,0,TAU);g.stroke();
+    var a=B.ox/cr*0.9;g.beginPath();g.moveTo(cx,yb+8+cr);g.lineTo(cx+Math.cos(a)*(cr-2),yb+8+cr+Math.sin(a)*(cr-2));g.stroke()});
+  g.fillStyle=C["--tint"];g.strokeStyle=C["--ink"];g.lineWidth=1.4;
+  g.fillRect(x0-6+B.ox,yb,x1-x0+12,8);g.strokeRect(x0-6+B.ox,yb,x1-x0+12,8);
+  var cols=[C["--att"],C["--res"],C["--obj"],C["--env"],C["--gold"]];
+  var rl=Math.min(62,bh-yb+yb-60);rl=Math.min(rl,yb-30);
+  for(var i=0;i<NB;i++){
+    var cx2=x0+pw*(i+0.5)+B.ox,ang=0.5*Math.sin(B.th[i]);
+    g.fillStyle=C["--surface"];g.strokeStyle=C["--ink"];g.lineWidth=1.3;
+    g.beginPath();g.moveTo(cx2-13,yb);g.lineTo(cx2+13,yb);g.lineTo(cx2+5,yb-rl*0.8);g.lineTo(cx2-5,yb-rl*0.8);g.closePath();g.fill();g.stroke();
+    var px=cx2,py=yb-5,tx=px+Math.sin(ang)*rl,ty=py-Math.cos(ang)*rl;
+    g.strokeStyle=cols[i];g.lineWidth=2.4;g.beginPath();g.moveTo(px,py);g.lineTo(tx,ty);g.stroke();
+    var wx=px+Math.sin(ang)*rl*0.72,wy=py-Math.cos(ang)*rl*0.72;g.fillStyle=cols[i];g.beginPath();g.arc(wx,wy,5,0,TAU);g.fill();
+  }
+  g.restore();
+  /* wheel */
+  var wx0,wy0,R;
+  if(wide){R=Math.min(w-bw-30,h-50)/2;wx0=bw+(w-bw)/2;wy0=h/2+4}
+  else{R=Math.min(w-40,h-bh-40)/2;wx0=w/2;wy0=bh+(h-bh)/2+4}
+  g.save();g.strokeStyle=C["--line"];g.lineWidth=1.5;g.beginPath();g.arc(wx0,wy0,R,0,TAU);g.stroke();
+  g.beginPath();g.moveTo(wx0-R,wy0);g.lineTo(wx0+R,wy0);g.moveTo(wx0,wy0-R);g.lineTo(wx0,wy0+R);g.stroke();
+  for(i=0;i<NB;i++){g.fillStyle=cols[i];g.beginPath();g.arc(wx0+R*Math.cos(B.th[i]),wy0-R*Math.sin(B.th[i]),6,0,TAU);g.fill();g.strokeStyle=C["--surface"];g.lineWidth=1;g.stroke()}
+  var L=R*B.r;g.strokeStyle=C["--ink"];g.lineWidth=2.4;g.beginPath();g.moveTo(wx0,wy0);g.lineTo(wx0+L*Math.cos(B.psi),wy0-L*Math.sin(B.psi));g.stroke();
+  g.fillStyle=C["--ink"];g.beginPath();g.arc(wx0,wy0,3,0,TAU);g.fill();
+  g.restore();
+  label(g,"where each is in its cycle",wx0,wy0-R-8,C["--muted"],"center");
+}
+var lastB="";
+function readB(){
+  var k=B.K/KMAX,t=B.rs<0.5?"ticking apart":B.rs<0.9?"gathering":"in step";
+  var bd=k<0.04?"held still":B.rs<0.5?"rocking a little":"rocking with them";
+  if($("rdTog").textContent!==t)$("rdTog").textContent=t;
+  if($("rdBoard").textContent!==bd)$("rdBoard").textContent=bd;
+  var key=t+"|"+(k<0.04?"0":"1")+"|"+B.spread;
+  if(key!==lastB){lastB=key;sayB(t,k)}
+}
+function sayB(t,k){
+  var h;
+  if(k<0.04)h='<p class="verdict">Board held still: each ticks at its own rate.</p><p>Nothing carries one metronome’s rhythm to the others, so they stay apart. Let the board roll.</p>';
+  else if(t==="ticking apart")h='<p class="verdict">Still ticking apart.</p><p>The board is rocking a little, but the coupling is weak '+(B.spread==="wide"?'and the rates are far apart':'for these rates')+'. Let it roll more freely.</p>';
+  else if(t==="gathering")h='<p class="verdict">Gathering.</p><p>Some are falling into step and the arrow on the wheel is growing. “The board … transmits each metronome’s rhythm to all the others” (§4, Entrainment).</p>';
+  else h='<p class="verdict">In step.</p><p>“A single, unified rhythm has emerged from independent oscillators with no central instruction” (§4, Entrainment). Nobody told them when to tick.</p>';
+  if(B.spread==="wide"&&t!=="in step"&&k>0.04)h+='<p>With the rates far apart, this model needs much more coupling than before, and may not bring them all together. The lesson’s definition speaks of oscillators “with similar frequencies.”</p>';
+  $("msgB").innerHTML=h+'<p class="ref">§4 · Entrainment</p>';
+}
+rK2.addEventListener("input",function(){setK2()});
+document.querySelectorAll("#spChips .chip").forEach(function(b){b.addEventListener("click",function(){setSpread(b.dataset.s)})});
+function setSpread(s){B.spread=s;setRates();document.querySelectorAll("#spChips .chip").forEach(function(c){c.setAttribute("aria-pressed",c.dataset.s===s?"true":"false")});lastB=""}
+$("bScr").addEventListener("click",function(){scramble();B.rs=0;lastB=""});
+function resetB(){rK2.value=0;setK2();B.spread="close";setSpread("close");scramble();B.rs=0;lastB="";stepB(0.016)}
+loopB=loop($("labB"),stepB,function(p){$("pzB").hidden=!p});
+window.__labs.B=loopB;resetB();loopB.start();
+
+/* ===== Part II questions (scored) ===== */
+var QS=[
+ {t:"Five metronomes, each ticking at its own rate, end up ticking in unison on a board that can roll. What does the lesson say brought them together?",
+  o:[["coupled","The board carries each metronome’s rhythm to all the others."],["central","A central instruction tells each metronome when to tick, beat by beat."],["energy","Each metronome is given more energy than it had at the start."],["slow","All of them slow down until they match the slowest metronome."]],a:"coupled",
+  why:"“The board, rocking microscopically beneath them … transmits each metronome’s rhythm to all the others,” and “a single, unified rhythm has emerged from independent oscillators with no central instruction” (§4, Entrainment). They are coupled through a shared medium.",ref:"§4 · Entrainment",
+  hint:{central:"Re-read the end of the lesson’s picture: the rhythm emerges “with no central instruction” (§4, Entrainment).",energy:"In the model, nothing was added to any metronome. What changed was how freely the board could carry the rhythms (§4, Entrainment).",slow:"The lesson says they “shift their phase” until all tick in unison. Watch the wheel in the model: nothing is said about matching the slowest (§4, Entrainment)."},
+  demo:{k:75,s:"close"}},
+ {t:"The lesson defines entrainment for oscillating systems with what kind of frequencies?",
+  o:[["similar","Similar ones, close but not necessarily identical."],["identical","Exactly identical ones, matched before they are coupled."],["far","Widely different ones, since opposites pull together."],["any","Any frequencies at all, provided they carry the same energy."]],a:"similar",
+  why:"“Two or more oscillating systems with similar frequencies, when coupled through a shared medium, tend to synchronise” (§4, Entrainment). The five metronomes in its picture each tick at “a slightly different rate.”",ref:"§4 · Entrainment",
+  hint:{identical:"The lesson’s metronomes each start at “a slightly different rate” and still fall into step (§4, Entrainment).",far:"The definition says “similar frequencies.” Try the model with the rates far apart and compare.",any:"The definition names the frequencies, not the energy: “similar frequencies” (§4, Entrainment)."},
+  demo:{k:60,s:"wide"}},
+ {t:"The lesson says the mathematics of entrainment is the same whether the coupling is a rocking board, musicians playing together, or something biological. What follows?",
+  o:[["same","The same principle is at work in each, whatever the medium."],["board","Only the rocking board is a true case; the others are comparisons."],["music","Each medium needs its own separate mathematics, though results look alike."],["size","The mathematics holds only when the oscillators are of the same size."]],a:"same",
+  why:"“The coupling can be mechanical (the rocking board), acoustic (musicians playing together), electromagnetic, or biological. The mathematics is the same” (§4, Entrainment).",ref:"§4 · Entrainment",
+  hint:{board:"The lesson names the board as one example among several kinds of coupling (§4, Entrainment).",music:"Re-read the sentence after the list of couplings: it says what is shared (§4, Entrainment).",size:"The lesson places no such condition on the oscillators: “The mathematics is the same” (§4, Entrainment)."}},
+ {t:"In the lesson, what is true of the rhythms in a coherent system?",
+  o:[["diverse","Not identical, but holding stable phase relationships."],["uniform","All identical in phase: uniformity is the mark of coherence."],["alone","Independent of one another, each unaffected by the others."],["still","Stopped: coherence means the oscillation has died away."]],a:"diverse",
+  why:"“In a coherent system, the rhythms are not identical; they maintain stable phase relationships; each knows, so to speak, where the others are in their cycle. Coherence is not uniformity. It is coordinated diversity” (§4, Coherence).",ref:"§4 · Coherence",
+  hint:{uniform:"The lesson says outright: “Coherence is not uniformity” (§4, Coherence).",alone:"Stable phase relationships mean each rhythm is held in relation to the others (§4, Coherence).",still:"Every metronome in the model is still swinging when they are in step. The lesson describes rhythms that “maintain stable phase relationships” (§4, Coherence)."}}
+];
+var Q={i:0,done:{},miss:{},sent:false};
+var qPicks=$("qPicks"),qMsg=$("qMsg");
+function qDots(){var d=$("qDots");d.innerHTML="";QS.forEach(function(_,k){var e=document.createElement("i");if(Q.done[k])e.className="done";else if(k===Q.i)e.className="cur";d.appendChild(e)})}
+function showQ(){
+  var q=QS[Q.i];$("qText").textContent=q.t;$("qPro").textContent="Question "+(Q.i+1)+" of "+QS.length;
+  qPicks.innerHTML="";
+  var opts=q.o.slice();for(var z=opts.length-1;z>0;z--){var r=Math.floor(Math.random()*(z+1)),tmp=opts[z];opts[z]=opts[r];opts[r]=tmp}
+  opts.forEach(function(o){var b=document.createElement("button");b.className="pick";b.dataset.p=o[0];b.textContent=o[1];b.addEventListener("click",function(){pick(b)});qPicks.appendChild(b)});
+  qMsg.innerHTML='<p class="note">Pick one answer.</p>';
+  $("qNext").hidden=true;$("qDemo").hidden=true;$("qShow").hidden=false;qDots();
+}
+function revealQ(){
+  var q=QS[Q.i];Q.done[Q.i]=true;
+  qPicks.querySelectorAll(".pick").forEach(function(p){p.disabled=true;if(p.dataset.p===q.a)p.classList.add("right")});
+  qMsg.innerHTML='<p class="verdict">'+(Q.miss[Q.i]?"The lesson’s answer:":"Yes.")+' '+q.o.filter(function(o){return o[0]===q.a})[0][1]+'</p><p>'+q.why+'</p><p class="ref">'+q.ref+'</p>';
+  $("qShow").hidden=true;$("qDemo").hidden=!q.demo;
+  if(Q.i<QS.length-1)$("qNext").hidden=false;else{$("qDone").hidden=false;finish()}
+  qDots();
+}
+function pick(b){
+  var q=QS[Q.i];
+  if(b.dataset.p===q.a){revealQ()}
+  else{Q.miss[Q.i]=true;b.classList.add("wrong");b.disabled=true;qMsg.innerHTML='<p class="verdict">Not this one.</p><p>'+q.hint[b.dataset.p]+'</p>'}
+}
+$("qNext").addEventListener("click",function(){Q.i++;showQ();try{qPicks.querySelector(".pick").focus({preventScroll:true})}catch(e){}});
+$("qShow").addEventListener("click",function(){Q.miss[Q.i]=true;revealQ()});
+$("qDemo").addEventListener("click",function(){
+  var d=QS[Q.i].demo;if(!d)return;
+  setSpread(d.s);rK2.value=d.k;setK2();scramble();B.rs=0;lastB="";
+  try{$("labB").scrollIntoView({behavior:"smooth",block:"start"})}catch(e){}
+});
+$("qReset").addEventListener("click",function(){Q={i:0,done:{},miss:{},sent:false};$("qDone").hidden=true;$("scBox").innerHTML="";showQ()});
+showQ();
+
+/* ===== Part III: a group coupled to a source ===== */
+var NC=10,Cc={th:[],w:[],ts:0,src:"none",t:0,K:0,fol:0,grp:0,tr:[],zone:"",lastKey:""};
+var W3=TAU*0.6,K3MAX=2.2,TRN=300;
+function srcRate(t){
+  if(Cc.src==="steady")return W3;
+  var d=0.20*Math.sin(0.9*t)+0.16*Math.sin(1.7*t+1)+0.14*Math.sin(2.9*t+2)+0.07*Math.sin(4.3*t+0.5);
+  return W3*(1+d);
+}
+function initC(){
+  Cc.th=[];Cc.w=[];for(var i=0;i<NC;i++){Cc.w[i]=W3*(1+0.12*(i-(NC-1)/2)/((NC-1)/2));Cc.th[i]=Math.random()*TAU}
+  Cc.ts=Math.random()*TAU;Cc.t=0;Cc.fol=0;Cc.grp=0;Cc.tr=[];Cc.zone="";Cc.lastKey="";
+}
+var rK3=$("rK3"),loopC;
+function setK3(){var v=+rK3.value;Cc.K=K3MAX*v/100;rK3.setAttribute("aria-valuetext",v<12?"weak":v<45?"moderate":"strong")}
+function stepC(dt){
+  var n=Math.max(1,Math.ceil(dt/0.01)),h=dt/n;
+  for(var s=0;s<n;s++){
+    Cc.ts+=srcRate(Cc.t)*h;Cc.t+=h;
+    var d=[],sc=0,ss=0;
+    for(var i=0;i<NC;i++){sc+=Math.cos(Cc.th[i]);ss+=Math.sin(Cc.th[i])}
+    for(i=0;i<NC;i++){
+      var pull=Cc.K/NC*(ss*Math.cos(Cc.th[i])-sc*Math.sin(Cc.th[i]));
+      var src=Cc.src==="none"?0:0.6*Cc.K*Math.sin(Cc.ts-Cc.th[i]);
+      d[i]=Cc.w[i]+pull+src;
+    }
+    for(i=0;i<NC;i++)Cc.th[i]+=d[i]*h;
+  }
+  var cs=0,sn=0,msn=0;for(var k=0;k<NC;k++){cs+=Math.cos(Cc.th[k]-Cc.ts);sn+=Math.sin(Cc.th[k]-Cc.ts);msn+=Math.sin(Cc.th[k])}
+  var f=Math.sqrt(cs*cs+sn*sn)/NC;
+  Cc.fol+=(f-Cc.fol)*Math.min(1,dt*2.5);
+  Cc.tr.push([Math.sin(Cc.ts),msn/NC]);if(Cc.tr.length>TRN)Cc.tr.shift();
+  drawC();readC();
+}
+function drawC(){
+  var f=fit($("cvC"));if(!f)return;var g=f.g,w=f.w,h=f.h;g.clearRect(0,0,w,h);
+  var wide=w>=560,ww=wide?w*0.38:w,wh=wide?h:h*0.52;
+  var R=Math.min(ww-36,wh-44)/2*1.0,cx=ww/2,cy=wh/2+6;
+  g.save();g.strokeStyle=C["--line"];g.lineWidth=1.5;g.beginPath();g.arc(cx,cy,R*0.72,0,TAU);g.stroke();
+  g.beginPath();g.arc(cx,cy,R,0,TAU);g.stroke();
+  for(var i=0;i<NC;i++){g.fillStyle=C["--res"];g.beginPath();g.arc(cx+R*0.72*Math.cos(Cc.th[i]),cy-R*0.72*Math.sin(Cc.th[i]),5.2,0,TAU);g.fill()}
+  if(Cc.src!=="none"){
+    var sx=cx+R*Math.cos(Cc.ts),sy=cy-R*Math.sin(Cc.ts);
+    g.strokeStyle=C["--gold"];g.lineWidth=1;g.globalAlpha=.5;g.beginPath();g.moveTo(cx,cy);g.lineTo(sx,sy);g.stroke();g.globalAlpha=1;
+    g.fillStyle=C["--gold"];g.beginPath();g.arc(sx,sy,8.5,0,TAU);g.fill();g.strokeStyle=C["--ink"];g.lineWidth=1.2;g.stroke();
+  }
+  g.restore();
+  label(g,Cc.src==="none"?"ten oscillators, no source":"source on the outer ring",cx,cy-R-8,C["--muted"],"center");
+  /* scope */
+  var sx0,sy0,sw,sh;
+  if(wide){sx0=ww+14;sy0=26;sw=w-sx0-14;sh=h-26-30}else{sx0=14;sy0=wh+22;sw=w-28;sh=h-wh-22-30}
+  g.save();g.strokeStyle=C["--line"];g.lineWidth=1;g.strokeRect(sx0,sy0,sw,sh);
+  g.beginPath();g.moveTo(sx0,sy0+sh/2);g.lineTo(sx0+sw,sy0+sh/2);g.stroke();
+  var mid=sy0+sh/2,amp=sh*0.44,N=TRN;
+  function trace(idx,col,lw,al){g.strokeStyle=col;g.lineWidth=lw;g.globalAlpha=al;g.beginPath();
+    for(var k=0;k<Cc.tr.length;k++){var x=sx0+sw-(sw)*(Cc.tr.length-1-k)/(N-1),y=mid-amp*Cc.tr[k][idx];if(k)g.lineTo(x,y);else g.moveTo(x,y)}g.stroke();g.globalAlpha=1}
+  if(Cc.src!=="none")trace(0,C["--gold"],2.4,1);
+  trace(1,C["--res"],2.2,1);
+  g.restore();
+  label(g,"the last few seconds",sx0,sy0-8,C["--muted"],"left");
+  label(g,"time →",sx0+sw,sy0+sh+18,C["--muted"],"right");
+}
+function readC(){
+  var src=Cc.src==="none"?"none":Cc.src==="steady"?"steady":"erratic";
+  var gp;
+  if(Cc.src==="none")gp="no source to follow";
+  else gp=Cc.fol<0.5?"keeps its own rates":Cc.fol<0.85?"partly follows the source":"follows the source";
+  if($("rcSrc").textContent!==src)$("rcSrc").textContent=src;
+  if($("rcGrp").textContent!==gp)$("rcGrp").textContent=gp;
+  var key=src+"|"+gp;if(key!==Cc.lastKey){Cc.lastKey=key;sayC(src,gp)}
+}
+function sayC(src,gp){
+  var h,ref="§4";
+  if(src==="none")h='<p class="verdict">No source.</p><p>The oscillators have natural rates of their own. Choose a steady source or an erratic one, and raise the coupling.</p>';
+  else if(gp==="keeps its own rates")h='<p class="verdict">The coupling is too weak for the group to follow.</p><p>With a '+src+' source and weak coupling, each oscillator mostly keeps its own rate. Raise the coupling.</p>';
+  else if(gp==="partly follows the source")h='<p class="verdict">Following in part.</p><p>The group is being drawn towards the '+src+' source, but not yet closely. Try a little more coupling.</p>';
+  else if(src==="steady")h='<p class="verdict">The group moves with the steady source.</p><p>Now change the source to the erratic one and leave the coupling where it is.</p>';
+  else{h='<p class="verdict">The group moves with the erratic source too.</p><p>The coupling is the same as it was with the steady source. The group follows the rhythm it is given, whatever that rhythm is. “The mechanism of resonance is neutral. It does not care what you couple to” (§4).</p>';ref="§4 · The Direction of Resonance"}
+  $("msgC").innerHTML=h+'<p class="ref">'+ref+'</p>';
+}
+rK3.addEventListener("input",setK3);
+document.querySelectorAll("#srcChips .chip").forEach(function(b){b.addEventListener("click",function(){setSrc(b.dataset.s)})});
+function setSrc(s){Cc.src=s;Cc.lastKey="";Cc.tr=[];document.querySelectorAll("#srcChips .chip").forEach(function(c){c.setAttribute("aria-pressed",c.dataset.s===s?"true":"false")})}
+function resetC(){initC();rK3.value=10;setK3();setSrc("none");stepC(0.016)}
+$("bResetC").addEventListener("click",resetC);
+loopC=loop($("labC"),stepC,function(p){$("pzC").hidden=!p});
+window.__labs.C=loopC;window.__labsC=Cc;resetC();loopC.start();
+
+/* ===== Scoring for Part II, and hand-off to the host page when embedded ===== */
+var EMBED=/[?&]embed=1/.test(location.search);
+var META={code:"ADV-P-4-6",title:"Practice: Lesson 4.6, What Are You Coupled To? (Part II)",programme:"The Mind in the Light of Modern and Spiritual Sciences (Advanced)",cut:75};
+function send(m){if(EMBED){try{parent.postMessage(m,"*")}catch(e){}}}
+function finish(){
+  if(Q.sent){return}
+  var n=QS.length,right=0,ans=[],wrong=[];
+  QS.forEach(function(q,k){var ok=!Q.miss[k];if(ok){right++}else{wrong.push(k)}var txt=q.o.filter(function(o){return o[0]===q.a})[0][1];ans.push({q:k+1,ok:ok,given:txt+(ok?" (first pick)":" (not on first pick)")})});
+  var pct=Math.round(100*right/n),good=pct>=META.cut;
+  var h='<div class="big">'+right+' of '+n+' on the first pick</div>'+
+        '<p class="band '+(good?'good':'')+'">'+(good?'Well grasped':'Revisit these ideas')+'</p>';
+  if(wrong.length){h+='<p>Look again at:</p><ul>'+wrong.map(function(k){return '<li>Question '+(k+1)+': '+QS[k].ref+'</li>'}).join('')+'</ul>'}
+  else{h+='<p>Nothing to revisit here.</p>'}
+  h+='<p class="saved" id="scSaved">'+(EMBED?'Saving your result…':'Sign in on the course page to have your result saved.')+'</p>';
+  $("scBox").innerHTML=h;Q.sent=true;
+  send({type:"quizResult",code:META.code,title:META.title,programme:META.programme,score:right,maxScore:n,percent:pct,questionsCorrect:right,questionCount:n,answers:ans});
+}
+window.addEventListener("message",function(e){
+  var d=e.data||{};if(!d||typeof d!=="object"){return}
+  var el=$("scSaved");if(!el){return}
+  if(d.type==="saved"){el.textContent="Your result has been saved to your member record."}
+  else if(d.type==="saveError"){el.textContent="Your result could not be saved this time. You can start again and finish once more."}
+  else if(d.type==="notMember"){el.textContent="Sign in as a member to have your result saved."}
+});
+send({type:"ready"});
+/* tell the host page how tall this page is, so the embed grows instead of scrolling inside its frame */
+(function(){
+  var last=0;
+  function h(){var d=document.documentElement,b=document.body;var v=Math.ceil(Math.max(d.scrollHeight,b.scrollHeight,b.offsetHeight));if(v&&Math.abs(v-last)>1){last=v;send({type:"height",height:v})}}
+  window.addEventListener("load",h);window.addEventListener("resize",h);
+  if(window.ResizeObserver)new ResizeObserver(h).observe(document.body);
+  setInterval(h,700);h();
+})();
+subs.push(function(){stepA(0);stepB(0);stepC(0)});
+window.addEventListener("resize",function(){stepA(0);stepB(0);stepC(0)});
+})();
+</script>
+</body></html>

@@ -1,0 +1,1111 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Practice: Lesson 4.2, Build the Ritam Diagram</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans:wght@400..700&family=Noto+Serif:ital,wght@0,400..700;1,400..700&display=swap">
+<style>
+:root{
+  --bg:#FBF5EA; --surface:#FFFDF8; --ink:#1E1E1E; --muted:#5A5A5A; --line:#E6DAC3; --tint:#F3EAD3; --navy:#12285A; --gold:#C9A24A; --goldt:#6B4E0E;
+  --obj:#0B8686; --att:#C95F06; --res:#2E3192; --env:#C0245B; --ok:#1B7A52;
+  --display:"Noto Serif",Georgia,"Times New Roman",serif;
+  --body:"Noto Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0B1A3D; --surface:#12285A; --ink:#FBF5EA; --muted:#C9C3B3; --line:#2B4686; --tint:#1D3770; --gold:#E6C36A; --goldt:#E6C36A;
+    --obj:#46CFC6; --att:#F5A04D; --res:#A3AAFF; --env:#FF7BA9; --ok:#5BD59B; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0B1A3D; --surface:#12285A; --ink:#FBF5EA; --muted:#C9C3B3; --line:#2B4686; --tint:#1D3770; --gold:#E6C36A; --goldt:#E6C36A;
+  --obj:#46CFC6; --att:#F5A04D; --res:#A3AAFF; --env:#FF7BA9; --ok:#5BD59B; color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;
+  padding-left:max(14px,env(safe-area-inset-left,0px));padding-right:max(14px,env(safe-area-inset-right,0px));padding-block:22px 40px}
+.wrap{max-width:900px;margin:0 auto;display:flex;flex-direction:column;gap:32px}
+h1,h2,h3{font-family:var(--display);font-weight:500;text-wrap:balance;margin:0;letter-spacing:-.01em}
+h1{font-size:clamp(30px,5.4vw,44px);line-height:1.06}
+h2{font-size:clamp(23px,3.4vw,29px);line-height:1.15}
+h3{font-size:19px;line-height:1.25}
+p{margin:0}
+sub{font-size:.72em;line-height:0}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.lede{font-size:17.5px;max-width:64ch}
+.intro{max-width:66ch;color:var(--muted)}
+header{display:flex;flex-direction:column;gap:12px}
+section{display:flex;flex-direction:column;gap:18px;min-width:0}
+.sym{font-family:var(--mono);font-size:.92em;white-space:nowrap}
+.k-obj{color:var(--obj)} .k-att{color:var(--att)} .k-res{color:var(--res)} .k-env{color:var(--env)}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px;display:flex;flex-direction:column;gap:14px;min-width:0}
+.bar{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;justify-content:space-between}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--bg)}
+.seg button{font:inherit;font-size:14px;color:var(--muted);background:transparent;border:0;padding:8px 13px;cursor:pointer}
+.seg button+button{border-left:1px solid var(--line)}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--surface)}
+button:focus-visible,input:focus-visible{outline:2px solid var(--res);outline-offset:2px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{font:inherit;font-size:14px;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:7px 13px;cursor:pointer;display:inline-flex;gap:8px;align-items:center}
+.chip i{font-style:normal;font-family:var(--mono);font-size:11px;color:var(--muted)}
+.chip[aria-pressed="true"]{background:var(--res);border-color:var(--res);color:#fff}
+.chip[aria-pressed="true"] i{color:#fff;opacity:.8}
+.chip:disabled{cursor:default}
+.chip.reached:not([aria-pressed="true"]){border-color:var(--res)}
+.btn{font:inherit;font-size:14px;color:var(--ink);background:var(--surface);border:1px solid var(--ink);border-radius:8px;padding:8px 16px;cursor:pointer}
+.btn.primary{background:var(--ink);color:var(--surface)}
+.btn.ghost{border-color:var(--line);color:var(--muted)}
+.scope-wrap{position:relative;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--bg)}
+canvas{display:block;width:100%}
+.playbtn{position:absolute;right:8px;bottom:8px;font:inherit;font-size:12px;background:var(--surface);color:var(--muted);border:1px solid var(--line);border-radius:6px;padding:4px 10px;cursor:pointer}
+.box{border:1px solid var(--line);border-radius:8px;background:var(--bg);padding:10px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.box .cap{font-size:12px;color:var(--muted)}
+.meters{display:flex;flex-direction:column;gap:9px}
+.meter{display:grid;grid-template-columns:1fr auto;gap:2px 8px;font-size:13px;align-items:baseline}
+.meter b{font-weight:600}
+.meter output{font-family:var(--mono);font-size:12px;color:var(--muted)}
+.meter .track{grid-column:1/-1;height:7px;background:var(--line);border-radius:4px;overflow:hidden}
+.meter .fill{height:100%;width:0;background:var(--res);border-radius:4px}
+.meter.f2 .fill{background:var(--env)} .meter.f3 .fill{background:var(--obj)}
+.slider{display:flex;align-items:center;gap:10px;flex:1 1 280px;min-width:0}
+.slider label{font-size:14px;min-width:0}
+.slider input[type=range]{flex:1;min-width:60px;accent-color:var(--res)}
+.slider small{color:var(--muted);font-size:12px;white-space:nowrap}
+.slider output{font-family:var(--mono);font-size:12.5px;color:var(--muted);min-width:46px;text-align:right}
+.readout{font-size:14px;color:var(--muted)}
+.readout b{color:var(--ink)}
+.tag{font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);border:1px solid var(--line);border-radius:4px;padding:2px 6px}
+.note{font-size:13px;color:var(--muted);max-width:70ch}
+.balance{background:var(--tint);border-radius:10px;padding:16px 18px;display:flex;flex-direction:column;gap:8px;max-width:78ch}
+footer{font-size:13px;color:var(--muted);max-width:76ch;border-top:1px solid var(--line);padding-top:12px}
+@media (max-width:640px){.panel{padding:12px}.wrap{gap:26px}}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
+
+:root{--c-t:var(--obj);--c-r:var(--att);--c-s:var(--res);--c-lift:var(--env)}
+nav.parts{display:flex;flex-wrap:wrap;gap:8px 20px;margin-top:4px}
+nav.parts a{color:var(--ink);text-decoration:none;border-bottom:1px solid var(--line);padding-bottom:2px;font-size:15px}
+nav.parts a:hover,nav.parts a:focus-visible{border-color:var(--res);color:var(--res)}
+.vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+[hidden]{display:none!important}
+.side>.slider{flex:none}
+.btn,.chip{min-height:40px}
+.btn:disabled{opacity:.4;cursor:default}
+.btn.small{align-self:flex-start;font-size:13px;padding:6px 12px;min-height:36px}
+.btn.lift{background:var(--c-lift);border-color:var(--c-lift);color:#fff}
+.sub{margin-top:2px}
+.sub2{margin-top:6px;font-size:23px}
+.k-t{color:var(--c-t)} .k-r{color:var(--c-r)} .k-s{color:var(--c-s)}
+b.k-t,b.k-r,b.k-s{font-weight:600}
+.row{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center}
+
+/* part I */
+.dots{display:flex;flex-wrap:wrap;gap:6px;list-style:none;margin:0;padding:0}
+.dots button{font:inherit;font-size:14px;min-width:40px;height:40px;border-radius:999px;border:1.5px solid var(--line);background:var(--bg);color:var(--muted);cursor:pointer}
+.dots button.done{border-color:var(--ok);color:var(--ink)}
+.dots button[aria-current="step"]{background:var(--ink);color:var(--surface);border-color:var(--ink)}
+.dots button:disabled{opacity:.4;cursor:default}
+.bgrid,.tgrid,.sgrid{display:grid;grid-template-columns:minmax(0,350px) minmax(0,1fr);gap:20px;align-items:start}
+.sgrid{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+.side{display:flex;flex-direction:column;gap:12px;min-width:0}
+.dwrap{min-width:0}
+.dg{width:100%;height:auto;display:block;touch-action:manipulation}
+.dg .ring{fill:none;stroke:var(--line);stroke-width:1.5}
+.dg .guide{stroke:var(--line);stroke-width:1.6;stroke-dasharray:3 5;fill:none}
+.dg .edge line{stroke-width:3;stroke-linecap:round;fill:none}
+.dg .edge.t line{stroke:var(--c-t)} .dg .edge.t polygon{fill:var(--c-t)}
+.dg .edge.r line{stroke:var(--c-r)} .dg .edge.r polygon{fill:var(--c-r)}
+.dg .edge.s line{stroke:var(--c-s)} .dg .edge.s polygon{fill:var(--c-s)}
+.dg .edge.d line{stroke:var(--ink);stroke-width:2.2} .dg .edge.d polygon{fill:var(--ink)}
+.dg .edge.l line{stroke:var(--c-lift);stroke-width:3.4} .dg .edge.l polygon{fill:var(--c-lift)}
+.dg .edge.d.old,.dg .edge.l.old{opacity:.4}
+.dg .edge.p line{stroke:var(--c-s);stroke-width:1.9;stroke-dasharray:5 4}
+.dg .edge .selfloop{fill:none;stroke-width:2.6}
+.dg .edge.d .selfloop{stroke:var(--ink)} .dg .edge.l .selfloop{stroke:var(--c-lift)}
+.dg .edge.new:not(.p) line{stroke-dasharray:1;stroke-dashoffset:1;animation:drw .55s ease forwards}
+.dg .edge.new polygon{opacity:0;animation:fadein .2s .45s forwards}
+@keyframes drw{to{stroke-dashoffset:0}}
+@keyframes fadein{to{opacity:1}}
+.dg .node .nc{fill:var(--surface);stroke:var(--muted);stroke-width:1.6}
+.dg .node .nr{display:none;fill:var(--surface);stroke:var(--muted);stroke-width:1.6}
+.dg .node .nh{display:none;fill:none;stroke:var(--c-s);stroke-width:1.6}
+.dg .node text{font:600 15px var(--body);fill:var(--ink);text-anchor:middle;dominant-baseline:central;pointer-events:none}
+.dg .node.col.fam-t .nc{stroke:var(--c-t);stroke-width:2.4}
+.dg .node.col.fam-t text{fill:var(--c-t)}
+.dg .node.col.fam-r .nc{display:none}
+.dg .node.col.fam-r .nr{display:block;stroke:var(--c-r);stroke-width:2.4}
+.dg .node.col.fam-r text{fill:var(--c-r)}
+.dg .node.col.fam-s .nc{stroke:var(--c-s);stroke-width:2.4}
+.dg .node.col.fam-s .nh{display:block}
+.dg .node.col.fam-s text{fill:var(--c-s)}
+.dg .node.hot.fam-t .nc{fill:var(--c-t)} .dg .node.hot.fam-s .nc{fill:var(--c-s)} .dg .node.hot.fam-r .nr{fill:var(--c-r)}
+.dg .node.hot.col text,.dg .node.hot text{fill:var(--surface)}
+.dg .node.hotn .nc,.dg .node.hotn .nr{fill:var(--ink);stroke:var(--ink)} .dg .node.hotn text{fill:var(--surface)}
+.dg .node.tap{cursor:pointer}
+.dg .node:focus{outline:none}
+.dg .node:focus-visible .nc,.dg .node:focus-visible .nr{stroke:var(--ink);stroke-width:3.4}
+.dg[data-focus] .edge,.dg[data-focus] .node{opacity:.2}
+.dg[data-focus="t"] .edge.t,.dg[data-focus="t"] .node.fam-t,.dg[data-focus="r"] .edge.r,.dg[data-focus="r"] .node.fam-r,.dg[data-focus="s"] .node.fam-s,.dg[data-focus="s"] .edge.s,.dg[data-focus="s"] .edge.p{opacity:1}
+.stepbox{min-height:620px;display:flex;flex-direction:column;gap:11px}
+.stepbox .eyebrow{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.stepbox h3{font-size:22px}
+.stepbox p{font-size:15.5px}
+.stepbox .ref{font-family:var(--mono);font-size:11px;color:var(--muted)}
+.act{background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px;display:flex;flex-direction:column;gap:10px}
+.act .cur{font-size:15px;color:var(--muted)}
+.act .cur b{color:var(--ink);font-family:var(--mono);font-size:17px}
+.arith{font-family:var(--mono);font-size:13.5px;min-height:1.5em;color:var(--ink);overflow-wrap:anywhere}
+.reveal{border-left:3px solid var(--c-s);padding:2px 0 2px 12px;display:flex;flex-direction:column;gap:8px}
+.reveal.t{border-color:var(--c-t)} .reveal.r{border-color:var(--c-r)}
+.callout{background:var(--tint);border-radius:8px;padding:10px 12px;font-size:14.5px}
+.pairs{display:flex;flex-wrap:wrap;gap:6px}
+.pairs span{font-family:var(--mono);font-size:12.5px;border:1px dashed var(--line);border-radius:6px;padding:3px 8px;color:var(--muted)}
+.pairs span.found{border-style:solid;border-color:var(--c-s);color:var(--ink)}
+.cards{display:grid;grid-template-columns:minmax(0,1fr);gap:8px}
+.fcard{font:inherit;text-align:left;border:1.5px solid var(--line);border-left-width:5px;border-radius:8px;background:var(--bg);color:var(--ink);padding:9px 11px;cursor:pointer;display:flex;flex-direction:column;gap:2px;font-size:14px;line-height:1.4}
+.fcard b{font-family:var(--display);font-size:17px;font-weight:500}
+.fcard.t{border-left-color:var(--c-t)} .fcard.r{border-left-color:var(--c-r)} .fcard.s{border-left-color:var(--c-s)}
+.fcard.t b{color:var(--c-t)} .fcard.r b{color:var(--c-r)} .fcard.s b{color:var(--c-s)}
+.fcard[aria-pressed="true"]{box-shadow:0 0 0 2px var(--ink)}
+.match{display:flex;flex-direction:column;gap:10px}
+.mrow{border:1px solid var(--line);border-radius:8px;padding:9px 10px;display:flex;flex-direction:column;gap:7px;background:var(--bg)}
+.mrow p{font-size:15px}
+.mrow .opts{display:flex;flex-wrap:wrap;gap:6px}
+.mrow .opts button{font:inherit;font-size:13.5px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:5px 12px;min-height:36px;cursor:pointer}
+.mrow .opts button:disabled{cursor:default;opacity:.45}
+.mrow .opts button.ok{opacity:1;background:color-mix(in srgb,var(--ok) 14%,var(--surface));border-color:var(--ok)}
+.mrow .why{font-size:13.5px;color:var(--muted)}
+.mrow.done .why{color:var(--ink)}
+
+/* part II */
+.ladder{display:flex;flex-direction:column;gap:4px}
+.lrow{display:grid;grid-template-columns:1fr;gap:4px;border:1px solid var(--line);border-left-width:5px;border-radius:8px;padding:7px 10px;background:var(--bg)}
+.lrow.t{border-left-color:var(--c-t)} .lrow.r{border-left-color:var(--c-r)} .lrow.s{border-left-color:var(--c-s)}
+.lrow .ln{font-size:12.5px;color:var(--muted)} .lrow .ln b{color:var(--ink);font-weight:600}
+.lrow .ns{display:flex;gap:6px;flex-wrap:wrap}
+.lrow .ns span{font-family:var(--mono);font-size:14px;min-width:30px;text-align:center;border:1.5px solid var(--line);border-radius:6px;padding:1px 6px;color:var(--muted)}
+.lrow.t .ns span.on{background:var(--c-t);border-color:var(--c-t);color:var(--surface)}
+.lrow.r .ns span.on{background:var(--c-r);border-color:var(--c-r);color:var(--surface)}
+.lrow.s .ns span.on{background:var(--c-s);border-color:var(--c-s);color:var(--surface)}
+.lup{font-size:12px;color:var(--c-lift);text-align:center;font-family:var(--mono);line-height:1}
+.opbar{justify-content:flex-start}
+.finds{list-style:none;margin:8px 0 0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.finds li{display:flex;gap:10px;align-items:flex-start;border:1px dashed var(--line);border-radius:8px;padding:8px 10px;font-size:14.5px}
+.finds li .mk{flex:none;width:22px;height:22px;border-radius:50%;border:1.5px solid var(--line);display:inline-flex;align-items:center;justify-content:center;font-size:13px;color:transparent}
+.finds li.done{border-style:solid;border-color:var(--ok)}
+.finds li.done .mk{background:var(--ok);border-color:var(--ok);color:#fff}
+.finds li small{display:block;color:var(--muted);font-size:12.5px}
+.sixtab{display:grid;grid-template-columns:repeat(2,minmax(0,auto));gap:2px 18px;font-family:var(--mono);font-size:13px;justify-content:start}
+.tcv{aspect-ratio:1.08;background:var(--bg)}
+.tcv{position:relative}
+.tcv canvas{position:absolute;inset:0;width:100%;height:100%;touch-action:pan-y;cursor:grab}
+.tgrid.wide{grid-template-columns:minmax(0,1.15fr) minmax(0,1fr)}
+.tcv canvas:focus-visible{outline:2px solid var(--res);outline-offset:-2px}
+.aspects{display:flex;flex-direction:column;gap:8px}
+.asp{font:inherit;text-align:left;border:1.5px solid var(--line);border-left-width:5px;border-radius:8px;background:var(--bg);color:var(--ink);padding:8px 11px;cursor:pointer;display:flex;flex-direction:column;gap:1px;font-size:13.5px;color:var(--muted)}
+.asp b{font-family:var(--display);font-size:17px;font-weight:500;color:var(--ink)}
+.asp .st{font-family:var(--mono);font-size:11px;letter-spacing:.05em;text-transform:uppercase}
+.asp.t{border-left-color:var(--c-t)} .asp.r{border-left-color:var(--c-r)} .asp.s{border-left-color:var(--c-s)}
+.asp[aria-pressed="false"]{opacity:.62;border-style:dashed;border-left-style:solid}
+.asp[aria-pressed="true"] .st{color:var(--ok)}
+.tstatus{border-top:1px solid var(--line);padding-top:10px;font-size:14.5px;display:flex;flex-direction:column;gap:6px}
+.tstatus b{font-family:var(--display);font-size:18px;font-weight:500}
+
+/* part III */
+.strands{display:flex;flex-direction:column;gap:12px}
+.str{display:flex;flex-direction:column;gap:3px}
+.str .top{display:flex;justify-content:space-between;gap:10px;align-items:baseline;flex-wrap:wrap}
+.str label{font-size:14.5px}
+.str label b{font-family:var(--display);font-size:19px;font-weight:500}
+.str .dsc{font-size:13px;color:var(--muted)}
+.str.t label b{color:var(--c-t)} .str.r label b{color:var(--c-r)} .str.s label b{color:var(--c-s)}
+.str output{font-family:var(--mono);font-size:12.5px;color:var(--muted)}
+.str input[type=range]{width:100%;min-height:28px}
+.str.t input{accent-color:var(--c-t)} .str.r input{accent-color:var(--c-r)} .str.s input{accent-color:var(--c-s)}
+.str .ends{display:flex;justify-content:space-between;font-size:11.5px;color:var(--muted);font-family:var(--mono)}
+.floormsg{min-height:3.2em;font-size:14px;color:var(--ink);display:flex;flex-direction:column;gap:6px}
+.floormsg p{border-left:3px solid var(--line);padding-left:10px}
+.floormsg p.t{border-color:var(--c-t)} .floormsg p.r{border-color:var(--c-r)} .floormsg p.s{border-color:var(--c-s)}
+#braid{width:100%;height:auto;display:block;background:var(--bg);border:1px solid var(--line);border-radius:8px}
+#braid path{fill:none;stroke-linecap:round;transition:stroke-width .3s}
+.reading{border-left:3px solid var(--c-s);padding:2px 0 2px 12px;display:flex;flex-direction:column;gap:4px;font-size:15px}
+.reading b{font-family:var(--display);font-size:19px;font-weight:500}
+.reading .ref{font-family:var(--mono);font-size:11px;color:var(--muted)}
+.story{font-family:var(--display);font-size:19px;line-height:1.45;min-height:4.4em}
+.choices{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.choice{font:inherit;text-align:left;border:1.5px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);padding:10px 12px;cursor:pointer;display:flex;flex-direction:column;gap:3px;min-width:0;font-size:14px;line-height:1.4}
+.choice b{font-family:var(--display);font-size:17.5px;font-weight:500}
+.choice:disabled{cursor:default;opacity:.5}
+.choice.right{opacity:1;border-color:var(--ok);background:color-mix(in srgb,var(--ok) 10%,var(--surface))}
+.fb{display:none;border-top:1px solid var(--line);padding-top:12px;font-size:15px;flex-direction:column;gap:8px}
+.fb.show{display:flex}
+.fb .ref{font-family:var(--mono);font-size:11px;color:var(--muted)}
+
+@media (prefers-reduced-motion: reduce){.dg .edge.new line,.dg .edge.new polygon{animation:none;stroke-dasharray:none;stroke-dashoffset:0;opacity:1}#braid path{transition:none}}
+@media (max-width:700px){
+  .stepbox{min-height:0}
+  .bgrid,.tgrid,.tgrid.wide,.sgrid{grid-template-columns:minmax(0,1fr);gap:16px}
+  .dwrap{max-width:300px;margin:0 auto;width:100%}
+  .finds,.choices{grid-template-columns:minmax(0,1fr)}
+}
+
+
+.brandhdr{background:#12285A;color:#FBF5EA;text-align:center;padding:18px 18px 20px;border-radius:14px;display:flex;flex-direction:column;align-items:center;gap:6px}
+.brandhdr .logos{display:flex;align-items:center;justify-content:center;gap:18px}
+.brandhdr .logos img{width:56px;height:66px;object-fit:contain;display:block}
+.brandhdr .logos img.rit{width:86px;height:65px}
+.brandhdr .eyebrow{color:#E6C36A;font-weight:700;letter-spacing:3px}
+.brandhdr h1{color:#FBF5EA;font-weight:700}
+.brandhdr .course{color:#E6C36A;font-weight:600;font-size:14px}
+.brandhdr .lede{color:#F1ECDF;font-size:15.5px;max-width:62ch}
+.brandhdr .scorenote{color:#F1ECDF;font-size:14.5px}
+nav.parts a{color:var(--ink)}
+.brandhdr nav.parts a{color:#FBF5EA;border-bottom:1px solid #E6C36A;background:none;padding-bottom:2px}
+.brandhdr nav.parts a:hover,.brandhdr nav.parts a:focus-visible{color:#E6C36A;border-color:#E6C36A}
+.tag.scored{color:var(--goldt);border-color:var(--gold)}
+.scorebox{border-left:5px solid var(--gold);background:var(--tint);border-radius:10px;padding:12px 14px;margin-bottom:14px}
+.scorebox .big{font-family:var(--display);font-size:30px;line-height:1.1;color:var(--ink)}
+.scorebox .band{font-family:var(--display);font-size:18px;margin:4px 0}
+.scorebox .band.good{color:var(--ok)}
+.scorebox .saved{font-size:13.5px;color:var(--muted)}
+.scorebox ul{margin:6px 0 0;padding-left:20px}
+
+/* PRACTICE TEMPLATE: one coloured "part" per section (part-1 .. part-4) */
+.part{--pc:#0E7A8A;--pcon:#FFFFFF;--pcbg:#E6F2F3;border:2px solid var(--pc);border-radius:14px;overflow:hidden;background:var(--pcbg)}
+.part-1{--pc:#0E7A8A;--pcbg:#E6F2F3}
+.part-2{--pc:#12285A;--pcbg:#EEF0F8}
+.part-3{--pc:#2F6B3A;--pcbg:#E6F0E3}
+.part-4{--pc:#7A2A5E;--pcbg:#F5E6F0}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .part{--pcbg:#0F2250;border-color:var(--pcl,var(--pc))}
+ :root:not([data-theme="light"]) .part-1{--pcl:#46CFC6} :root:not([data-theme="light"]) .part-2{--pcl:#E6C36A} :root:not([data-theme="light"]) .part-3{--pcl:#7FD08C} :root:not([data-theme="light"]) .part-4{--pcl:#F08CC8}}
+:root[data-theme="dark"] .part{--pcbg:#0F2250;border-color:var(--pcl,var(--pc))}
+:root[data-theme="dark"] .part-1{--pcl:#46CFC6} :root[data-theme="dark"] .part-2{--pcl:#E6C36A} :root[data-theme="dark"] .part-3{--pcl:#7FD08C} :root[data-theme="dark"] .part-4{--pcl:#F08CC8}
+.part-band{background:var(--pc);color:var(--pcon);padding:12px 16px;display:flex;align-items:center;flex-wrap:wrap;gap:6px 14px}
+.part-band h2{color:inherit;font-size:clamp(20px,3.4vw,26px);font-weight:600;flex:1 1 220px}
+.part-num{font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;font-weight:500;background:rgba(255,255,255,.18);border-radius:4px;padding:3px 9px}
+.part-band .tag{color:inherit;border-color:currentColor;background:rgba(255,255,255,.12)}
+.part-2 .part-band .tag,.part-2 .part-num{color:#E6C36A}
+.part-body{padding:16px;display:flex;flex-direction:column;gap:14px}
+.part .panel{background:var(--surface)}
+@media (max-width:640px){.part-body{padding:12px}}
+.brandhdr .k-obj{color:#46CFC6} .brandhdr .k-att{color:#F5A04D} .brandhdr .k-res{color:#C3C8FF} .brandhdr .k-env{color:#FF9DBF}
+.op.word{font-family:var(--body);font-size:13px}
+
+.part{gap:0}
+.scorenote b{color:#FBF5EA}
+.supportline{margin-top:6px}
+.reading .ref,.fb .ref{font-family:var(--mono)}
+
+
+body[data-part] header{display:none}
+body[data-part="1"] #s2,body[data-part="1"] #s3,
+body[data-part="2"] #s1,body[data-part="2"] #s3,
+body[data-part="3"] #s1,body[data-part="3"] #s2{display:none}
+body[data-part]{padding-block:10px 18px}
+body[data-sec="a"] #s2b,body[data-sec="b"] #s2a{display:none}
+#s2a,#s2b{display:flex;flex-direction:column;gap:18px;min-width:0}
+
+</style></head><body>
+<div class="wrap">
+<header class="brandhdr">
+  <div class="logos"><img src="vedantanz-logo.png" alt="Ramakrishna Vedanta NZ emblem" width="56" height="66"><img class="rit" src="ritam-wordmark.png" alt="Ritam" width="86" height="65"></div>
+  <div class="eyebrow">Practice · Lesson 4.2</div>
+  <h1>Build the Ritam Diagram</h1>
+  <p class="course">The Mind in the Light of Modern and Spiritual Sciences · Advanced</p>
+  <p class="lede">Nine points on a circle, three small number patterns, and three names: tamas, rajas and sattva. Build the diagram yourself, see how doubling differs from trebling, lift it into the torus, and find out why the three guṇas are strands to balance, never valences to rank.</p>
+  <p class="scorenote"><b>Nothing on this page is scored</b>, and the page sends no result to your record. All three parts are for exploring. There is no right answer to find.</p>
+  <nav class="parts" aria-label="Parts of this page"><a href="#s1">I. Build the diagram</a><a href="#s2">II. Lift the diagram</a><a href="#s3">III. Three strands</a></nav>
+</header>
+
+<section id="s1" class="part part-1">
+  <div class="part-band"><span class="part-num">Part I</span><h2>Build the diagram</h2><span class="tag">Practice: not scored</span></div>
+  <div class="part-body">
+  <p class="intro">Seven short steps. At each one you do the arithmetic yourself, so that the closing of the loop is something you watch happen, not something you are told. The next step opens when the activity is done.</p>
+  <div class="panel" id="bd">
+    <ol class="dots" id="dots" aria-label="Steps"></ol>
+    <div class="bgrid">
+      <div class="dwrap"><svg id="dg1" class="dg" viewBox="0 0 360 360" role="group" aria-label="The Ritam Diagram: a circle of nine points"></svg></div>
+      <div class="side">
+        <div id="stepBody"></div>
+        <div class="vh" id="stepAnn" role="status" aria-live="polite"></div>
+        <div class="bar nav">
+          <button class="btn ghost" id="bBack">Back</button>
+          <button class="btn ghost" id="bShow">Show me</button>
+          <button class="btn primary" id="bNext">Next</button>
+        </div>
+        <p class="note" id="gateHint"></p>
+      </div>
+    </div>
+  </div>
+  </div>
+</section>
+
+<section id="s2" class="part part-2">
+  <div class="part-band"><span class="part-num">Part II</span><h2>Lift the diagram</h2><span class="tag">Practice: not scored</span></div>
+  <div class="part-body">
+  <div id="s2a">
+  <p class="intro">Doubling kept every number inside its own family. Trebling does something different. Pick a number, then double or treble it. Before you press Treble, say to yourself where you expect to land.</p>
+  <div class="panel" id="tb">
+    <div class="tgrid">
+      <div class="dwrap"><svg id="dg2" class="dg" viewBox="0 0 360 360" role="img" aria-label="The Ritam Diagram with the path of your doubling and trebling"></svg></div>
+      <div class="side">
+        <div class="row"><span class="tag">Start from</span><div class="chips" id="startChips" role="group" aria-label="Start number"></div></div>
+        <div class="bar opbar">
+          <button class="btn primary" id="opD">Double ×2</button>
+          <button class="btn primary lift" id="opT">Treble ×3</button>
+        </div>
+        <div class="ladder" id="ladder"></div>
+        <div class="readout" id="opRead" role="status" aria-live="polite"></div>
+        <button class="btn ghost small" id="opSix">Treble every number of the loop at once</button>
+      </div>
+    </div>
+    <div>
+      <h3 class="sub">What to find</h3>
+      <ul class="finds" id="finds"></ul>
+    </div>
+    <div class="balance" id="tbSyn" hidden></div>
+  </div>
+  </div>
+
+  <div id="s2b">
+  <h3 class="sub2">Lifted into three dimensions: the torus</h3>
+  <p class="intro">The lesson says the two-dimensional diagram is a display, and that the full architecture is three-dimensional and lives in one form, the torus: a surface made by revolving a small circle around a larger one (§8). Each strand has its place on it. Switch each one off and see what the torus loses. The drawing is schematic: the winding curve stands for the doubling loop.</p>
+  <div class="panel" id="tp">
+    <div class="tgrid wide">
+      <div class="side">
+        <div class="scope-wrap tcv"><canvas id="torus" tabindex="0" role="img" aria-label="A rotating torus. Use the left and right arrow keys to turn it and the up and down arrow keys to tilt it."></canvas></div>
+        <div class="slider"><label for="tilt">Tilt</label><input type="range" id="tilt" min="0.3" max="1.45" step="0.05" value="1"><small>drag the torus to turn it</small></div>
+      </div>
+      <div class="side">
+        <div class="aspects" id="aspects"></div>
+        <div class="row" id="pulseRow"><span class="tag">Natural frequency</span><div class="chips" role="group" aria-label="Pulse rate"></div></div>
+        <div class="tstatus" id="tStatus" role="status" aria-live="polite"></div>
+      </div>
+    </div>
+    <div>
+      <h3 class="sub">Where the lesson finds the torus</h3>
+      <div class="chips" id="natChips" role="group" aria-label="Examples of the torus in nature"></div>
+      <p class="readout" id="natText"></p>
+    </div>
+    <div class="balance">
+      <h3>A note on humility</h3>
+      <p>We are not claiming that every natural system is exactly toroidal, or that the torus is the only organising form in nature. Spheres, helices, fractals, lattices and branching trees each have their own rationale. The claim is that the torus is one organising form, and that it appears with striking frequency in self-sustaining living systems. The Ritam Diagram is a useful display of one important architectural pattern, not the unique theory of everything (§8).</p>
+    </div>
+  </div>
+  </div>
+  </div>
+</section>
+
+<section id="s3" class="part part-3">
+  <div class="part-band"><span class="part-num">Part III</span><h2>Three strands, not three valences</h2><span class="tag">Practice: not scored</span></div>
+  <div class="part-body">
+  <p class="intro">In some popular treatments, tamas is “bad”, rajas is “neutral” and sattva is “good”, and the aim is to escape tamas, moderate rajas and cultivate sattva. The lesson calls this a deep mistake. Test it yourself: drag any strand toward zero and see what happens.</p>
+  <div class="panel" id="sp">
+    <div class="sgrid">
+      <div class="side">
+        <div class="strands" id="strands"></div>
+        <div class="floormsg" id="floorMsg" role="status" aria-live="polite"></div>
+      </div>
+      <div class="side">
+        <svg id="braid" viewBox="0 0 360 130" role="img" aria-label="Three woven strands whose thickness shows how much each is expressed"></svg>
+        <div class="reading" id="reading" role="status" aria-live="polite"></div>
+        <p class="note">Qualitative predominance, not a score. The reading describes a pattern in a system, never a verdict on a person.</p>
+      </div>
+    </div>
+  </div>
+  <div class="panel" id="vg">
+    <h3>Three short stories</h3>
+    <p class="note">The lesson’s own three stories, about made-up people. They are structural readings of a pattern, not diagnoses, and not a test of you. Choose a story, then choose the reading you think fits. Nothing is scored.</p>
+    <div class="seg" id="vgSeg" role="group" aria-label="Story"><button data-v="0" aria-pressed="true">Story 1</button><button data-v="1" aria-pressed="false">Story 2</button><button data-v="2" aria-pressed="false">Story 3</button></div>
+    <p class="story" id="vgText"></p>
+    <div class="choices three" id="vgChoices" role="group" aria-label="Structural readings"></div>
+    <div class="fb" id="vgFb" role="status" aria-live="polite"></div>
+  </div>
+  <div class="balance">
+    <h3>Hold the framing</h3>
+    <p>The diagnostic question is never which guṇa is good and which is bad. It is which is over- or under-expressed for this person, in this body, at this stage of life, right now (§9). Three strands, all indispensable, all to be balanced, never three valences to be ranked.</p>
+  </div>
+  </div>
+</section>
+<footer>Nothing on this page is scored, and nothing is saved. Based on Lesson 4.2. The Ritam Diagram is a display of structure, and the stories are illustrations about made-up people: nothing here diagnoses or advises on any person’s situation, and a reading is of a moment, not of a person. If anything here touches something difficult for you, please be gentle with yourself, and consider speaking with someone you trust or a qualified professional.<br>Ritam · Ramakrishna Vedanta Centre NZ · <a href="https://www.vedanta.nz">www.vedanta.nz</a></footer>
+</div>
+
+<script>
+window.Core=(function(){
+"use strict";
+var TAU=Math.PI*2;
+try{var q=new URLSearchParams(location.search).get("theme");if(q==="light"||q==="dark")document.documentElement.setAttribute("data-theme",q)}catch(e){}
+function lerp(a,b,t){return a+(b-a)*t}
+function clamp(x,a,b){return Math.max(a,Math.min(b,x))}
+function el(id){return document.getElementById(id)}
+var col={},subs=[];
+function readColors(){
+  var cs=getComputedStyle(document.documentElement);
+  ["--bg","--surface","--ink","--muted","--line","--tint","--obj","--att","--res","--env","--ok"].forEach(function(k){col[k]=cs.getPropertyValue(k).trim()});
+  subs.forEach(function(f){try{f()}catch(e){}});
+}
+readColors();
+try{window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change",readColors)}catch(e){}
+new MutationObserver(readColors).observe(document.documentElement,{attributes:true,attributeFilter:["data-theme"]});
+function onTheme(f){subs.push(f)}
+var dpr=Math.max(1,Math.min(2,window.devicePixelRatio||1));
+function fit(c){
+  var w=c.clientWidth,h=c.clientHeight;
+  if(!w||!h)return null;
+  var bw=Math.round(w*dpr),bh=Math.round(h*dpr);
+  if(c.width!==bw||c.height!==bh){c.width=bw;c.height=bh}
+  var g=c.getContext("2d");g.setTransform(dpr,0,0,dpr,0,0);return {g:g,w:w,h:h};
+}
+var FONT="500 11.5px 'Noto Sans',system-ui,sans-serif";
+function label(g,t,x,y,color,align,pill){
+  g.font=FONT;g.textAlign=align||"left";g.textBaseline="alphabetic";
+  if(pill){var w=g.measureText(t).width,x0=(align==="right")?x-w:(align==="center"?x-w/2:x);
+    g.save();g.globalAlpha=.82;g.fillStyle=col["--surface"];g.fillRect(x0-5,y-12,w+10,17);g.restore()}
+  g.fillStyle=color;g.fillText(t,x,y)}
+/* ring-buffer trace: arr, head index, length N */
+function trace(g,arr,head,N,x0,w,cy,sc,color,lw,alpha,dash){
+  g.save();g.globalAlpha=alpha==null?1:alpha;g.strokeStyle=color;g.lineWidth=lw;g.lineJoin="round";if(dash)g.setLineDash(dash);
+  g.beginPath();
+  for(var i=0;i<N;i++){var v=arr[(head+i)%N];var x=x0+w*i/(N-1),y=cy-v*sc;if(i)g.lineTo(x,y);else g.moveTo(x,y)}
+  g.stroke();g.restore();
+}
+/* shaded envelope band around a lane centre */
+function envelope(g,E,head,N,W,cy,sc,color,alpha){
+  g.save();g.globalAlpha=alpha;
+  g.beginPath();
+  for(var i=0;i<N;i++){var e=E[(head+i)%N],x=W*i/(N-1),y=cy-e*sc;if(i)g.lineTo(x,y);else g.moveTo(x,y)}
+  for(var j=N-1;j>=0;j--){var e2=E[(head+j)%N],x2=W*j/(N-1);g.lineTo(x2,cy+e2*sc)}
+  g.closePath();g.fillStyle=color;g.globalAlpha=.09*alpha;g.fill();g.restore();
+  g.save();g.globalAlpha=alpha;g.strokeStyle=color;g.lineWidth=1.6;g.setLineDash([6,4]);
+  [1,-1].forEach(function(sg){g.beginPath();for(var i2=0;i2<N;i2++){var ee=E[(head+i2)%N]*sg,xx=W*i2/(N-1),yy=cy-ee*sc;if(i2)g.lineTo(xx,yy);else g.moveTo(xx,yy)}g.stroke()});
+  g.restore();
+}
+return {TAU:TAU,lerp:lerp,clamp:clamp,el:el,col:col,onTheme:onTheme,fit:fit,label:label,trace:trace,envelope:envelope,FONT:FONT};
+})();
+
+</script>
+<script>
+(function(){
+"use strict";
+var $=Core.el, TAU=Core.TAU;
+try{var pt=new URLSearchParams(location.search).get("part");if(pt==="1"||pt==="2"||pt==="3")document.body.setAttribute("data-part",pt)}catch(e){}
+try{var sc_=new URLSearchParams(location.search).get("sec");if(pt==="2"&&(sc_==="a"||sc_==="b"))document.body.setAttribute("data-sec",sc_)}catch(e){}
+var RM=false;try{RM=window.matchMedia("(prefers-reduced-motion: reduce)").matches}catch(e){}
+var NS="http://www.w3.org/2000/svg";
+var LOOP=[1,2,4,8,7,5];
+var FAM={1:"t",2:"t",4:"t",8:"t",7:"t",5:"t",3:"r",6:"r",9:"s"};
+var FN={t:"tamas",r:"rajas",s:"sattva"}, FR={t:"form",r:"rhythm",s:"equilibrium"};
+var LV={t:"Form",r:"Rhythm",s:"Equilibrium"};
+
+function root(n){return n%9===0?9:n%9}
+function sumStr(p){var out=[];while(p>9){var ds=String(p).split("");var s=ds.reduce(function(a,b){return a+ +b},0);out.push(ds.join(" + ")+" = "+s);p=s}return out.join(", ")}
+function opStr(a,k){var p=a*k,s=a+" × "+k+" = "+p;if(p>9)s+=", "+sumStr(p);return s}
+function svgEl(tag,attrs,parent){var e=document.createElementNS(NS,tag);for(var k in attrs)e.setAttribute(k,attrs[k]);if(parent)parent.appendChild(e);return e}
+function cls(e,c,on){e.classList.toggle(c,!!on)}
+function keys(o){return Object.keys(o).length}
+
+/* ---------------- the circle of nine points ---------------- */
+function Diagram(svg){
+  var cx=180,cy=180,R=122,NR=17,H=9;
+  while(svg.firstChild)svg.removeChild(svg.firstChild);
+  var gRing=svgEl("g",{},svg),gGuide=svgEl("g",{},svg),gPair=svgEl("g",{},svg),gEdge=svgEl("g",{},svg),gNode=svgEl("g",{},svg);
+  svgEl("circle",{cx:cx,cy:cy,r:R,"class":"ring"},gRing);
+  var nodes={},handler=null,prev={};
+  function pos(n){var a=(n%9)*40*Math.PI/180;return{x:cx+R*Math.sin(a),y:cy-R*Math.cos(a)}}
+  function f(v){return v.toFixed(1)}
+  for(var n=1;n<=9;n++){(function(n){
+    var p=pos(n),g=svgEl("g",{"class":"node fam-"+FAM[n],"data-n":n,transform:"translate("+f(p.x)+","+f(p.y)+")"},gNode);
+    svgEl("circle",{r:NR+5,"class":"nh"},g);
+    svgEl("circle",{r:NR,"class":"nc"},g);
+    svgEl("rect",{x:-NR+1,y:-NR+1,width:2*NR-2,height:2*NR-2,rx:7,"class":"nr"},g);
+    var t=svgEl("text",{},g);t.textContent=n;
+    g.addEventListener("click",function(){if(handler&&g.classList.contains("tap"))handler(n)});
+    g.addEventListener("keydown",function(e){if((e.key==="Enter"||e.key===" ")&&handler&&g.classList.contains("tap")){e.preventDefault();handler(n)}});
+    nodes[n]=g;
+  })(n)}
+  function arrow(x,y,ux,uy,parent){
+    var bx=x-ux*H,by=y-uy*H,px=-uy*4.8,py=ux*4.8;
+    svgEl("polygon",{points:f(x)+","+f(y)+" "+f(bx+px)+","+f(by+py)+" "+f(bx-px)+","+f(by-py)},parent);
+  }
+  function chord(e,parent){
+    var A=pos(e.a),B=pos(e.b),dx=B.x-A.x,dy=B.y-A.y,L=Math.hypot(dx,dy),ux=dx/L,uy=dy/L,gap=NR+2;
+    var x1=A.x+ux*gap,y1=A.y+uy*gap,x2=B.x-ux*gap,y2=B.y-uy*gap;
+    var lx2=e.arrow?x2-ux*H*.7:x2,ly2=e.arrow?y2-uy*H*.7:y2;
+    svgEl("line",{x1:f(x1),y1:f(y1),x2:f(lx2),y2:f(ly2),pathLength:1},parent);
+    if(e.arrow)arrow(x2,y2,ux,uy,parent);
+  }
+  function setEdges(list){
+    while(gEdge.firstChild)gEdge.removeChild(gEdge.firstChild);
+    var ks={};
+    list.forEach(function(e){
+      var key=e.a+">"+e.b+e.cls;ks[key]=1;
+      var isNew=!prev[key]&&!RM&&e.cls!=="p";
+      var g=svgEl("g",{"class":"edge "+e.cls+(e.old?" old":"")+(isNew?" new":"")},gEdge);
+      if(e.a===e.b){
+        var p=pos(e.a),dx=(p.x-cx)/R,dy=(p.y-cy)/R,ccx=p.x+dx*(NR+5),ccy=p.y+dy*(NR+5);
+        svgEl("circle",{cx:f(ccx),cy:f(ccy),r:9,"class":"selfloop"},g);
+      } else chord(e,g);
+    });
+    prev=ks;
+  }
+  function setPairs(list){
+    while(gPair.firstChild)gPair.removeChild(gPair.firstChild);
+    list.forEach(function(e){var g=svgEl("g",{"class":"edge p"},gPair);chord({a:e[0],b:e[1]},g)});
+  }
+  function setGuides(o){
+    while(gGuide.firstChild)gGuide.removeChild(gGuide.firstChild);
+    var a=pos(9),b=pos(3),c=pos(6);
+    if(o.tri){svgEl("line",{x1:f(a.x),y1:f(a.y),x2:f(b.x),y2:f(b.y),"class":"guide"},gGuide);svgEl("line",{x1:f(a.x),y1:f(a.y),x2:f(c.x),y2:f(c.y),"class":"guide"},gGuide)}
+    if(o.axis)svgEl("line",{x1:cx,y1:f(a.y),x2:cx,y2:cy+R,"class":"guide"},gGuide);
+  }
+  function setNode(n,o){var g=nodes[n];cls(g,"col",o.col);cls(g,"hot",o.hot);cls(g,"hotn",o.hotn)}
+  function setTap(list){for(var n=1;n<=9;n++){var g=nodes[n],on=list.indexOf(n)>=0;cls(g,"tap",on);
+    if(on){g.setAttribute("tabindex","0");g.setAttribute("role","button");g.setAttribute("aria-label","Point "+n)}
+    else{g.removeAttribute("tabindex");g.removeAttribute("role");g.removeAttribute("aria-label")}}}
+  function setFocus(fm){if(fm)svg.setAttribute("data-focus",fm);else svg.removeAttribute("data-focus")}
+  function describe(t){svg.setAttribute("aria-label",t)}
+  return{setEdges:setEdges,setPairs:setPairs,setGuides:setGuides,setNode:setNode,setTap:setTap,setFocus:setFocus,describe:describe,onPoint:function(h){handler=h}};
+}
+
+/* ======================= PART I ======================= */
+(function(){
+  var svg=$("dg1");if(!svg)return;
+  var D=Diagram(svg);
+  var S={step:0,loop:0,rh:0,nine:{},dr:null,pairs:{},last:null,modes:{num:1},mode:"num",focus:null,match:{}};
+  var TITLES=["The nine points","Form: double and reduce","Rhythm: start from 3","Equilibrium: 9","Every pair completes in 9","Read it in three languages","One breath, three strands"];
+  var PASS=[
+    function(){return true},
+    function(){return S.loop>=6},
+    function(){return S.rh>=2},
+    function(){return keys(S.nine)>=3},
+    function(){return !!(S.pairs[1]&&S.pairs[2]&&S.pairs[4])},
+    function(){return keys(S.modes)>=3},
+    function(){return !!(S.match.a&&S.match.b&&S.match.c)}
+  ];
+  var HINT=[
+    "",
+    "Press Double it until the loop closes, or use Show me.",
+    "Press Double it twice to unlock the next step.",
+    "Try at least three multipliers to unlock the next step.",
+    "Find the three pairs on the doubling loop to unlock the next step.",
+    "Look at all three languages to unlock the next step.",
+    ""
+  ];
+  function unlocked(){for(var i=0;i<PASS.length;i++)if(!PASS[i]())return i;return PASS.length-1}
+
+  var dots=$("dots");
+  TITLES.forEach(function(t,i){
+    var li=document.createElement("li"),b=document.createElement("button");
+    b.type="button";b.textContent=i+1;b.setAttribute("aria-label","Step "+(i+1)+": "+t);b.setAttribute("data-go",i);
+    li.appendChild(b);dots.appendChild(li);
+  });
+
+  function head(i,ref){return '<div class="eyebrow">Step '+(i+1)+' of 7 <span class="ref">'+ref+'</span></div><h3>'+TITLES[i]+'</h3>'}
+  var BODY=[
+    function(){return head(0,"§2, Diagram 1")+
+      '<p>Nine points sit on a circle, numbered 1 to 9 clockwise from the top, with 9 at the apex. 1, 2, 3, 4 run down the right side and 5, 6, 7, 8 up the left. The inside is empty: it is the canvas for what comes next.</p>'+
+      '<div class="act"><p>One tool is needed, the <b>digital root</b>: add the digits of a number, and add again, until one digit is left. Tap a number to reduce it and see where it lands.</p>'+
+      '<div class="chips" role="group" aria-label="Numbers to reduce">'+[16,32,64,128,27].map(function(n){return '<button class="chip" data-act="dr" data-n="'+n+'" aria-pressed="false">'+n+'</button>'}).join("")+'</div>'+
+      '<div class="arith" id="drOut">Tap a number.</div></div>'+
+      '<div class="callout"><b>This is not numerology.</b> No number here is lucky or mystical. The diagram is a visual aid for a structural insight, the way the periodic table is a visual aid for chemistry. It displays the architecture; it is not the architecture (§2).</div>'}
+    ,function(){return head(1,"§3, Fig 4.2.a")+
+      '<p>Start at 1. Double it, reduce the result to a single digit, and move to that point. Then do the same from where you land.</p>'+
+      '<div class="act"><div class="cur">Now at <b id="lpCur">1</b></div><div class="row"><button class="btn primary" data-act="dbl">Double it</button></div><div class="arith" id="lpOut"></div></div>'+
+      '<div class="reveal t" id="lpDone" hidden><p>Six points, and the loop is closed: 1, 2, 4, 8, 7, 5, and back to 1. Nothing escapes and nothing new appears. 3, 6 and 9 are never visited. Joined up, the six make a hexagram.</p>'+
+      '<p>This is form-giving recurrence: one becoming two becoming four, the pattern of cell division, branching trees and crystal lattices. Its Sanskrit name is <b class="k-t">tamas</b>: persistence, density, structural stability. “Darkness” and “inertia” make it sound negative. It is not. Without tamas no shape would hold (§3).</p></div>'}
+    ,function(){return head(2,"§4")+
+      '<p>The loop never visited 3 or 6. They belong to a different family. Start from 3 and double.</p>'+
+      '<div class="act"><div class="cur">Now at <b id="rhCur">3</b></div><div class="row"><button class="btn primary" data-act="rdbl">Double it</button></div><div class="arith" id="rhOut"></div></div>'+
+      '<div class="reveal r" id="rhDone" hidden><p>Two points, back and forth: 3, 6, 3, 6, for as long as you like. This is the simplest possible rhythm, two states alternating. It shares the circle with the loop but never overlaps it.</p>'+
+      '<p>Its Sanskrit name is <b class="k-r">rajas</b>: dynamism, movement, energy. Without rajas, form would be inert: a chair that holds its shape, with nothing ever happening on it (§4).</p></div>'}
+    ,function(){return head(3,"§5")+
+      '<p>Now 9. Multiply it by any number, reduce the result, and see where it goes.</p>'+
+      '<div class="act"><div class="chips" role="group" aria-label="Multiply 9 by">'+[2,4,5,7,8].map(function(k){return '<button class="chip" data-act="nine" data-k="'+k+'" aria-pressed="false">9 × '+k+'</button>'}).join("")+'</div><div class="arith" id="nnOut">Choose a multiplier.</div></div>'+
+      '<div class="reveal s" id="nnDone" hidden><p>Always 9. It is an absorbing element: whatever it multiplies is absorbed back into itself, and there is no escaping 9 once you bring it into the operation.</p>'+
+      '<p>It sits at the apex, the still axis around which the loop is arranged and the rhythm pulses. Its Sanskrit name is <b class="k-s">sattva</b>: integration, clarity, balance. Equilibrium here is not the absence of motion. It is integrated motion, like a well-balanced spinning top (§5).</p></div>'}
+    ,function(){return head(4,"§5, Diagram 4")+
+      '<p>Pair up the numbers of the doubling loop. Tap a point on the circle (or a button below) to find its complement.</p>'+
+      '<div class="act"><div class="chips" role="group" aria-label="Choose a number">'+[1,2,4,8,7,5,3,6].map(function(n){return '<button class="chip" data-act="pair" data-n="'+n+'" aria-pressed="false">'+n+'</button>'}).join("")+'</div>'+
+      '<div class="arith" id="prOut">Choose a number.</div><div class="pairs" id="prList"></div></div>'+
+      '<div class="reveal s" id="prDone" hidden><p>Three pairs, each completing in 9. The 9 is not outside the loop: it is the completion of every pair within it, the silent presence each pair points toward (§5). Look at the circle: each pair sits as mirror images across the vertical line through 9.</p>'+
+      '<p>3 and 6 also sum to 9. The lesson draws out a difference between that pair and the other three; Part II shows its cause (§7).</p></div>'}
+    ,function(){return head(5,"§6, Fig 4.2.b")+
+      '<p>The same diagram can be read in three languages. Switch between them, and tap a card to isolate one strand on the circle.</p>'+
+      '<div class="seg" id="modeSeg" role="group" aria-label="Language"><button data-act="mode" data-m="num" aria-pressed="true">Numbers</button><button data-act="mode" data-m="san" aria-pressed="false">Sanskrit</button><button data-act="mode" data-m="nat" aria-pressed="false">In nature</button></div>'+
+      '<div class="cards" id="cards"></div>'+
+      '<div class="callout"><b>Where is the witness?</b> The lesson places the witness-awareness at 0, the source-pole. It is not one of the nine points. Sattva, 9, is the nearest the manifest spectrum comes to it (§5). The lesson keeps 0 distinct from 9 (§2).</div>'}
+    ,function(){return head(6,"§1, §6, Fig 4.2.c")+
+      '<p>All three strands are present in a single breath. For each part of one breath, choose the strand it belongs to.</p>'+
+      '<div class="match" id="match"></div>'+
+      '<div class="reveal s" id="mhDone" hidden><p>Three strands, woven into one breath, all present at once and none removable. The two-dimensional Ritam Diagram is complete (Fig 4.2.b).</p></div>'}
+  ];
+  var CARDS={
+    num:{t:["Doubling family {1, 2, 4, 8, 7, 5}","A closed six-point loop, a hexagram. Doubling with the digital root never leaves it."],
+         r:["Pulsation pair {3, 6}","Two points alternating across the circle. Doubling swaps one for the other."],
+         s:["Integrating axis {9}","Absorbs whatever it multiplies, and completes every pair in the loop."]},
+    san:{t:["Form","Persistence, density, structural stability. Not “bad”: the strand that gives the world its structure."],
+         r:["Rhythm","Dynamism, movement, energy. The strand of change. Module 1 readers may recognise Spanda."],
+         s:["Equilibrium","Integration, clarity, balance. The strand that holds form and rhythm together."]},
+    nat:{t:["Form","Cell division, branching trees, an orange, a galaxy’s arms, crystal lattices, the skeleton."],
+         r:["Rhythm","The breath, the heartbeat, the autonomic nervous system, day and night, the seasons, the tides."],
+         s:["Equilibrium","Vagal-cardiac coherence, autonomic equilibrium, the eye of a hurricane, the axis of a spinning top."]}
+  };
+  var NAMEHEAD={num:{t:"Numbers",r:"Numbers",s:"Numbers"},san:{t:"Tamas",r:"Rajas",s:"Sattva"},nat:{t:"Tamas",r:"Rajas",s:"Sattva"}};
+  var ITEMS=[
+    {k:"a",txt:"The inhale and the exhale, alternating",ans:"r",ok:"Rajas. Inhale and exhale are the 3-6 pulsation: two states alternating for the whole of your life (§4, §6).",hint:"Think of what alternates between two poles."},
+    {k:"b",txt:"The structured shape of the breath in the chest",ans:"t",ok:"Tamas. The shape the breath takes, the structure that holds it, is form (§1, §6).",hint:"Think of what has a shape that holds."},
+    {k:"c",txt:"What holds the shape and rhythm of the breath together, so it does not fragment",ans:"s",ok:"Sattva. What holds form and rhythm together so that the breath does not fragment into noise is the integrating axis, equilibrium (§1, §5).",hint:"Think of what holds form and rhythm together without becoming either."}
+  ];
+
+  function body(){$("stepBody").innerHTML='<div class="stepbox">'+BODY[S.step]()+'</div>';dyn()}
+  function dyn(){
+    var st=S.step,e;
+    if(st===0){
+      [].forEach.call(document.querySelectorAll('[data-act="dr"]'),function(b){b.setAttribute("aria-pressed",String(+b.getAttribute("data-n")===S.dr))});
+      e=$("drOut");if(S.dr){var r=root(S.dr);e.innerHTML="<b>"+S.dr+"</b>: "+sumStr(S.dr)+". It lands on point <b>"+r+"</b>."}
+    }
+    if(st===1){
+      var cur=LOOP[S.loop%6];$("lpCur").textContent=cur;
+      if(S.loop>0){var pv=LOOP[(S.loop-1)%6];$("lpOut").textContent=opStr(pv,2)+"  →  point "+cur}else $("lpOut").textContent="Press Double it: 1 × 2 = 2.";
+      $("lpDone").hidden=S.loop<6;
+    }
+    if(st===2){
+      var c2=S.rh%2?6:3;$("rhCur").textContent=c2;
+      if(S.rh>0){var p2=S.rh%2?3:6;$("rhOut").textContent=opStr(p2,2)+"  →  point "+c2}else $("rhOut").textContent="Press Double it: 3 × 2 = 6.";
+      $("rhDone").hidden=S.rh<2;
+    }
+    if(st===3){
+      [].forEach.call(document.querySelectorAll('[data-act="nine"]'),function(b){b.setAttribute("aria-pressed",String(!!S.nine[b.getAttribute("data-k")]))});
+      e=$("nnOut");if(S.last){e.textContent=opStr(9,S.last)+"  →  point 9"}
+      $("nnDone").hidden=keys(S.nine)<3;
+    }
+    if(st===4){
+      e=$("prOut");if(S.last){var a=S.last,b2=9-a;e.textContent=a+" + "+b2+" = 9"}
+      [].forEach.call(document.querySelectorAll('[data-act="pair"]'),function(b){var n=+b.getAttribute("data-n");b.setAttribute("aria-pressed",String(S.last===n))});
+      $("prList").innerHTML=[[1,8],[2,7],[4,5],[3,6]].map(function(p){return '<span class="'+(S.pairs[p[0]]?"found":"")+'">'+p[0]+" + "+p[1]+(S.pairs[p[0]]?" = 9 (found)":"")+"</span>"}).join("");
+      $("prDone").hidden=!(S.pairs[1]&&S.pairs[2]&&S.pairs[4]);
+    }
+    if(st===5){
+      [].forEach.call(document.querySelectorAll('[data-act="mode"]'),function(b){b.setAttribute("aria-pressed",String(b.getAttribute("data-m")===S.mode))});
+      $("cards").innerHTML=["t","r","s"].map(function(f){var c=CARDS[S.mode][f];return '<button class="fcard '+f+'" data-act="card" data-f="'+f+'" aria-pressed="'+(S.focus===f)+'"><b>'+(S.mode==="num"?c[0]:NAMEHEAD[S.mode][f]+" · "+c[0].toLowerCase())+'</b><span>'+c[1]+'</span></button>'}).join("");
+    }
+    if(st===6){
+      var h="";
+      ITEMS.forEach(function(it){
+        var m=S.match[it.k],wrong=(S.wrong&&S.wrong[it.k])||{};
+        h+='<div class="mrow'+(m?" done":"")+'" data-k="'+it.k+'"><p>'+it.txt+'</p><div class="opts" role="group" aria-label="Strand for: '+it.txt+'">'+
+          ["t","r","s"].map(function(f){var dis=m||wrong[f];return '<button data-act="match" data-k="'+it.k+'" data-f="'+f+'"'+(dis?" disabled":"")+(m&&it.ans===f?' class="ok"':"")+'>'+FN[f]+'</button>'}).join("")+
+          '</div><p class="why" id="why_'+it.k+'">'+(m?it.ok:(S.hintShown&&S.hintShown[it.k]?"Not quite. "+it.hint:""))+'</p></div>';
+      });
+      $("match").innerHTML=h;
+      $("mhDone").hidden=!PASS[6]();
+    }
+    paint();nav();
+  }
+  function paint(){
+    var st=S.step,edges=[],n,i;
+    for(i=0;i<Math.min(S.loop,6);i++)edges.push({a:LOOP[i],b:LOOP[(i+1)%6],cls:"t",arrow:1});
+    if(S.rh>=1)edges.push({a:3,b:6,cls:"r",arrow:1});
+    if(S.rh>=2)edges.push({a:6,b:3,cls:"r",arrow:1});
+    D.setEdges(edges);
+    var pairs=[];[1,2,4,3].forEach(function(a){if(S.pairs[a])pairs.push([a,9-a])});
+    D.setPairs(pairs);
+    D.setGuides({tri:st>=3,axis:st>=3});
+    var all=st>=5||PASS[6]();
+    for(n=1;n<=9;n++){
+      var f=FAM[n],col=all,hot=false,hotn=false;
+      if(!all){
+        if(f==="t"){var idx=LOOP.indexOf(n);col=st>=1&&(idx===0||idx<=S.loop)}
+        if(n===3)col=st>=2;
+        if(n===6)col=S.rh>=1;
+        if(n===9)col=st>=3;
+        if(st===1&&n===LOOP[S.loop%6])hot=true;
+        if(st===2&&n===(S.rh%2?6:3))hot=true;
+        if(st===3&&n===9&&S.last)hot=true;
+        if(st===4&&S.last&&(n===S.last||n===9-S.last)&&n!==9){hot=true;col=true}
+      }
+      if(st===0&&S.dr&&n===root(S.dr)){hotn=true}
+      D.setNode(n,{col:col,hot:hot,hotn:hotn});
+    }
+    D.setTap(st===4?[1,2,4,5,7,8,3,6]:[]);
+    D.setFocus(st>=5?S.focus:null);
+    D.describe("The Ritam Diagram so far. "+(S.loop>=6?"The doubling loop 1, 2, 4, 8, 7, 5 is closed. ":S.loop>0?"A doubling path is partly drawn. ":"")+(S.rh>=2?"The rhythm pair 3 and 6 alternates. ":"")+(st>=3?"9 sits at the apex. ":"")+(keys(S.pairs)?"Complement pairs summing to 9 are joined by dashed lines.":""));
+  }
+  function nav(){
+    var st=S.step,u=unlocked();
+    $("bBack").disabled=st===0;
+    var last=st===PASS.length-1;
+    $("bNext").hidden=last;
+    $("bNext").disabled=!PASS[st]();
+    $("bShow").hidden=st===0;
+    $("bShow").disabled=PASS[st]()&&st!==6;
+    if(PASS[st]()&&st!==0){$("bShow").disabled=true}
+    $("gateHint").textContent=PASS[st]()?"":HINT[st];
+    [].forEach.call(dots.querySelectorAll("button"),function(b,i){
+      b.disabled=i>u;b.classList.toggle("done",i<u||(i===u&&PASS[i]()&&i>0));
+      if(i===st)b.setAttribute("aria-current","step");else b.removeAttribute("aria-current");
+    });
+  }
+  function go(i){if(i<0||i>unlocked())return;S.step=i;S.last=null;S.focus=null;body();$("stepAnn").textContent="Step "+(i+1)+" of 7: "+TITLES[i]}
+  function show(){
+    var st=S.step;
+    if(st===1)S.loop=6;
+    if(st===2)S.rh=Math.max(S.rh,2);
+    if(st===3){[2,5,8].forEach(function(k){S.nine[k]=1});S.last=5}
+    if(st===4){S.pairs[1]=S.pairs[2]=S.pairs[4]=1;S.last=2}
+    if(st===5){S.modes={num:1,san:1,nat:1}}
+    if(st===6){S.match={a:1,b:1,c:1}}
+    dyn();
+  }
+  $("bd").addEventListener("click",function(e){
+    var go_=e.target.closest("[data-go]");if(go_){go(+go_.getAttribute("data-go"));return}
+    var t=e.target.closest("[data-act],#bBack,#bNext,#bShow");if(!t)return;
+    if(t.id==="bBack"){go(S.step-1);return}
+    if(t.id==="bNext"){go(S.step+1);return}
+    if(t.id==="bShow"){show();return}
+    var a=t.getAttribute("data-act");
+    if(a==="dr"){S.dr=+t.getAttribute("data-n");dyn()}
+    else if(a==="dbl"){S.loop++;dyn()}
+    else if(a==="rdbl"){S.rh++;dyn()}
+    else if(a==="nine"){var k=+t.getAttribute("data-k");S.nine[k]=1;S.last=k;dyn()}
+    else if(a==="pair")pairTap(+t.getAttribute("data-n"));
+    else if(a==="mode"){S.mode=t.getAttribute("data-m");S.modes[S.mode]=1;dyn()}
+    else if(a==="card"){var f=t.getAttribute("data-f");S.focus=S.focus===f?null:f;dyn()}
+    else if(a==="match"){
+      var kk=t.getAttribute("data-k"),ff=t.getAttribute("data-f"),it=ITEMS.filter(function(x){return x.k===kk})[0];
+      if(ff===it.ans){S.match[kk]=1;S.focus=ff}
+      else{S.wrong=S.wrong||{};S.wrong[kk]=S.wrong[kk]||{};S.wrong[kk][ff]=1;S.hintShown=S.hintShown||{};S.hintShown[kk]=1}
+      if(PASS[6]())S.focus=null;
+      dyn();
+      var ann=$("why_"+kk);if(ann&&ann.textContent)$("stepAnn").textContent=ann.textContent;
+    }
+  });
+  function pairTap(n){
+    if(S.step!==4||n===9)return;
+    S.last=n;var lo=Math.min(n,9-n);if(lo!==4&&lo!==3&&lo!==2&&lo!==1)lo=n;
+    S.pairs[lo]=1;dyn();
+    $("stepAnn").textContent=n+" + "+(9-n)+" = 9";
+  }
+  D.onPoint(pairTap);
+  body();
+})();
+
+/* ======================= PART II : doubling and trebling ======================= */
+(function(){
+  var svg=$("dg2");if(!svg)return;
+  var D=Diagram(svg);
+  var cur=1,trail=[],showSix=false;
+  var F={dbl:{},t:{},r:{},n:false};
+  var sc=$("startChips");
+  for(var n=1;n<=9;n++){(function(n){var b=document.createElement("button");b.type="button";b.className="chip";b.textContent=n;b.setAttribute("data-n",n);b.setAttribute("aria-pressed",String(n===1));sc.appendChild(b)})(n)}
+  sc.addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;cur=+b.getAttribute("data-n");trail=[];showSix=false;$("opRead").innerHTML="Start: <b>"+cur+"</b>. Choose Double or Treble.";paint()});
+  function op(k){
+    var a=cur,b=root(a*k),fa=FAM[a],fb=FAM[b];
+    showSix=false;
+    trail.push({a:a,b:b,cls:k===2?"d":"l"});if(trail.length>7)trail.shift();
+    cur=b;
+    var msg=opStr(a,k)+"  →  point <b>"+b+"</b><br>";
+    if(k===2){F.dbl[fa]=1;msg+="Doubling: you stay in the same family ("+FN[fa]+", "+FR[fa]+")."}
+    else{
+      if(fa==="t"){F.t[a]=1}else if(fa==="r"){F.r[a]=1}else F.n=true;
+      if(fa!==fb)msg+="<b>Lifted</b> from "+FR[fa]+" ("+FN[fa]+") to "+FR[fb]+" ("+FN[fb]+").";
+      else msg+="Trebling 9 returns 9: the integrating axis is self-stable.";
+    }
+    $("opRead").innerHTML=msg;paint();
+  }
+  $("opD").addEventListener("click",function(){op(2)});
+  $("opT").addEventListener("click",function(){op(3)});
+  $("opSix").addEventListener("click",function(){
+    showSix=true;trail=[];LOOP.forEach(function(n){F.t[n]=1});
+    var h='<div class="sixtab">'+LOOP.map(function(n){return "<span>"+opStr(n,3)+"</span>"}).join("")+"</div>Every member of the loop, without exception, lands on 3 or 6.";
+    $("opRead").innerHTML=h;paint();
+  });
+  function paint(){
+    var edges=[],i;
+    if(showSix)LOOP.forEach(function(n){edges.push({a:n,b:root(n*3),cls:"l",arrow:1})});
+    else trail.forEach(function(t,i){edges.push({a:t.a,b:t.b,cls:t.cls,arrow:1,old:i<trail.length-1})});
+    D.setEdges(edges);
+    D.setGuides({axis:true});
+    for(i=1;i<=9;i++)D.setNode(i,{col:true,hot:i===cur&&!showSix});
+    [].forEach.call(sc.children,function(b){b.setAttribute("aria-pressed",String(+b.getAttribute("data-n")===cur))});
+    var h="";
+    ["s","r","t"].forEach(function(f,ix){
+      var ns=f==="t"?LOOP:f==="r"?[3,6]:[9];
+      var cap=f==="t"?"doubling goes round this loop":f==="r"?"doubling swaps 3 and 6":"doubling stays at 9";
+      h+='<div class="lrow '+f+'"><div class="ln"><b>'+LV[f]+" ("+FN[f]+")</b> · "+cap+'</div><div class="ns">'+ns.map(function(n){return '<span class="'+(n===cur?"on":"")+'">'+n+"</span>"}).join("")+"</div></div>";
+      if(ix<2)h+='<div class="lup" aria-hidden="true">▲ trebling lifts</div>';
+    });
+    $("ladder").innerHTML=h;
+    finds();
+    svg.setAttribute("aria-label","The Ritam Diagram. Current point "+cur+". Doubling paths are drawn in dark lines and trebling lifts in magenta.");
+  }
+  function finds(){
+    var d=keys(F.dbl),t=keys(F.t),r=keys(F.r);
+    var items=[
+      {ok:d>=3,t:"Doubling keeps you in the same family.",s:"Try it from a loop number, from 3 or 6, and from 9 ("+d+" of 3)."},
+      {ok:t>=6,t:"Trebling lifts every form number to rhythm.",s:"All six of {1, 2, 4, 8, 7, 5} land on 3 or 6 ("+t+" of 6)."},
+      {ok:r>=2,t:"Trebling lifts rhythm to 9.",s:"Treble 3, and treble 6 ("+r+" of 2)."},
+      {ok:F.n,t:"Trebling 9 returns 9.",s:"Treble 9 and see where it goes."}
+    ];
+    $("finds").innerHTML=items.map(function(it){return '<li class="'+(it.ok?"done":"")+'"><span class="mk" aria-hidden="true">✓</span><span>'+(it.ok?'<span class="vh">Found: </span>':"")+it.t+"<small>"+it.s+"</small></span></li>"}).join("");
+    var all=items.every(function(i){return i.ok}),syn=$("tbSyn");
+    if(all&&syn.hidden){
+      syn.innerHTML='<h3>Trebling is the algebra of ascent</h3>'+
+        '<p>The lesson says: applied once, trebling lifts form into rhythm; applied again, it lifts rhythm into equilibrium, tamas to rajas to sattva. The direction is built into the arithmetic of the diagram, not imposed from outside (§7). Doubling, by contrast, stays inside its own family (§3, §4).</p>'+
+        '<p>Notice the asymmetry. A form number needs two liftings to reach 9; a rhythm number needs one. Rhythm is the one family with a direct algebraic path to sattva, which the lesson calls the Breath Shortcut and relates to the breath (§7). The pairs show it a second way: 1 + 8, 2 + 7 and 4 + 5 complete in 9 only by way of the loop, while 3 + 6 reaches 9 directly (§7).</p>'+
+        '<p>9 trebled returns to 9, so the integrating axis is self-stable. The lesson adds that it is not the final horizon: the cascade continues, and Lesson 4.3 shows what lies beyond (§7).</p>'+
+        '<p class="note">&ldquo;Lift&rdquo; names an operation on numbers. It does not rank the strands: all three stay indispensable (§9). This page works only with the arithmetic and teaches no breathing practice; practice belongs to Module 5.</p>';
+      syn.hidden=false;
+    }
+  }
+  paint();$("opRead").innerHTML="Start: <b>1</b>. Choose Double or Treble.";
+})();
+
+/* ======================= PART II : the torus ======================= */
+(function(){
+  var cv=$("torus");if(!cv)return;
+  var st={yaw:.6,tilt:1,form:true,rhythm:true,axis:true,period:1,phase:1.2,dir:1,drag:null,vis:true,pulseName:"heart"};
+  var ASP=[
+    {k:"form",c:"t",n:"Form (tamas)",d:"The doubling loop wrapping the surface of the torus."},
+    {k:"rhythm",c:"r",n:"Rhythm (rajas)",d:"The pulsation: expanding and contracting at its natural frequency."},
+    {k:"axis",c:"s",n:"Axis (sattva)",d:"The still vertical axis, 9, around which the pulsation organises itself."}
+  ];
+  var asp=$("aspects");
+  ASP.forEach(function(a){var b=document.createElement("button");b.type="button";b.className="asp "+a.c;b.setAttribute("data-k",a.k);b.innerHTML='<span class="st"></span><b>'+a.n+"</b><span>"+a.d+"</span>";asp.appendChild(b)});
+  var pr=$("pulseRow").querySelector(".chips");
+  [["heart","Heart-like: about once a second",1],["lung","Lung-like: about fifteen a minute",4]].forEach(function(p){var b=document.createElement("button");b.type="button";b.className="chip";b.setAttribute("data-k",p[0]);b.setAttribute("data-p",p[2]);b.textContent=p[1];pr.appendChild(b)});
+  if(RM){var sb=document.createElement("button");sb.type="button";sb.className="chip";sb.textContent="Step the pulse";sb.id="stepPulse";pr.appendChild(sb)}
+  function sync(){
+    [].forEach.call(asp.children,function(b){var on=st[b.getAttribute("data-k")];b.setAttribute("aria-pressed",String(on));b.querySelector(".st").textContent=on?"present":"switched off"});
+    [].forEach.call(pr.querySelectorAll("[data-k]"),function(b){b.setAttribute("aria-pressed",String(b.getAttribute("data-k")===st.pulseName));b.disabled=!st.rhythm});
+    if($("stepPulse")){$("stepPulse").disabled=!st.rhythm;$("stepPulse").textContent="Step the pulse (now "+(st.dir>0?"expanding":"contracting")+")"}
+    var miss=[];
+    if(!st.form)miss.push("Without the surface-structure there is no torus.");
+    if(!st.rhythm)miss.push("Without the pulsation the form is inert; with it, the form is alive.");
+    if(!st.axis)miss.push("Without the still axis there is no silent reference around which all the dynamism organises itself.");
+    $("tStatus").innerHTML=miss.length?"<b>Not a living torus.</b><span>"+miss.join(" ")+" Remove any one and the torus ceases to be a living system (§8).</span>":
+      "<b>All three present: a living torus.</b><span>The lesson says a properly energised torus sustains its own pulsation: each cycle of expansion and contraction feeds the next, and the system needs little external driver until drift disrupts it (§8). Every living structure has its own characteristic rate: the heart roughly once a second, the lungs fifteen breaths a minute (§8).</span>";
+    draw();
+  }
+  asp.addEventListener("click",function(e){var b=e.target.closest(".asp");if(!b)return;var k=b.getAttribute("data-k");st[k]=!st[k];sync()});
+  pr.addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;
+    if(b.id==="stepPulse"){st.dir=-st.dir;st.phase=st.dir>0?-1.2:1.2;sync();return}
+    st.pulseName=b.getAttribute("data-k");st.period=+b.getAttribute("data-p");sync()});
+  var tilt=$("tilt");tilt.addEventListener("input",function(){st.tilt=+tilt.value;draw()});
+
+  function proj(x,y,z){
+    var c=Math.cos(st.yaw),s=Math.sin(st.yaw),x1=x*c-y*s,y1=x*s+y*c;
+    var ca=Math.cos(st.tilt),sa=Math.sin(st.tilt);
+    return [x1,-(z*ca+y1*sa),y1*ca-z*sa];
+  }
+  function draw(){
+    var c=Core.fit(cv);if(!c)return;
+    var g=c.g,w=c.w,h=c.h,col=Core.col;
+    g.clearRect(0,0,w,h);
+    var K=Math.min(w/3.5,h/3.1),ox=w/2,oy=h/2;
+    var r=.42*(st.rhythm?(1+.2*Math.sin(st.phase)):1);
+    function pt(x,y,z){var p=proj(x,y,z),k=1-.09*p[2];return [ox+p[0]*K*k,oy+p[1]*K*k,p[2]]}
+    function P(th,ph){var rr=1+r*Math.cos(ph);return pt(rr*Math.cos(th),rr*Math.sin(th),r*Math.sin(ph))}
+    var i,j;
+    function strokeBuckets(buckets,alphas,color,lw){
+      g.save();g.strokeStyle=color;g.lineWidth=lw;g.lineCap="round";g.lineJoin="round";
+      for(var b=0;b<buckets.length;b++){g.globalAlpha=alphas[b];g.beginPath();buckets[b].forEach(function(s){g.moveTo(s[0],s[1]);g.lineTo(s[2],s[3])});g.stroke()}
+      g.restore();
+    }
+    function bucketOf(d){return d<-.35?0:d<.35?1:2}
+    if(st.form){
+      var bk=[[],[],[]],M=18,Pn=7,N=22,a,b;
+      for(i=0;i<M;i++){a=P(TAU*i/M,0);for(j=1;j<=N;j++){b=P(TAU*i/M,TAU*j/N);bk[bucketOf((a[2]+b[2])/2)].push([a[0],a[1],b[0],b[1]]);a=b}}
+      for(i=0;i<Pn;i++){a=P(0,TAU*i/Pn);for(j=1;j<=56;j++){b=P(TAU*j/56,TAU*i/Pn);bk[bucketOf((a[2]+b[2])/2)].push([a[0],a[1],b[0],b[1]]);a=b}}
+      strokeBuckets(bk,[.42,.22,.08],col["--ink"],1);
+      var cb=[[],[],[]],NN=420;a=P(0,0);
+      for(j=1;j<=NN;j++){b=P(TAU*j/NN,TAU*6*j/NN);cb[bucketOf((a[2]+b[2])/2)].push([a[0],a[1],b[0],b[1]]);a=b}
+      strokeBuckets(cb,[1,.7,.35],col["--obj"],2.6);
+    } else {
+      g.save();g.strokeStyle=col["--muted"];g.globalAlpha=.4;g.setLineDash([3,6]);g.lineWidth=1.2;
+      [0,Math.PI].forEach(function(ph){g.beginPath();for(j=0;j<=64;j++){var q=P(TAU*j/64,ph);if(j)g.lineTo(q[0],q[1]);else g.moveTo(q[0],q[1])}g.stroke()});
+      g.restore();
+    }
+    if(st.rhythm){
+      var vel=RM?st.dir:Math.cos(st.phase),sg=vel>=0?1:-1,al=RM?1:.35+.65*Math.abs(vel);
+      g.save();g.strokeStyle=col["--att"];g.fillStyle=col["--att"];g.lineWidth=2.4;g.globalAlpha=al;g.lineCap="round";
+      for(i=0;i<4;i++)[0,Math.PI].forEach(function(ph){
+        var th=TAU*i/4+.4,cph=Math.cos(ph),rr=1+r*cph,sx=rr*Math.cos(th),sy=rr*Math.sin(th),sz=r*Math.sin(ph);
+        var nx=cph*Math.cos(th),ny=cph*Math.sin(th),L=.3;
+        var p0=pt(sx,sy,sz),p1=pt(sx+nx*L,sy+ny*L,sz);
+        var from=sg>0?p0:p1,to=sg>0?p1:p0;
+        var dx=to[0]-from[0],dy=to[1]-from[1],ln=Math.hypot(dx,dy)||1,ux=dx/ln,uy=dy/ln;
+        g.beginPath();g.moveTo(from[0],from[1]);g.lineTo(to[0]-ux*5,to[1]-uy*5);g.stroke();
+        g.beginPath();g.moveTo(to[0],to[1]);g.lineTo(to[0]-ux*9-uy*4.5,to[1]-uy*9+ux*4.5);g.lineTo(to[0]-ux*9+uy*4.5,to[1]-uy*9-ux*4.5);g.closePath();g.fill();
+      });
+      g.restore();
+    }
+    if(st.axis){
+      var t0=pt(0,0,-1.3),t1=pt(0,0,1.3);
+      g.save();g.strokeStyle=col["--res"];g.fillStyle=col["--res"];g.lineWidth=3.2;g.lineCap="round";
+      g.beginPath();g.moveTo(t0[0],t0[1]);g.lineTo(t1[0],t1[1]);g.stroke();
+      g.font="600 14px 'Noto Sans',system-ui,sans-serif";g.textAlign="left";
+      var top=t0[1]<t1[1]?t0:t1;g.fillText("9",top[0]+7,top[1]+4);
+      g.restore();
+    }
+  }
+  /* interaction */
+  cv.addEventListener("pointerdown",function(e){st.drag={x:e.clientX,yaw:st.yaw};try{cv.setPointerCapture(e.pointerId)}catch(_){}cv.style.cursor="grabbing"});
+  cv.addEventListener("pointermove",function(e){if(!st.drag)return;st.yaw=st.drag.yaw+(e.clientX-st.drag.x)*.01;if(RM)draw()});
+  function endDrag(){st.drag=null;cv.style.cursor=""}
+  cv.addEventListener("pointerup",endDrag);cv.addEventListener("pointercancel",endDrag);
+  cv.addEventListener("keydown",function(e){
+    var k=e.key,used=true;
+    if(k==="ArrowLeft")st.yaw-=.15;else if(k==="ArrowRight")st.yaw+=.15;
+    else if(k==="ArrowUp")st.tilt=Math.min(1.45,st.tilt+.08);else if(k==="ArrowDown")st.tilt=Math.max(.3,st.tilt-.08);
+    else used=false;
+    if(used){e.preventDefault();tilt.value=st.tilt;draw()}
+  });
+  Core.onTheme(draw);
+  window.addEventListener("resize",draw);
+  try{new IntersectionObserver(function(es){st.vis=es[0].isIntersecting;if(st.vis)draw()}).observe(cv)}catch(e){}
+  var last=0;
+  function tick(ts){
+    var dt=Math.min(.05,(ts-last)/1000||0);last=ts;
+    if(!RM&&st.vis&&cv.clientWidth){if(st.rhythm)st.phase+=dt*TAU/st.period;if(!st.drag)st.yaw+=dt*.22;draw()}
+    requestAnimationFrame(tick);
+  }
+  if(!RM)requestAnimationFrame(tick);
+  /* nature chips */
+  var NAT=[
+    ["The heartbeat","The lesson says the heart contracts and relaxes at its own natural frequency, roughly once a second at rest, and that blood entering the left ventricle forms a toroidal vortex ring that helps eject it into the aorta."],
+    ["Earth’s magnetosphere","The lesson describes the planet’s magnetic field as a vast torus around it, with field lines emerging from one pole, looping around, and re-entering at the other, and the Van Allen radiation belts sitting inside it."],
+    ["A smoke ring","The lesson describes it as a self-sustaining toroidal vortex of air that can travel surprising distances, holding its shape."],
+    ["The eye of a hurricane","The lesson describes a toroidal weather system with a still centre, the eye, and a circulating body, which sustains itself because its own circulation feeds back into itself."],
+    ["A tokamak","The lesson says fusion designs of this kind use a torus to confine super-heated plasma."]
+  ];
+  var nc=$("natChips");
+  NAT.forEach(function(n,i){var b=document.createElement("button");b.type="button";b.className="chip";b.textContent=n[0];b.setAttribute("data-i",i);b.setAttribute("aria-pressed","false");nc.appendChild(b)});
+  $("natText").textContent="Choose an example the lesson gives. The lesson holds the torus to be one organising form among many, not the only one (§8, Fig 4.2.e).";
+  nc.addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;var i=+b.getAttribute("data-i");
+    [].forEach.call(nc.children,function(x){x.setAttribute("aria-pressed",String(x===b))});$("natText").textContent=NAT[i][1]});
+  sync();
+})();
+
+/* ======================= PART III : strands ======================= */
+(function(){
+  var host=$("strands");if(!host)return;
+  var V={t:6,r:6,s:6};
+  var DEF=[
+    {k:"t",n:"Tamas",d:"form: persistence, structure"},
+    {k:"r",n:"Rajas",d:"rhythm: movement, energy"},
+    {k:"s",n:"Sattva",d:"equilibrium: integration, clarity"}
+  ];
+  var FLOOR={
+    t:"Tamas is at its floor. You cannot escape tamas: without it you would have no body, no shape, no continuity, no skeleton (§9).",
+    r:"Rajas is at its floor. You cannot escape rajas: without it you would have no breath, no heartbeat, no metabolism, no movement (§9).",
+    s:"Sattva is at its floor. With too little sattva the system is incoherent, caught between rigid form and frantic activity, with no integrating axis to hold it (§9)."
+  };
+  function word(v){return v<=2?"least possible":v<=4?"less":v<=7?"moderate":"predominant"}
+  host.innerHTML=DEF.map(function(d){return '<div class="str '+d.k+'"><div class="top"><label for="sl_'+d.k+'"><b>'+d.n+'</b></label><output id="o_'+d.k+'" for="sl_'+d.k+'"></output></div><input type="range" id="sl_'+d.k+'" min="1" max="10" step="1" value="6" data-k="'+d.k+'" aria-describedby="o_'+d.k+'"><div class="dsc">'+d.d+'</div><div class="ends"><span>no zero available</span><span>predominant</span></div></div>'}).join("");
+  var braid=$("braid");
+  var BP={};
+  var SH={t:0,r:2.1,s:4.2},CC={t:"--obj",r:"--att",s:"--res"};
+  ["t","r","s"].forEach(function(f){BP[f]=svgEl("path",{},braid)});
+  function path(f){
+    var d="",x;for(x=-10;x<=370;x+=10){var y=65+30*Math.sin(x/38+SH[f]);d+=(x===-10?"M":"L")+x+","+y.toFixed(1)}return d;
+  }
+  function braidPaint(){
+    ["t","r","s"].forEach(function(f){BP[f].setAttribute("d",path(f));BP[f].setAttribute("stroke-width",(3+2.6*V[f]).toFixed(1));BP[f].style.stroke="var("+CC[f]+")";BP[f].style.opacity=".82"});
+    var order=["t","r","s"].sort(function(a,b){return V[b]-V[a]});
+    order.forEach(function(f){braid.appendChild(BP[f])});
+  }
+  function reading(){
+    var a=[V.t,V.r,V.s],m=Math.max.apply(null,a),n=Math.min.apply(null,a);
+    var tops=["t","r","s"].filter(function(f){return V[f]>=m-1}),T,X,ref;
+    if(m-n<=2){T="In proportion";X="All three strands are present and expressed through each other. This is the picture of Ritam in Fig 4.2.f: none escaped, none ranked.";ref="§9, Fig 4.2.f"}
+    else if(tops.length===1){
+      var f=tops[0];
+      if(f==="s"){
+        if(V.t<=2&&V.r<=2){T="An empty axis";X="Sattva with almost nothing to integrate: in the lesson’s words, “just an empty axis”.";ref="§9"}
+        else{T="Sattva predominant";X="Sattva is the strand that holds form and rhythm together coherently (§5). It needs both present: it integrates and does not retreat from them, and sattva without something to integrate is an empty axis (§9).";ref="§5, §9"}
+      } else if(f==="t"){
+        if(V.r<=3&&V.s<=3){T="Tamasic drift: form heavy, rhythm sunk";X="Persistence has become rigidity and stability stagnation. Rhythm has sunk and there is no axis to hold the whole.";ref="§3, Fig 4.2.f"}
+        else{T="Tamas predominant";X="Persistence, density, structure. In proper proportion it is indispensable. It becomes problematic only when it dominates to the exclusion of the other two.";ref="§3"}
+      } else {
+        if(V.t<=3&&V.s<=3){T="Rajasic drift: rhythm overrunning form";X="Activity has become restlessness and rhythm agitation. The energy outruns the structure that holds it, and integration is fraying.";ref="§4, Fig 4.2.f"}
+        else{T="Rajas predominant";X="Dynamism, movement, energy. In proper proportion it keeps the architecture alive. It becomes problematic when it dominates.";ref="§4"}
+      }
+    } else if(tops.length===2){
+      var low=["t","r","s"].filter(function(f){return tops.indexOf(f)<0})[0];
+      if(V[low]<=m-3){
+        if(low==="t"){T="Insufficient tamas";X="The lesson says this may be ungrounded: unable to hold form, scattered, lacking the structural stability to sustain anything."}
+        else if(low==="r"){T="Insufficient rajas";X="The lesson says this may be lethargic: unable to mobilise, lacking the dynamism to engage life."}
+        else{T="Insufficient sattva";X="The lesson says this may be incoherent: caught between rigid form and frantic activity, with no integrating axis to hold things together."}
+        ref="§9";
+      } else {T="A mixed proportion";X="Ask the lesson’s question: which strand is over- or under-expressed here, now?";ref="§9"}
+    } else {T="A mixed proportion";X="Ask the lesson’s question: which strand is over- or under-expressed here, now?";ref="§9"}
+    $("reading").innerHTML="<b>"+T+"</b><span>"+X+"</span><span class=\"ref\">"+ref+" · structural, never moral · a moment, not a person</span>";
+  }
+  function floors(){
+    var h="";["t","r","s"].forEach(function(f){if(V[f]===1)h+='<p class="'+f+'">'+FLOOR[f]+"</p>"});
+    if(V.s>=6&&V.t===1&&V.r===1)h+='<p class="s">With form and rhythm both at their floor, sattva is just an empty axis (§9).</p>';
+    if(!h)h='<p>Drag any strand to the left. Each one stops before zero, because none of them can be taken away.</p>';
+    $("floorMsg").innerHTML=h;
+  }
+  function paint(){
+    ["t","r","s"].forEach(function(f){$("sl_"+f).value=V[f];$("o_"+f).textContent=word(V[f])});
+    braidPaint();reading();floors();
+  }
+  host.addEventListener("input",function(e){var k=e.target.getAttribute("data-k");if(!k)return;V[k]=+e.target.value;paint()});
+  /* stories */
+  var ST=[
+    {txt:"Your friend has not got out of bed for three days. Her appetite has flattened. She moves slowly, speaks in a monotone, and struggles to engage even with things that used to delight her.",
+     ans:"a",set:{t:9,r:2,s:2},
+     ok:"Her tamas is dominant, her rajas is low, and her sattva cannot find an axis to hold. The lesson calls this tamasic drift (§9).",
+     no:{b:"Look again: the rhythm has gone out of her body rather than run ahead of it.",c:"Stillness that integrates would show engagement with life. Here the form has become heavy and inert."}},
+    {txt:"Your colleague cannot stop. His mind races, he sleeps four hours, he checks his phone every three minutes, and his attention scatters before any one thing can take root.",
+     ans:"b",set:{t:3,r:9,s:2},
+     ok:"His rajas has overrun his tamas, and his sattva has lost its grip. The lesson calls this rajasic drift (§9).",
+     no:{a:"Here the rhythm is not sunk but accelerated past what the form can hold.",c:"This is not integrated: the speed has outrun anything that could hold it."}},
+    {txt:"Your acquaintance meditates daily and reads the spiritual classics, but his closest friendships have quietly lapsed, and he cannot remember the last time he shared a meal or an evening with anyone. He describes what he has cultivated as “stillness”.",
+     ans:"a",set:{t:8,r:2,s:3},
+     ok:"From outside it looks like sattva. The lesson reads it structurally as tamasic withdrawal that has taken on the outer form of contemplation: the energy is low, the engagement collapsed, the relationships under-tended. Genuine sattva integrates form and rhythm; it does not retreat from them. This says nothing against contemplative practice itself: the lesson says genuine practice strengthens engagement with life (§5, §9).",
+     no:{b:"Nothing in the story suggests racing rhythm. The energy is depressed and the engagement has collapsed.",c:"That is how he describes it, and it is a natural reading. But look at what has happened to his life: genuine practice makes a person more, not less, available to embodied life."}}
+  ];
+  var OPT=[["a","Tamasic drift","form heavy, rhythm sunk, no axis to hold it"],["b","Rajasic drift","rhythm overrunning form, integration fraying"],["c","Sattva","stillness that integrates form and rhythm"]];
+  var vi=0,wrong={};
+  function story(){
+    $("vgText").textContent=ST[vi].txt;
+    var done=wrong.done;
+    $("vgChoices").innerHTML=OPT.map(function(o){var dis=done||wrong[o[0]];return '<button class="choice'+(done&&o[0]===ST[vi].ans?" right":"")+'" data-k="'+o[0]+'"'+(dis?" disabled":"")+"><b>"+o[1]+"</b><span>"+o[2]+"</span></button>"}).join("");
+    var fb=$("vgFb");
+    if(done){fb.className="fb show";fb.innerHTML="<span>"+ST[vi].ok+'</span><span>None of this is a moral judgement. Each story shows a recognisable disequilibrium of the three strands, and the sliders above now show it. A reading is of a moment, not of a person.</span><span class="ref">§5, §9, Fig 4.2.f</span>'}
+    else if(wrong.msg){fb.className="fb show";fb.innerHTML="<span>"+wrong.msg+"</span>"}
+    else{fb.className="fb";fb.innerHTML=""}
+  }
+  $("vgSeg").addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;vi=+b.getAttribute("data-v");wrong={};
+    [].forEach.call($("vgSeg").children,function(x){x.setAttribute("aria-pressed",String(x===b))});story()});
+  $("vgChoices").addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;var k=b.getAttribute("data-k");
+    if(k===ST[vi].ans){wrong.done=true;V.t=ST[vi].set.t;V.r=ST[vi].set.r;V.s=ST[vi].set.s;paint()}
+    else{wrong[k]=true;wrong.msg=ST[vi].no[k]}
+    story()});
+  paint();story();
+})();
+})();
+
+</script>
+<script>
+(function(){
+"use strict";
+
+var EMBED=/[?&]embed=1/.test(location.search);
+function send(m){if(EMBED){try{parent.postMessage(m,"*")}catch(e){}}}
+send({type:"ready"});
+/* tell the host page how tall this page is, so the embed grows instead of scrolling inside its frame */
+(function(){
+  var last=0;
+  function h(){var d=document.documentElement,b=document.body;var v=Math.ceil(Math.max(d.scrollHeight,b.scrollHeight,b.offsetHeight));if(v&&Math.abs(v-last)>1){last=v;send({type:"height",height:v})}}
+  window.addEventListener("load",h);window.addEventListener("resize",h);
+  if(window.ResizeObserver)new ResizeObserver(h).observe(document.body);
+  setInterval(h,700);h();
+})();
+
+})();
+</script>
+</body></html>

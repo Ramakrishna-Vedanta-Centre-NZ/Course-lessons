@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Understanding Check: Module 4</title>
+<meta name="description" content="Fifteen optional questions across Lessons 4.1 to 4.7, Module 4, Human Condition: Drift, Suffering &amp; Wellbeing, from The Mind in the Light of Modern and Spiritual Sciences.">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400..700;1,400..700&family=Noto+Sans:wght@400..700&display=swap">
+<style>
+:root{
+ --bg:#FBF5EA; --surface:#FFFDF8; --ink:#1E1E1E; --muted:#5A5A5A; --line:#E6DAC3; --tint:#F3EAD3;
+ --navy:#12285A; --gold:#C9A24A; --goldt:#6B4E0E; --qink:#13295B;
+ --res:#12285A; --ok:#2F5A2E; --okbg:#E3EDDF; --no:#C2557A; --nobg:#F6E3EA;
+ --display:"Noto Serif",Georgia,serif; --body:"Noto Sans",system-ui,-apple-system,"Segoe UI",sans-serif; --mono:"Noto Sans",system-ui,sans-serif;
+}
+@media (prefers-color-scheme: dark){
+ :root:not([data-theme="light"]){
+  --bg:#0B1A3D; --surface:#12285A; --ink:#FBF5EA; --muted:#C9C3B3; --line:#2B4686; --tint:#1D3770;
+  --goldt:#E6C36A; --qink:#FBF5EA; --res:#E6C36A; --ok:#8FD79A; --okbg:#1E3A2A; --no:#F08FB0; --nobg:#4A2236; color-scheme:dark;
+ }
+}
+:root[data-theme="dark"]{
+ --bg:#0B1A3D; --surface:#12285A; --ink:#FBF5EA; --muted:#C9C3B3; --line:#2B4686; --tint:#1D3770;
+ --goldt:#E6C36A; --qink:#FBF5EA; --res:#E6C36A; --ok:#8FD79A; --okbg:#1E3A2A; --no:#F08FB0; --nobg:#4A2236; color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;
+ padding:18px max(14px,env(safe-area-inset-right,0px)) 30px max(14px,env(safe-area-inset-left,0px))}
+.wrap{max-width:720px;margin:0 auto;display:flex;flex-direction:column;gap:16px}
+h1{font-family:var(--display);font-weight:500;font-size:clamp(24px,5vw,32px);line-height:1.15;margin:0}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.sub{color:var(--muted);margin:0}
+.bar{height:6px;background:var(--line);border-radius:3px;overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--res);transition:width .25s}
+.meta{display:flex;justify-content:space-between;font-size:13px;color:var(--muted)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:20px 18px;display:flex;flex-direction:column;gap:14px}
+.qn{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:0}
+.q{font-family:var(--display);font-size:clamp(19px,3.4vw,22px);line-height:1.35;margin:0}
+.opts{display:flex;flex-direction:column;gap:10px}
+.opt{font:inherit;text-align:left;color:var(--ink);background:var(--surface);border:2px solid var(--line);border-radius:10px;padding:12px 14px;cursor:pointer;width:100%}
+.opt:hover:not(:disabled){border-color:var(--res)}
+.opt.right{border-color:var(--ok);background:var(--okbg)}
+.opt.wrong{border-color:var(--no);background:var(--nobg)}
+.opt:disabled{cursor:default}
+input.fill{font:inherit;width:100%;padding:12px 14px;border:2px solid var(--line);border-radius:10px;background:var(--surface);color:var(--ink)}
+input.fill:focus{outline:none;border-color:var(--res)}
+.btn{font:inherit;font-weight:600;font-size:15px;color:var(--surface);background:var(--ink);border:0;border-radius:8px;padding:11px 20px;cursor:pointer;text-decoration:none;display:inline-block}
+.btn.alt{background:var(--surface);color:var(--ink);border:1px solid var(--ink)}
+button:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(--res);outline-offset:2px}
+.fb{display:none;padding:12px 14px;border-radius:10px;font-size:15.5px;line-height:1.5}
+.fb.ok{display:block;background:var(--okbg);border-left:5px solid var(--ok)}
+.fb.no{display:block;background:var(--nobg);border-left:5px solid var(--no)}
+.fb b{display:block;margin-bottom:2px}
+.nav{display:flex;justify-content:flex-end}
+.res{text-align:center}
+.score{font-family:var(--display);margin:4px 0}
+.score .big{font-size:60px;line-height:1}
+.score .of{font-size:26px;color:var(--muted)}
+.band{font-family:var(--display);font-size:22px;margin:0}
+.band.good{color:var(--ok)} .band.rev{color:var(--res)}
+.res p{margin:0}
+.revisit{text-align:left;background:var(--tint);border-radius:10px;padding:12px 14px}
+.revisit h2,.review h2{font-family:var(--display);font-size:18px;margin:0 0 6px}
+.revisit ul{margin:0;padding-left:20px}
+.review{text-align:left;display:flex;flex-direction:column;gap:8px}
+.review .item{padding:10px 12px;border-radius:8px;font-size:15px;line-height:1.45}
+.review .r{background:var(--okbg)} .review .w{background:var(--nobg)}
+.review .item small{display:block;color:var(--muted);margin-top:4px}
+.acts{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+.saved{font-size:14px;color:var(--muted)}
+footer{text-align:center;font-size:13px;color:var(--muted)}
+footer a{color:var(--res)}
+.wrap header{background:#12285A;color:#FBF5EA;text-align:center;padding:18px 16px 20px;border-radius:14px}
+.wrap header img{width:56px;height:66px;object-fit:contain;display:block}
+.wrap header .logos{display:flex;align-items:center;justify-content:center;gap:18px}
+.wrap header img.rit{width:86px;height:65px}
+.wrap header .eyebrow{color:#E6C36A;font-weight:700;letter-spacing:3px;margin:8px 0 0}
+.wrap header h1{color:#FBF5EA;font-weight:700;margin:6px 0 4px}
+.wrap header .course{font-size:14px;color:#E6C36A;margin:0 0 8px;font-weight:600}
+.wrap header .sub{color:#F1ECDF;font-size:15px}
+.bar i{background:var(--gold)!important}
+.opt:hover:not(:disabled){border-color:var(--gold)!important}
+input.fill:focus{border-color:var(--gold)!important}
+.q{color:var(--qink)}
+.qn{color:var(--goldt);font-weight:700}
+.btn{background:var(--navy)!important;color:#FBF5EA!important}
+.btn.alt{background:transparent!important;color:var(--ink)!important;border:1px solid var(--navy)!important}
+.card{box-shadow:0 2px 8px rgba(19,41,91,.08)}
+</style>
+</head>
+<body>
+<div class="wrap">
+ <header>
+  <div class="logos"><img src="vedantanz-logo.png" alt="Ramakrishna Vedanta NZ emblem" width="56" height="66"><img class="rit" src="ritam-wordmark.png" alt="Ritam" width="86" height="65"></div>
+  <p class="eyebrow">Understanding check · Module 4</p>
+  <h1>Human Condition: Drift, Suffering &amp; Wellbeing</h1>
+  <p class="course">The Mind in the Light of Modern and Spiritual Sciences · Advanced</p>
+  <p class="sub">Fifteen questions across Lessons 4.1 to 4.7. This check is optional. Take it as often as you like; each answer comes with its explanation and the lesson and section to revisit.</p>
+ </header>
+ <div class="bar"><i id="prog"></i></div>
+ <div class="meta"><span id="pos"></span><span id="sc"></span></div>
+ <div id="app"></div>
+ <footer>Understanding check · <a href="https://www.vedanta.nz">www.vedanta.nz</a>. Privacy: when you are signed in, your name, email, answers and score are saved to your member record. Only you and the course instructors can see them. They are not shared or ranked.</footer>
+</div>
+<script>
+/* Question bank. Types: mc (options o, correct index a; options are shuffled on display), judge (statement q; a: 0 holds, 1 does not hold, 2 holds only in part), fill (accepted answers a[], show).
+   e = explanation, c = idea to revisit, s = [lesson, section] reference (null = the module as a whole). Content from the key ideas and corrected misconceptions of Lessons 4.1 to 4.7, verified against the live lesson text. */
+var META={code:'ADV-M4',lesson:'M4',quizTitle:"Understanding check: Module 4, Human Condition: Drift, Suffering & Wellbeing",programme:'The Mind in the Light of Modern and Spiritual Sciences (Advanced)',cut:75};
+var Q=[
+{"t": "mc", "q": "Lesson 4.1 walks three connected questions: Who am I?, Where do I come from?, and What holds it all together? Which set of answers does its summary give?", "o": ["A manifest being on a spectrum with awareness at one pole and form at the other; an unmanifest source; and Ritam, right-fittedness", "A body that produces awareness; an unmanifest source that is a separate reality above the world; and Ritam as a law imposed on matter from outside", "A mind located inside a body; a vacuum that is empty space and nothing more; and Ritam as a ritual order kept only by correct performance", "A stream of thoughts with no further ground; a source that is diminished by manifestation; and Ritam as the average of every rhythm in nature"], "a": 0, "e": "The summary of Lesson 4.1 answers: a manifest being arrayed on a spectrum from gross to subtle, with awareness at one pole and form at the other; an unmanifest source, recognised as the vacuum state in modern physics and as Ātman / Brahman / Para in the contemplative traditions; and Ritam, right-fittedness, operating at every scale. Lesson 4.2 then draws the architecture that 4.1 points at.", "c": "Source, spectrum and Ritam: the three answers of Lesson 4.1", "s": ["4.1", "8"]},
+{"t": "judge", "q": "“According to Lesson 4.1, a person suffers because they have somehow left Being for Becoming.”", "a": 1, "e": "Being and Becoming are one reality in two views, spectral and temporal, and both are continuously present in every moment of experience. The lesson says that when a person suffers it is because the rhythm between the two views, the fluent movement of attention from the spectral to the temporal and back, has fallen out of fittedness. Lesson 4.7 names that loss of fit anṛta.", "c": "Being and Becoming are never left; what drifts is the fit between the two views", "s": ["4.1", "3"]},
+{"t": "fill", "q": "In the Ritam Diagram of Lesson 4.2, the doubling loop {1, 2, 4, 8, 7, 5} is the strand of form, which Sāṅkhya names ______.", "a": ["tamas"], "show": "tamas", "e": "Doubling 1, 2, 4, 8, 16, 32 and reducing each number to a single digit gives a closed six-step cycle, {1, 2, 4, 8, 7, 5}. This is form-giving recurrence, the signature of tamas, the principle of persistence, density and structural stability. The lesson stresses that tamas is not a negative quality: without it no shape would hold.", "c": "The three families of the diagram: form (tamas), rhythm (rajas), equilibrium (sattva)", "s": ["4.2", "3"]},
+{"t": "mc", "q": "Lessons 4.2 and 4.3 show that multiplying by 3 (with digital roots) lifts each family to the next. Which sequence is right?", "o": ["Each member of {1, 2, 4, 8, 7, 5} lands on {3, 6}, then {3, 6} on 9, and 9 on itself", "Every member of {3, 6} lands on {1, 2, 4, 8, 7, 5}, and 9 lands on one of them in turn", "Multiplying by 3 cycles within {1, 2, 4, 8, 7, 5}, just as doubling does, and never leaves the loop", "The lift continues past 9: 9, trebled, lands on 0, so that trebling itself reaches the source"], "a": 0, "e": "Trebling lifts: every member of {1, 2, 4, 8, 7, 5} lands on {3, 6}, then {3, 6} lands on 9, and 9 × 3 = 27 has digital root 9, so 9 returns to itself. Lesson 4.3 uses the same arithmetic for its cascade and says that the final movement, 9 into 0, is not another trebling but involution.", "c": "Doubling holds, trebling lifts: form to rhythm to the integrating axis", "s": ["4.2", "7"]},
+{"t": "judge", "q": "“In Lesson 4.2, the three guṇas are three indispensable strands, not valences: the diagnostic question is which strand is over- or under-expressed, not which is good.”", "a": 0, "e": "The lesson calls the valence reading a deep mistake. You cannot escape tamas, or you would have no body and no continuity; you cannot escape rajas, or you would have no breath or movement; and sattva alone is an empty axis. A reading names a recognisable disequilibrium of the strands, a structural diagnosis and never a moral judgement.", "c": "Three strands, not three valences", "s": ["4.2", "9"]},
+{"t": "mc", "q": "Lessons 4.3 and 4.4 place the inner instrument in the wave equation. Which pairing is right?", "o": ["The body and prāṇa set G(t); manas sets the frequency fₘ; chitta’s saṁskāras form h(t); ahaṁkāra is the standing tilt Δφ", "Manas sets G(t), and the body and prāṇa set the frequency fₘ; buddhi’s discrimination forms h(t); ahaṁkāra is the noise n(t)", "Buddhi sets the frequency fₘ and chitta sets G(t); the body forms h(t); manas is the standing tilt Δφ of the attention wave", "The body and prāṇa set the frequency fₘ, and ahaṁkāra sets G(t); manas forms h(t), and buddhi is the standing tilt Δφ"], "a": 0, "e": "The summary of Lesson 4.4: manas sets the frequency fₘ, the body and prāṇa set G(t), chitta is the field whose saṁskāras form h(t), buddhi corrects the phase and reads the carrier, and ahaṁkāra is the standing tilt Δφ. The equation tells us what is behaving; the antaḥkaraṇa tells us who is doing what.", "c": "The equation and the inner instrument: who sets which term", "s": ["4.4", "4"]},
+{"t": "judge", "q": "“In the wave equation of Lesson 4.3, citta-vṛtti-nirodha stills the fluctuation of the envelope, and it does so by destroying the resultant wave.”", "a": 2, "e": "The first half holds: nirodha is the stilling of the envelope’s fluctuation, the felt flicker of duality. The second half does not: the lesson says it is not the destruction of the resultant but the settling of its clarity layer into constancy. When the frequencies align the beat stops and the resultant holds a constant fullness; it is not blanked out.", "c": "Nirodha settles the clarity layer into constancy; it does not destroy the resultant", "s": ["4.3", "3"]},
+{"t": "judge", "q": "“In Lesson 4.4, ahaṁkāra is the standing phase-tilt Δφ that the attention wave carries into every meeting; it also tags and appropriates, weaving a continuous ‘me’ across moments.”", "a": 0, "e": "The lesson gives ahaṁkāra two faces. In the equation it is the standing tilt, brought to the meeting and not produced by it. In the antaḥkaraṇa it is the self-tagging function, which takes each tilted meeting and weaves it into a continuous narrative self. Both are real, and each is incomplete without the other.", "c": "Ahaṁkāra: the standing tilt in the equation, and the tagging function in the antaḥkaraṇa", "s": ["4.4", "4"]},
+{"t": "judge", "q": "“In the default, bottom-up regime of Lessons 4.3 and 4.4, buddhi governs manas and the body simply follows.”", "a": 1, "e": "In the bottom-up regime the hierarchy has inverted: the body’s autonomic state drives manas and the gain G(t) before attention can steady it, and buddhi loses its grip on the reins. The lesson says these are not failures of moral character but states in which the architecture’s hierarchy has temporarily inverted, and that practice restores the direction of flow.", "c": "Top-down and bottom-up regimes: who steadies whom", "s": ["4.4", "3"]},
+{"t": "mc", "q": "Where does the filter h(t) of Lessons 4.3 and 4.4 get its shape, according to Lesson 4.5?", "o": ["From the totality of one’s saṁskāras, with the vāsanās adding broad dispositional colouring", "From the object-wave itself, which carries its own filter with it into every meeting that occurs", "From buddhi’s discernment in the present moment, which builds the filter afresh each time it meets a signal", "From the noise term n(t), which accumulates over time into a standing pattern"], "a": 0, "e": "Lesson 4.5 says the structural content of h(t) is the totality of one’s saṁskāras. The strong, well-worn loops contribute large-amplitude shaping, the weaker and more recent ones smaller perturbations, and the vāsanās the broad colouring that runs through the whole filter. Lesson 4.3 adds that the work is not removing h(t) but reshaping its guṇa-mix.", "c": "Where h(t) comes from: the totality of one’s saṁskāras", "s": ["4.5", "3"]},
+{"t": "mc", "q": "Lessons 4.5 and 4.7 name three modes of the saṁskāric inheritance: sañcita, prārabdha and āgāmi. Where does the practitioner’s direct agency lie?", "o": ["In the saṁskāras being formed now, through present action and response", "In choosing which part of the inheritance will ripen as prārabdha in this life", "In removing the accumulated reservoir, sañcita, before any of it can ripen", "Nowhere: the lessons describe the whole account as a fixed determinism"], "a": 0, "e": "Lesson 4.5 says that saṁskāra-formation is the only mode over which the practitioner has direct agency, and Lesson 4.7 repeats it: two of the three are inherited, and the third is where agency operates, in the saṁskāras being formed right now. The account is, in Lesson 4.5’s words, neither determinism nor voluntarism.", "c": "Agency lives in present saṁskāra-formation", "s": ["4.5", "5"]},
+{"t": "judge", "q": "“Resonance is neutral: a nervous system phase-locks with whatever it is coupled to, a coherent breath or an agitated feed alike, and so it makes no difference what we couple to.”", "a": 2, "e": "The first half holds: the mechanism of resonance does not care what it couples to, and in every case the system phase-locks with what holds it. The second half does not: the direction of the flow depends entirely on what you are coupled to, and Lesson 4.6 calls choosing what to resonate with a yogic practice in its own right.", "c": "Resonance is neutral, but the direction depends on what we couple to", "s": ["4.6", "4"]},
+{"t": "mc", "q": "In Lesson 4.6, what is Ṛta as a state of a person?", "o": ["The natural baseline of a system in resonant fit, approached and returned to", "A peak state of enlightenment that is reached once and then held permanently", "An ideal imposed from outside, against which a life is measured and found wanting", "A state of complete freedom from fatigue, reactivity and difficulty of every kind"], "a": 0, "e": "Lesson 4.6 says Ṛta is not a peak state, not enlightenment, not a permanent condition and not an achievement sustained by extraordinary effort. It is the natural baseline of a system in resonant fit and, like all natural baselines, it is approached rather than arrived at, and returned to after being lost.", "c": "Ṛta as a natural baseline, approached and returned to", "s": ["4.6", "3"]},
+{"t": "mc", "q": "Lessons 4.3, 4.4 and 4.7 speak with one voice about a mind in which the noise term n(t) is high, or a system in anṛta. Which statement matches?", "o": ["Misfitted, not broken: a structural condition, not a defect of the person", "It is evidence of a moral failing that better discipline would remove", "It is permanent damage to the architecture that practice can only work around", "It is a sign that the filter h(t) should be removed rather than reshaped"], "a": 0, "e": "Lesson 4.3 says the mind is not broken when n(t) is high but misfitted, and Lesson 4.4 repeats that misfit can be re-fitted. Lesson 4.7 names the condition anṛta and frames it as a structural condition of misfit, not a defect of the person who experiences it. It also says anṛta can arise through no fault of the system.", "c": "Misfit is structural, not a defect of the person", "s": ["4.7", "2"]},
+{"t": "mc", "q": "Lessons 4.4 and 4.7 describe how anṛta and Ritam are related. Which statement matches?", "o": ["Anṛta is Ritam with the wrong predominance pattern, so reintegration restores rather than creates", "Anṛta is the opposite of Ritam, so restoring fit means replacing the whole architecture with a new one", "Anṛta and Ritam are unrelated states, so nothing in the one helps to find the way to the other", "Ritam belongs only to those who have never drifted, and cannot be returned to once it is lost"], "a": 0, "e": "Lesson 4.4 says anṛta is not the opposite of Ritam: it is Ritam with the wrong predominance pattern, and reintegration is not creation. Lesson 4.7 says the same from the side of return: the same rhythmic architecture that generates anṛta when disrupted generates Ritam when restored, and drift is recoverable.", "c": "Drift and return: the same architecture, a different predominance pattern", "s": ["4.4", "6"]}
+];
+(function(){
+ var q=new URLSearchParams(location.search);
+ if(q.get('theme')==='light')document.documentElement.setAttribute('data-theme','light');
+ if(q.get('theme')==='dark')document.documentElement.setAttribute('data-theme','dark');
+})();
+var i=0,right=0,ans=[],saved=false;
+var app=document.getElementById('app');
+var JL=['True','False','True only in part'];
+function norm(s){return s.normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().replace(/[^a-z]/g,'')}
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;')}
+function hdr(){
+ document.getElementById('pos').textContent=i<Q.length?'Question '+(i+1)+' of '+Q.length:'Finished';
+ document.getElementById('sc').textContent=i<Q.length?right+' right so far':'';
+ document.getElementById('prog').style.width=(100*Math.min(i,Q.length)/Q.length)+'%';
+}
+function send(m){try{window.parent.postMessage(m,'*')}catch(e){}}
+function ref(s){return s?'Lesson '+s[0]+', section'+(/ and /.test(s[1])?'s ':' ')+s[1]:'the module as a whole'}
+function show(){
+ hdr();
+ if(i>=Q.length){return result()}
+ var qq=Q[i];
+ var h='<div class="card"><p class="qn">Question '+(i+1)+'</p><p class="q">'+esc(qq.q)+'</p>';
+ if(qq.t==='mc'){h+='<div class="opts">';var ord=qq.o.map(function(o,k){return k});for(var r=ord.length-1;r>0;r--){var s2=Math.floor(Math.random()*(r+1)),t2=ord[r];ord[r]=ord[s2];ord[s2]=t2}ord.forEach(function(k,pos){h+='<button class="opt" data-k="'+k+'">'+String.fromCharCode(65+pos)+'. '+esc(qq.o[k])+'</button>'});h+='</div>'}
+ else if(qq.t==='judge'){h+='<div class="opts">';JL.forEach(function(o,k){h+='<button class="opt" data-k="'+k+'">'+o+'</button>'});h+='</div>'}
+ else{h+='<input class="fill" id="fill" type="text" autocomplete="off" autocapitalize="off" placeholder="Type your answer"><div><button class="btn" id="chk">Check answer</button></div>'}
+ h+='<div class="fb" id="fb" role="status"></div><div class="nav"><button class="btn" id="nx" style="display:none">'+(i===Q.length-1?'See my result':'Next question')+'</button></div></div>';
+ app.innerHTML=h;
+ if(qq.t!=='fill'){app.querySelectorAll('.opt').forEach(function(b){b.onclick=function(){mark(+b.dataset.k===qq.a,b)}})}
+ else{var f=document.getElementById('fill');
+  document.getElementById('chk').onclick=function(){
+   if(!f.value.trim()){f.focus();return}
+   var ok=qq.a.some(function(x){return norm(f.value)===norm(x)});
+   f.disabled=true;this.style.display='none';mark(ok,null,f.value)};
+  f.onkeydown=function(e){if(e.key==='Enter')document.getElementById('chk').click()};f.focus()}
+ document.getElementById('nx').onclick=function(){i++;show();window.scrollTo(0,0)};
+}
+function mark(ok,btn,typed){
+ started=true;
+ var qq=Q[i];if(ok)right++;ans.push({q:i+1,ok:ok,given:typed!==undefined?typed:(btn?btn.textContent:'')});
+ if(qq.t!=='fill'){app.querySelectorAll('.opt').forEach(function(b,k){b.disabled=true;if(+b.dataset.k===qq.a)b.classList.add('right')});if(!ok&&btn)btn.classList.add('wrong')}
+ var right_ans=qq.t==='mc'?qq.o[qq.a]:qq.t==='judge'?JL[qq.a]:qq.show;
+ var fb=document.getElementById('fb');fb.className='fb '+(ok?'ok':'no');
+ fb.innerHTML='<b>'+(ok?'Right.':'Not quite. The answer is: '+esc(right_ans))+'</b>'+esc(qq.e)+' <i>('+ref(qq.s)+'.)</i>';
+ document.getElementById('nx').style.display='inline-block';hdr();
+ send({type:'progress',code:META.code,state:{i:i+1,right:right,ans:ans}});
+}
+function result(){
+ var n=Q.length,p=Math.round(100*right/n),good=p>=META.cut;
+ var h='<div class="card res"><p class="qn">Your result</p><p class="score"><span class="big">'+p+'%</span></p>'+
+  '<p class="band '+(good?'good':'rev')+'">'+(good?'Well grasped':'Revisit these ideas')+'</p>'+
+  '<p>'+right+' of '+n+' questions right.</p>';
+ var miss=[];Q.forEach(function(qq,k){if(!ans[k]||!ans[k].ok)miss.push(qq)});
+ if(miss.length){h+='<div class="revisit"><h2>Ideas to revisit</h2><ul>';miss.forEach(function(qq){h+='<li>'+esc(qq.c)+' <i>('+ref(qq.s)+')</i></li>'});h+='</ul></div>'}
+ else{h+='<div class="revisit"><h2>Nothing to revisit</h2><p>Every idea in this check was answered correctly.</p></div>'}
+ h+='<div class="review"><h2>Every question, with its answer</h2>';
+ Q.forEach(function(qq,k){var ok=ans[k]&&ans[k].ok;var a=qq.t==='mc'?qq.o[qq.a]:qq.t==='judge'?JL[qq.a]:qq.show;
+  h+='<div class="item '+(ok?'r':'w')+'">'+(ok?'Right. ':'Not quite. ')+'<b>Q'+(k+1)+'</b> '+esc(qq.q)+'<br>Answer: '+esc(a)+'<small>'+esc(qq.e)+' ('+ref(qq.s)+')</small></div>'});
+ h+='</div><p class="saved" id="savedmsg"></p><div class="acts"><button class="btn" id="again">Take it again</button></div></div>';
+ app.innerHTML=h;
+ document.getElementById('again').onclick=function(){i=0;right=0;ans=[];saved=false;show();window.scrollTo(0,0)};
+ send({type:'quizResult',code:META.code,title:META.quizTitle,programme:META.programme,score:right,maxScore:n,percent:p,questionsCorrect:right,questionCount:n,answers:ans});
+ send({type:'progress',code:META.code,state:null});
+}
+window.addEventListener('message',function(ev){
+ var d=ev.data;if(!d||!d.type)return;
+ var m=document.getElementById('savedmsg');
+ if(d.type==='saved'&&m){m.textContent='Your result has been saved to your member record.'}
+ if(d.type==='saveError'&&m){m.textContent='Your result could not be saved this time. You can take the check again.'}
+ if(d.type==='notMember'&&m){m.textContent='Sign in as a member to have your result saved.'}
+ if(d.type==='resume'&&d.state&&d.state.i>0&&d.state.i<Q.length&&!started){offerResume(d.state)}
+});
+var started=false;
+function offerResume(st){
+ var h='<div class="card"><p class="qn">Welcome back</p><p class="q">You have answered '+st.i+' of '+Q.length+' questions so far.</p><p>Would you like to continue where you left off, or start again from the beginning?</p><div class="acts"><button class="btn" id="cont">Continue from question '+(st.i+1)+'</button><button class="btn alt" id="rest">Start again</button></div></div>';
+ app.innerHTML=h;
+ document.getElementById('cont').onclick=function(){i=st.i;right=st.right||0;ans=st.ans||[];started=true;show()};
+ document.getElementById('rest').onclick=function(){i=0;right=0;ans=[];started=true;show()};
+}
+show();
+send({type:'ready'});
+</script>
+</body>
+</html>
