@@ -1,0 +1,551 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Practice: Lesson 3.4, Lower the Floor</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans:wght@400..700&family=Noto+Serif:ital,wght@0,400..700;1,400..700&display=swap">
+<style>
+:root{
+  --bg:#FBF5EA; --surface:#FFFDF8; --ink:#1E1E1E; --muted:#5A5A5A; --line:#E6DAC3; --tint:#F3EAD3; --navy:#12285A; --gold:#C9A24A; --goldt:#6B4E0E;
+  --obj:#0B8686; --att:#C95F06; --res:#2E3192; --env:#C0245B; --ok:#1B7A52;
+  --display:"Noto Serif",Georgia,"Times New Roman",serif;
+  --body:"Noto Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0B1A3D; --surface:#12285A; --ink:#FBF5EA; --muted:#C9C3B3; --line:#2B4686; --tint:#1D3770; --gold:#E6C36A; --goldt:#E6C36A;
+    --obj:#46CFC6; --att:#F5A04D; --res:#A3AAFF; --env:#FF7BA9; --ok:#5BD59B; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0B1A3D; --surface:#12285A; --ink:#FBF5EA; --muted:#C9C3B3; --line:#2B4686; --tint:#1D3770; --gold:#E6C36A; --goldt:#E6C36A;
+  --obj:#46CFC6; --att:#F5A04D; --res:#A3AAFF; --env:#FF7BA9; --ok:#5BD59B; color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;
+  padding-left:max(14px,env(safe-area-inset-left,0px));padding-right:max(14px,env(safe-area-inset-right,0px));padding-block:22px 40px}
+.wrap{max-width:900px;margin:0 auto;display:flex;flex-direction:column;gap:32px}
+h1,h2,h3{font-family:var(--display);font-weight:500;text-wrap:balance;margin:0;letter-spacing:-.01em}
+h1{font-size:clamp(30px,5.4vw,44px);line-height:1.06}
+h2{font-size:clamp(23px,3.4vw,29px);line-height:1.15}
+h3{font-size:19px;line-height:1.25}
+p{margin:0}
+sub{font-size:.72em;line-height:0}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.lede{font-size:17.5px;max-width:64ch}
+.intro{max-width:66ch;color:var(--muted)}
+header{display:flex;flex-direction:column;gap:12px}
+section{display:flex;flex-direction:column;gap:18px;min-width:0}
+.sym{font-family:var(--mono);font-size:.92em;white-space:nowrap}
+.k-obj{color:var(--obj)} .k-att{color:var(--att)} .k-res{color:var(--res)} .k-env{color:var(--env)}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px;display:flex;flex-direction:column;gap:14px;min-width:0}
+.bar{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;justify-content:space-between}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--bg)}
+.seg button{font:inherit;font-size:14px;color:var(--muted);background:transparent;border:0;padding:8px 13px;cursor:pointer}
+.seg button+button{border-left:1px solid var(--line)}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--surface)}
+button:focus-visible,input:focus-visible{outline:2px solid var(--res);outline-offset:2px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{font:inherit;font-size:14px;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:7px 13px;cursor:pointer;display:inline-flex;gap:8px;align-items:center}
+.chip i{font-style:normal;font-family:var(--mono);font-size:11px;color:var(--muted)}
+.chip[aria-pressed="true"]{background:var(--res);border-color:var(--res);color:#fff}
+.chip[aria-pressed="true"] i{color:#fff;opacity:.8}
+.chip:disabled{cursor:default}
+.chip.reached:not([aria-pressed="true"]){border-color:var(--res)}
+.btn{font:inherit;font-size:14px;color:var(--ink);background:var(--surface);border:1px solid var(--ink);border-radius:8px;padding:8px 16px;cursor:pointer}
+.btn.primary{background:var(--ink);color:var(--surface)}
+.btn.ghost{border-color:var(--line);color:var(--muted)}
+.scope-wrap{position:relative;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--bg)}
+canvas{display:block;width:100%}
+.playbtn{position:absolute;right:8px;bottom:8px;font:inherit;font-size:12px;background:var(--surface);color:var(--muted);border:1px solid var(--line);border-radius:6px;padding:4px 10px;cursor:pointer}
+.box{border:1px solid var(--line);border-radius:8px;background:var(--bg);padding:10px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.box .cap{font-size:12px;color:var(--muted)}
+.meters{display:flex;flex-direction:column;gap:9px}
+.meter{display:grid;grid-template-columns:1fr auto;gap:2px 8px;font-size:13px;align-items:baseline}
+.meter b{font-weight:600}
+.meter output{font-family:var(--mono);font-size:12px;color:var(--muted)}
+.meter .track{grid-column:1/-1;height:7px;background:var(--line);border-radius:4px;overflow:hidden}
+.meter .fill{height:100%;width:0;background:var(--res);border-radius:4px}
+.meter.f2 .fill{background:var(--env)} .meter.f3 .fill{background:var(--obj)}
+.slider{display:flex;align-items:center;gap:10px;flex:1 1 280px;min-width:0}
+.slider label{font-size:14px;min-width:0}
+.slider input[type=range]{flex:1;min-width:60px;accent-color:var(--res)}
+.slider small{color:var(--muted);font-size:12px;white-space:nowrap}
+.slider output{font-family:var(--mono);font-size:12.5px;color:var(--muted);min-width:46px;text-align:right}
+.readout{font-size:14px;color:var(--muted)}
+.readout b{color:var(--ink)}
+.tag{font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);border:1px solid var(--line);border-radius:4px;padding:2px 6px}
+.note{font-size:13px;color:var(--muted);max-width:70ch}
+.balance{background:var(--tint);border-radius:10px;padding:16px 18px;display:flex;flex-direction:column;gap:8px;max-width:78ch}
+footer{font-size:13px;color:var(--muted);max-width:76ch;border-top:1px solid var(--line);padding-top:12px}
+@media (max-width:640px){.panel{padding:12px}.wrap{gap:26px}}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
+
+[hidden]{display:none!important}
+:root{--c-h:var(--res);--c-ref:var(--obj);--c-over:var(--env);--c-settle:var(--att);--c-rip:var(--obj)}
+nav.parts{display:flex;flex-wrap:wrap;gap:8px 20px;margin-top:4px}
+nav.parts a{color:var(--ink);text-decoration:none;border-bottom:1px solid var(--line);padding-bottom:2px;font-size:15px}
+nav.parts a:hover,nav.parts a:focus-visible{border-color:var(--res);color:var(--res)}
+.msg{min-height:1.5em;font-size:15px}
+.fbbox{border-top:1px solid var(--line);padding-top:12px;display:flex;flex-direction:column;gap:8px;min-height:6.5em}
+.fbbox .verdict{font-family:var(--display);font-size:19px}
+.fbbox .ref{font-family:var(--mono);font-size:11px;color:var(--muted)}
+.fbbox q{font-style:italic;quotes:"“" "”"}
+.strikebar{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center}
+.chip:focus-visible,.pick:focus-visible,summary:focus-visible{outline:2px solid var(--res);outline-offset:2px}
+.scene{border-left:3px solid var(--line);padding:2px 0 2px 12px;font-family:var(--display);font-size:18.5px;line-height:1.45;min-height:5.6em}
+.picks{gap:10px}
+.pick{font:inherit;font-size:15px;color:var(--ink);background:var(--bg);border:1.5px solid var(--line);border-top-width:4px;border-radius:10px;padding:9px 14px;cursor:pointer;min-width:0}
+.pick[data-p="settle"]{border-top-color:var(--c-settle)}
+.pick[data-p="over"]{border-top-color:var(--c-over)}
+.pick[data-p="ripple"]{border-top-color:var(--c-rip)}
+.pick.wrong{opacity:.55}
+.pick.right{background:var(--surface);box-shadow:0 0 0 2px var(--ink)}
+.pick:disabled{cursor:default}
+.dots{display:flex;gap:6px}
+.dots i{width:10px;height:10px;border-radius:50%;border:1.5px solid var(--muted)}
+.dots i.done{background:var(--ink);border-color:var(--ink)}
+.dots i.cur{border-color:var(--ink);box-shadow:0 0 0 2px var(--line)}
+.brandhdr{background:#12285A;color:#FBF5EA;text-align:center;padding:18px 18px 20px;border-radius:14px;display:flex;flex-direction:column;align-items:center;gap:6px}
+.brandhdr .logos{display:flex;align-items:center;justify-content:center;gap:18px}
+.brandhdr .logos img{width:56px;height:66px;object-fit:contain;display:block}
+.brandhdr .logos img.rit{width:86px;height:65px}
+.brandhdr .eyebrow{color:#E6C36A;font-weight:700;letter-spacing:3px}
+.brandhdr h1{color:#FBF5EA;font-weight:700}
+.brandhdr .course{color:#E6C36A;font-weight:600;font-size:14px}
+.brandhdr .lede{color:#F1ECDF;font-size:15.5px;max-width:62ch}
+.brandhdr .scorenote{color:#F1ECDF;font-size:14.5px}
+nav.parts a{color:var(--ink)}
+.brandhdr nav.parts a{color:#FBF5EA;border-bottom:1px solid #E6C36A;background:none;padding-bottom:2px}
+.brandhdr nav.parts a:hover,.brandhdr nav.parts a:focus-visible{color:#E6C36A;border-color:#E6C36A}
+.tag.scored{color:var(--goldt);border-color:var(--gold)}
+.scorebox{border-left:5px solid var(--gold);background:var(--tint);border-radius:10px;padding:12px 14px;margin-bottom:14px}
+.scorebox .big{font-family:var(--display);font-size:30px;line-height:1.1;color:var(--ink)}
+.scorebox .band{font-family:var(--display);font-size:18px;margin:4px 0}
+.scorebox .band.good{color:var(--ok)}
+.scorebox .saved{font-size:13.5px;color:var(--muted)}
+.scorebox ul{margin:6px 0 0;padding-left:20px}
+
+/* PRACTICE TEMPLATE: one coloured "part" per section (part-1 .. part-4) */
+.part{--pc:#0E7A8A;--pcon:#FFFFFF;--pcbg:#E6F2F3;border:2px solid var(--pc);border-radius:14px;overflow:hidden;background:var(--pcbg)}
+.part-1{--pc:#0E7A8A;--pcbg:#E6F2F3}
+.part-2{--pc:#12285A;--pcbg:#EEF0F8}
+.part-3{--pc:#2F6B3A;--pcbg:#E6F0E3}
+.part-4{--pc:#7A2A5E;--pcbg:#F5E6F0}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .part{--pcbg:#0F2250;border-color:var(--pcl,var(--pc))}
+ :root:not([data-theme="light"]) .part-1{--pcl:#46CFC6} :root:not([data-theme="light"]) .part-2{--pcl:#E6C36A} :root:not([data-theme="light"]) .part-3{--pcl:#7FD08C} :root:not([data-theme="light"]) .part-4{--pcl:#F08CC8}}
+:root[data-theme="dark"] .part{--pcbg:#0F2250;border-color:var(--pcl,var(--pc))}
+:root[data-theme="dark"] .part-1{--pcl:#46CFC6} :root[data-theme="dark"] .part-2{--pcl:#E6C36A} :root[data-theme="dark"] .part-3{--pcl:#7FD08C} :root[data-theme="dark"] .part-4{--pcl:#F08CC8}
+.part-band{background:var(--pc);color:var(--pcon);padding:12px 16px;display:flex;align-items:center;flex-wrap:wrap;gap:6px 14px}
+.part-band h2{color:inherit;font-size:clamp(20px,3.4vw,26px);font-weight:600;flex:1 1 220px}
+.part-num{font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;font-weight:500;background:rgba(255,255,255,.18);border-radius:4px;padding:3px 9px}
+.part-band .tag{color:inherit;border-color:currentColor;background:rgba(255,255,255,.12)}
+.part-2 .part-band .tag,.part-2 .part-num{color:#E6C36A}
+.part-body{padding:16px;display:flex;flex-direction:column;gap:14px}
+.part .panel{background:var(--surface)}
+@media (max-width:640px){.part-body{padding:12px}}
+
+/* page-specific */
+q{font-style:italic;quotes:"“" "”"}
+.btn:disabled{opacity:.45;cursor:default}
+.btn[aria-pressed="true"]{background:var(--ink);color:var(--surface)}
+.controls{display:flex;flex-direction:column;gap:14px}
+.controls .slider{flex:0 0 auto;flex-wrap:wrap}
+.controls .slider label{font-weight:600;min-width:150px}
+#cv1{height:280px}
+.legend{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:13px;color:var(--muted)}
+.legend span{display:inline-flex;align-items:center;gap:7px}
+.sw{display:inline-block;width:22px;height:0;border-top:2.5px solid var(--res)}
+.sw-sig{border-top:2px dashed var(--obj)}
+.sw-floor{border-top:8px solid color-mix(in srgb,var(--env) 25%,transparent)}
+.reads{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.rd{border-top:3px solid var(--line);padding-top:7px;display:flex;flex-direction:column;gap:3px;min-width:0}
+.rd .tag{align-self:flex-start}
+.rd b{font-family:var(--display);font-size:19px;font-weight:500;line-height:1.2}
+.rd[data-r="sig"]{border-color:var(--obj)} .rd[data-r="floor"]{border-color:var(--env)} .rd[data-r="mix"]{border-color:var(--res)}
+/* part 2: the veil */
+.stage{position:relative;border:2px solid var(--line);border-radius:12px;background:var(--bg);min-height:250px;padding:22px 16px 58px;display:flex;flex-direction:column;justify-content:center;gap:18px;transition:border-color .6s,box-shadow .6s}
+.stage.seen{border-color:var(--gold);box-shadow:0 0 0 4px color-mix(in srgb,var(--gold) 22%,transparent)}
+.card{position:relative;border:1px solid var(--line);border-radius:10px;background:var(--surface);padding:12px 14px;display:flex;flex-direction:column;gap:3px;max-width:30em;width:100%;align-self:center}
+.card .cn{font-family:var(--display);font-size:22px;line-height:1.2}
+.card .cd{font-size:14px;color:var(--muted)}
+.card.faint{opacity:.62}
+.card.faint .cn{font-size:19px;font-style:italic;font-weight:400;color:var(--muted)}
+.card .st{position:relative;z-index:2;align-self:flex-start;background:var(--surface);border-radius:3px;padding:0 3px;font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.card .st.on{color:var(--ok)}
+#veil{position:absolute;inset:0;width:100%;height:100%;z-index:1;pointer-events:none;border-radius:10px}
+.framecap{position:absolute;left:12px;right:12px;bottom:8px;z-index:2;font-size:13px;color:var(--goldt);text-align:center;opacity:0;transition:opacity .6s}
+.stage.seen .framecap{opacity:1}
+/* part 3 */
+.kinds{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.kind{border:1px solid var(--line);border-radius:8px;background:var(--bg);padding:8px;display:flex;flex-direction:column;gap:4px;min-width:0}
+.kind svg{display:block;width:100%;height:auto}
+.kind b{font-size:14px}
+.kind span{font-size:12.5px;color:var(--muted);line-height:1.35}
+.pick{display:inline-flex;align-items:center;gap:8px;border-top-width:1.5px}
+.pick svg{width:46px;height:16px;flex:none}
+.pick.right{background:var(--ok);border-color:var(--ok);color:#fff;box-shadow:none}
+.pick.right svg path{stroke:#fff}
+@media (max-width:640px){
+  #cv1{height:240px}
+  .reads{grid-template-columns:minmax(0,1fr)}
+  .rd{flex-direction:row;flex-wrap:wrap;align-items:baseline;gap:4px 10px}
+  .controls .slider label{min-width:0;flex-basis:100%}
+  .kinds{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .scene{font-size:17px}
+  .card .cn{font-size:20px}
+  .stage{padding-bottom:70px}
+}
+@media (prefers-reduced-motion: reduce){.stage,.framecap{transition:none}}
+body[data-part] header{display:none}
+body[data-part="1"] #s2,body[data-part="1"] #s3,body[data-part="2"] #s1,body[data-part="2"] #s3,body[data-part="3"] #s1,body[data-part="3"] #s2{display:none}
+body[data-part]{padding-block:10px 18px}
+</style></head><body>
+<div class="wrap">
+<header class="brandhdr">
+  <div class="logos"><img src="vedantanz-logo.png" alt="Ramakrishna Vedanta NZ emblem" width="56" height="66"><img class="rit" src="ritam-wordmark.png" alt="Ritam" width="86" height="65"></div>
+  <div class="eyebrow">Practice · Lesson 3.4</div>
+  <h1>Lower the Floor</h1>
+  <p class="course">The Mind in the Light of Modern and Spiritual Sciences · Advanced</p>
+  <p class="lede">Lesson 3.4 says that noise hides a signal without removing it, and that practice lowers the noise floor so that what was always there can come through. Here you will lower the floor under a faint, steady signal, see what the lesson says becomes perceptible as it drops, and then name four kinds of noise in four short scenes.</p>
+  <p class="scorenote"><b>Parts I and II</b> are practice and are not scored. <b>Part III</b> is scored: your first pick in each scene counts.</p>
+  <nav class="parts" aria-label="Parts of this page"><a href="#s1">I. Only the floor moves</a><a href="#s2">II. What becomes perceptible</a><a href="#s3">III. Name that noise</a></nav>
+</header>
+
+<section id="s1" class="part part-1">
+  <div class="part-band"><span class="part-num">Part I</span><h2>Only the floor moves</h2><span class="tag">Practice: not scored</span></div>
+  <div class="part-body">
+  <p class="intro">The top line is a faint, steady signal. The lower line is what reaches you: the same signal with noise added. Lower the noise floor and watch the lower line. Then try the response the lesson compares to turning up the volume.</p>
+  <div class="panel" id="lab">
+    <div class="scope-wrap"><canvas id="cv1" role="img" aria-label="The signal, and the signal with noise"></canvas></div>
+    <div class="legend">
+      <span><i class="sw"></i>what reaches you</span>
+      <span><i class="sw sw-floor"></i>the noise floor</span>
+      <span id="lgSig" hidden><i class="sw sw-sig"></i>the same signal, drawn over it</span>
+    </div>
+    <div class="reads" aria-live="polite">
+      <div class="rd" data-r="sig"><span class="tag">the signal</span><b id="rdSig">the same throughout</b></div>
+      <div class="rd" data-r="floor"><span class="tag">noise floor</span><b id="rdFloor">high</b></div>
+      <div class="rd" data-r="mix"><span class="tag">signal to noise</span><b id="rdMix">marginally buried</b></div>
+    </div>
+    <div class="controls">
+      <div class="slider"><label for="rFloor">Noise floor</label><small>high</small><input type="range" id="rFloor" min="0" max="3" step="1" value="0"><small>low</small></div>
+      <div class="chips">
+        <button class="btn" id="bVol" aria-pressed="false">Turn up the volume</button>
+        <button class="btn ghost" id="bSig" aria-pressed="false">Show where the signal is</button>
+        <button class="btn ghost" id="bSound" aria-pressed="false">Sound: off (optional)</button>
+        <button class="btn ghost" id="bReset1">Start again</button>
+      </div>
+      <p class="note">The four settings of the floor follow the four steps the lesson gives in §2. They describe this drawing, not any person’s mind: the lesson’s figures are illustrations. Sound is off unless you turn it on.</p>
+    </div>
+    <div id="labMsg" class="msg fbbox" role="status" aria-live="polite"></div>
+  </div>
+  <div class="balance">
+    <h3>A difference in noise, not in worth</h3>
+    <p><q>Neither of these people is morally superior or inferior. Neither has a “better mind” or “worse mind.” They simply have different noise floors.</q> <q>It is a difference in system configuration, not a character flaw.</q> (§2)</p>
+  </div>
+  </div>
+</section>
+
+<section id="s2" class="part part-2">
+  <div class="part-band"><span class="part-num">Part II</span><h2>What becomes perceptible</h2><span class="tag">Practice: not scored</span></div>
+  <div class="part-body">
+  <p class="intro">Three things the lesson names sit beneath the noise: peace, the space between thoughts, and the witness. The first two are cards; the witness is not an object, so it is shown as the frame around them. All are drawn the same way at every setting: only the noise in front of them changes. Lower the floor slowly, and raise it again if you like.</p>
+  <div class="panel" id="un">
+    <div class="stage" id="stage">
+      <div class="card" id="cPeace"><span class="cn">Peace</span><span class="cd">“subtle perceptions of peace” (§9)</span><span class="st" id="stPeace">beneath the noise, still there</span></div>
+      <div class="card faint" id="cSpace"><span class="cn">The space between thoughts</span><span class="cd">“the quiet in which no vṛtti is active” (§9)</span><span class="st" id="stSpace">beneath the noise, still there</span></div>
+      <canvas id="veil" aria-hidden="true"></canvas>
+      <p class="framecap" id="frameCap">sākṣī: “the awareness that has been observing all experience all along” (§9)</p>
+    </div>
+    <div class="controls">
+      <div class="slider"><label for="rFloor2">Noise floor</label><small>high</small><input type="range" id="rFloor2" min="0" max="100" step="1" value="0"><small>low</small></div>
+      <div class="chips"><button class="btn ghost" id="bReset2">Start again</button></div>
+    </div>
+    <div id="unMsg" class="msg fbbox" role="status" aria-live="polite"></div>
+    <p class="note">The slider has no numbers on purpose. The order is the lesson’s; the points at which each comes through are drawn by the page, and are not stages to reach.</p>
+  </div>
+  <div class="balance">
+    <h3>Beyond the last setting</h3>
+    <p>No setting of the slider stands for the last step of §9, so it is given here as the lesson’s text: <q>At the deepest stillness, the fundamental freedom of Consciousness is no longer something approached or attained. It is known by Itself, as Itself, in immediate presence. The Ātman recognizes the Ātman. This is not an achievement of the small self; it is the dropping away of the obscuration that made the small self seem to be all there is.</q> (§9)</p>
+    <p><q>Practice does not manufacture peace, manufacture the witness, or manufacture Consciousness.</q> (§9)</p>
+  </div>
+  </div>
+</section>
+
+<section id="s3" class="part part-3">
+  <div class="part-band"><span class="part-num">Part III</span><h2>Name that noise</h2><span class="tag scored">Scored: first pick counts</span></div>
+  <div class="part-body">
+  <p class="intro">§4 describes four kinds of noise, first as physics and then as their counterparts in the mind. Here are the four traces with their physical description. Then, in four short made-up scenes, pick the kind of noise the lesson would name.</p>
+  <div class="panel">
+    <div class="kinds" id="kinds"></div>
+  </div>
+  <div class="panel" id="st">
+    <div class="bar"><span class="tag" id="stPro">Scene 1 of 4</span><div class="dots" id="stDots" aria-hidden="true"></div></div>
+    <div class="scene"><p id="stText"></p></div>
+    <div class="chips picks" id="stPicks" role="group" aria-label="Kind of noise"></div>
+    <div id="stMsg" class="msg fbbox" role="status" aria-live="polite"><p class="note">Pick one of the four.</p></div>
+    <div class="bar"><div class="chips"><button class="btn primary" id="stNext" hidden>Next scene</button><button class="btn ghost" id="stShow">Show me</button><button class="btn ghost" id="stReset">Start again</button></div></div>
+  </div>
+  <div class="panel" id="stDone" hidden>
+    <div class="scorebox" id="scBox" aria-live="polite"></div>
+    <h3>Features of an untrained system</h3>
+    <p><q>All of these types of noise are present in the ordinary mind, in various combinations. They are not abnormal. They are simply features of an untrained system.</q> (§4)</p>
+  </div>
+  <div class="balance">
+    <h3>Lower the floor, do not fight the noise</h3>
+    <p><q>An intuitive response to mental noise is to fight it: to suppress the thoughts, to resist the emotions, to force the mind to be still.</q> <q>A better approach is to lower the baseline noise through systemic practices: simplification of input, regulation of the nervous system, ethical living, and the repetition of what is wholesome.</q> (§11)</p>
+  </div>
+  </div>
+</section>
+<footer>Parts I and II are practice and are not scored. Part III is scored, and only to show you where to look again. Based on Lesson 3.4. The people in Part III are made up. This page illustrates the lesson’s qualitative picture of signal and noise and does not measure, diagnose or advise on anyone’s situation. For help with distress, please speak with a qualified professional or someone you trust.<br>Ritam · Ramakrishna Vedanta Centre NZ · <a href="https://www.vedanta.nz">www.vedanta.nz</a> Privacy: when you are signed in, your name, email, answers and score are saved to your member record. Only you and the course instructors can see them. They are not shared or ranked.</footer>
+</div>
+
+<script>
+(function(){
+"use strict";
+var $=function(id){return document.getElementById(id)};
+try{var q=new URLSearchParams(location.search).get("theme");if(q==="light"||q==="dark")document.documentElement.setAttribute("data-theme",q)}catch(e){}
+try{var pt=new URLSearchParams(location.search).get("part");if(pt==="1"||pt==="2"||pt==="3")document.body.setAttribute("data-part",pt)}catch(e){}
+var EMBED=/[?&]embed=1/.test(location.search);
+function send(m){if(EMBED){try{parent.postMessage(m,"*")}catch(e){}}}
+function esc(t){return String(t).replace(/&/g,"&amp;").replace(/</g,"&lt;")}
+var RM=false;try{RM=window.matchMedia("(prefers-reduced-motion: reduce)").matches}catch(e){}
+var C={};
+function readColors(){var cs=getComputedStyle(document.documentElement);["--bg","--surface","--ink","--muted","--line","--obj","--att","--res","--env","--ok","--gold"].forEach(function(k){C[k]=cs.getPropertyValue(k).trim()})}
+readColors();
+var dpr=Math.max(1,Math.min(2,window.devicePixelRatio||1));
+function fit(c){var w=c.clientWidth,h=c.clientHeight;if(!w||!h)return null;var bw=Math.round(w*dpr),bh=Math.round(h*dpr);if(c.width!==bw||c.height!==bh){c.width=bw;c.height=bh}var g=c.getContext("2d");g.setTransform(dpr,0,0,dpr,0,0);return {g:g,w:w,h:h}}
+function label(g,t,x,y,color,align){g.font="500 11.5px 'Noto Sans',system-ui,sans-serif";g.textAlign=align||"left";g.textBaseline="alphabetic";var w=g.measureText(t).width,x0=align==="right"?x-w:x;g.save();g.globalAlpha=.85;g.fillStyle=C["--bg"];g.fillRect(x0-4,y-12,w+8,16);g.restore();g.fillStyle=color;g.fillText(t,x,y)}
+function gauss(){var u=Math.random()||1e-9,v=Math.random();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v)}
+
+/* ===== Part I: only the floor moves (not scored) ===== */
+var N=600,W=2*Math.PI*7/N;
+var STOPS=[
+ {db:0,floor:"high",mix:"marginally buried",q:"<q>SNR = 0 dB means signal and noise are equal power; the signal is marginally buried.</q>"},
+ {db:10,floor:"lower",mix:"becoming noticeable",q:"<q>SNR = 10 dB means the signal is ten times stronger, becoming noticeable.</q>"},
+ {db:20,floor:"low",mix:"quite clear",q:"<q>SNR = 20 dB means the signal is one hundred times stronger, quite clear.</q>"},
+ {db:30,floor:"very low",mix:"very clear",q:"<q>SNR = 30 dB means the signal is a thousand times stronger, very clear indeed.</q>"}
+];
+var P={k:0,vol:false,sig:false,ph:0,noi:new Float64Array(N),head:0,y:0,anim:0,last:0};
+function nextNoise(){P.y=.5*P.y+.5*gauss();return P.y/0.577}
+for(var i=0;i<N;i++){P.noi[i]=nextNoise()}
+function sigma(){return (1/Math.SQRT2)/Math.sqrt(Math.pow(10,STOPS[P.k].db/10))}
+var cv1=$("cv1");
+function draw1(){
+  var f=fit(cv1);if(!f)return;var g=f.g,Wd=f.w,H=f.h;
+  g.clearRect(0,0,Wd,H);g.fillStyle=C["--bg"];g.fillRect(0,0,Wd,H);
+  var x0=12,x1=Wd-12,hA=Math.round(H*.30),cA=hA/2+12,top=hA+20,cB=top+(H-top)/2,hB=(H-top)/2-8;
+  var s=Math.min(hA*.42,hB*.95/2.6),gain=P.vol?1.9:1,sg=sigma();
+  function X(i){return x0+(x1-x0)*i/(N-1)}
+  /* dividers and baselines */
+  g.strokeStyle=C["--line"];g.lineWidth=1;g.beginPath();g.moveTo(0,top-6);g.lineTo(Wd,top-6);g.stroke();
+  /* lane A: the signal */
+  g.save();g.strokeStyle=C["--obj"];g.lineWidth=2;g.beginPath();
+  for(var i=0;i<N;i++){var y=cA-s*Math.sin(W*i+P.ph);if(i)g.lineTo(X(i),y);else g.moveTo(X(i),y)}g.stroke();g.restore();
+  label(g,"the signal",x0+4,14,C["--obj"]);
+  /* lane B: floor band */
+  var band=Math.min(hB,2*sg*s*gain);
+  g.save();g.fillStyle=C["--env"];g.globalAlpha=.16;g.fillRect(x0,cB-band,x1-x0,2*band);g.restore();
+  /* lane B: mix */
+  g.save();g.beginPath();g.rect(0,top,Wd,H-top);g.clip();
+  g.strokeStyle=C["--res"];g.lineWidth=1.6;g.lineJoin="round";g.beginPath();
+  var clipped=false;
+  for(var j=0;j<N;j++){var v=gain*(Math.sin(W*j+P.ph)+sg*P.noi[(P.head+j)%N]);var yy=cB-s*v;if(yy<cB-hB){yy=cB-hB;clipped=true}if(yy>cB+hB){yy=cB+hB;clipped=true}if(j)g.lineTo(X(j),yy);else g.moveTo(X(j),yy)}
+  g.stroke();
+  if(P.sig){g.strokeStyle=C["--obj"];g.lineWidth=2;g.setLineDash([6,4]);g.beginPath();for(var k=0;k<N;k++){var y2=cB-s*gain*Math.sin(W*k+P.ph);if(k)g.lineTo(X(k),y2);else g.moveTo(X(k),y2)}g.stroke()}
+  g.restore();
+  label(g,"what reaches you"+(P.vol?", louder":""),x0+4,top+12,C["--res"]);
+  if(band>6)label(g,"noise floor",x1-4,cB-band+14,C["--env"],"right");
+  if(clipped)label(g,"too loud for the lane: it is cut off",x1-4,H-6,C["--muted"],"right");
+  cv1.setAttribute("aria-label","Top: the signal, the same at every setting. Bottom: what reaches you, the signal with noise. Noise floor "+STOPS[P.k].floor+"; the signal is "+STOPS[P.k].mix+(P.vol?"; the volume is turned up, and both are louder.":"."));
+}
+function reads(){$("rdFloor").textContent=STOPS[P.k].floor;$("rdMix").textContent=STOPS[P.k].mix;$("rFloor").setAttribute("aria-valuetext",STOPS[P.k].floor)}
+function loop(t){
+  if(t-P.last>40){P.last=t;for(var i=0;i<3;i++){P.noi[P.head]=nextNoise();P.head=(P.head+1)%N}P.ph+=3*W;draw1()}
+  P.anim=requestAnimationFrame(loop);
+}
+var msg1=$("labMsg");
+function say1(v,body,ref){msg1.innerHTML=(v?'<p class="verdict">'+v+'</p>':'')+body+'<p class="ref">'+ref+'</p>'}
+$("rFloor").addEventListener("input",function(){
+  var prev=P.k;P.k=+this.value;reads();draw1();sound();
+  var lead=P.k>prev?"The floor is lower.":P.k<prev?"The floor is higher.":"";
+  say1(lead,'<p>'+STOPS[P.k].q+'</p><p>Look at the top line: it has not changed. Only the noise in the lower line moved.</p>',"§2 · §3");
+});
+$("bVol").addEventListener("click",function(){
+  P.vol=!P.vol;this.setAttribute("aria-pressed",P.vol?"true":"false");this.textContent=P.vol?"Volume back to normal":"Turn up the volume";draw1();sound();
+  if(P.vol)say1("Louder, not clearer.",'<p>The volume raises the signal and the noise together, so the ratio between them stays where it was: the readout <b>signal to noise</b> has not moved.</p><p>Fighting noise, the lesson says, <q>is like trying to reduce static on a radio by turning up the volume. It does not work.</q></p>',"§11");
+  else say1("","<p>The volume is back to normal. The ratio did not change either way: only lowering the floor changes it.</p>","§11");
+});
+$("bSig").addEventListener("click",function(){
+  P.sig=!P.sig;this.setAttribute("aria-pressed",P.sig?"true":"false");this.textContent=P.sig?"Hide the signal line":"Show where the signal is";$("lgSig").hidden=!P.sig;draw1();
+  if(P.sig)say1("","<p>The dashed line is the same signal, drawn over what reaches you. It is there at every setting, buried or clear. <q>The signal is still there. The external world has not changed. But you cannot perceive it clearly because the noise is in the way. The signal is masked.</q></p>","§1");
+  else say1("","<p>The signal line is hidden again. The signal itself is still in the lower line.</p>","§1");
+});
+/* optional sound: a soft tone in noise, off until asked for */
+var A={ctx:null,on:false};
+function sound(){
+  if(!A.ctx||!A.on)return;
+  var vol=P.vol?1.8:1,sg=sigma(),t=A.ctx.currentTime;
+  A.gs.gain.setTargetAtTime(0.05*vol,t,.05);
+  A.gn.gain.setTargetAtTime(0.05*sg*Math.sqrt(3)*vol,t,.05);
+}
+$("bSound").addEventListener("click",function(){
+  var b=this;
+  try{
+    if(!A.ctx){
+      var AC=window.AudioContext||window.webkitAudioContext;if(!AC)throw 0;
+      A.ctx=new AC();var c=A.ctx;
+      A.gs=c.createGain();A.gn=c.createGain();A.gs.gain.value=0;A.gn.gain.value=0;
+      var o=c.createOscillator();o.type="sine";o.frequency.value=392;o.connect(A.gs);A.gs.connect(c.destination);o.start();
+      var buf=c.createBuffer(1,c.sampleRate*2,c.sampleRate),d=buf.getChannelData(0);for(var i=0;i<d.length;i++)d[i]=Math.random()*2-1;
+      var src=c.createBufferSource();src.buffer=buf;src.loop=true;src.connect(A.gn);A.gn.connect(c.destination);src.start();
+    }
+    A.on=!A.on;
+    if(A.on){A.ctx.resume();sound()}else{A.gs.gain.setTargetAtTime(0,A.ctx.currentTime,.03);A.gn.gain.setTargetAtTime(0,A.ctx.currentTime,.03)}
+    b.setAttribute("aria-pressed",A.on?"true":"false");b.textContent=A.on?"Sound: on":"Sound: off (optional)";
+  }catch(e){b.disabled=true;b.textContent="Sound is not available here"}
+});
+function reset1(first){
+  P.k=0;P.vol=false;P.sig=false;$("rFloor").value=0;$("lgSig").hidden=true;
+  $("bVol").setAttribute("aria-pressed","false");$("bVol").textContent="Turn up the volume";
+  $("bSig").setAttribute("aria-pressed","false");$("bSig").textContent="Show where the signal is";
+  reads();draw1();sound();
+  say1("",first?"<p>The floor is high: the signal in the lower line is hard to make out. Lower the floor one step at a time.</p>":"<p>Back to the start: a high floor, normal volume.</p>","§3");
+}
+$("bReset1").addEventListener("click",function(){reset1(false)});
+
+/* ===== Part II: what becomes perceptible (not scored) ===== */
+var veil=$("veil"),stage=$("stage"),U={v:0,seen:{peace:false,space:false,wit:false},anim:0,last:0};
+var TH={peace:40,space:70,wit:95};
+function drawVeil(){
+  var f=fit(veil);if(!f)return;var g=f.g,w=f.w,h=f.h,a=.97*(1-U.v/100);
+  g.clearRect(0,0,w,h);if(a<=0.01)return;
+  g.save();g.globalAlpha=a*.9;g.fillStyle=C["--bg"];g.fillRect(0,0,w,h);g.restore();
+  var n=Math.round(w*h/18*a);g.save();
+  for(var i=0;i<n;i++){var x=Math.random()*w,y=Math.random()*h;g.globalAlpha=a*(.35+.5*Math.random());g.fillStyle=Math.random()<.5?C["--muted"]:C["--line"];g.fillRect(x,y,1.6,1.6)}
+  g.restore();
+}
+function veilLoop(t){if(t-U.last>90){U.last=t;drawVeil()}U.anim=requestAnimationFrame(veilLoop)}
+function setState(id,on){var e=$(id);e.textContent=on?"perceptible":"beneath the noise, still there";e.classList.toggle("on",on)}
+var unMsg=$("unMsg");
+function renderU(prev){
+  var v=U.v,p=v>=TH.peace,s=v>=TH.space,w=v>=TH.wit;
+  setState("stPeace",p);setState("stSpace",s);stage.classList.toggle("seen",w);
+  $("rFloor2").setAttribute("aria-valuetext",w?"lowest":s?"low":p?"lower":"high");
+  if(RM)drawVeil();
+  if(prev==null)return;
+  var h="";
+  if(w&&prev<TH.wit){h='<p class="verdict">The witness.</p><p>No card has appeared, and none will. <q>What was hidden by the noise of identification with the mind reveals itself: the witness, the awareness that has been observing all experience all along. You do not perceive the witness as a new object. You recognize yourself as the witness.</q></p><p><q>The sākṣī was never absent. It is what was reading these words a moment ago.</q></p><p class="ref">§9</p>'}
+  else if(s&&!w&&prev<TH.space){h='<p class="verdict">The space between thoughts.</p><p><q>The space between thoughts becomes evident: the quiet in which no vṛtti is active.</q> <q>It is not a new Reality appearing. It is an existing Reality becoming perceptible.</q></p><p class="ref">§9</p>'}
+  else if(p&&!s&&prev<TH.peace){h='<p class="verdict">Peace comes through.</p><p><q>Subtle perceptions of peace begin to come through. Not because peace was created. Because peace was always there, below the noise floor, and the floor has dropped enough for it to surface.</q></p><p class="ref">§9</p>'}
+  else if(v<prev&&((prev>=TH.peace&&!p)||(prev>=TH.space&&!s)||(prev>=TH.wit&&!w))){h='<p class="verdict">The floor has risen again.</p><p>What was perceptible is beneath the noise once more. Nothing under it has changed: the cards are drawn exactly as before.</p><p class="ref">§3 · §9</p>'}
+  if(h)unMsg.innerHTML=h;
+}
+$("rFloor2").addEventListener("input",function(){var prev=U.v;U.v=+this.value;renderU(prev)});
+function reset2(first){U.v=0;$("rFloor2").value=0;renderU(null);drawVeil();
+  unMsg.innerHTML='<p>The floor is high. <q>The sutras are clear: these subtler states of consciousness exist. But they are accessible only when the noise floor drops.</q> <q>This is not a limitation of the spiritual Reality. It is a limitation of the measurement system.</q></p><p class="ref">§3</p>'}
+$("bReset2").addEventListener("click",function(){reset2(false)});
+
+/* ===== Part III: name that noise (scored) ===== */
+function rng(seed){return function(){seed=(seed*9301+49297)%233280;return seed/233280}}
+function tracePath(kind,w,h,n){
+  var r=rng({white:11,pink:23,narrow:5,impulse:41}[kind]),pts=[],i,cy=h/2,a=h*.42;
+  if(kind==="white"){for(i=0;i<n;i++)pts.push((r()*2-1)*a)}
+  else if(kind==="pink"){var ph=[r()*6,r()*6,r()*6,r()*6,r()*6];for(i=0;i<n;i++){var t=i/n,v=0;[1,2,4,8,16].forEach(function(f,k){v+=Math.sin(2*Math.PI*f*t+ph[k])/f});pts.push(v*a*.55)}}
+  else if(kind==="narrow"){for(i=0;i<n;i++)pts.push(Math.sin(2*Math.PI*7*i/n)*a*.85+(r()*2-1)*a*.08)}
+  else{for(i=0;i<n;i++)pts.push((r()*2-1)*a*.06);pts[Math.round(n*.3)]=-a;pts[Math.round(n*.3)+1]=a*.5;pts[Math.round(n*.74)]=-a*.9}
+  return pts.map(function(v,i){return (i?"L":"M")+(w*i/(n-1)).toFixed(1)+" "+(cy+v).toFixed(1)}).join("");
+}
+var KINDS=[
+ {k:"white",n:"White noise",d:"Random, with equal power across all frequencies. It sounds like a hiss or static."},
+ {k:"pink",n:"Pink noise",d:"More power at lower frequencies. It sounds like rainfall or wind: a background hum with natural fluctuations."},
+ {k:"narrow",n:"Narrowband interference",d:"Concentrated at one particular frequency: a single loud tone underneath your music."},
+ {k:"impulse",n:"Impulse noise",d:"Sudden, sharp spikes: brief but intense. It sounds like clicks or pops."}
+];
+var NAMES={};KINDS.forEach(function(x){NAMES[x.k]=x.n});
+$("kinds").innerHTML=KINDS.map(function(x){return '<div class="kind"><svg viewBox="0 0 160 44" aria-hidden="true"><path d="'+tracePath(x.k,160,44,x.k==="white"?90:120)+'" fill="none" stroke="var(--res)" stroke-width="1.5" stroke-linejoin="round"/></svg><b>'+x.n+'</b><span>'+x.d+'</span></div>'}).join("");
+$("stPicks").innerHTML=KINDS.map(function(x){return '<button class="pick" data-p="'+x.k+'"><svg viewBox="0 0 46 16" aria-hidden="true"><path d="'+tracePath(x.k,46,16,x.k==="white"?30:46)+'" fill="none" stroke="var(--res)" stroke-width="1.2"/></svg>'+x.n+'</button>'}).join("");
+var SCENES=[
+ {t:"For some weeks a low, vague unease has gone everywhere with Mia, a sense that something is missing. It never quite leaves. Some days it is lighter, some days heavier.",a:"pink",
+  why:"In the mind, pink noise is <q>the persistent moods and background unease that accompany you</q>, <q>a vague sense that something is missing</q>: like the physical kind, <q>a background hum with natural fluctuations</q>.",
+  hint:{white:"Chatter jumps between many unconnected thoughts. Mia has one background feeling that stays (§4).",narrow:"Narrowband is one particular thought that keeps coming back. Here there is no single thought, only a background mood (§4).",impulse:"Impulse noise is sudden and brief. This has been with her for weeks (§4)."}},
+ {t:"Ana is reading quietly on the train when a sharp jolt goes through her: she has left her phone at the café. A moment later she finds it in her bag, and the jolt is gone.",a:"impulse",
+  why:"In the mind, impulse noise is <q>the sudden intrusive memory, the startle reaction to an unexpected sound, the sharp emotional spike when you think you have left your phone somewhere</q>: <q>brief but intense disruptions</q>.",
+  hint:{white:"Chatter is a steady scatter of small thoughts. This is one sharp spike, then quiet (§4).",pink:"A background mood stays a long time. This lasts a moment (§4).",narrow:"Narrowband keeps returning to one thing. This comes once and is gone (§4)."}},
+ {t:"Waiting for the kettle, Rangi’s thoughts skip about: something he should have said yesterday, where his keys are, a joke from lunch, whether it will rain.",a:"white",
+  why:"In the mind, white noise is <q>random mental chatter: the scattered, unpredictable thoughts that arise without pattern or purpose.</q> The lesson’s own example runs much like Rangi’s.",
+  hint:{pink:"There is no single mood here: the thoughts are many and unconnected (§4).",narrow:"No one thought comes back; each is different (§4).",impulse:"Nothing here is sharp or startling. It is a scatter of small thoughts (§4)."}},
+ {t:"Since Tuesday, whenever his mind is free, Sam replays the same argument with his brother: the same few lines, again and again.",a:"narrow",
+  why:"In the mind, narrowband interference is <q>the one thing you cannot stop thinking about, the argument you keep replaying, the worry that keeps returning</q>: noise <q>concentrated at one particular frequency</q>.",
+  hint:{white:"Chatter wanders from topic to topic. Sam’s mind goes back to one thing (§4).",pink:"A mood is a general background feeling. This is one particular thought, repeating (§4).",impulse:"Impulse noise comes once, sharply. This keeps repeating (§4)."}}
+];
+var S={i:0,done:{},miss:{},sent:false};
+var picks=document.querySelectorAll("#stPicks .pick"),stMsg=$("stMsg");
+function dots(){var d=$("stDots");d.innerHTML="";SCENES.forEach(function(_,k){var e=document.createElement("i");if(S.done[k])e.className="done";else if(k===S.i)e.className="cur";d.appendChild(e)})}
+function showScene(){
+  var s=SCENES[S.i];$("stText").textContent=s.t;$("stPro").textContent="Scene "+(S.i+1)+" of "+SCENES.length;
+  picks.forEach(function(p){p.disabled=false;p.classList.remove("wrong","right");p.setAttribute("aria-pressed","false")});
+  stMsg.innerHTML='<p class="note">Pick one of the four.</p>';
+  $("stNext").hidden=true;$("stShow").hidden=false;dots();
+}
+function reveal(){
+  var s=SCENES[S.i];S.done[S.i]=true;
+  picks.forEach(function(p){p.disabled=true;if(p.dataset.p===s.a){p.classList.add("right");p.setAttribute("aria-pressed","true")}});
+  stMsg.innerHTML='<p class="verdict">'+NAMES[s.a]+'.</p><p>'+s.why+'</p><p class="ref">§4</p>';
+  $("stShow").hidden=true;
+  if(S.i<SCENES.length-1){$("stNext").hidden=false}else{$("stDone").hidden=false;finish()}
+  dots();
+}
+picks.forEach(function(p){p.addEventListener("click",function(){
+  var s=SCENES[S.i];
+  if(p.dataset.p===s.a){reveal()}
+  else{S.miss[S.i]=true;p.classList.add("wrong");p.disabled=true;stMsg.innerHTML='<p class="verdict">Not this one.</p><p>'+s.hint[p.dataset.p]+'</p>'}
+})});
+$("stNext").addEventListener("click",function(){S.i++;showScene();try{$("stPicks").querySelector(".pick").focus({preventScroll:true})}catch(e){}});
+$("stShow").addEventListener("click",function(){S.miss[S.i]=true;reveal()});
+$("stReset").addEventListener("click",function(){S={i:0,done:{},miss:{},sent:S.sent};$("stDone").hidden=true;showScene()});
+
+/* ===== scoring for Part III, and hand-off to the host page when embedded ===== */
+var META={code:"ADV-P-3-4",title:"Practice: Lesson 3.4, Lower the Floor (Part III)",programme:"The Mind in the Light of Modern and Spiritual Sciences (Advanced)",cut:75};
+function finish(){
+  if(S.sent){return}
+  var n=SCENES.length,right=0,ans=[],wrong=[];
+  SCENES.forEach(function(sc,k){var ok=!S.miss[k];if(ok){right++}else{wrong.push(k)}ans.push({q:k+1,ok:ok,given:NAMES[sc.a]+(ok?" (first pick)":" (not on first pick)")})});
+  var pct=Math.round(100*right/n),good=pct>=META.cut;
+  var h='<div class="big">'+right+' of '+n+' on the first pick</div><p class="band '+(good?'good':'')+'">'+(good?'Well grasped':'Revisit these ideas')+'</p>';
+  if(wrong.length){h+='<p>Look again at §4 for:</p><ul>'+wrong.map(function(k){return '<li>Scene '+(k+1)+': '+NAMES[SCENES[k].a]+'</li>'}).join('')+'</ul>'}
+  else{h+='<p>Nothing to revisit here.</p>'}
+  h+='<p class="saved" id="scSaved">'+(EMBED?'Saving your result…':'Sign in on the course page to have your result saved.')+'</p>';
+  $("scBox").innerHTML=h;S.sent=true;
+  send({type:"quizResult",code:META.code,title:META.title,programme:META.programme,score:right,maxScore:n,percent:pct,questionsCorrect:right,questionCount:n,answers:ans});
+}
+window.addEventListener("message",function(e){
+  var d=e.data||{};if(!d||typeof d!=="object"){return}
+  var el=$("scSaved");if(!el){return}
+  if(d.type==="saved"){el.textContent="Your result has been saved to your member record."}
+  else if(d.type==="saveError"){el.textContent="Your result could not be saved this time."}
+  else if(d.type==="notMember"){el.textContent="Sign in as a member to have your result saved."}
+});
+send({type:"ready"});
+/* tell the host page how tall this page is, so the embed grows instead of scrolling inside its frame */
+(function(){
+  var last=0;
+  function h(){var d=document.documentElement,b=document.body;var v=Math.ceil(Math.max(d.scrollHeight,b.scrollHeight,b.offsetHeight));if(v&&Math.abs(v-last)>1){last=v;send({type:"height",height:v})}}
+  window.addEventListener("load",h);window.addEventListener("resize",h);
+  if(window.ResizeObserver)new ResizeObserver(h).observe(document.body);
+  setInterval(h,700);h();
+})();
+
+/* redraw on resize and theme change */
+var rt=0;
+window.addEventListener("resize",function(){clearTimeout(rt);rt=setTimeout(function(){draw1();drawVeil()},80)});
+function retheme(){readColors();draw1();drawVeil()}
+try{window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change",retheme)}catch(e){}
+new MutationObserver(retheme).observe(document.documentElement,{attributes:true,attributeFilter:["data-theme"]});
+reset1(true);reset2(true);showScene();
+if(!RM){P.anim=requestAnimationFrame(loop);U.anim=requestAnimationFrame(veilLoop)}
+})();
+</script>
+</body></html>

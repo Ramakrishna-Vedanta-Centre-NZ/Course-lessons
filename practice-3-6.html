@@ -1,0 +1,579 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Practice: Lesson 3.6, Same Energy, Different Effect</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans:wght@400..700&family=Noto+Serif:ital,wght@0,400..700;1,400..700&display=swap">
+<style>
+:root{
+  --bg:#FBF5EA; --surface:#FFFDF8; --ink:#1E1E1E; --muted:#5A5A5A; --line:#E6DAC3; --tint:#F3EAD3; --navy:#12285A; --gold:#C9A24A; --goldt:#6B4E0E;
+  --obj:#0B8686; --att:#C95F06; --res:#2E3192; --env:#C0245B; --ok:#1B7A52;
+  --display:"Noto Serif",Georgia,"Times New Roman",serif;
+  --body:"Noto Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0B1A3D; --surface:#12285A; --ink:#FBF5EA; --muted:#C9C3B3; --line:#2B4686; --tint:#1D3770; --gold:#E6C36A; --goldt:#E6C36A;
+    --obj:#46CFC6; --att:#F5A04D; --res:#A3AAFF; --env:#FF7BA9; --ok:#5BD59B; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0B1A3D; --surface:#12285A; --ink:#FBF5EA; --muted:#C9C3B3; --line:#2B4686; --tint:#1D3770; --gold:#E6C36A; --goldt:#E6C36A;
+  --obj:#46CFC6; --att:#F5A04D; --res:#A3AAFF; --env:#FF7BA9; --ok:#5BD59B; color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;
+  padding-left:max(14px,env(safe-area-inset-left,0px));padding-right:max(14px,env(safe-area-inset-right,0px));padding-block:22px 40px}
+.wrap{max-width:900px;margin:0 auto;display:flex;flex-direction:column;gap:32px}
+h1,h2,h3{font-family:var(--display);font-weight:500;text-wrap:balance;margin:0;letter-spacing:-.01em}
+h1{font-size:clamp(30px,5.4vw,44px);line-height:1.06}
+h2{font-size:clamp(23px,3.4vw,29px);line-height:1.15}
+h3{font-size:19px;line-height:1.25}
+p{margin:0}
+sub{font-size:.72em;line-height:0}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.lede{font-size:17.5px;max-width:64ch}
+.intro{max-width:66ch;color:var(--muted)}
+header{display:flex;flex-direction:column;gap:12px}
+section{display:flex;flex-direction:column;gap:18px;min-width:0}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px;display:flex;flex-direction:column;gap:14px;min-width:0}
+.bar{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;justify-content:space-between}
+button:focus-visible,input:focus-visible{outline:2px solid var(--res);outline-offset:2px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{font:inherit;font-size:14px;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:7px 13px;cursor:pointer;display:inline-flex;gap:8px;align-items:center}
+.chip[aria-pressed="true"]{background:var(--res);border-color:var(--res);color:#fff}
+.chip:disabled{cursor:default;opacity:.5}
+.btn{font:inherit;font-size:14px;color:var(--ink);background:var(--surface);border:1px solid var(--ink);border-radius:8px;padding:8px 16px;cursor:pointer}
+.btn.primary{background:var(--ink);color:var(--surface)}
+.btn.ghost{border-color:var(--line);color:var(--muted)}
+.scope-wrap{position:relative;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--bg)}
+canvas{display:block;width:100%}
+.slider{display:flex;align-items:center;gap:10px;flex:0 0 auto;min-width:0;flex-wrap:wrap}
+.slider label{font-size:14px;font-weight:600;min-width:150px}
+.slider input[type=range]{flex:1;min-width:60px;accent-color:var(--res)}
+.slider small{color:var(--muted);font-size:12px;white-space:nowrap}
+.tag{font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);border:1px solid var(--line);border-radius:4px;padding:2px 6px}
+.note{font-size:13px;color:var(--muted);max-width:70ch}
+.balance{background:var(--tint);border-radius:10px;padding:16px 18px;display:flex;flex-direction:column;gap:8px;max-width:78ch}
+footer{font-size:13px;color:var(--muted);max-width:76ch;border-top:1px solid var(--line);padding-top:12px}
+@media (max-width:640px){.panel{padding:12px}.wrap{gap:26px}.slider label{min-width:0;flex-basis:100%}}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
+[hidden]{display:none!important}
+nav.parts{display:flex;flex-wrap:wrap;gap:8px 20px;margin-top:4px}
+nav.parts a{color:var(--ink);text-decoration:none;border-bottom:1px solid var(--line);padding-bottom:2px;font-size:15px}
+.msg{min-height:1.5em;font-size:15px}
+.fbbox{border-top:1px solid var(--line);padding-top:12px;display:flex;flex-direction:column;gap:8px;min-height:6.5em}
+.fbbox .verdict{font-family:var(--display);font-size:19px}
+.fbbox .ref{font-family:var(--mono);font-size:11px;color:var(--muted)}
+.chip:focus-visible,.pick:focus-visible{outline:2px solid var(--res);outline-offset:2px}
+#cvA{height:290px}
+#cvB{height:300px}
+@media (max-width:640px){#cvA{height:270px}#cvB{height:380px}}
+.legend{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:13px;color:var(--muted)}
+.legend span{display:inline-flex;align-items:center;gap:7px}
+.sw{display:inline-block;width:22px;height:0;border-top:2.5px solid var(--res)}
+.dot{display:inline-block;width:11px;height:11px;border-radius:50%}
+/* meters */
+.meters{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 18px}
+.meter{display:flex;flex-direction:column;gap:4px;min-width:0}
+.meter .mh{display:flex;justify-content:space-between;gap:8px;font-size:13px;flex-wrap:wrap}
+.meter .mh b{font-weight:600}
+.meter .mh output{color:var(--muted);font-size:13px}
+.track{position:relative;height:9px;background:var(--line);border-radius:5px}
+.track .fill{position:absolute;left:0;top:0;bottom:0;width:0;background:var(--att);border-radius:5px}
+.track .fill.even{background:var(--muted)}
+.ticks{position:relative;height:18px;font-size:11px;color:var(--muted)}
+.ticks span{position:absolute;top:2px;transform:translateX(-50%);white-space:nowrap}
+.ticks span::before{content:"";position:absolute;left:50%;top:-11px;height:9px;border-left:1.5px solid var(--ink)}
+.ticks span.r{transform:translateX(-100%)} .ticks span.r::before{left:auto;right:0}
+.reads{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.read{border-top:3px solid var(--line);padding-top:7px;display:flex;flex-direction:column;gap:2px;min-width:0}
+.read .tag{align-self:flex-start}
+.read b{font-family:var(--display);font-size:18px;font-weight:500;line-height:1.25}
+.read[data-r="tog"]{border-color:var(--res)} .read[data-r="pace"]{border-color:var(--gold)} .read[data-r="far"]{border-color:var(--env)}
+@media (max-width:640px){.meters,.reads{grid-template-columns:minmax(0,1fr)}}
+/* questions */
+.scene{border-left:3px solid var(--line);padding:2px 0 2px 12px;font-family:var(--display);font-size:18.5px;line-height:1.45;min-height:3.2em}
+.picks{display:flex;flex-direction:column;gap:8px;align-items:stretch}
+.pick{font:inherit;font-size:15px;text-align:left;color:var(--ink);background:var(--bg);border:1.5px solid var(--line);border-left-width:4px;border-radius:10px;padding:9px 14px;cursor:pointer;min-width:0}
+.pick.wrong{opacity:.55}
+.pick.right{background:var(--surface);box-shadow:0 0 0 2px var(--ink);border-left-color:var(--ok)}
+.pick:disabled{cursor:default}
+.dots{display:flex;gap:6px}
+.dots i{width:10px;height:10px;border-radius:50%;border:1.5px solid var(--muted)}
+.dots i.done{background:var(--ink);border-color:var(--ink)}
+.dots i.cur{border-color:var(--ink);box-shadow:0 0 0 2px var(--line)}
+@media (max-width:640px){.scene{font-size:17px}}
+.paused{position:absolute;left:8px;top:8px;font-size:12px;color:var(--muted);background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:2px 8px}
+body[data-part] header{display:none}
+body[data-part="1"] #s2,body[data-part="2"] #s1{display:none}
+body[data-part]{padding-block:10px 18px}
+
+.brandhdr{background:#12285A;color:#FBF5EA;text-align:center;padding:18px 18px 20px;border-radius:14px;display:flex;flex-direction:column;align-items:center;gap:6px}
+.brandhdr .logos{display:flex;align-items:center;justify-content:center;gap:18px}
+.brandhdr .logos img{width:56px;height:66px;object-fit:contain;display:block}
+.brandhdr .logos img.rit{width:86px;height:65px}
+.brandhdr .eyebrow{color:#E6C36A;font-weight:700;letter-spacing:3px}
+.brandhdr h1{color:#FBF5EA;font-weight:700}
+.brandhdr .course{color:#E6C36A;font-weight:600;font-size:14px}
+.brandhdr .lede{color:#F1ECDF;font-size:15.5px;max-width:62ch}
+.brandhdr .scorenote{color:#F1ECDF;font-size:14.5px}
+.brandhdr nav.parts a{color:#FBF5EA;border-bottom:1px solid #E6C36A;background:none;padding-bottom:2px}
+.brandhdr nav.parts a:hover,.brandhdr nav.parts a:focus-visible{color:#E6C36A;border-color:#E6C36A}
+.tag.scored{color:var(--goldt);border-color:var(--gold)}
+.scorebox{border-left:5px solid var(--gold);background:var(--tint);border-radius:10px;padding:12px 14px;margin-bottom:14px}
+.scorebox .big{font-family:var(--display);font-size:30px;line-height:1.1;color:var(--ink)}
+.scorebox .band{font-family:var(--display);font-size:18px;margin:4px 0}
+.scorebox .band.good{color:var(--ok)}
+.scorebox .saved{font-size:13.5px;color:var(--muted)}
+.scorebox ul{margin:6px 0 0;padding-left:20px}
+
+/* PRACTICE TEMPLATE: one coloured "part" per section (part-1 .. part-4) */
+.part{--pc:#0E7A8A;--pcon:#FFFFFF;--pcbg:#E6F2F3;border:2px solid var(--pc);border-radius:14px;overflow:hidden;background:var(--pcbg)}
+.part-1{--pc:#0E7A8A;--pcbg:#E6F2F3}
+.part-2{--pc:#12285A;--pcbg:#EEF0F8}
+.part-3{--pc:#2F6B3A;--pcbg:#E6F0E3}
+.part-4{--pc:#7A2A5E;--pcbg:#F5E6F0}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .part{--pcbg:#0F2250;border-color:var(--pcl,var(--pc))}
+ :root:not([data-theme="light"]) .part-1{--pcl:#46CFC6} :root:not([data-theme="light"]) .part-2{--pcl:#E6C36A} :root:not([data-theme="light"]) .part-3{--pcl:#7FD08C} :root:not([data-theme="light"]) .part-4{--pcl:#F08CC8}}
+:root[data-theme="dark"] .part{--pcbg:#0F2250;border-color:var(--pcl,var(--pc))}
+:root[data-theme="dark"] .part-1{--pcl:#46CFC6} :root[data-theme="dark"] .part-2{--pcl:#E6C36A} :root[data-theme="dark"] .part-3{--pcl:#7FD08C} :root[data-theme="dark"] .part-4{--pcl:#F08CC8}
+.part-band{background:var(--pc);color:var(--pcon);padding:12px 16px;display:flex;align-items:center;flex-wrap:wrap;gap:6px 14px}
+.part-band h2{color:inherit;font-size:clamp(20px,3.4vw,26px);font-weight:600;flex:1 1 220px}
+.part-num{font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;font-weight:500;background:rgba(255,255,255,.18);border-radius:4px;padding:3px 9px}
+.part-band .tag{color:inherit;border-color:currentColor;background:rgba(255,255,255,.12)}
+.part-2 .part-band .tag,.part-2 .part-num{color:#E6C36A}
+.part-body{padding:16px;display:flex;flex-direction:column;gap:14px}
+.part .panel{background:var(--surface)}
+@media (max-width:640px){.part-body{padding:12px}}
+</style></head><body>
+<div class="wrap">
+<header class="brandhdr">
+  <div class="logos"><img src="vedantanz-logo.png" alt="Ramakrishna Vedanta NZ emblem" width="56" height="66"><img class="rit" src="ritam-wordmark.png" alt="Ritam" width="86" height="65"></div>
+  <div class="eyebrow">Practice · Lesson 3.6</div>
+  <h1>Same Energy, Different Effect</h1>
+  <p class="course">The Mind in the Light of Modern and Spiritual Sciences · Advanced</p>
+  <p class="lede">A light bulb and a laser can use the same amount of energy. “Same energy. Utterly different effect. The difference is coherence” (§3). Here you bring scattered waves into line, then let a group of oscillators fall into step through coupling, with and without a steady source.</p>
+  <p class="scorenote"><b>Part I</b> is practice and is not scored. <b>Part II</b> is scored: only its five questions count, and your first pick on each counts.</p>
+  <nav class="parts" aria-label="Parts of this page"><a href="#s1">I. Bring the waves into line</a><a href="#s2">II. Falling into step</a></nav>
+</header>
+
+<section id="s1" class="part part-1">
+  <div class="part-band"><span class="part-num">Part I</span><h2>Bring the waves into line</h2><span class="tag">Practice: not scored</span></div>
+  <div class="part-body">
+  <p class="intro">Each lamp sends out a wave of the same frequency and the same strength. When their phases are scattered, their peaks reach the spot at different moments. Move the slider to bring the phases into line and watch the spot where the waves meet. The energy put in does not change.</p>
+  <div class="panel" id="labA">
+    <div class="bar">
+      <div class="chips" id="nChips" role="group" aria-label="How many waves">
+        <button class="chip" data-n="2" aria-pressed="true">Two waves (the lesson’s example)</button>
+        <button class="chip" data-n="6" aria-pressed="false">A row of six lamps</button>
+      </div>
+      <button class="btn ghost" id="bScatter">Scatter them again</button>
+    </div>
+    <div class="scope-wrap" id="wrapA"><canvas id="cvA" role="img" aria-label="Waves from each lamp, their sum, and the spot where they meet"></canvas><span class="paused" id="pzA" hidden>Paused while off screen</span></div>
+    <div class="legend">
+      <span><i class="sw" style="border-color:var(--att)"></i>each lamp’s wave</span>
+      <span><i class="sw" style="border-color:var(--res)"></i>all of them together at the spot</span>
+    </div>
+    <div class="slider"><label for="rAlign">Phases</label><small>scattered</small><input type="range" id="rAlign" min="0" max="100" value="0"><small>aligned</small></div>
+    <div class="meters">
+      <div class="meter"><div class="mh"><b>Energy put in</b><output id="oEnergy">the same at every setting</output></div><div class="track"><div class="fill even" id="fEnergy" style="width:60%"></div></div></div>
+      <div class="meter"><div class="mh"><b>Brightness at the spot</b><output id="oBright">scattered</output></div><div class="track"><div class="fill" id="fBright"></div></div><div class="ticks" id="ticksA"></div></div>
+    </div>
+    <p class="note">The brightness bar is averaged over a few seconds. Its marks show the average for scattered phases and for aligned ones; with two waves, the first mark is either wave alone. The page shows these in words, not figures.</p>
+    <div id="msgA" class="msg fbbox" role="status" aria-live="polite"></div>
+  </div>
+  <div class="balance">
+    <h3>Aligned is not still</h3>
+    <p>Every lamp in the aligned row is still waving; only the timing of the waves has changed. In the lesson’s own practice: “This is coherence: not the absence of thought or feeling or sensation, but their alignment and coordination” (§9).</p>
+  </div>
+  </div>
+</section>
+
+<section id="s2" class="part part-2">
+  <div class="part-band"><span class="part-num">Part II</span><h2>Falling into step</h2><span class="tag scored">Scored: first pick counts</span></div>
+  <div class="part-body">
+  <p class="intro">Ten oscillators, each with a natural pace of its own close to the others, run round a circle. Coupling lets each one feel the pull of the rest. Raise it and watch whether they fall into step. Then add a steady source that keeps its own rhythm, calm or agitated, and an oscillator whose pace is far from the rest. Only the five questions below are scored.</p>
+  <div class="panel" id="labB">
+    <div class="scope-wrap" id="wrapB"><canvas id="cvB" role="img" aria-label="Oscillators on a circle and the group’s combined rhythm"></canvas><span class="paused" id="pzB" hidden>Paused while off screen</span></div>
+    <div class="legend">
+      <span><i class="dot" style="background:var(--res)"></i>an oscillator</span>
+      <span id="lgSrc" hidden><i class="dot" style="background:var(--gold)"></i>the steady source</span>
+      <span id="lgFar" hidden><i class="dot" style="background:var(--env)"></i>the far-off oscillator</span>
+      <span><i class="sw"></i>the group’s combined rhythm</span>
+    </div>
+    <div class="slider"><label for="rK">Coupling</label><small>none</small><input type="range" id="rK" min="0" max="100" value="8"><small>strong</small></div>
+    <div class="bar">
+      <div class="chips" id="srcChips" role="group" aria-label="Steady source">
+        <button class="chip" data-s="none" aria-pressed="true">No source</button>
+        <button class="chip" data-s="calm" aria-pressed="false">Steady source: calm rhythm</button>
+        <button class="chip" data-s="ag" aria-pressed="false">Steady source: agitated rhythm</button>
+      </div>
+      <div class="chips"><button class="chip" id="bFar" aria-pressed="false">Add a far-off oscillator</button></div>
+    </div>
+    <div class="reads" aria-live="polite">
+      <div class="read" data-r="tog"><span class="tag">together</span><b id="rdTog">scattered</b></div>
+      <div class="read" data-r="pace"><span class="tag">the group’s pace</span><b id="rdPace">no shared pace</b></div>
+      <div class="read" data-r="far"><span class="tag">far-off oscillator</span><b id="rdFar">not added</b></div>
+    </div>
+    <div id="msgB" class="msg fbbox" role="status" aria-live="polite"></div>
+    <div class="chips"><button class="btn ghost" id="bResetB">Start again</button></div>
+    <p class="note">This is a generic model of coupled oscillators, not a model of nervous systems or of any person. “Steady” here means that the source keeps its own rhythm and is not pulled by the group. The lesson applies the principle of entrainment to wise company and to groups (§5, §7); the model shows only the principle.</p>
+  </div>
+
+  <div class="panel" id="qz">
+    <div class="bar"><span class="tag" id="qPro">Question 1 of 5</span><div class="dots" id="qDots" aria-hidden="true"></div></div>
+    <div class="scene"><p id="qText"></p></div>
+    <div class="picks" id="qPicks" role="group" aria-label="Answers"></div>
+    <div id="qMsg" class="msg fbbox" role="status" aria-live="polite"><p class="note">Pick one answer.</p></div>
+    <div class="bar"><div class="chips"><button class="btn primary" id="qNext" hidden>Next question</button><button class="btn" id="qDemo" hidden>Show this in the model</button><button class="btn ghost" id="qShow">Show me</button><button class="btn ghost" id="qReset">Start again</button></div></div>
+  </div>
+  <div class="panel" id="qDone" hidden>
+    <div class="scorebox" id="scBox" aria-live="polite"></div>
+    <h3>The field amplifies whatever it is given</h3>
+    <p>“The power of the collective field is neutral. It amplifies whatever frequency is present. So it is crucial to ensure that what is being amplified is truthful, ethical, and life-serving” (§7). The lesson gives the dark side plainly: “A mob locked in fear or rage creates a collective field that is terrifying” (§7). And the bright side as plainly: “Used wisely, it is one of the most transformative forces available” (§7).</p>
+    <h3>A condition, not the recognition</h3>
+    <p>“The coherent state is not itself the recognition of the deepest Self; it is the condition of the instrument that allows that recognition to dawn” (§4).</p>
+  </div>
+  </div>
+</section>
+<footer>Part I is practice and is not scored. Part II is scored, and only to show you where to look again. Based on Lesson 3.6. The lamps and oscillators are a generic model of waves and coupled oscillators; they do not model or measure any person, nervous system or group. This page illustrates the lesson’s teaching and does not advise on anyone’s situation. For help with distress, please speak with a qualified professional or someone you trust.<br>Ritam · Ramakrishna Vedanta Centre NZ · <a href="https://www.vedanta.nz">www.vedanta.nz</a> Privacy: when you are signed in, your name, email, answers and score are saved to your member record. Only you and the course instructors can see them. They are not shared or ranked.</footer>
+</div>
+
+<script>
+window.Core=(function(){
+"use strict";
+var TAU=Math.PI*2;
+try{var q=new URLSearchParams(location.search).get("theme");if(q==="light"||q==="dark")document.documentElement.setAttribute("data-theme",q)}catch(e){}
+function clamp(x,a,b){return Math.max(a,Math.min(b,x))}
+function el(id){return document.getElementById(id)}
+var col={},subs=[];
+function readColors(){
+  var cs=getComputedStyle(document.documentElement);
+  ["--bg","--surface","--ink","--muted","--line","--tint","--obj","--att","--res","--env","--ok","--gold"].forEach(function(k){col[k]=cs.getPropertyValue(k).trim()});
+  subs.forEach(function(f){try{f()}catch(e){}});
+}
+readColors();
+try{window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change",readColors)}catch(e){}
+new MutationObserver(readColors).observe(document.documentElement,{attributes:true,attributeFilter:["data-theme"]});
+function onTheme(f){subs.push(f)}
+var dpr=Math.max(1,Math.min(2,window.devicePixelRatio||1));
+function fit(c){
+  var w=c.clientWidth,h=c.clientHeight;
+  if(!w||!h)return null;
+  var bw=Math.round(w*dpr),bh=Math.round(h*dpr);
+  if(c.width!==bw||c.height!==bh){c.width=bw;c.height=bh}
+  var g=c.getContext("2d");g.setTransform(dpr,0,0,dpr,0,0);return {g:g,w:w,h:h};
+}
+var FONT="500 11.5px 'Noto Sans',system-ui,sans-serif";
+function label(g,t,x,y,color,align,pill){
+  g.font=FONT;g.textAlign=align||"left";g.textBaseline="alphabetic";
+  if(pill){var w=g.measureText(t).width,x0=(align==="right")?x-w:(align==="center"?x-w/2:x);
+    g.save();g.globalAlpha=.82;g.fillStyle=col["--surface"];g.fillRect(x0-5,y-12,w+10,17);g.restore()}
+  g.fillStyle=color;g.fillText(t,x,y)}
+function gauss(){var u=Math.random()||1e-9,v=Math.random();return Math.sqrt(-2*Math.log(u))*Math.cos(TAU*v)}
+/* an animation loop that runs only while its element is on screen and the tab is visible */
+function loop(target,step,onPause){
+  var on=false,vis=false,raf=0,last=0,RM=false;
+  try{RM=window.matchMedia("(prefers-reduced-motion: reduce)").matches}catch(e){}
+  function frame(t){
+    if(!on||!vis||document.hidden){raf=0;return}
+    if(RM&&last&&t-last<200){raf=requestAnimationFrame(frame);return}
+    var dt=last?Math.min(0.1,(t-last)/1000):0;last=t;step(dt,RM);raf=requestAnimationFrame(frame);
+  }
+  function kick(){if(on&&vis&&!document.hidden&&!raf){last=0;raf=requestAnimationFrame(frame)}onPause&&onPause(on&&!vis)}
+  if(window.IntersectionObserver){new IntersectionObserver(function(es){es.forEach(function(e){vis=e.isIntersecting});kick()},{threshold:0}).observe(target)}else{vis=true}
+  document.addEventListener("visibilitychange",kick);
+  return {start:function(){on=true;kick()},stop:function(){on=false},running:function(){return !!raf}};
+}
+return {TAU:TAU,clamp:clamp,el:el,col:col,onTheme:onTheme,fit:fit,label:label,gauss:gauss,loop:loop,FONT:FONT};
+})();
+</script>
+<script>
+(function(){
+"use strict";
+var $=Core.el,C=Core.col,TAU=Core.TAU;
+try{var pt=new URLSearchParams(location.search).get("part");if(pt==="1"||pt==="2")document.body.setAttribute("data-part",pt)}catch(e){}
+
+/* ===== Part I: lamps with scattered or aligned phases ===== */
+var A={n:2,ph:[],t:0,avg:0.5,a:0};
+var cvA=$("cvA"),rAlign=$("rAlign"),msgA=$("msgA");
+function scatter(){A.ph=[];for(var k=0;k<A.n;k++)A.ph.push(Math.random()*TAU)}
+function inst(){var x=0,y=0;for(var k=0;k<A.n;k++){x+=Math.cos(A.ph[k]);y+=Math.sin(A.ph[k])}return {r:Math.hypot(x,y)/A.n,arg:Math.atan2(y,x)}}
+/* brightness at the spot, as a share of the fully aligned brightness: aligned 1, scattered on average 1/n, one lamp alone 1/n² */
+function ticks(){
+  var n=A.n,h="";
+  if(n===2)h='<span style="left:25%">either alone</span><span style="left:50%">scattered</span><span class="r" style="left:100%">aligned</span>';
+  else h='<span style="left:'+(100/n)+'%">scattered</span><span class="r" style="left:100%">aligned</span>';
+  $("ticksA").innerHTML=h;
+}
+function stepA(dt,RM){
+  var a=A.a,noise=1.7*(1-a),pull=3.2*a;
+  for(var k=0;k<A.n;k++){
+    A.ph[k]+=(noise*Math.sqrt(dt||0.016)*Core.gauss())-(pull*Math.sin(A.ph[k])*(dt||0.016));
+  }
+  if(!RM)A.t+=dt;
+  var s=inst();var b=s.r*s.r;
+  A.avg+=(b-A.avg)*Math.min(1,(dt||0.016)/1.2);
+  drawA(s);readA();
+}
+function drawA(s){
+  var f=Core.fit(cvA);if(!f)return;var g=f.g,W=f.w,H=f.h,n=A.n;
+  g.clearRect(0,0,W,H);g.fillStyle=C["--bg"];g.fillRect(0,0,W,H);
+  var narrow=W<520,x0=30,x1=narrow?W*0.62:W*0.64,spotX=narrow?W*0.82:W*0.83;
+  var sumH=narrow?92:104,top=10,rowsH=H-sumH-top-8,rowH=rowsH/n,amp=Math.min(rowH*0.36,26);
+  var k0=TAU/(narrow?90:120),w=TAU*0.6;
+  /* each lamp */
+  for(var k=0;k<n;k++){
+    var cy=top+rowH*(k+0.5);
+    g.save();g.fillStyle=C["--att"];g.globalAlpha=.9;g.beginPath();g.arc(14,cy,6,0,TAU);g.fill();g.restore();
+    g.save();g.strokeStyle=C["--att"];g.lineWidth=1.8;g.beginPath();
+    for(var x=x0;x<=x1;x+=2){var y=cy-amp*Math.cos(k0*(x-x1)-w*A.t+A.ph[k]);if(x===x0)g.moveTo(x,y);else g.lineTo(x,y)}
+    g.stroke();g.restore();
+    /* where its peak meets the spot line */
+    g.save();g.strokeStyle=C["--line"];g.setLineDash([3,3]);g.beginPath();g.moveTo(x1,cy);g.lineTo(spotX-30,top+rowsH/2+sumH*0);g.stroke();g.restore();
+  }
+  /* sum at the spot */
+  var cyS=H-sumH/2-4,ampS=sumH*0.42/1;
+  g.save();g.strokeStyle=C["--line"];g.beginPath();g.moveTo(x0,cyS);g.lineTo(x1,cyS);g.stroke();g.restore();
+  g.save();g.strokeStyle=C["--res"];g.lineWidth=2.6;g.beginPath();
+  for(var x2=x0;x2<=x1;x2+=2){var y2=cyS-ampS*s.r*Math.cos(k0*(x2-x1)-w*A.t+s.arg);if(x2===x0)g.moveTo(x2,y2);else g.lineTo(x2,y2)}
+  g.stroke();g.restore();
+  /* the spot: glow follows the momentary brightness */
+  var b=s.r*s.r,cyG=top+rowsH/2+ (narrow?10:0),R=narrow?30:40;
+  var grd=g.createRadialGradient(spotX,cyG,2,spotX,cyG,R*1.6);
+  grd.addColorStop(0,"rgba(255,214,120,"+(0.12+0.88*b).toFixed(3)+")");grd.addColorStop(1,"rgba(255,214,120,0)");
+  g.fillStyle=grd;g.beginPath();g.arc(spotX,cyG,R*1.6,0,TAU);g.fill();
+  g.save();g.strokeStyle=C["--muted"];g.lineWidth=1.2;g.beginPath();g.arc(spotX,cyG,R,0,TAU);g.stroke();g.restore();
+  Core.label(g,"the spot",spotX,cyG+R+18,C["--muted"],"center",true);
+}
+function brightWord(){var s=1/A.n,b=A.avg;if(b>0.85)return "aligned";if(b<s*1.6)return "scattered";return "partly aligned"}
+var lastWordA="";
+function readA(){
+  $("fBright").style.width=Math.round(100*Core.clamp(A.avg,0,1))+"%";
+  var wd=brightWord();$("oBright").textContent=wd;
+  if(wd!==lastWordA){lastWordA=wd;sayA(wd)}
+}
+function sayA(wd){
+  var two=A.n===2,h;
+  if(wd==="scattered")h='<p class="verdict">Scattered: peaks meet troughs as often as peaks.</p><p>Watch the spot flicker as the waves drift in and out of step. Incoherent waves “will sometimes constructively interfere (when peaks align with peaks) and sometimes destructively interfere (when peaks align with troughs). The net result is an average brightness” (§3).</p>';
+  else if(wd==="partly aligned")h='<p class="verdict">Partly aligned: brighter, with the same energy.</p><p>More of the peaks now arrive together, so more of them add. Nothing has been added to any lamp.</p>';
+  else h='<p class="verdict">Aligned: every peak meets a peak.</p><p>'+(two?"“Their amplitudes will add. The result is a bright spot that is four times as bright as either wave alone, even though the total energy used is the same” (§3).":"With every peak arriving together, the waves add fully, and the spot is far brighter than when they were scattered. The energy put in has not changed. A laser emits its light “with all the waves in phase … Same energy. Utterly different effect. The difference is coherence” (§3).")+'</p>';
+  msgA.innerHTML=h+'<p class="ref">§3</p>';
+}
+var loopA=Core.loop($("labA"),stepA,function(p){$("pzA").hidden=!p});
+function setN(n){A.n=n;scatter();A.avg=1/n;lastWordA="";ticks();
+  document.querySelectorAll("#nChips .chip").forEach(function(c){c.setAttribute("aria-pressed",+c.dataset.n===n?"true":"false")});
+  stepA(0.016,true)}
+document.querySelectorAll("#nChips .chip").forEach(function(b){b.addEventListener("click",function(){setN(+b.dataset.n)})});
+rAlign.addEventListener("input",function(){A.a=+rAlign.value/100;rAlign.setAttribute("aria-valuetext",A.a<0.15?"scattered":A.a>0.85?"aligned":"partly aligned")});
+$("bScatter").addEventListener("click",function(){scatter();A.avg=Math.min(A.avg,1/A.n);lastWordA="";stepA(0.016,true)});
+rAlign.setAttribute("aria-valuetext","scattered");
+setN(2);loopA.start();
+
+/* ===== Part II: coupled oscillators (a generic Kuramoto-type model) ===== */
+var W0=TAU*0.4,NB=10,KMAX=3;
+var B={th:[],om:[],far:false,src:"none",thS:0,u:0,K:0,hist:[],histS:[],hn:0,r:0,pace:0,prevPsi:null,farRel:[],t:0};
+var cvB=$("cvB"),rK=$("rK"),msgB=$("msgB");
+function initB(){
+  B.th=[];B.om=[];
+  for(var i=0;i<NB;i++){B.om.push(W0*(1+0.15*(-1+2*i/(NB-1))));B.th.push(Math.random()*TAU)}
+  if(B.far){B.om.push(W0*1.8);B.th.push(Math.random()*TAU)}
+  B.thS=Math.random()*TAU;B.u=0;B.hist=[];B.histS=[];B.r=0;B.pace=W0;B.prevPsi=null;B.farOk=0;B.srcOk=0;
+}
+function srcOmega(){return B.src==="calm"?W0*0.65:W0*1.5}
+function stepB(dt,RM){
+  var h=1/120,steps=Math.max(1,Math.round((dt||0.016)/h)),n=B.th.length,K=B.K;
+  for(var s=0;s<steps;s++){
+    var zr=0,zi=0,j;for(j=0;j<n;j++){zr+=Math.cos(B.th[j]);zi+=Math.sin(B.th[j])}
+    var nt=new Array(n);
+    for(var i=0;i<n;i++){
+      var d=B.om[i]+K/n*(zi*Math.cos(B.th[i])-zr*Math.sin(B.th[i]));
+      if(B.src!=="none")d+=1.3*K*Math.sin(B.thS-B.th[i]);
+      nt[i]=B.th[i]+d*h;
+    }
+    B.th=nt;
+    if(B.src==="ag"){B.u+=-B.u/0.7*h+Math.sqrt(2/0.7*h)*Core.gauss();B.thS+=srcOmega()*(1+0.28*B.u)*h}
+    else if(B.src==="calm"){B.thS+=srcOmega()*h}
+  }
+  /* order of the ten (the far-off one is read separately) */
+  var x=0,y=0;for(var k=0;k<NB;k++){x+=Math.cos(B.th[k]);y+=Math.sin(B.th[k])}
+  var r=Math.hypot(x,y)/NB,psi=Math.atan2(y,x),ddt=dt||0.016;
+  B.r+=(r-B.r)*Math.min(1,ddt/1.0);
+  if(B.prevPsi!=null&&ddt>0){var dp=psi-B.prevPsi;while(dp>Math.PI)dp-=TAU;while(dp<-Math.PI)dp+=TAU;B.pace+=(dp/ddt-B.pace)*Math.min(1,ddt/2.5)}
+  B.prevPsi=psi;
+  if(B.src!=="none"){var sr=B.thS-psi;B.srcOk+=((Math.abs(Math.sin(sr/2))<0.7&&r>0.6?1:0)-B.srcOk)*Math.min(1,ddt/3)}else B.srcOk=0;
+  if(B.far){var fr=B.th[NB]-psi;B.farOk+=( (Math.abs(Math.sin((fr)/2))<0.6&&r>0.6?1:0) - B.farOk)*Math.min(1,ddt/3)}
+  /* combined rhythm trace */
+  var sig=0;for(var m=0;m<NB;m++)sig+=Math.cos(B.th[m]);sig/=NB;
+  B.hist.push(sig);B.histS.push(B.src!=="none"?Math.cos(B.thS):null);
+  var maxH=420;if(B.hist.length>maxH){B.hist.shift();B.histS.shift()}
+  drawB(psi,r);readB();
+}
+function drawB(psi,r){
+  var f=Core.fit(cvB);if(!f)return;var g=f.g,W=f.w,H=f.h;
+  g.clearRect(0,0,W,H);g.fillStyle=C["--bg"];g.fillRect(0,0,W,H);
+  var narrow=W<520,cx,cy,R,tx0,tx1,ty;
+  if(narrow){R=Math.min(W*0.3,92);cx=W/2;cy=R+26;tx0=14;tx1=W-12;ty=cy+R+30}
+  else{R=Math.min(H/2-34,110);cx=R+40;cy=H/2;tx0=cx+R+56;tx1=W-14;ty=24}
+  /* circle */
+  g.save();g.strokeStyle=C["--line"];g.lineWidth=1.5;g.beginPath();g.arc(cx,cy,R,0,TAU);g.stroke();g.restore();
+  /* together arrow */
+  g.save();g.strokeStyle=C["--ink"];g.fillStyle=C["--ink"];g.lineWidth=2;var ax=cx+R*0.85*r*Math.cos(psi),ay=cy-R*0.85*r*Math.sin(psi);
+  g.beginPath();g.moveTo(cx,cy);g.lineTo(ax,ay);g.stroke();g.beginPath();g.arc(cx,cy,3,0,TAU);g.fill();g.restore();
+  /* oscillators */
+  for(var i=0;i<B.th.length;i++){
+    var isFar=i>=NB,px=cx+R*Math.cos(B.th[i]),py=cy-R*Math.sin(B.th[i]);
+    g.save();g.fillStyle=isFar?C["--env"]:C["--res"];g.globalAlpha=isFar?1:.85;g.beginPath();g.arc(px,py,isFar?7.5:6,0,TAU);g.fill();g.restore();
+  }
+  if(B.src!=="none"){
+    var sx=cx+(R+16)*Math.cos(B.thS),sy=cy-(R+16)*Math.sin(B.thS);
+    g.save();g.fillStyle=C["--gold"];g.strokeStyle=C["--ink"];g.lineWidth=1.2;g.beginPath();g.arc(sx,sy,8.5,0,TAU);g.fill();g.stroke();g.restore();
+  }
+  /* trace */
+  var th=narrow?H-ty-16:H-ty-30,mid=ty+th/2,amp=th*0.42,N=B.hist.length,span=420;
+  Core.label(g,"the group’s combined rhythm",tx0,ty-6,C["--muted"],"left",false);
+  g.save();g.strokeStyle=C["--line"];g.beginPath();g.moveTo(tx0,mid);g.lineTo(tx1,mid);g.stroke();g.restore();
+  if(N>1){
+    if(B.src!=="none"){g.save();g.strokeStyle=C["--gold"];g.lineWidth=1.5;g.setLineDash([5,4]);g.beginPath();var st=false;
+      for(var k=0;k<N;k++){var v=B.histS[k];if(v==null){st=false;continue}var xx=tx1-(tx1-tx0)*(N-1-k)/(span-1),yy=mid-amp*0.5*v;if(st)g.lineTo(xx,yy);else{g.moveTo(xx,yy);st=true}}g.stroke();g.restore()}
+    g.save();g.strokeStyle=C["--res"];g.lineWidth=2.2;g.beginPath();
+    for(var k2=0;k2<N;k2++){var x2=tx1-(tx1-tx0)*(N-1-k2)/(span-1),y2=mid-amp*B.hist[k2];if(k2)g.lineTo(x2,y2);else g.moveTo(x2,y2)}
+    g.stroke();g.restore();
+  }
+  Core.label(g,"time →",tx1,ty+th+16,C["--muted"],"right",false);
+}
+function togWord(){return B.r<0.45?"scattered":B.r<0.85?"gathering":"moving as one"}
+function paceWord(){
+  if(B.r<0.6)return "no shared pace";
+  if(B.src!=="none"&&B.srcOk>0.8)return B.src==="calm"?"follows the calm source":"follows the agitated source";
+  if(B.src!=="none")return "a pace of its own";
+  return "a shared pace of its own";
+}
+function farWord(){if(!B.far)return "not added";return B.farOk>0.8?"locked in with the group":"keeps its own pace"}
+var lastKey="";
+function readB(){
+  var t=togWord(),p=paceWord(),fw=farWord();
+  $("rdTog").textContent=t;$("rdPace").textContent=p;$("rdFar").textContent=fw;
+  var key=t+"|"+p+"|"+fw;if(key!==lastKey){lastKey=key;sayB(t,p,fw)}
+}
+function sayB(t,p,fw){
+  var h="",refs="§5";
+  if(t==="scattered")h='<p class="verdict">Scattered: each keeps its own pace.</p><p>With little or no coupling, nothing pulls the oscillators together. “Two coupled oscillators … naturally tend to synchronise their frequency when coupled strongly enough” (§5). Raise the coupling.</p>';
+  else if(p.indexOf("agitated")>=0){h='<p class="verdict">The group follows the agitated rhythm.</p><p>The same coupling that brings calm brings agitation. “Resonance works in both directions … Expose it to an agitated, fearful frequency and the system entrains toward agitation and fear” (§1).</p>';refs="§1 · §7"}
+  else if(p.indexOf("calm")>=0){h='<p class="verdict">The group follows the calm rhythm.</p><p>“Expose the mind to a steady, peaceful frequency and the system entrains toward steadiness and peace” (§1). Now try the agitated rhythm at the same coupling.</p>';refs="§1 · §5"}
+  else if(t==="gathering")h='<p class="verdict">Gathering: some are falling into step.</p><p>A cluster forms and others drift in and out of it. A little more coupling and the rest join.</p>';
+  else h='<p class="verdict">Moving as one.</p><p>The arrow in the middle is long: the oscillators now add, as the aligned lamps did in Part I, and the combined rhythm swings fully. No oscillator was given more energy; coupling brought them into step.</p>';
+  if(B.far){h+=fw.indexOf("locked")>=0?'<p>The far-off oscillator has locked in too, but only now that the coupling is strong.</p>':'<p>The far-off oscillator, whose own pace is far from the others, keeps slipping past them. It locks in only when the coupling is strong.</p>'}
+  msgB.innerHTML=h+'<p class="ref">'+refs+'</p>';
+}
+var loopB=Core.loop($("labB"),stepB,function(p){$("pzB").hidden=!p});
+function setK(){B.K=KMAX*(+rK.value)/100;rK.setAttribute("aria-valuetext",B.K<0.4?"weak":B.K<1.5?"moderate":"strong")}
+rK.addEventListener("input",setK);
+function setSrc(s){B.src=s;B.u=0;B.srcOk=0;B.thS=Math.random()*TAU;$("lgSrc").hidden=s==="none";B.hist=[];B.histS=[];
+  document.querySelectorAll("#srcChips .chip").forEach(function(c){c.setAttribute("aria-pressed",c.dataset.s===s?"true":"false")})}
+document.querySelectorAll("#srcChips .chip").forEach(function(b){b.addEventListener("click",function(){setSrc(b.dataset.s)})});
+$("bFar").addEventListener("click",function(){B.far=!B.far;$("bFar").setAttribute("aria-pressed",B.far?"true":"false");$("lgFar").hidden=!B.far;$("bFar").textContent=B.far?"Remove the far-off oscillator":"Add a far-off oscillator";initB()});
+function resetB(){rK.value=8;setK();B.far=false;$("bFar").setAttribute("aria-pressed","false");$("bFar").textContent="Add a far-off oscillator";$("lgFar").hidden=true;setSrc("none");initB();lastKey="";stepB(0.016,true)}
+$("bResetB").addEventListener("click",resetB);
+resetB();loopB.start();
+
+/* ===== Part II questions (scored) ===== */
+var QS=[
+ {t:"In the lesson, what do two oscillators need in order to synchronise?",
+  o:[["energy","More energy than either has alone."],["coupled","To be coupled strongly enough."],["start","To start at the same moment."]],a:"coupled",
+  why:"“Two coupled oscillators … naturally tend to synchronise their frequency when coupled strongly enough” (§5). In the model, the oscillators started at scattered moments and still fell into step once the coupling was strong.",ref:"§5",
+  hint:{energy:"Look at what changes in the model as they fall into step: the coupling, not the energy (§5).",start:"In the model they start at scattered moments and still fall into step. What does §5 say they need?"},
+  demo:{K:85,src:"none",far:false}},
+ {t:"As the oscillators fall into step, the combined rhythm swings more fully, just as the aligned lamps made a brighter spot. What made the difference?",
+  o:[["more","More energy came in from outside as they synchronised."],["each","Each oscillator grew stronger as it joined the group."],["align","Their phases came into line while the energy stayed the same."]],a:"align",
+  why:"“Same energy. Utterly different effect. The difference is coherence” (§3). Coherent waves “will always constructively interfere. Their amplitudes will add” (§3).",ref:"§3",
+  hint:{more:"Look back at Part I: the energy put in stayed the same at every setting (§3).",each:"No lamp and no oscillator changed its own strength. What changed was their timing (§3)."}},
+ {t:"The steady source has an agitated rhythm, and the coupling is strong. What does the group do?",
+  o:[["calm","It settles into a calm rhythm, since being in step is calm."],["follow","It falls in step with the agitated rhythm it is given."],["stay","It stays scattered, because the source is too agitated to follow."]],a:"follow",
+  why:"“Resonance works in both directions. Expose the mind to a steady, peaceful frequency and the system entrains toward steadiness and peace. Expose it to an agitated, fearful frequency and the system entrains toward agitation and fear” (§1).",ref:"§1",
+  hint:{calm:"Being in step is not the same as being calm. The lesson says resonance works in both directions (§1).",stay:"The coupling is strong, so something pulls the group together. What does §1 say it entrains toward?"},
+  demo:{K:90,src:"ag",far:false}},
+ {t:"Then is practising together in a group good in itself?",
+  o:[["always","Yes: a coherent group field is good in itself, whatever it holds."],["neutral","Not by itself: the field is neutral and amplifies what is present."],["size","That depends only on how many people take part, and how closely."]],a:"neutral",
+  why:"“This is why the traditions always link collective practice with discernment (viveka). The power of the collective field is neutral. It amplifies whatever frequency is present” (§7). Used wisely, the lesson says, it is “one of the most transformative forces available” (§7).",ref:"§7",
+  hint:{always:"The same coupling carried the agitated rhythm too. What does §7 say about the power of the collective field?",size:"The lesson names a different condition: what is being amplified, and so discernment (§7)."}},
+ {t:"Picture a mind in which resonance, rhythm and coherence all work together. In the lesson, what is this coherent state?",
+  o:[["recog","The recognition of the deepest Self, reached by the mind."],["property","A new property of the Self, acquired through steady practice."],["condition","A condition of the instrument that lets recognition dawn."]],a:"condition",
+  why:"“The coherent state is not itself the recognition of the deepest Self; it is the condition of the instrument that allows that recognition to dawn” (§4). And from §1: “Coherent states are not new properties of the Self being acquired.”",ref:"§1 · §4",
+  hint:{recog:"The lesson draws a line here: coherence is not itself that recognition (§4).",property:"§1 says plainly that coherent states are not new properties of the Self. They are conditions of what?"}}
+];
+var Q={i:0,done:{},miss:{},sent:false};
+var qPicks=$("qPicks"),qMsg=$("qMsg");
+function qDots(){var d=$("qDots");d.innerHTML="";QS.forEach(function(_,k){var e=document.createElement("i");if(Q.done[k])e.className="done";else if(k===Q.i)e.className="cur";d.appendChild(e)})}
+function showQ(){
+  var q=QS[Q.i];$("qText").textContent=q.t;$("qPro").textContent="Question "+(Q.i+1)+" of "+QS.length;
+  qPicks.innerHTML="";
+  var opts=q.o.slice();for(var z=opts.length-1;z>0;z--){var r=Math.floor(Math.random()*(z+1)),tmp=opts[z];opts[z]=opts[r];opts[r]=tmp}
+  opts.forEach(function(o){var b=document.createElement("button");b.className="pick";b.dataset.p=o[0];b.textContent=o[1];b.addEventListener("click",function(){pick(b)});qPicks.appendChild(b)});
+  qMsg.innerHTML='<p class="note">Pick one answer.</p>';
+  $("qNext").hidden=true;$("qDemo").hidden=true;$("qShow").hidden=false;qDots();
+}
+function revealQ(){
+  var q=QS[Q.i];Q.done[Q.i]=true;
+  qPicks.querySelectorAll(".pick").forEach(function(p){p.disabled=true;if(p.dataset.p===q.a)p.classList.add("right")});
+  qMsg.innerHTML='<p class="verdict">'+(Q.miss[Q.i]?"The lesson’s answer:":"Yes.")+' '+q.o.filter(function(o){return o[0]===q.a})[0][1]+'</p><p>'+q.why+'</p><p class="ref">'+q.ref+'</p>';
+  $("qShow").hidden=true;$("qDemo").hidden=!q.demo;
+  if(Q.i<QS.length-1)$("qNext").hidden=false;else{$("qDone").hidden=false;finish()}
+  qDots();
+}
+function pick(b){
+  var q=QS[Q.i];
+  if(b.dataset.p===q.a){revealQ()}
+  else{Q.miss[Q.i]=true;b.classList.add("wrong");b.disabled=true;qMsg.innerHTML='<p class="verdict">Not this one.</p><p>'+q.hint[b.dataset.p]+'</p>'}
+}
+$("qNext").addEventListener("click",function(){Q.i++;showQ();try{qPicks.querySelector(".pick").focus({preventScroll:true})}catch(e){}});
+$("qShow").addEventListener("click",function(){Q.miss[Q.i]=true;revealQ()});
+$("qDemo").addEventListener("click",function(){
+  var d=QS[Q.i].demo;if(!d)return;
+  if(B.far!==d.far)$("bFar").click();
+  rK.value=d.K;setK();setSrc(d.src);
+  try{$("labB").scrollIntoView({behavior:"smooth",block:"start"})}catch(e){}
+});
+$("qReset").addEventListener("click",function(){Q={i:0,done:{},miss:{},sent:false};$("qDone").hidden=true;$("scBox").innerHTML="";showQ()});
+showQ();
+
+/* ===== Scoring for Part II, and hand-off to the host page when embedded ===== */
+var EMBED=/[?&]embed=1/.test(location.search);
+var META={code:"ADV-P-3-6",title:"Practice: Lesson 3.6, Same Energy, Different Effect (Part II)",programme:"The Mind in the Light of Modern and Spiritual Sciences (Advanced)",cut:75};
+function send(m){if(EMBED){try{parent.postMessage(m,"*")}catch(e){}}}
+function finish(){
+  if(Q.sent){return}
+  var n=QS.length,right=0,ans=[],wrong=[];
+  QS.forEach(function(q,k){var ok=!Q.miss[k];if(ok){right++}else{wrong.push(k)}var txt=q.o.filter(function(o){return o[0]===q.a})[0][1];ans.push({q:k+1,ok:ok,given:txt+(ok?" (first pick)":" (not on first pick)")})});
+  var pct=Math.round(100*right/n),good=pct>=META.cut;
+  var h='<div class="big">'+right+' of '+n+' on the first pick</div>'+
+        '<p class="band '+(good?'good':'')+'">'+(good?'Well grasped':'Revisit these ideas')+'</p>';
+  if(wrong.length){h+='<p>Look again at:</p><ul>'+wrong.map(function(k){return '<li>Question '+(k+1)+': '+QS[k].ref+'</li>'}).join('')+'</ul>'}
+  else{h+='<p>Nothing to revisit here.</p>'}
+  h+='<p class="saved" id="scSaved">'+(EMBED?'Saving your result…':'Sign in on the course page to have your result saved.')+'</p>';
+  $("scBox").innerHTML=h;Q.sent=true;
+  send({type:"quizResult",code:META.code,title:META.title,programme:META.programme,score:right,maxScore:n,percent:pct,questionsCorrect:right,questionCount:n,answers:ans});
+}
+window.addEventListener("message",function(e){
+  var d=e.data||{};if(!d||typeof d!=="object"){return}
+  var el=$("scSaved");if(!el){return}
+  if(d.type==="saved"){el.textContent="Your result has been saved to your member record."}
+  else if(d.type==="saveError"){el.textContent="Your result could not be saved this time. You can start again and finish once more."}
+  else if(d.type==="notMember"){el.textContent="Sign in as a member to have your result saved."}
+});
+send({type:"ready"});
+/* tell the host page how tall this page is, so the embed grows instead of scrolling inside its frame */
+(function(){
+  var last=0;
+  function h(){var d=document.documentElement,b=document.body;var v=Math.ceil(Math.max(d.scrollHeight,b.scrollHeight,b.offsetHeight));if(v&&Math.abs(v-last)>1){last=v;send({type:"height",height:v})}}
+  window.addEventListener("load",h);window.addEventListener("resize",h);
+  if(window.ResizeObserver)new ResizeObserver(h).observe(document.body);
+  setInterval(h,700);h();
+})();
+Core.onTheme(function(){stepA(0,true);stepB(0,true)});
+window.addEventListener("resize",function(){stepA(0,true);stepB(0,true)});
+})();
+</script>
+</body></html>

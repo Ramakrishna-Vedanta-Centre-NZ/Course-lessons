@@ -1,0 +1,570 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Practice: Lesson 3.5, Three Dials and a 2x2</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans:wght@400..700&family=Noto+Serif:ital,wght@0,400..700;1,400..700&display=swap">
+<style>
+:root{
+  --bg:#FBF5EA; --surface:#FFFDF8; --ink:#1E1E1E; --muted:#5A5A5A; --line:#E6DAC3; --tint:#F3EAD3; --navy:#12285A; --gold:#C9A24A; --goldt:#6B4E0E;
+  --obj:#0B8686; --att:#C95F06; --res:#2E3192; --env:#C0245B; --ok:#1B7A52;
+  --display:"Noto Serif",Georgia,"Times New Roman",serif;
+  --body:"Noto Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0B1A3D; --surface:#12285A; --ink:#FBF5EA; --muted:#C9C3B3; --line:#2B4686; --tint:#1D3770; --gold:#E6C36A; --goldt:#E6C36A;
+    --obj:#46CFC6; --att:#F5A04D; --res:#A3AAFF; --env:#FF7BA9; --ok:#5BD59B; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0B1A3D; --surface:#12285A; --ink:#FBF5EA; --muted:#C9C3B3; --line:#2B4686; --tint:#1D3770; --gold:#E6C36A; --goldt:#E6C36A;
+  --obj:#46CFC6; --att:#F5A04D; --res:#A3AAFF; --env:#FF7BA9; --ok:#5BD59B; color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;
+  padding-left:max(14px,env(safe-area-inset-left,0px));padding-right:max(14px,env(safe-area-inset-right,0px));padding-block:22px 40px}
+.wrap{max-width:900px;margin:0 auto;display:flex;flex-direction:column;gap:32px}
+h1,h2,h3{font-family:var(--display);font-weight:500;text-wrap:balance;margin:0;letter-spacing:-.01em}
+h1{font-size:clamp(30px,5.4vw,44px);line-height:1.06}
+h2{font-size:clamp(23px,3.4vw,29px);line-height:1.15}
+h3{font-size:19px;line-height:1.25}
+p{margin:0}
+sub{font-size:.72em;line-height:0}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.lede{font-size:17.5px;max-width:64ch}
+.intro{max-width:66ch;color:var(--muted)}
+header{display:flex;flex-direction:column;gap:12px}
+section{display:flex;flex-direction:column;gap:18px;min-width:0}
+.sym{font-family:var(--mono);font-size:.92em;white-space:nowrap}
+.k-obj{color:var(--obj)} .k-att{color:var(--att)} .k-res{color:var(--res)} .k-env{color:var(--env)}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px;display:flex;flex-direction:column;gap:14px;min-width:0}
+.bar{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;justify-content:space-between}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--bg)}
+.seg button{font:inherit;font-size:14px;color:var(--muted);background:transparent;border:0;padding:8px 13px;cursor:pointer}
+.seg button+button{border-left:1px solid var(--line)}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--surface)}
+button:focus-visible,input:focus-visible{outline:2px solid var(--res);outline-offset:2px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{font:inherit;font-size:14px;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:7px 13px;cursor:pointer;display:inline-flex;gap:8px;align-items:center}
+.chip i{font-style:normal;font-family:var(--mono);font-size:11px;color:var(--muted)}
+.chip[aria-pressed="true"]{background:var(--res);border-color:var(--res);color:#fff}
+.chip[aria-pressed="true"] i{color:#fff;opacity:.8}
+.chip:disabled{cursor:default}
+.chip.reached:not([aria-pressed="true"]){border-color:var(--res)}
+.btn{font:inherit;font-size:14px;color:var(--ink);background:var(--surface);border:1px solid var(--ink);border-radius:8px;padding:8px 16px;cursor:pointer}
+.btn.primary{background:var(--ink);color:var(--surface)}
+.btn.ghost{border-color:var(--line);color:var(--muted)}
+.scope-wrap{position:relative;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--bg)}
+canvas{display:block;width:100%}
+.playbtn{position:absolute;right:8px;bottom:8px;font:inherit;font-size:12px;background:var(--surface);color:var(--muted);border:1px solid var(--line);border-radius:6px;padding:4px 10px;cursor:pointer}
+.box{border:1px solid var(--line);border-radius:8px;background:var(--bg);padding:10px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.box .cap{font-size:12px;color:var(--muted)}
+.meters{display:flex;flex-direction:column;gap:9px}
+.meter{display:grid;grid-template-columns:1fr auto;gap:2px 8px;font-size:13px;align-items:baseline}
+.meter b{font-weight:600}
+.meter output{font-family:var(--mono);font-size:12px;color:var(--muted)}
+.meter .track{grid-column:1/-1;height:7px;background:var(--line);border-radius:4px;overflow:hidden}
+.meter .fill{height:100%;width:0;background:var(--res);border-radius:4px}
+.meter.f2 .fill{background:var(--env)} .meter.f3 .fill{background:var(--obj)}
+.slider{display:flex;align-items:center;gap:10px;flex:1 1 280px;min-width:0}
+.slider label{font-size:14px;min-width:0}
+.slider input[type=range]{flex:1;min-width:60px;accent-color:var(--res)}
+.slider small{color:var(--muted);font-size:12px;white-space:nowrap}
+.slider output{font-family:var(--mono);font-size:12.5px;color:var(--muted);min-width:46px;text-align:right}
+.readout{font-size:14px;color:var(--muted)}
+.readout b{color:var(--ink)}
+.tag{font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);border:1px solid var(--line);border-radius:4px;padding:2px 6px}
+.note{font-size:13px;color:var(--muted);max-width:70ch}
+.balance{background:var(--tint);border-radius:10px;padding:16px 18px;display:flex;flex-direction:column;gap:8px;max-width:78ch}
+footer{font-size:13px;color:var(--muted);max-width:76ch;border-top:1px solid var(--line);padding-top:12px}
+@media (max-width:640px){.panel{padding:12px}.wrap{gap:26px}}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
+
+[hidden]{display:none!important}
+:root{--c-h:var(--res);--c-ref:var(--obj);--c-over:var(--env);--c-settle:var(--att);--c-rip:var(--obj)}
+nav.parts{display:flex;flex-wrap:wrap;gap:8px 20px;margin-top:4px}
+nav.parts a{color:var(--ink);text-decoration:none;border-bottom:1px solid var(--line);padding-bottom:2px;font-size:15px}
+nav.parts a:hover,nav.parts a:focus-visible{border-color:var(--res);color:var(--res)}
+.msg{min-height:1.5em;font-size:15px}
+.fbbox{border-top:1px solid var(--line);padding-top:12px;display:flex;flex-direction:column;gap:8px;min-height:6.5em}
+.fbbox .verdict{font-family:var(--display);font-size:19px}
+.fbbox .ref{font-family:var(--mono);font-size:11px;color:var(--muted)}
+.fbbox q{font-style:italic;quotes:"“" "”"}
+.strikebar{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center}
+.chip:focus-visible,.pick:focus-visible,summary:focus-visible{outline:2px solid var(--res);outline-offset:2px}
+.scene{border-left:3px solid var(--line);padding:2px 0 2px 12px;font-family:var(--display);font-size:18.5px;line-height:1.45;min-height:5.6em}
+.picks{gap:10px}
+.pick{font:inherit;font-size:15px;color:var(--ink);background:var(--bg);border:1.5px solid var(--line);border-top-width:4px;border-radius:10px;padding:9px 14px;cursor:pointer;min-width:0}
+.pick[data-p="settle"]{border-top-color:var(--c-settle)}
+.pick[data-p="over"]{border-top-color:var(--c-over)}
+.pick[data-p="ripple"]{border-top-color:var(--c-rip)}
+.pick.wrong{opacity:.55}
+.pick.right{background:var(--surface);box-shadow:0 0 0 2px var(--ink)}
+.pick:disabled{cursor:default}
+.dots{display:flex;gap:6px}
+.dots i{width:10px;height:10px;border-radius:50%;border:1.5px solid var(--muted)}
+.dots i.done{background:var(--ink);border-color:var(--ink)}
+.dots i.cur{border-color:var(--ink);box-shadow:0 0 0 2px var(--line)}
+.brandhdr{background:#12285A;color:#FBF5EA;text-align:center;padding:18px 18px 20px;border-radius:14px;display:flex;flex-direction:column;align-items:center;gap:6px}
+.brandhdr .logos{display:flex;align-items:center;justify-content:center;gap:18px}
+.brandhdr .logos img{width:56px;height:66px;object-fit:contain;display:block}
+.brandhdr .logos img.rit{width:86px;height:65px}
+.brandhdr .eyebrow{color:#E6C36A;font-weight:700;letter-spacing:3px}
+.brandhdr h1{color:#FBF5EA;font-weight:700}
+.brandhdr .course{color:#E6C36A;font-weight:600;font-size:14px}
+.brandhdr .lede{color:#F1ECDF;font-size:15.5px;max-width:62ch}
+.brandhdr .scorenote{color:#F1ECDF;font-size:14.5px}
+nav.parts a{color:var(--ink)}
+.brandhdr nav.parts a{color:#FBF5EA;border-bottom:1px solid #E6C36A;background:none;padding-bottom:2px}
+.brandhdr nav.parts a:hover,.brandhdr nav.parts a:focus-visible{color:#E6C36A;border-color:#E6C36A}
+.tag.scored{color:var(--goldt);border-color:var(--gold)}
+.scorebox{border-left:5px solid var(--gold);background:var(--tint);border-radius:10px;padding:12px 14px;margin-bottom:14px}
+.scorebox .big{font-family:var(--display);font-size:30px;line-height:1.1;color:var(--ink)}
+.scorebox .band{font-family:var(--display);font-size:18px;margin:4px 0}
+.scorebox .band.good{color:var(--ok)}
+.scorebox .saved{font-size:13.5px;color:var(--muted)}
+.scorebox ul{margin:6px 0 0;padding-left:20px}
+
+/* PRACTICE TEMPLATE: one coloured "part" per section (part-1 .. part-4) */
+.part{--pc:#0E7A8A;--pcon:#FFFFFF;--pcbg:#E6F2F3;border:2px solid var(--pc);border-radius:14px;overflow:hidden;background:var(--pcbg)}
+.part-1{--pc:#0E7A8A;--pcbg:#E6F2F3}
+.part-2{--pc:#12285A;--pcbg:#EEF0F8}
+.part-3{--pc:#2F6B3A;--pcbg:#E6F0E3}
+.part-4{--pc:#7A2A5E;--pcbg:#F5E6F0}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .part{--pcbg:#0F2250;border-color:var(--pcl,var(--pc))}
+ :root:not([data-theme="light"]) .part-1{--pcl:#46CFC6} :root:not([data-theme="light"]) .part-2{--pcl:#E6C36A} :root:not([data-theme="light"]) .part-3{--pcl:#7FD08C} :root:not([data-theme="light"]) .part-4{--pcl:#F08CC8}}
+:root[data-theme="dark"] .part{--pcbg:#0F2250;border-color:var(--pcl,var(--pc))}
+:root[data-theme="dark"] .part-1{--pcl:#46CFC6} :root[data-theme="dark"] .part-2{--pcl:#E6C36A} :root[data-theme="dark"] .part-3{--pcl:#7FD08C} :root[data-theme="dark"] .part-4{--pcl:#F08CC8}
+.part-band{background:var(--pc);color:var(--pcon);padding:12px 16px;display:flex;align-items:center;flex-wrap:wrap;gap:6px 14px}
+.part-band h2{color:inherit;font-size:clamp(20px,3.4vw,26px);font-weight:600;flex:1 1 220px}
+.part-num{font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;font-weight:500;background:rgba(255,255,255,.18);border-radius:4px;padding:3px 9px}
+.part-band .tag{color:inherit;border-color:currentColor;background:rgba(255,255,255,.12)}
+.part-2 .part-band .tag,.part-2 .part-num{color:#E6C36A}
+.part-body{padding:16px;display:flex;flex-direction:column;gap:14px}
+.part .panel{background:var(--surface)}
+@media (max-width:640px){.part-body{padding:12px}}
+
+/* page-specific */
+q{font-style:italic;quotes:"“" "”"}
+.btn:disabled{opacity:.45;cursor:default}
+.controls{display:flex;flex-direction:column;gap:14px}
+.controls .slider{flex:0 0 auto;flex-wrap:wrap}
+.controls .slider label{font-weight:600;min-width:190px;display:flex;flex-direction:column;line-height:1.3}
+.controls .slider label small{font-weight:400;white-space:normal}
+#cv{height:300px}
+.legend{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:13px;color:var(--muted)}
+.legend span{display:inline-flex;align-items:center;gap:7px}
+.sw{display:inline-block;width:22px;height:0;border-top:2.5px solid var(--res)}
+.sw-x{border-top-color:var(--obj)} .sw-m{border-top-color:var(--att)} .sw-e{border-top:2px dashed var(--env)}
+.reads{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.rd{border-top:3px solid var(--line);padding-top:7px;display:flex;flex-direction:column;gap:3px;min-width:0}
+.rd .tag{align-self:flex-start;text-transform:none}
+.rd b{font-family:var(--display);font-size:19px;font-weight:500;line-height:1.2}
+.rd .fd{font-size:12.5px;color:var(--muted);line-height:1.35}
+.rd[data-r="beat"]{border-color:var(--env)} .rd[data-r="full"]{border-color:var(--res)} .rd[data-r="str"]{border-color:var(--att)}
+.chip[data-w][aria-pressed="true"]{background:var(--att);border-color:var(--att)}
+.eqs summary{cursor:pointer;font-size:15px;color:var(--ink)}
+.eqbody{display:flex;flex-direction:column;gap:10px;padding-top:10px}
+.eq{font-size:16px;white-space:normal}
+/* part 2: the grid */
+.casetag{font-family:var(--mono);font-size:11px;letter-spacing:.04em;color:var(--muted)}
+.gridwrap{display:grid;grid-template-columns:minmax(0,1fr);gap:6px}
+.xax{font-size:12.5px;color:var(--muted);display:flex;justify-content:space-between;gap:8px}
+.quad{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+.q{font:inherit;font-size:14px;color:var(--ink);background:var(--bg);border:1.5px solid var(--line);border-radius:10px;padding:10px;min-height:96px;cursor:pointer;display:flex;flex-direction:column;align-items:flex-start;justify-content:space-between;gap:6px;text-align:left;min-width:0}
+.q:focus-visible{outline:2px solid var(--res);outline-offset:2px}
+.q .ql{font-size:13.5px;font-weight:600;color:var(--ink)}
+.q .who{display:flex;flex-wrap:wrap;gap:4px}
+.q .who span{font-size:12.5px;background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:1px 8px}
+.q.wrong{opacity:.5}
+.q.right{border-color:var(--ok);box-shadow:0 0 0 2px var(--ok)}
+.q:disabled{cursor:default}
+/* part 3 */
+.bwfig{border:1px solid var(--line);border-radius:8px;background:var(--bg);overflow:hidden}
+.bwfig svg{display:block;width:100%;height:auto}
+.boxrow{display:flex;flex-wrap:wrap;gap:14px;align-items:center}
+.boxrow svg{width:200px;height:auto;flex:none}
+.boxrow p{flex:1 1 220px}
+.reads2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.rd[data-r="tone"]{border-color:var(--obj)} .rd[data-r="event"]{border-color:var(--env)}
+@media (max-width:640px){
+  #cv{height:270px}
+  .reads,.reads2{grid-template-columns:minmax(0,1fr)}
+  .rd{flex-direction:row;flex-wrap:wrap;align-items:baseline;gap:4px 10px}
+  .rd .fd{flex-basis:100%}
+  .controls .slider label{min-width:0;flex-basis:100%}
+  .scene{font-size:17px}
+  .q{min-height:88px;font-size:13px;padding:8px}
+  .boxrow svg{width:160px}
+  #bwSvg text{font-size:21px}
+}
+body[data-part] header{display:none}
+body[data-part="1"] #s2,body[data-part="1"] #s3,body[data-part="2"] #s1,body[data-part="2"] #s3,body[data-part="3"] #s1,body[data-part="3"] #s2{display:none}
+body[data-part]{padding-block:10px 18px}
+</style></head><body>
+<div class="wrap">
+<header class="brandhdr">
+  <div class="logos"><img src="vedantanz-logo.png" alt="Ramakrishna Vedanta NZ emblem" width="56" height="66"><img class="rit" src="ritam-wordmark.png" alt="Ritam" width="86" height="65"></div>
+  <div class="eyebrow">Practice · Lesson 3.5</div>
+  <h1>Three Dials and a 2x2</h1>
+  <p class="course">The Mind in the Light of Modern and Spiritual Sciences · Advanced</p>
+  <p class="lede">Lesson 3.5 says that attention is the mind’s own wave, ψₘ, and that it has three parameters practice can reach, each set in a different place. Here you will turn the three dials against a fixed object wave, place four short made-up cases on a grid of arousal and steadiness, and then trade depth against responsiveness with the bandwidth of attention.</p>
+  <p class="scorenote"><b>Part II</b> is scored: your first pick for each case counts. <b>Parts I and III</b> are practice and are not scored.</p>
+  <nav class="parts" aria-label="Parts of this page"><a href="#s1">I. Three dials</a><a href="#s2">II. Arousal and steadiness</a><a href="#s3">III. Depth or responsiveness</a></nav>
+</header>
+
+<section id="s1" class="part part-1">
+  <div class="part-band"><span class="part-num">Part I</span><h2>Three dials</h2><span class="tag">Practice: not scored</span></div>
+  <div class="part-body">
+  <p class="intro">The object wave ψₓ stays fixed at its frequency fₛ. The attention wave meets it, and their resultant carries a carrier and an envelope (§1). Turn each dial on its own and watch which part of the picture it changes. Each dial is labelled with what sets it in the lesson.</p>
+  <div class="panel" id="lab">
+    <div class="scope-wrap"><canvas id="cv" role="img" aria-label="The object wave, the attention wave and their resultant"></canvas></div>
+    <div class="legend">
+      <span><i class="sw sw-x"></i>ψₓ, the object wave</span>
+      <span><i class="sw sw-m"></i>G(t) · ψₘ(t), the attention wave</span>
+      <span><i class="sw"></i>the resultant</span>
+      <span><i class="sw sw-e"></i>its envelope</span>
+    </div>
+    <div class="reads" aria-live="polite">
+      <div class="rd" data-r="beat"><span class="tag">beat Δf = |fₛ − fₘ|</span><b id="rdBeat">slow</b><span class="fd">the flicker in the envelope</span></div>
+      <div class="rd" data-r="full"><span class="tag">fullness</span><b id="rdFull">rises and falls</b><span class="fd">how fully the two waves add</span></div>
+      <div class="rd" data-r="str"><span class="tag">strength</span><b id="rdStr">moderate</b><span class="fd">how strongly the attention wave is driven</span></div>
+    </div>
+    <div class="controls">
+      <div class="slider"><label for="rG">Gain G(t)<small>set by the body and prāṇa</small></label><small>weaker</small><input type="range" id="rG" min="0" max="100" value="50"><small>stronger</small></div>
+      <div class="slider"><label for="rF">Frequency fₘ<small>held by manas</small></label><small>slower than the object</small><input type="range" id="rF" min="0" max="100" value="68"><small>faster than the object</small></div>
+      <div class="slider"><label for="rP">Phase: the standing tilt Δφ<small>carried by ahaṁkāra, corrected by buddhi</small></label><small>no tilt</small><input type="range" id="rP" min="0" max="100" value="55"><small>strong tilt</small></div>
+      <div class="chips">
+        <button class="btn" id="bBud">Let buddhi correct the tilt</button>
+        <button class="chip" data-w="1" id="bWander" aria-pressed="false">Untrained manas: fₘ keeps shifting</button>
+        <button class="btn ghost" id="bReset1">Start again</button>
+      </div>
+      <p class="note">The middle of the frequency dial is the object’s own frequency. Neither side of it is better: what the lesson asks is how well fₘ matches this object. The attention wave is drawn weaker than the object wave, so the envelope never falls to nothing.</p>
+    </div>
+    <div id="labMsg" class="msg fbbox" role="status" aria-live="polite"></div>
+    <details class="eqs"><summary>The attention wave in the lesson’s notation</summary>
+      <div class="eqbody">
+        <p class="eq sym">ψₘ(t) = Aₘ · cos(2πfₘ·t + φₘ)</p>
+        <p class="note">The attention wave <q>enters the equation scaled by a slowly varying gain, G(t), the strength with which the body and prāṇa drive it, so that what meets the object is G(t) · ψₘ(t).</q> (§1) The page draws only this meeting. It is a model, and it does not measure anyone’s attention.</p>
+      </div>
+    </details>
+  </div>
+  <div class="balance">
+    <h3>Arousal is not steadiness</h3>
+    <p><q>You can have high arousal but scattered attention (an anxious person who is scattered despite being activated), or low arousal but steady attention (a tired person who remains focussed on what matters).</q> (§1) Try it above: a stronger wave still beats if fₘ is off the object.</p>
+  </div>
+  </div>
+</section>
+
+<section id="s2" class="part part-2">
+  <div class="part-band"><span class="part-num">Part II</span><h2>Arousal and steadiness</h2><span class="tag scored">Scored: first pick counts</span></div>
+  <div class="part-body">
+  <p class="intro">Two of the dials make a grid: arousal, the gain G that the body and prāṇa set, and the steadiness of fₘ, which manas holds. Four short cases, all made up. Two follow the examples the lesson gives in §1; two are added for this page. Place each one on the grid.</p>
+  <div class="panel" id="st">
+    <div class="bar"><span class="tag" id="stPro">Case 1 of 4</span><div class="dots" id="stDots" aria-hidden="true"></div></div>
+    <p class="casetag" id="stTag"></p>
+    <div class="scene"><p id="stText"></p></div>
+    <div class="gridwrap">
+      <div class="quad" id="quad" role="group" aria-label="Place this case">
+        <button class="q" data-q="hu"><span class="ql">More arousal, fₘ shifting</span><span class="who"></span></button>
+        <button class="q" data-q="hs"><span class="ql">More arousal, fₘ steady</span><span class="who"></span></button>
+        <button class="q" data-q="lu"><span class="ql">Less arousal, fₘ shifting</span><span class="who"></span></button>
+        <button class="q" data-q="ls"><span class="ql">Less arousal, fₘ steady</span><span class="who"></span></button>
+      </div>
+      <p class="note">Rows: arousal, the gain G (body and prāṇa). Columns: steadiness of fₘ (manas).</p>
+    </div>
+    <div id="stMsg" class="msg fbbox" role="status" aria-live="polite"><p class="note">Pick one of the four.</p></div>
+    <div class="bar"><div class="chips"><button class="btn primary" id="stNext" hidden>Next case</button><button class="btn ghost" id="stShow">Show me</button><button class="btn ghost" id="stReset">Start again</button></div></div>
+  </div>
+  <div class="panel" id="stDone" hidden>
+    <div class="scorebox" id="scBox" aria-live="polite"></div>
+    <h3>Two dials, not one</h3>
+    <p>Arousal and steadiness are set in different places: the gain by <q>the body and prāṇa</q>, the frequency by manas (§1). The grid places moments in made-up lives, not people, and no corner of it is a verdict. The gain <q>can be shifted through breath work and body practice (which Lesson 3.7 addresses)</q> (§1).</p>
+  </div>
+  </div>
+</section>
+
+<section id="s3" class="part part-3">
+  <div class="part-band"><span class="part-num">Part III</span><h2>Depth or responsiveness</h2><span class="tag">Practice: not scored</span></div>
+  <div class="part-body">
+  <p class="intro">A steady tone runs throughout, and partway through a sudden event occurs. Set the bandwidth of attention, BW, from narrow to wide, then run it. The top panel shows how finely the tone is read; the lower panel shows when the event is caught.</p>
+  <div class="panel" id="bw">
+    <div class="bwfig"><svg id="bwSvg" viewBox="0 0 600 312" role="img" aria-label="Bandwidth of attention">
+      <text x="16" y="22" font-family="Noto Sans, system-ui, sans-serif" font-size="13" fill="var(--muted)">Reading the steady tone</text>
+      <line x1="30" y1="120" x2="570" y2="120" stroke="var(--line)" stroke-width="1.5"/>
+      <line x1="300" y1="30" x2="300" y2="124" stroke="var(--obj)" stroke-width="1" stroke-dasharray="3 3"/>
+      <text x="306" y="40" font-family="Noto Sans, system-ui, sans-serif" font-size="12" fill="var(--obj)">the tone’s frequency</text>
+      <path id="bwPeak" d="" fill="var(--res)" fill-opacity=".14" stroke="var(--res)" stroke-width="2"/>
+      <text x="570" y="138" text-anchor="end" font-family="Noto Sans, system-ui, sans-serif" font-size="11.5" fill="var(--muted)">frequency →</text>
+      <line x1="0" y1="152" x2="600" y2="152" stroke="var(--line)" stroke-width="1"/>
+      <text x="16" y="174" font-family="Noto Sans, system-ui, sans-serif" font-size="13" fill="var(--muted)">Catching the sudden event</text>
+      <path id="bwTone" d="" fill="none" stroke="var(--obj)" stroke-width="1.6"/>
+      <g id="bwEvent"><line x1="150" y1="190" x2="150" y2="268" stroke="var(--env)" stroke-width="1.5" stroke-dasharray="4 3"/><text x="150" y="284" text-anchor="middle" font-family="Noto Sans, system-ui, sans-serif" font-size="12" fill="var(--env)">the event</text></g>
+      <g id="bwDet"><line id="bwDetL" x1="0" y1="190" x2="0" y2="268" stroke="var(--res)" stroke-width="2"/><circle id="bwDetC" cx="0" cy="190" r="5" fill="var(--res)"/><text id="bwDetT" x="0" y="298" text-anchor="middle" font-family="Noto Sans, system-ui, sans-serif" font-size="12" fill="var(--res)">caught</text></g>
+      <line id="bwCur" x1="30" y1="182" x2="30" y2="270" stroke="var(--ink)" stroke-width="1" opacity="0"/>
+      <text x="570" y="284" text-anchor="end" font-family="Noto Sans, system-ui, sans-serif" font-size="11.5" fill="var(--muted)">time →</text>
+    </svg></div>
+    <div class="reads reads2" aria-live="polite">
+      <div class="rd" data-r="tone"><span class="tag">the tone is read</span><b id="rdTone">finely</b></div>
+      <div class="rd" data-r="event"><span class="tag">the event is caught</span><b id="rdEvent">late</b></div>
+    </div>
+    <div class="controls">
+      <div class="slider"><label for="rBW">Bandwidth BW<small>the range of frequencies the mind spans</small></label><small>narrow</small><input type="range" id="rBW" min="0" max="100" value="10"><small>wide</small></div>
+      <div class="chips"><button class="btn primary" id="bRun">Run it</button><button class="btn ghost" id="bReset3">Start again</button></div>
+    </div>
+    <div class="boxrow">
+      <svg id="boxSvg" viewBox="0 0 200 140" role="img" aria-label="BW times delta t"><rect id="bwRect" x="34" y="10" width="40" height="100" fill="var(--res)" fill-opacity=".14" stroke="var(--res)" stroke-width="2"/><text id="bwRectW" x="40" y="128" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="12" fill="var(--muted)">BW</text><text id="bwRectH" x="28" y="60" text-anchor="end" font-family="IBM Plex Mono, monospace" font-size="12" fill="var(--muted)">Δt</text></svg>
+      <p class="note">The rectangle’s width is the bandwidth and its height is the time the event takes to register. Its area does not shrink as you move the dial: <span class="sym">BW · Δt ≥ constant</span> (§2). The page draws the limit case, where the product equals the constant.</p>
+    </div>
+    <div id="bwMsg" class="msg fbbox" role="status" aria-live="polite"></div>
+  </div>
+  <div class="balance">
+    <h3>Narrow, and then effortless</h3>
+    <p>The page cannot draw the next step, so it is left to the lesson’s words: <q>Over time, something shifts. The bandwidth remains narrow, but the grip loosens. The frequency no longer wavers. This transition is meditation (dhyāna): the bandwidth is narrow but the engagement is effortless, like oil pouring smoothly from one vessel to another.</q> (§2)</p>
+    <p>Nor is focus the whole story: <q>A mind that has trained itself to focus intently but is focused on its own conditioned beliefs is not more free; it is more imprisoned.</q> (§7)</p>
+  </div>
+  </div>
+</section>
+<footer>Part II is scored, and only to show you where to look again. Parts I and III are practice and are not scored. Based on Lesson 3.5. The people in Part II are made up. This page illustrates the lesson’s model of the attention wave and does not measure, diagnose or advise on anyone’s situation. For help with distress, please speak with a qualified professional or someone you trust.<br>Ritam · Ramakrishna Vedanta Centre NZ · <a href="https://www.vedanta.nz">www.vedanta.nz</a> Privacy: when you are signed in, your name, email, answers and score are saved to your member record. Only you and the course instructors can see them. They are not shared or ranked.</footer>
+</div>
+
+<script>
+(function(){
+"use strict";
+var $=function(id){return document.getElementById(id)};
+try{var q=new URLSearchParams(location.search).get("theme");if(q==="light"||q==="dark")document.documentElement.setAttribute("data-theme",q)}catch(e){}
+try{var pt=new URLSearchParams(location.search).get("part");if(pt==="1"||pt==="2"||pt==="3")document.body.setAttribute("data-part",pt)}catch(e){}
+var EMBED=/[?&]embed=1/.test(location.search);
+function send(m){if(EMBED){try{parent.postMessage(m,"*")}catch(e){}}}
+var RM=false;try{RM=window.matchMedia("(prefers-reduced-motion: reduce)").matches}catch(e){}
+var C={};
+function readColors(){var cs=getComputedStyle(document.documentElement);["--bg","--surface","--ink","--muted","--line","--obj","--att","--res","--env","--ok"].forEach(function(k){C[k]=cs.getPropertyValue(k).trim()})}
+readColors();
+var dpr=Math.max(1,Math.min(2,window.devicePixelRatio||1));
+function fit(c){var w=c.clientWidth,h=c.clientHeight;if(!w||!h)return null;var bw=Math.round(w*dpr),bh=Math.round(h*dpr);if(c.width!==bw||c.height!==bh){c.width=bw;c.height=bh}var g=c.getContext("2d");g.setTransform(dpr,0,0,dpr,0,0);return {g:g,w:w,h:h}}
+function label(g,t,x,y,color){g.font="500 11.5px 'Noto Sans',system-ui,sans-serif";g.textAlign="left";g.textBaseline="alphabetic";var w=g.measureText(t).width;g.save();g.globalAlpha=.85;g.fillStyle=C["--bg"];g.fillRect(x-4,y-12,w+8,16);g.restore();g.fillStyle=color;g.fillText(t,x,y)}
+
+/* ===== Part I: three dials (not scored) ===== */
+var FS=10,AM=.6,TAU=Math.PI*2;
+var D={t:0,wander:false,wv:0,anim:0,last:0,bud:0};
+var rG=$("rG"),rF=$("rF"),rP=$("rP"),cv=$("cv");
+function G(){return .3+1.2*(+rG.value)/100}
+function fm(){var v=+rF.value;if(Math.abs(v-50)<=2)return FS;return FS*(1+(v-50)/50*.4)}
+function dphi(){return Math.PI*(+rP.value)/100}
+function matched(){return Math.abs(+rF.value-50)<=2}
+function words(){
+  var v=Math.abs(+rF.value-50),gv=+rG.value,pv=+rP.value,b=G()*AM,ph=dphi();
+  var beat=v<=2?"none":v<15?"slow":"fast";
+  var full;
+  if(v<=2){var r=Math.sqrt(1+b*b+2*b*Math.cos(ph))/(1+b);full=r>.93?"full":r>.75?"somewhat reduced":"much reduced"}
+  else full="rises and falls with the beat";
+  var str=gv<34?"low":gv<67?"moderate":"high";
+  var tilt=pv<8?"no tilt":pv<35?"a slight tilt":pv<70?"a marked tilt":"a strong tilt";
+  return {beat:beat,full:full,str:str,tilt:tilt};
+}
+function draw(){
+  var f=fit(cv);if(!f)return;var g=f.g,W=f.w,H=f.h;
+  g.clearRect(0,0,W,H);g.fillStyle=C["--bg"];g.fillRect(0,0,W,H);
+  var x0=12,x1=W-12,n=Math.max(200,Math.round(W)),s=(H-78)/7.8;
+  var c1=14+s+6,c2=c1+s+6+14+s+6,c3=c2+s+6+14+1.9*s+6;
+  var b=G()*AM,f2=fm(),ph=dphi(),T=1;
+  function X(i){return x0+(x1-x0)*i/(n-1)}
+  function lane(cy,fn,color,lw){g.save();g.strokeStyle=color;g.lineWidth=lw;g.lineJoin="round";g.beginPath();for(var i=0;i<n;i++){var t=D.t+T*i/(n-1),y=cy-s*fn(t);if(i)g.lineTo(X(i),y);else g.moveTo(X(i),y)}g.stroke();g.restore()}
+  g.strokeStyle=C["--line"];g.lineWidth=1;
+  [c1+s+7,c2+s+7].forEach(function(y){g.beginPath();g.moveTo(0,y);g.lineTo(W,y);g.stroke()});
+  lane(c1,function(t){return Math.cos(TAU*FS*t)},C["--obj"],1.8);
+  label(g,"ψₓ, fixed at fₛ",x0+4,c1-s+2,C["--obj"]);
+  lane(c2,function(t){return b*Math.cos(TAU*f2*t+ph)},C["--att"],1.8);
+  label(g,"G(t) · ψₘ(t)",x0+4,c2-s+2,C["--att"]);
+  /* envelope */
+  g.save();g.strokeStyle=C["--env"];g.lineWidth=1.5;g.setLineDash([6,4]);
+  [1,-1].forEach(function(sg){g.beginPath();for(var i=0;i<n;i++){var t=D.t+T*i/(n-1),e=Math.sqrt(1+b*b+2*b*Math.cos(TAU*(f2-FS)*t+ph)),y=c3-sg*s*e;if(i)g.lineTo(X(i),y);else g.moveTo(X(i),y)}g.stroke()});
+  g.restore();
+  lane(c3,function(t){return Math.cos(TAU*FS*t)+b*Math.cos(TAU*f2*t+ph)},C["--res"],2);
+  label(g,"the resultant",x0+4,c3-1.9*s+2,C["--res"]);
+  var w=words();
+  cv.setAttribute("aria-label","Object wave fixed; attention wave with "+w.str+" strength and "+w.tilt+"; beat "+w.beat+"; fullness "+w.full+".");
+}
+function reads(){var w=words();$("rdBeat").textContent=w.beat;$("rdFull").textContent=w.full;$("rdStr").textContent=w.str;
+  rG.setAttribute("aria-valuetext",w.str);rP.setAttribute("aria-valuetext",w.tilt);
+  var v=+rF.value;rF.setAttribute("aria-valuetext",Math.abs(v-50)<=2?"matched to the object":v<50?"slower than the object":"faster than the object")}
+function loop(t){
+  if(t-D.last>40){D.last=t;D.t+=.004;
+    if(D.wander){if(Math.random()<.07){D.wv=Math.round(8+Math.random()*84)}var nv=+rF.value+(D.wv-(+rF.value))*.25;if(Math.abs(nv-50)<=2)nv+=nv<D.wv?3:-3;rF.value=Math.round(nv);reads()}
+    draw()}
+  D.anim=requestAnimationFrame(loop);
+}
+var msg=$("labMsg");
+function say(v,body,ref){msg.innerHTML=(v?'<p class="verdict">'+v+'</p>':'')+body+'<p class="ref">'+ref+'</p>'}
+function fMsg(){
+  if(matched())say("Matched: the beat is gone.","<p><q>When fₘ matches fₛ, something remarkable happens: the beat Δf = |fₛ − fₘ| shrinks. The flicker disappears. The knowing becomes smooth.</q></p><p>Now the tilt dial shows its own effect on the fullness.</p>","§1");
+  else say(+rF.value<50?"fₘ is slower than the object.":"fₘ is faster than the object.","<p>The envelope beats, and the further fₘ is from fₛ, the faster the beat. Slower or faster makes no difference here: what counts is the match with this object. <q>Every shift creates a mismatch, a beat, a flutter of incomprehension.</q></p>","§1");
+}
+rG.addEventListener("input",function(){reads();draw();
+  say("Gain: "+words().str+".","<p>The gain changes how strongly the attention wave is driven, so the resultant grows or shrinks. It does not change the beat: if fₘ is off the object, a stronger wave beats just as fast. <q>This amplitude is set by the body and prāṇa. It rests on arousal, how activated your nervous system is, together with sleep, nourishment, breath and health.</q></p>","§1")});
+rF.addEventListener("input",function(){if(D.wander)toggleWander(false);reads();draw();fMsg()});
+rP.addEventListener("input",function(){reads();draw();tiltMsg()});
+function tiltMsg(){
+  var w=words();
+  if(matched())say("The tilt: "+w.tilt+".","<p>With fₘ matched, the tilt decides how fully the two waves add: the fullness is <b>"+w.full+"</b>. <q>Even if the mind's frequency matches the object's, the waves must be in phase, in sync.</q> <q>The attention wave arrives with a standing tilt, Δφ, which the ahaṁkāra carries, and the correction of that tilt is the work of buddhi.</q></p>","§1");
+  else say("The tilt: "+w.tilt+".","<p>With a beat running, the tilt mostly moves where the peaks of the beat fall. Bring fₘ to the middle of its dial to see what the tilt does to the fullness. <q>The attention wave arrives with a standing tilt, Δφ, which the ahaṁkāra carries, and the correction of that tilt is the work of buddhi.</q></p>","§1");
+}
+$("bBud").addEventListener("click",function(){
+  cancelAnimationFrame(D.bud);var v0=+rP.value;
+  function done(){rP.value=0;reads();draw();say("The tilt is corrected.","<p>In wave terms, <q>buddhi’s work is phase correction: it notices the standing tilt and adjusts the phase of the attention wave toward undistorted engagement, and it reads the carrier faithfully.</q>"+(matched()?" With fₘ matched, the two waves now add fully.":" The beat is still there: correcting the tilt does not change fₘ.")+"</p>","§7")}
+  if(RM||v0===0){done();return}
+  var t0=null;function st(t){if(t0==null)t0=t;var u=Math.min(1,(t-t0)/900);rP.value=Math.round(v0*(1-u));reads();draw();if(u<1)D.bud=requestAnimationFrame(st);else done()}
+  D.bud=requestAnimationFrame(st);
+});
+function toggleWander(on){
+  D.wander=on;var b=$("bWander");b.setAttribute("aria-pressed",on?"true":"false");
+  if(on){D.wv=+rF.value;if(RM){rF.value=Math.round(15+Math.random()*70);reads();draw()}
+    say("fₘ keeps shifting.","<p><q>An untrained manas has a frequency that is always shifting, always searching, always restless. It produces rapid, erratic beats with every object.</q> Turn the gain up or down while it wanders: the strength changes, the restlessness does not.</p>","§6")}
+  else say("fₘ is held again.","<p><q>When manas is trained, fₘ settles. The mind is no longer jumping. It rests at one frequency.</q> <q>Training manas means steadying fₘ.</q> Move the frequency dial to bring it to the object.</p>","§6");
+}
+$("bWander").addEventListener("click",function(){toggleWander(!D.wander)});
+function reset1(first){
+  D.wander=false;$("bWander").setAttribute("aria-pressed","false");rG.value=50;rF.value=68;rP.value=55;reads();draw();
+  say("",first?"<p>Three separate dials. Start with the frequency: bring fₘ to the middle of its dial, where it matches the object, and watch the envelope. Then try the tilt, and the gain.</p>":"<p>Back to the start: moderate gain, fₘ faster than the object, a marked tilt.</p>","§1");
+}
+$("bReset1").addEventListener("click",function(){reset1(false)});
+
+/* ===== Part II: the grid (scored) ===== */
+var QN={hu:"More arousal, fₘ shifting",hs:"More arousal, fₘ steady",lu:"Less arousal, fₘ shifting",ls:"Less arousal, fₘ steady"};
+var CASES=[
+ {who:"Kiri",tag:"§1 gives this case",a:"hu",
+  t:"Kiri is keyed up before a job interview: wide awake, heart quick. Yet her mind will not stay anywhere: her notes, the clock, the traffic, her notes again.",
+  why:"This is the first of the lesson’s two examples: <q>You can have high arousal but scattered attention (an anxious person who is scattered despite being activated)</q>. Her gain is high; her fₘ keeps shifting.",
+  hint:{hs:"Her arousal is high, but is her attention steady? Her mind will not stay anywhere: that is an fₘ that keeps shifting (§6).",lu:"Is she drowsy? She is wide awake, heart quick: <q>A person on high alert has high G.</q> (§1)",ls:"Look at both axes again: she is wide awake, and her mind keeps jumping (§1)."}},
+ {who:"Priya",tag:"A further case, made up for this page",a:"lu",
+  t:"After a heavy lunch and a short night, Priya is drowsy at her desk. Her mind drifts from the report to the window to the weekend, and back.",
+  why:"<q>A person drowsy has low G</q> (§1), and an fₘ that drifts from one object to the next is the restless manas of §6. The lesson’s own two examples sit in the other two corners; this case adds a tired mind that also drifts, so that no corner is left out.",
+  hint:{hu:"Is she on high alert? She is drowsy: <q>A person drowsy has low G.</q> (§1)",ls:"Is her attention steady? It drifts from the report to the window to the weekend (§6).",hs:"Look at both axes again: she is drowsy, and her mind drifts (§1, §6)."}},
+ {who:"Tomas",tag:"§1 gives this case",a:"ls",
+  t:"At the end of a long double shift, Tomas is tired. When his daughter tells him about her day, he stays with her story from beginning to end.",
+  why:"This is the second of the lesson’s examples: <q>low arousal but steady attention (a tired person who remains focussed on what matters)</q>. His gain is low; his fₘ holds.",
+  hint:{hs:"He is tired: the body and prāṇa are not driving the wave strongly (§1).",lu:"Tired, yes. But does his attention drift? He stays with the story from beginning to end (§1).",hu:"Look at both axes again: he is tired, and his attention holds (§1)."}},
+ {who:"Hemi",tag:"A further case, made up for this page",a:"hs",
+  t:"Wide awake and alert after a good sleep and a morning walk, Hemi sits down with a long letter from an old friend and stays with it, line by line.",
+  why:"<q>When your body and nervous system are alert and well resourced, G is high</q> (§1), and his fₘ rests on one object (§6). High gain and steady attention go together here: the two dials move separately.",
+  hint:{hu:"He is alert, but does his attention jump? He stays with the letter line by line (§6).",ls:"Is he tired? He is rested after a good sleep and a walk (§1).",lu:"Look at both axes again: he is rested, and his attention holds (§1, §6)."}}
+];
+var S={i:0,done:{},miss:{},sent:false};
+var qs=document.querySelectorAll("#quad .q"),stMsg=$("stMsg");
+function dots(){var d=$("stDots");d.innerHTML="";CASES.forEach(function(_,k){var e=document.createElement("i");if(S.done[k])e.className="done";else if(k===S.i)e.className="cur";d.appendChild(e)})}
+function placed(){qs.forEach(function(b){var w=b.querySelector(".who");w.innerHTML=CASES.filter(function(c,k){return S.done[k]&&c.a===b.dataset.q}).map(function(c){return '<span>'+c.who+'</span>'}).join("")})}
+function showCase(){
+  var c=CASES[S.i];$("stText").textContent=c.t;$("stTag").textContent=c.tag;$("stPro").textContent="Case "+(S.i+1)+" of "+CASES.length;
+  qs.forEach(function(b){b.disabled=false;b.classList.remove("wrong","right");b.setAttribute("aria-pressed","false")});
+  stMsg.innerHTML='<p class="note">Pick one of the four.</p>';$("stNext").hidden=true;$("stShow").hidden=false;placed();dots();
+}
+function reveal(){
+  var c=CASES[S.i];S.done[S.i]=true;
+  qs.forEach(function(b){b.disabled=true;if(b.dataset.q===c.a){b.classList.add("right");b.setAttribute("aria-pressed","true")}});
+  stMsg.innerHTML='<p class="verdict">'+QN[c.a]+'.</p><p>'+c.why+'</p><p class="ref">§1'+(c.a==="hu"||c.a==="ls"?"":" · §6")+'</p>';
+  $("stShow").hidden=true;placed();
+  if(S.i<CASES.length-1){$("stNext").hidden=false}else{$("stDone").hidden=false;finish()}
+  dots();
+}
+qs.forEach(function(b){b.addEventListener("click",function(){
+  var c=CASES[S.i];
+  if(b.dataset.q===c.a){reveal()}
+  else{S.miss[S.i]=true;b.classList.add("wrong");b.disabled=true;stMsg.innerHTML='<p class="verdict">Not this corner.</p><p>'+c.hint[b.dataset.q]+'</p>'}
+})});
+$("stNext").addEventListener("click",function(){S.i++;showCase();try{qs[0].focus({preventScroll:true})}catch(e){}});
+$("stShow").addEventListener("click",function(){S.miss[S.i]=true;reveal()});
+$("stReset").addEventListener("click",function(){S={i:0,done:{},miss:{},sent:S.sent};$("stDone").hidden=true;showCase()});
+
+/* ===== scoring for Part II, and hand-off to the host page when embedded ===== */
+var META={code:"ADV-P-3-5",title:"Practice: Lesson 3.5, Three Dials and a 2x2 (Part II)",programme:"The Mind in the Light of Modern and Spiritual Sciences (Advanced)",cut:75};
+function finish(){
+  if(S.sent){return}
+  var n=CASES.length,right=0,ans=[],wrong=[];
+  CASES.forEach(function(c,k){var ok=!S.miss[k];if(ok){right++}else{wrong.push(k)}ans.push({q:k+1,ok:ok,given:QN[c.a]+(ok?" (first pick)":" (not on first pick)")})});
+  var pct=Math.round(100*right/n),good=pct>=META.cut;
+  var h='<div class="big">'+right+' of '+n+' on the first pick</div><p class="band '+(good?'good':'')+'">'+(good?'Well grasped':'Revisit these ideas')+'</p>';
+  if(wrong.length){h+='<p>Look again at §1 and §6 for:</p><ul>'+wrong.map(function(k){return '<li>Case '+(k+1)+', '+CASES[k].who+': '+QN[CASES[k].a].toLowerCase()+'</li>'}).join('')+'</ul>'}
+  else{h+='<p>Nothing to revisit here.</p>'}
+  h+='<p class="saved" id="scSaved">'+(EMBED?'Saving your result…':'Sign in on the course page to have your result saved.')+'</p>';
+  $("scBox").innerHTML=h;S.sent=true;
+  send({type:"quizResult",code:META.code,title:META.title,programme:META.programme,score:right,maxScore:n,percent:pct,questionsCorrect:right,questionCount:n,answers:ans});
+}
+window.addEventListener("message",function(e){
+  var d=e.data||{};if(!d||typeof d!=="object"){return}
+  var el=$("scSaved");if(!el){return}
+  if(d.type==="saved"){el.textContent="Your result has been saved to your member record."}
+  else if(d.type==="saveError"){el.textContent="Your result could not be saved this time."}
+  else if(d.type==="notMember"){el.textContent="Sign in as a member to have your result saved."}
+});
+
+/* ===== Part III: bandwidth (not scored) ===== */
+var B={anim:0,run:0};
+var rBW=$("rBW");
+function bwVal(){return .12+.88*(+rBW.value)/100}
+var EX=150,TX0=30,TX1=570;
+function bwDraw(prog){
+  var bw=bwVal(),sig=120*bw,dt=300*.12/bw,dx=EX+dt;
+  /* the tone as read: a peak whose width follows BW */
+  var d="",i,n=120;for(i=0;i<=n;i++){var x=30+540*i/n,y=120-80*Math.exp(-Math.pow((x-300)/sig,2)/2);d+=(i?"L":"M")+x.toFixed(1)+" "+y.toFixed(1)}
+  $("bwPeak").setAttribute("d",d+"L570 120L30 120Z");
+  /* the timeline: steady tone with a sudden burst */
+  var tp="",end=prog==null?1:prog;n=360;
+  for(i=0;i<=n;i++){var u=i/n;if(u>end)break;var x2=TX0+(TX1-TX0)*u,burst=(x2>=EX&&x2<EX+26)?22*Math.sin(Math.PI*(x2-EX)/26):0;var y2=229-(9+burst)*Math.sin(TAU*u*34);tp+=(i?"L":"M")+x2.toFixed(1)+" "+y2.toFixed(1)}
+  $("bwTone").setAttribute("d",tp);
+  var showDet=prog==null||TX0+(TX1-TX0)*prog>=dx;
+  $("bwDet").setAttribute("opacity",showDet?1:0);
+  $("bwDetL").setAttribute("x1",dx);$("bwDetL").setAttribute("x2",dx);$("bwDetC").setAttribute("cx",dx);$("bwDetT").setAttribute("x",Math.min(dx,545));
+  $("bwEvent").setAttribute("opacity",prog==null||TX0+(TX1-TX0)*prog>=EX?1:.25);
+  var cur=$("bwCur");if(prog==null){cur.setAttribute("opacity",0)}else{var cx=TX0+(TX1-TX0)*prog;cur.setAttribute("x1",cx);cur.setAttribute("x2",cx);cur.setAttribute("opacity",.5)}
+  /* the rectangle: width BW, height dt, constant area */
+  var rw=10+90*(bw-.12)/.88,area=1000,rh=Math.min(100,area/Math.max(rw,1));
+  rw=area/rh;
+  $("bwRect").setAttribute("width",rw.toFixed(1));$("bwRect").setAttribute("height",rh.toFixed(1));$("bwRect").setAttribute("y",(115-rh).toFixed(1));
+  $("bwRectW").setAttribute("x",(34+rw/2).toFixed(1));$("bwRectH").setAttribute("y",(115-rh/2+4).toFixed(1));
+  var tone=bw<.38?"finely":bw<.72?"moderately":"coarsely",ev=bw<.38?"late":bw<.72?"after a while":"almost at once";
+  $("rdTone").textContent=tone;$("rdEvent").textContent=ev;
+  rBW.setAttribute("aria-valuetext",bw<.38?"narrow":bw<.72?"middle":"wide");
+  $("bwSvg").setAttribute("aria-label","Bandwidth "+(bw<.38?"narrow":bw<.72?"middle":"wide")+": the tone is read "+tone+", and the event is caught "+ev+".");
+  return {tone:tone,ev:ev,bw:bw};
+}
+var bwMsg=$("bwMsg");
+function bwSay(){
+  var r=bwDraw(null),h;
+  if(r.bw<.38)h='<p class="verdict">Narrow: deep, and slow to notice change.</p><p><q>When your attention is narrow and focused (what the traditions call dhāraṇā, fixed focus) your attention wave occupies a very narrow bandwidth.</q> <q>This produces high resolution: you know that object in exquisite detail. But it comes at a cost. With narrow bandwidth, you are insensitive to change.</q></p>';
+  else if(r.bw<.72)h='<p class="verdict">Between the two: some depth, some speed.</p><p>The trade runs all along the dial. <q>You cannot simultaneously have perfect frequency resolution (knowing exactly what you are tuned to) and perfect temporal resolution (responding instantly to change).</q></p>';
+  else h='<p class="verdict">Wide: quick to notice, and shallow.</p><p><q>When your attention is broad and diffuse (the scattered or wandering mind) your bandwidth is wide.</q> <q>This means you are responsive to many things: you notice when something changes</q>. <q>But the price is low resolution. Nothing is known deeply.</q></p>';
+  bwMsg.innerHTML=h+'<p class="ref">§2</p>';
+}
+rBW.addEventListener("input",function(){cancelAnimationFrame(B.anim);bwSay()});
+$("bRun").addEventListener("click",function(){
+  cancelAnimationFrame(B.anim);
+  if(RM){bwSay();return}
+  var t0=null;function st(t){if(t0==null)t0=t;var u=Math.min(1,(t-t0)/3000);bwDraw(u);if(u<1)B.anim=requestAnimationFrame(st);else bwSay()}
+  B.anim=requestAnimationFrame(st);
+});
+function reset3(){cancelAnimationFrame(B.anim);rBW.value=10;bwSay()}
+$("bReset3").addEventListener("click",reset3);
+
+send({type:"ready"});
+/* tell the host page how tall this page is, so the embed grows instead of scrolling inside its frame */
+(function(){
+  var last=0;
+  function h(){var d=document.documentElement,b=document.body;var v=Math.ceil(Math.max(d.scrollHeight,b.scrollHeight,b.offsetHeight));if(v&&Math.abs(v-last)>1){last=v;send({type:"height",height:v})}}
+  window.addEventListener("load",h);window.addEventListener("resize",h);
+  if(window.ResizeObserver)new ResizeObserver(h).observe(document.body);
+  setInterval(h,700);h();
+})();
+
+/* redraw on resize and theme change */
+var rt=0;
+window.addEventListener("resize",function(){clearTimeout(rt);rt=setTimeout(draw,80)});
+function retheme(){readColors();draw()}
+try{window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change",retheme)}catch(e){}
+new MutationObserver(retheme).observe(document.documentElement,{attributes:true,attributeFilter:["data-theme"]});
+reset1(true);showCase();reset3();
+if(!RM){D.anim=requestAnimationFrame(loop)}
+})();
+</script>
+</body></html>

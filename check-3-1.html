@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Understanding Check: Lesson 3.1</title>
+<meta name="description" content="Eight questions on Lesson 3.1, Vṛtti: The Waves of the Mind, from The Mind in the Light of Modern and Spiritual Sciences.">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400..700;1,400..700&family=Noto+Sans:wght@400..700&display=swap">
+<style>
+:root{
+ --bg:#FBF5EA; --surface:#FFFDF8; --ink:#1E1E1E; --muted:#5A5A5A; --line:#E6DAC3; --tint:#F3EAD3;
+ --navy:#12285A; --gold:#C9A24A; --goldt:#6B4E0E; --qink:#13295B;
+ --res:#12285A; --ok:#2F5A2E; --okbg:#E3EDDF; --no:#C2557A; --nobg:#F6E3EA;
+ --display:"Noto Serif",Georgia,serif; --body:"Noto Sans",system-ui,-apple-system,"Segoe UI",sans-serif; --mono:"Noto Sans",system-ui,sans-serif;
+}
+@media (prefers-color-scheme: dark){
+ :root:not([data-theme="light"]){
+  --bg:#0B1A3D; --surface:#12285A; --ink:#FBF5EA; --muted:#C9C3B3; --line:#2B4686; --tint:#1D3770;
+  --goldt:#E6C36A; --qink:#FBF5EA; --res:#E6C36A; --ok:#8FD79A; --okbg:#1E3A2A; --no:#F08FB0; --nobg:#4A2236; color-scheme:dark;
+ }
+}
+:root[data-theme="dark"]{
+ --bg:#0B1A3D; --surface:#12285A; --ink:#FBF5EA; --muted:#C9C3B3; --line:#2B4686; --tint:#1D3770;
+ --goldt:#E6C36A; --qink:#FBF5EA; --res:#E6C36A; --ok:#8FD79A; --okbg:#1E3A2A; --no:#F08FB0; --nobg:#4A2236; color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;
+ padding:18px max(14px,env(safe-area-inset-right,0px)) 30px max(14px,env(safe-area-inset-left,0px))}
+.wrap{max-width:720px;margin:0 auto;display:flex;flex-direction:column;gap:16px}
+h1{font-family:var(--display);font-weight:500;font-size:clamp(24px,5vw,32px);line-height:1.15;margin:0}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.sub{color:var(--muted);margin:0}
+.bar{height:6px;background:var(--line);border-radius:3px;overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--res);transition:width .25s}
+.meta{display:flex;justify-content:space-between;font-size:13px;color:var(--muted)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:20px 18px;display:flex;flex-direction:column;gap:14px}
+.qn{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:0}
+.q{font-family:var(--display);font-size:clamp(19px,3.4vw,22px);line-height:1.35;margin:0}
+.opts{display:flex;flex-direction:column;gap:10px}
+.opt{font:inherit;text-align:left;color:var(--ink);background:var(--surface);border:2px solid var(--line);border-radius:10px;padding:12px 14px;cursor:pointer;width:100%}
+.opt:hover:not(:disabled){border-color:var(--res)}
+.opt.right{border-color:var(--ok);background:var(--okbg)}
+.opt.wrong{border-color:var(--no);background:var(--nobg)}
+.opt:disabled{cursor:default}
+input.fill{font:inherit;width:100%;padding:12px 14px;border:2px solid var(--line);border-radius:10px;background:var(--surface);color:var(--ink)}
+input.fill:focus{outline:none;border-color:var(--res)}
+.btn{font:inherit;font-weight:600;font-size:15px;color:var(--surface);background:var(--ink);border:0;border-radius:8px;padding:11px 20px;cursor:pointer;text-decoration:none;display:inline-block}
+.btn.alt{background:var(--surface);color:var(--ink);border:1px solid var(--ink)}
+button:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(--res);outline-offset:2px}
+.fb{display:none;padding:12px 14px;border-radius:10px;font-size:15.5px;line-height:1.5}
+.fb.ok{display:block;background:var(--okbg);border-left:5px solid var(--ok)}
+.fb.no{display:block;background:var(--nobg);border-left:5px solid var(--no)}
+.fb b{display:block;margin-bottom:2px}
+.nav{display:flex;justify-content:flex-end}
+.res{text-align:center}
+.score{font-family:var(--display);margin:4px 0}
+.score .big{font-size:60px;line-height:1}
+.score .of{font-size:26px;color:var(--muted)}
+.band{font-family:var(--display);font-size:22px;margin:0}
+.band.good{color:var(--ok)} .band.rev{color:var(--res)}
+.res p{margin:0}
+.revisit{text-align:left;background:var(--tint);border-radius:10px;padding:12px 14px}
+.revisit h2,.review h2{font-family:var(--display);font-size:18px;margin:0 0 6px}
+.revisit ul{margin:0;padding-left:20px}
+.review{text-align:left;display:flex;flex-direction:column;gap:8px}
+.review .item{padding:10px 12px;border-radius:8px;font-size:15px;line-height:1.45}
+.review .r{background:var(--okbg)} .review .w{background:var(--nobg)}
+.review .item small{display:block;color:var(--muted);margin-top:4px}
+.acts{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+.saved{font-size:14px;color:var(--muted)}
+footer{text-align:center;font-size:13px;color:var(--muted)}
+footer a{color:var(--res)}
+.wrap header{background:#12285A;color:#FBF5EA;text-align:center;padding:18px 16px 20px;border-radius:14px}
+.wrap header img{width:56px;height:66px;object-fit:contain;display:block}
+.wrap header .logos{display:flex;align-items:center;justify-content:center;gap:18px}
+.wrap header img.rit{width:86px;height:65px}
+.wrap header .eyebrow{color:#E6C36A;font-weight:700;letter-spacing:3px;margin:8px 0 0}
+.wrap header h1{color:#FBF5EA;font-weight:700;margin:6px 0 4px}
+.wrap header .course{font-size:14px;color:#E6C36A;margin:0 0 8px;font-weight:600}
+.wrap header .sub{color:#F1ECDF;font-size:15px}
+.bar i{background:var(--gold)!important}
+.opt:hover:not(:disabled){border-color:var(--gold)!important}
+input.fill:focus{border-color:var(--gold)!important}
+.q{color:var(--qink)}
+.qn{color:var(--goldt);font-weight:700}
+.btn{background:var(--navy)!important;color:#FBF5EA!important}
+.btn.alt{background:transparent!important;color:var(--ink)!important;border:1px solid var(--navy)!important}
+.card{box-shadow:0 2px 8px rgba(19,41,91,.08)}
+</style>
+</head>
+<body>
+<div class="wrap">
+ <header>
+  <div class="logos"><img src="vedantanz-logo.png" alt="Ramakrishna Vedanta NZ emblem" width="56" height="66"><img class="rit" src="ritam-wordmark.png" alt="Ritam" width="86" height="65"></div>
+  <p class="eyebrow">Understanding check · Lesson 3.1</p>
+  <h1>Vṛtti: The Waves of the Mind</h1>
+  <p class="course">The Mind in the Light of Modern and Spiritual Sciences · Advanced</p>
+  <p class="sub">Eight questions on the lesson. Take them as often as you like; each answer comes with its explanation.</p>
+ </header>
+ <div class="bar"><i id="prog"></i></div>
+ <div class="meta"><span id="pos"></span><span id="sc"></span></div>
+ <div id="app"></div>
+ <footer>Understanding check · <a href="https://www.vedanta.nz">www.vedanta.nz</a>. Privacy: when you are signed in, your name, email, answers and score are saved to your member record. Only you and the course instructors can see them. They are not shared or ranked.</footer>
+</div>
+<script>
+/* Question bank. Types: mc (options o, correct index a; options are shuffled on display), judge (statement q; a: 0 holds, 1 does not hold, 2 holds only in part), fill (accepted answers a[], show).
+   e = explanation, c = idea to revisit, s = lesson section reference (null = lesson as a whole). All content from the live text of Lesson 3.1, its key ideas and misconceptions. */
+var META={code:'ADV-3-1',lesson:'3.1',quizTitle:'Understanding check: Lesson 3.1, Vṛtti: The Waves of the Mind',programme:'The Mind in the Light of Modern and Spiritual Sciences (Advanced)',cut:75};
+var Q=[
+{t:'judge',q:'“The temporal domain and the spectral domain are two ways of describing a wave, and the spectral description is the more complete of the two.”',a:2,
+ e:'The first half holds: every wave can be described in the temporal domain, as it unfolds in time, and in the spectral domain, as the pattern of frequencies that makes it up. The second half does not: both descriptions are complete, and neither loses information. You can compute one from the other using the Fourier transform, and there is no remainder, no loss, no approximation.',c:'The temporal and spectral descriptions are complete and equivalent',s:'3'},
+{t:'mc',q:'In Swami Vivekananda’s image of the mind-lake, why can the bottom not be seen while the ripples are active?',o:['Attention is captured by the ripples; the bottom is not hidden','The ripples cover the Self the way dirt covers a window, hiding it from view','The bottom is a separate substance that lies far beneath the water, out of reach','Each ripple leaves a residue behind that slowly clouds the water over time'],a:0,
+ e:'The Self is not “covered” by vṛttis in the way dirt covers a window; it is the substance of which vṛttis are formations. A ripple is just the lake taking on a certain shape, and when it subsides there is no residue. As long as the vṛttis are active and turbulent you cannot see the bottom: not because the bottom is hidden, but because your attention is captured by the ripples.',c:'The mind-lake: the Self is the substance of the lake, not something hidden behind the ripples',s:'4'},
+{t:'judge',q:'“The stilling of the vṛttis means destroying the waves and creating a blank mind.”',a:1,
+ e:'The stilling of the vṛttis is not about destroying the waves, creating a blank mind, or reaching some state other than your current situation. It is about the agitation simply ceasing, naturally, the way a lake becomes still when the wind stops, so that what you are looking for reveals itself as what was always actually present.',c:'Nirodha: the agitation ceasing, as a lake stills when the wind stops, not a blank mind',s:'4'},
+{t:'mc',q:'How do the Yoga Sūtras, as the lesson presents them, treat deep sleep (nidrā)?',o:['One of the five vṛttis, with minimal content and structure','A state below the vṛttis, in which no formation arises in the mind-field at all','The stilling of the vṛttis, which is what yoga aims at, reached in sleep','A form of vikalpa, an imagination with no external object whatsoever'],a:0,
+ e:'Nidrā is often misunderstood as a non-vṛtti state, as if sleep were somehow below vṛttis. But the Yoga Sūtras classify it explicitly as one of the five types. Sleep is a particular wave-formation, one with minimal frequency content, minimal intensity and minimal structure. But it is still a vṛtti.',c:'Nidrā is a vṛtti, not a state below the vṛttis',s:'5'},
+{t:'mc',q:'You lie awake worrying about something that might happen tomorrow but has not happened. In the lesson’s terms, which of the five types of vṛtti is this?',o:['Vikalpa','Viparyaya','Smṛti','Pramāṇa'],a:0,
+ e:'When you worry about something that might happen (but hasn’t), that is vikalpa: your mind is creating a story. Vikalpa is not falsehood in the way viparyaya is; it is not a misperception. It is a mental construct with no corresponding external fact, and it can still trigger genuine physiological stress.',c:'Vikalpa: a construct with no external object, which is not the same as error',s:'5'},
+{t:'judge',q:'“While it is happening, viparyaya feels exactly like pramāṇa.”',a:0,
+ e:'Viparyaya feels exactly like pramāṇa while it is happening. The wave-pattern is vivid and convincing: the rope taken for a snake still raises fear. Only when you bring light, through inquiry, evidence, or someone else’s testimony, do you see the mismatch. This is why error is so persistent: the vṛtti itself does not announce that it is false.',c:'Error does not announce itself: viparyaya feels like pramāṇa',s:'5'},
+{t:'mc',q:'In the lesson’s wave language, which function is the standing tilt of phase that your attention carries into every experience, before any particular meeting occurs?',o:['Ahaṁkāra, the claiming function','Buddhi, the discriminating function','Manas, the scanning function','Chitta, the field and record'],a:0,
+ e:'Ahaṁkāra claims experience as “mine,” and it does this before any particular meeting occurs: it is the standing tilt of phase that your attention carries into every experience. Buddhi corrects that tilt and reads the vṛtti; manas sets the frequency of attention; chitta is the field and the record.',c:'Ahaṁkāra as the standing phase offset, which buddhi corrects',s:'8'},
+{t:'fill',q:'The energy that powers every vṛtti, and so sets its amplitude, comes from the body and ______.',a:['prana','breath','the breath'],show:'prāṇa (or breath)',
+ e:'The body and prāṇa set the amplitude (the lesson also puts it as “the body and breath”). A rested, well-breathing body brings a steady, moderate amplitude to each meeting; an exhausted or overwrought body brings a faint or an excessive one. This is why Lesson 3.7 turns to the body and the breath.',c:'Amplitude is set by the body and prāṇa',s:'8'}
+];
+(function(){
+ var q=new URLSearchParams(location.search);
+ if(q.get('theme')==='light')document.documentElement.setAttribute('data-theme','light');
+ if(q.get('theme')==='dark')document.documentElement.setAttribute('data-theme','dark');
+})();
+var i=0,right=0,ans=[],saved=false;
+var app=document.getElementById('app');
+var JL=['True','False','True only in part'];
+function norm(s){return s.normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().replace(/[^a-z]/g,'')}
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;')}
+function hdr(){
+ document.getElementById('pos').textContent=i<Q.length?'Question '+(i+1)+' of '+Q.length:'Finished';
+ document.getElementById('sc').textContent=i<Q.length?right+' right so far':'';
+ document.getElementById('prog').style.width=(100*Math.min(i,Q.length)/Q.length)+'%';
+}
+function send(m){try{window.parent.postMessage(m,'*')}catch(e){}}
+function ref(s){return s?'Lesson 3.1, section'+(/ and /.test(s)?'s ':' ')+s:'Lesson 3.1'}
+function show(){
+ hdr();
+ if(i>=Q.length){return result()}
+ var qq=Q[i];
+ var h='<div class="card"><p class="qn">Question '+(i+1)+'</p><p class="q">'+esc(qq.q)+'</p>';
+ if(qq.t==='mc'){h+='<div class="opts">';var ord=qq.o.map(function(o,k){return k});for(var r=ord.length-1;r>0;r--){var s2=Math.floor(Math.random()*(r+1)),t2=ord[r];ord[r]=ord[s2];ord[s2]=t2}ord.forEach(function(k,pos){h+='<button class="opt" data-k="'+k+'">'+String.fromCharCode(65+pos)+'. '+esc(qq.o[k])+'</button>'});h+='</div>'}
+ else if(qq.t==='judge'){h+='<div class="opts">';JL.forEach(function(o,k){h+='<button class="opt" data-k="'+k+'">'+o+'</button>'});h+='</div>'}
+ else{h+='<input class="fill" id="fill" type="text" autocomplete="off" autocapitalize="off" placeholder="Type your answer"><div><button class="btn" id="chk">Check answer</button></div>'}
+ h+='<div class="fb" id="fb" role="status"></div><div class="nav"><button class="btn" id="nx" style="display:none">'+(i===Q.length-1?'See my result':'Next question')+'</button></div></div>';
+ app.innerHTML=h;
+ if(qq.t!=='fill'){app.querySelectorAll('.opt').forEach(function(b){b.onclick=function(){mark(+b.dataset.k===qq.a,b)}})}
+ else{var f=document.getElementById('fill');
+  document.getElementById('chk').onclick=function(){
+   if(!f.value.trim()){f.focus();return}
+   var ok=qq.a.some(function(x){return norm(f.value)===norm(x)});
+   f.disabled=true;this.style.display='none';mark(ok,null,f.value)};
+  f.onkeydown=function(e){if(e.key==='Enter')document.getElementById('chk').click()};f.focus()}
+ document.getElementById('nx').onclick=function(){i++;show();window.scrollTo(0,0)};
+}
+function mark(ok,btn,typed){
+ started=true;
+ var qq=Q[i];if(ok)right++;ans.push({q:i+1,ok:ok,given:typed!==undefined?typed:(btn?btn.textContent:'')});
+ if(qq.t!=='fill'){app.querySelectorAll('.opt').forEach(function(b,k){b.disabled=true;if(+b.dataset.k===qq.a)b.classList.add('right')});if(!ok&&btn)btn.classList.add('wrong')}
+ var right_ans=qq.t==='mc'?qq.o[qq.a]:qq.t==='judge'?JL[qq.a]:qq.show;
+ var fb=document.getElementById('fb');fb.className='fb '+(ok?'ok':'no');
+ fb.innerHTML='<b>'+(ok?'Right.':'Not quite. The answer is: '+esc(right_ans))+'</b>'+esc(qq.e)+' <i>('+ref(qq.s)+'.)</i>';
+ document.getElementById('nx').style.display='inline-block';hdr();
+ send({type:'progress',code:META.code,state:{i:i+1,right:right,ans:ans}});
+}
+function result(){
+ var n=Q.length,p=Math.round(100*right/n),good=p>=META.cut;
+ var h='<div class="card res"><p class="qn">Your result</p><p class="score"><span class="big">'+p+'%</span></p>'+
+  '<p class="band '+(good?'good':'rev')+'">'+(good?'Well grasped':'Revisit these ideas')+'</p>'+
+  '<p>'+right+' of '+n+' questions right.</p>';
+ var miss=[];Q.forEach(function(qq,k){if(!ans[k]||!ans[k].ok)miss.push(qq)});
+ if(miss.length){h+='<div class="revisit"><h2>Ideas to revisit</h2><ul>';miss.forEach(function(qq){h+='<li>'+esc(qq.c)+' <i>('+ref(qq.s)+')</i></li>'});h+='</ul></div>'}
+ else{h+='<div class="revisit"><h2>Nothing to revisit</h2><p>Every idea in this check was answered correctly.</p></div>'}
+ h+='<div class="review"><h2>Every question, with its answer</h2>';
+ Q.forEach(function(qq,k){var ok=ans[k]&&ans[k].ok;var a=qq.t==='mc'?qq.o[qq.a]:qq.t==='judge'?JL[qq.a]:qq.show;
+  h+='<div class="item '+(ok?'r':'w')+'">'+(ok?'Right. ':'Not quite. ')+'<b>Q'+(k+1)+'</b> '+esc(qq.q)+'<br>Answer: '+esc(a)+'<small>'+esc(qq.e)+' ('+ref(qq.s)+')</small></div>'});
+ h+='</div><p class="saved" id="savedmsg"></p><div class="acts"><button class="btn" id="again">Take it again</button></div></div>';
+ app.innerHTML=h;
+ document.getElementById('again').onclick=function(){i=0;right=0;ans=[];saved=false;show();window.scrollTo(0,0)};
+ send({type:'quizResult',code:META.code,title:META.quizTitle,programme:META.programme,score:right,maxScore:n,percent:p,questionsCorrect:right,questionCount:n,answers:ans});
+ send({type:'progress',code:META.code,state:null});
+}
+window.addEventListener('message',function(ev){
+ var d=ev.data;if(!d||!d.type)return;
+ var m=document.getElementById('savedmsg');
+ if(d.type==='saved'&&m){m.textContent='Your result has been saved to your member record.'}
+ if(d.type==='saveError'&&m){m.textContent='Your result could not be saved this time. You can take the check again.'}
+ if(d.type==='notMember'&&m){m.textContent='Sign in as a member to have your result saved.'}
+ if(d.type==='resume'&&d.state&&d.state.i>0&&d.state.i<Q.length&&!started){offerResume(d.state)}
+});
+var started=false;
+function offerResume(st){
+ var h='<div class="card"><p class="qn">Welcome back</p><p class="q">You have answered '+st.i+' of '+Q.length+' questions so far.</p><p>Would you like to continue where you left off, or start again from the beginning?</p><div class="acts"><button class="btn" id="cont">Continue from question '+(st.i+1)+'</button><button class="btn alt" id="rest">Start again</button></div></div>';
+ app.innerHTML=h;
+ document.getElementById('cont').onclick=function(){i=st.i;right=st.right||0;ans=st.ans||[];started=true;show()};
+ document.getElementById('rest').onclick=function(){i=0;right=0;ans=[];started=true;show()};
+}
+show();
+send({type:'ready'});
+</script>
+</body>
+</html>
