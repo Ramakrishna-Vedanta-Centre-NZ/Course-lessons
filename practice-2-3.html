@@ -1,0 +1,382 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Practice: Lesson 2.3, Claim It or Hold It</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans:wght@400..700&family=Noto+Serif:ital,wght@0,400..700;1,400..700&display=swap">
+<style>
+
+:root{
+  --bg:#FBF5EA; --surface:#FFFDF8; --ink:#1E1E1E; --muted:#5A5A5A; --line:#E6DAC3; --tint:#F3EAD3; --navy:#12285A; --gold:#C9A24A; --goldt:#6B4E0E;
+  --obj:#0B8686; --att:#C95F06; --res:#2E3192; --env:#C0245B; --ok:#1B7A52;
+  --display:"Noto Serif",Georgia,"Times New Roman",serif;
+  --body:"Noto Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0B1A3D; --surface:#12285A; --ink:#FBF5EA; --muted:#C9C3B3; --line:#2B4686; --tint:#1D3770; --gold:#E6C36A; --goldt:#E6C36A;
+    --obj:#46CFC6; --att:#F5A04D; --res:#A3AAFF; --env:#FF7BA9; --ok:#5BD59B; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0B1A3D; --surface:#12285A; --ink:#FBF5EA; --muted:#C9C3B3; --line:#2B4686; --tint:#1D3770; --gold:#E6C36A; --goldt:#E6C36A;
+  --obj:#46CFC6; --att:#F5A04D; --res:#A3AAFF; --env:#FF7BA9; --ok:#5BD59B; color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;
+  padding-left:max(14px,env(safe-area-inset-left,0px));padding-right:max(14px,env(safe-area-inset-right,0px));padding-block:22px 40px}
+.wrap{max-width:900px;margin:0 auto;display:flex;flex-direction:column;gap:32px}
+h1,h2,h3{font-family:var(--display);font-weight:500;text-wrap:balance;margin:0;letter-spacing:-.01em}
+h1{font-size:clamp(30px,5.4vw,44px);line-height:1.06}
+h2{font-size:clamp(23px,3.4vw,29px);line-height:1.15}
+h3{font-size:19px;line-height:1.25}
+p{margin:0}
+sub{font-size:.72em;line-height:0}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.lede{font-size:17.5px;max-width:64ch}
+.intro{max-width:66ch;color:var(--muted)}
+header{display:flex;flex-direction:column;gap:12px}
+section{display:flex;flex-direction:column;gap:18px;min-width:0}
+.sym{font-family:var(--mono);font-size:.92em;white-space:nowrap}
+.k-obj{color:var(--obj)} .k-att{color:var(--att)} .k-res{color:var(--res)} .k-env{color:var(--env)}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px;display:flex;flex-direction:column;gap:14px;min-width:0}
+.bar{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;justify-content:space-between}
+button:focus-visible,input:focus-visible{outline:2px solid var(--res);outline-offset:2px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{font:inherit;font-size:14px;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:7px 13px;cursor:pointer;display:inline-flex;gap:8px;align-items:center}
+.chip i{font-style:normal;font-family:var(--mono);font-size:11px;color:var(--muted)}
+.chip[aria-pressed="true"]{background:var(--res);border-color:var(--res);color:#fff}
+.chip[aria-pressed="true"] i{color:#fff;opacity:.8}
+.chip:disabled{cursor:default}
+.chip.reached:not([aria-pressed="true"]){border-color:var(--res)}
+.btn{font:inherit;font-size:14px;color:var(--ink);background:var(--surface);border:1px solid var(--ink);border-radius:8px;padding:8px 16px;cursor:pointer}
+.btn.primary{background:var(--ink);color:var(--surface)}
+.btn.ghost{border-color:var(--line);color:var(--muted)}
+.readout{font-size:14px;color:var(--muted)}
+.readout b{color:var(--ink)}
+.tag{font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);border:1px solid var(--line);border-radius:4px;padding:2px 6px}
+.note{font-size:13px;color:var(--muted);max-width:70ch}
+.balance{background:var(--tint);border-radius:10px;padding:16px 18px;display:flex;flex-direction:column;gap:8px;max-width:78ch}
+footer{font-size:13px;color:var(--muted);max-width:76ch;border-top:1px solid var(--line);padding-top:12px}
+@media (max-width:640px){.panel{padding:12px}.wrap{gap:26px}}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
+
+[hidden]{display:none!important}
+:root{--c-h:var(--res);--c-ref:var(--obj);--c-over:var(--env);--c-settle:var(--att);--c-rip:var(--obj)}
+nav.parts{display:flex;flex-wrap:wrap;gap:8px 20px;margin-top:4px}
+nav.parts a{color:var(--ink);text-decoration:none;border-bottom:1px solid var(--line);padding-bottom:2px;font-size:15px}
+nav.parts a:hover,nav.parts a:focus-visible{border-color:var(--res);color:var(--res)}
+.msg{min-height:1.5em;font-size:15px}
+.fbbox{border-top:1px solid var(--line);padding-top:12px;display:flex;flex-direction:column;gap:8px;min-height:6.5em}
+.fbbox .verdict{font-family:var(--display);font-size:19px}
+.fbbox .ref{font-family:var(--mono);font-size:11px;color:var(--muted)}
+.fbbox q{font-style:italic;quotes:"“" "”"}
+.chip:focus-visible,.pick:focus-visible,summary:focus-visible{outline:2px solid var(--res);outline-offset:2px}
+.btn:disabled{opacity:.45;cursor:default}
+/* part 2 */
+.scene{border-left:3px solid var(--line);padding:2px 0 2px 12px;font-family:var(--display);font-size:18.5px;line-height:1.45;min-height:5.6em}
+.picks{gap:10px}
+.pick{font:inherit;font-size:15px;color:var(--ink);background:var(--bg);border:1.5px solid var(--line);border-top-width:4px;border-radius:10px;padding:9px 14px;cursor:pointer;min-width:0}
+.pick.wrong{opacity:.55}
+.pick.right{background:var(--surface);box-shadow:0 0 0 2px var(--ink)}
+.pick:disabled{cursor:default}
+.dots{display:flex;gap:6px}
+.dots i{width:10px;height:10px;border-radius:50%;border:1.5px solid var(--muted)}
+.dots i.done{background:var(--ink);border-color:var(--ink)}
+.dots i.cur{border-color:var(--ink);box-shadow:0 0 0 2px var(--line)}
+@media (max-width:640px){
+  .scene{font-size:17px}
+}
+body[data-part] header{display:none}
+body[data-part="1"] #s2,body[data-part="2"] #s1{display:none}
+body[data-part]{padding-block:10px 18px}
+
+
+.brandhdr{background:#12285A;color:#FBF5EA;text-align:center;padding:18px 18px 20px;border-radius:14px;display:flex;flex-direction:column;align-items:center;gap:6px}
+.brandhdr .logos{display:flex;align-items:center;justify-content:center;gap:18px}
+.brandhdr .logos img{width:56px;height:66px;object-fit:contain;display:block}
+.brandhdr .logos img.rit{width:86px;height:65px}
+.brandhdr .eyebrow{color:#E6C36A;font-weight:700;letter-spacing:3px}
+.brandhdr h1{color:#FBF5EA;font-weight:700}
+.brandhdr .course{color:#E6C36A;font-weight:600;font-size:14px}
+.brandhdr .lede{color:#F1ECDF;font-size:15.5px;max-width:62ch}
+.brandhdr .scorenote{color:#F1ECDF;font-size:14.5px}
+nav.parts a{color:var(--ink)}
+.brandhdr nav.parts a{color:#FBF5EA;border-bottom:1px solid #E6C36A;background:none;padding-bottom:2px}
+.brandhdr nav.parts a:hover,.brandhdr nav.parts a:focus-visible{color:#E6C36A;border-color:#E6C36A}
+.tag.scored{color:var(--goldt);border-color:var(--gold)}
+.scorebox{border-left:5px solid var(--gold);background:var(--tint);border-radius:10px;padding:12px 14px;margin-bottom:14px}
+.scorebox .big{font-family:var(--display);font-size:30px;line-height:1.1;color:var(--ink)}
+.scorebox .band{font-family:var(--display);font-size:18px;margin:4px 0}
+.scorebox .band.good{color:var(--ok)}
+.scorebox .saved{font-size:13.5px;color:var(--muted)}
+.scorebox ul{margin:6px 0 0;padding-left:20px}
+
+/* PRACTICE TEMPLATE: one coloured "part" per section (part-1 .. part-4) */
+.part{--pc:#0E7A8A;--pcon:#FFFFFF;--pcbg:#E6F2F3;border:2px solid var(--pc);border-radius:14px;overflow:hidden;background:var(--pcbg)}
+.part-1{--pc:#0E7A8A;--pcbg:#E6F2F3}
+.part-2{--pc:#12285A;--pcbg:#EEF0F8}
+.part-3{--pc:#2F6B3A;--pcbg:#E6F0E3}
+.part-4{--pc:#7A2A5E;--pcbg:#F5E6F0}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .part{--pcbg:#0F2250;border-color:var(--pcl,var(--pc))}
+ :root:not([data-theme="light"]) .part-1{--pcl:#46CFC6} :root:not([data-theme="light"]) .part-2{--pcl:#E6C36A} :root:not([data-theme="light"]) .part-3{--pcl:#7FD08C} :root:not([data-theme="light"]) .part-4{--pcl:#F08CC8}}
+:root[data-theme="dark"] .part{--pcbg:#0F2250;border-color:var(--pcl,var(--pc))}
+:root[data-theme="dark"] .part-1{--pcl:#46CFC6} :root[data-theme="dark"] .part-2{--pcl:#E6C36A} :root[data-theme="dark"] .part-3{--pcl:#7FD08C} :root[data-theme="dark"] .part-4{--pcl:#F08CC8}
+.part-band{background:var(--pc);color:var(--pcon);padding:12px 16px;display:flex;align-items:center;flex-wrap:wrap;gap:6px 14px}
+.part-band h2{color:inherit;font-size:clamp(20px,3.4vw,26px);font-weight:600;flex:1 1 220px}
+.part-num{font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;font-weight:500;background:rgba(255,255,255,.18);border-radius:4px;padding:3px 9px}
+.part-band .tag{color:inherit;border-color:currentColor;background:rgba(255,255,255,.12)}
+.part-2 .part-band .tag,.part-2 .part-num{color:#E6C36A}
+.part-body{padding:16px;display:flex;flex-direction:column;gap:14px}
+.part .panel{background:var(--surface)}
+@media (max-width:640px){.part-body{padding:12px}}
+
+
+/* page-specific */
+q{font-style:italic;quotes:"“" "”"}
+.pick.right{background:var(--ok);border-color:var(--ok);color:#fff;box-shadow:none}
+.pick.wrong{opacity:.5;text-decoration:line-through}
+.ctl{display:flex;flex-direction:column;gap:6px}
+.ctl .eyebrow{font-size:10.5px}
+.scope{width:100%;border:1px solid var(--line);border-radius:10px;background:var(--bg);overflow:hidden}
+.scope svg{display:block;width:100%;height:auto}
+.event{font-family:var(--display);font-size:19px;line-height:1.35}
+.said{font-family:var(--display);font-size:18px;line-height:1.4;border-left:3px solid var(--gold);padding:2px 0 2px 12px;min-height:3em}
+.tags{display:flex;flex-wrap:wrap;gap:6px;align-items:center;min-height:28px}
+.stag{font-family:var(--mono);font-size:12px;border:1.5px solid var(--att);color:var(--att);border-radius:4px;padding:2px 8px}
+.stag.tight{background:var(--att);color:#fff}
+.cols{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px}
+.colbox{border:1px solid var(--line);border-radius:10px;background:var(--bg);padding:12px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.colbox h3{font-family:var(--display);font-size:18px}
+.colbox .eyebrow{font-size:10.5px}
+.two{display:flex;flex-wrap:wrap;gap:10px}
+.two .tok{font-family:var(--display);font-size:18px;border:1.5px solid var(--line);border-radius:8px;padding:6px 12px;background:var(--surface)}
+.labels .pick{border-top-width:1.5px}
+@media (max-width:640px){.cols{grid-template-columns:minmax(0,1fr)}.said{font-size:17px}.event{font-size:18px}}
+</style></head><body>
+<div class="wrap">
+<header class="brandhdr">
+  <div class="logos"><img src="vedantanz-logo.png" alt="Ramakrishna Vedanta NZ emblem" width="56" height="66"><img class="rit" src="ritam-wordmark.png" alt="Ritam" width="86" height="65"></div>
+  <div class="eyebrow">Practice · Lesson 2.3</div>
+  <h1>Claim It or Hold It</h1>
+  <p class="course">The Mind in the Light of Modern and Spiritual Sciences · Advanced</p>
+  <p class="lede">Lesson 2.3 says that the problem is <q>not the experience itself but the appropriation of the experience.</q> Here you will take the lesson’s own events and change how tightly ahaṁkāra claims them, then name four ways the ego can bend the whole inner instrument.</p>
+  <p class="scorenote"><b>Part I</b> is practice and is not scored. <b>Part II</b> is scored: your first pick in each case counts.</p>
+  <nav class="parts" aria-label="Parts of this page"><a href="#s1">I. Claim it or hold it</a><a href="#s2">II. How the ego bends the instrument</a></nav>
+</header>
+
+<section id="s1" class="part part-1">
+  <div class="part-band"><span class="part-num">Part I</span><h2>Claim it or hold it</h2><span class="tag">Practice: not scored</span></div>
+  <div class="part-body">
+  <p class="intro">Choose an event, then choose how it is held. The wave is the lesson’s Module 2 image of a gain amplifier (§5.2): its shape stands for the content, its height for the gain. It has no numbers and measures nothing.</p>
+  <div class="panel" id="lab">
+    <div class="ctl"><span class="eyebrow">The content</span>
+      <div class="chips" id="evChips" role="group" aria-label="Event"></div></div>
+    <div class="ctl"><span class="eyebrow">How it is held</span>
+      <div class="chips" id="posChips" role="group" aria-label="How it is held">
+        <button class="chip" data-p="0" aria-pressed="false">Held lightly</button>
+        <button class="chip" data-p="1" aria-pressed="true">Claimed</button>
+        <button class="chip" data-p="2" aria-pressed="false">Claimed tightly</button>
+      </div></div>
+    <div class="scope"><svg id="wave" viewBox="0 0 600 140" role="img" aria-label="Wave">
+      <line x1="10" y1="70" x2="590" y2="70" stroke="var(--line)" stroke-width="1.5"/>
+      <path id="wPath" fill="none" stroke="var(--att)" stroke-width="3" stroke-linejoin="round"/>
+      <text id="wCap" x="14" y="132" font-family="Noto Sans, system-ui, sans-serif" font-size="13" fill="var(--muted)"></text>
+    </svg></div>
+    <p class="event" id="evText"></p>
+    <div class="tags" id="tags" aria-label="Self-tags"></div>
+    <p class="said" id="said"></p>
+    <div id="labMsg" class="msg fbbox" role="status" aria-live="polite"></div>
+    <div class="chips"><button class="btn ghost" id="labReset">Start again</button></div>
+  </div>
+  <div class="panel">
+    <h3>Two people, the same feedback (§5.2)</h3>
+    <div class="cols">
+      <div class="colbox"><span class="eyebrow">Tagged as core to identity</span><h3><q>I am my work</q></h3><p>Ahaṁkāra <q>amplifies the signal enormously: praise becomes inflation (“I really am excellent”), criticism becomes injury (“I am failing, I am not good enough”).</q></p></div>
+      <div class="colbox"><span class="eyebrow">The role held more lightly</span><h3><q>work is something I do, not something I am</q></h3><p><q>The gain is lower: the feedback is received as useful information, processed, and let go.</q></p></div>
+    </div>
+    <p class="note"><q>The feedback is identical.</q></p>
+  </div>
+  <div class="panel">
+    <h3>Two faces, one function (§4)</h3>
+    <div class="two"><span class="tok">“I am worthless”</span><span class="tok">“I am superior”</span></div>
+    <div class="chips"><button class="btn" id="facesGo">What do these two share?</button></div>
+    <div id="facesMsg" class="msg" role="status" aria-live="polite"></div>
+  </div>
+  <div class="balance">
+    <h3>Held lightly is not indifference</h3>
+    <p>Held lightly, the feedback is still <q>received as useful information, processed, and let go</q> (§5.2). And a working “I” remains: <q>the ego is not an enemy to be hated. It is a provisional organising structure.</q> A healthy spiritual psychology aims at <q>a functional ego with reduced rigidity</q> (§8).</p>
+  </div>
+  </div>
+</section>
+
+<section id="s2" class="part part-2">
+  <div class="part-band"><span class="part-num">Part II</span><h2>How the ego bends the instrument</h2><span class="tag scored">Scored: first pick counts</span></div>
+  <div class="part-body">
+  <p class="intro">Four short cases, all made up, each built on an example in §6. Which of the four ways the ego bends the instrument does each case show?</p>
+  <div class="panel" id="cs">
+    <div class="bar"><span class="tag" id="csPro">Case 1 of 4</span><div class="dots" id="csDots" aria-hidden="true"></div></div>
+    <div class="scene"><p id="csText"></p></div>
+    <div class="chips picks labels" id="csPicks" role="group" aria-label="Which way">
+      <button class="pick" data-p="sel">Selective attention</button>
+      <button class="pick" data-p="int">Interpretive bias</button>
+      <button class="pick" data-p="nar">Narrative fixation</button>
+      <button class="pick" data-p="def">Defensive filtering</button>
+    </div>
+    <div id="csMsg" class="msg fbbox" role="status" aria-live="polite"><p class="note">Pick one of the four.</p></div>
+    <div class="bar"><div class="chips"><button class="btn primary" id="csNext" hidden>Next case</button><button class="btn ghost" id="csReset">Start again</button></div></div>
+  </div>
+  <div class="panel" id="csDone" hidden>
+    <div class="scorebox" id="scBox" aria-live="polite"></div>
+    <h3>Insight alone is often not the end of it</h3>
+    <p>In the last case, Sam could see that the point was fair. <q>This is why insight alone is often insufficient for change. The ego’s defences must also soften.</q> (§6)</p>
+    <p>And the grooves can change: identity <q>can change, through the same mechanism in reverse. New patterns of observation, new ways of holding experience, and new relationships with self-reference can gradually create different grooves.</q> (§5.4)</p>
+  </div>
+  </div>
+</section>
+<footer>Part I is practice and is not scored. Part II is scored, and only to show you where to look again. Based on Lesson 2.3. The events in Part I are the lesson’s own; the people in Part II are made up. This page illustrates the lesson’s model and does not measure, diagnose or advise on anyone’s situation. For help with distress, please speak with a qualified professional or someone you trust.<br>Ritam · Ramakrishna Vedanta Centre NZ · <a href="https://www.vedanta.nz">www.vedanta.nz</a> Privacy: when you are signed in, your name, email, answers and score are saved to your member record. Only you and the course instructors can see them. They are not shared or ranked.</footer>
+</div>
+<script>
+(function(){
+"use strict";
+var $=function(id){return document.getElementById(id)};
+try{var q=new URLSearchParams(location.search).get("theme");if(q==="light"||q==="dark")document.documentElement.setAttribute("data-theme",q)}catch(e){}
+try{var pt=new URLSearchParams(location.search).get("part");if(pt==="1"||pt==="2")document.body.setAttribute("data-part",pt)}catch(e){}
+var EMBED=/[?&]embed=1/.test(location.search);
+function send(m){if(EMBED){try{parent.postMessage(m,"*")}catch(e){}}}
+function esc(t){return String(t).replace(/&/g,"&amp;").replace(/</g,"&lt;")}
+
+/* ===== Part I: claim it or hold it (not scored) ===== */
+var AMP=[.22,.58,1];
+var POS=["held lightly","claimed","claimed tightly"];
+var EV=[
+ {k:"rain",n:"Rain",t:"It rains on the day of a picnic.",tag:"mine",
+  f:function(x){return Math.sin(x*6*Math.PI)},
+  s:["<q>Rain is just rain</q> (§4).","Ahaṁkāra says <q>my picnic is ruined</q> (§4).","The same claim, held more tightly. <q>Ego does not merely identify. It amplifies.</q> (§5.2)"]},
+ {k:"crit",n:"Criticism",t:"Critical feedback on a piece of work.",tag:"against me",
+  f:function(x){var v=0;[.2,.45,.7].forEach(function(c){v+=Math.exp(-Math.pow((x-c)/.03,2))*(c===.45?-1:1)});return v},
+  s:["<q>Feedback is just feedback</q> (§4). Held lightly, it is <q>received as useful information, processed, and let go</q> (§5.2).","Ahaṁkāra says <q>I am being attacked</q> (§4).","Criticism becomes injury: <q>I am failing, I am not good enough</q> (§5.2)."]},
+ {k:"praise",n:"Praise",t:"Praise for a piece of work.",tag:"my success",
+  f:function(x){return Math.exp(-Math.pow((x-.5)/.16,2))},
+  s:["Held lightly, it is <q>received as useful information, processed, and let go</q> (§5.2).","Pride: <q>This confirms me and I must protect it</q> (§4).","Praise becomes inflation: <q>I really am excellent</q> (§5.2)."]},
+ {k:"age",n:"Ageing",t:"Growing older.",tag:"my image",
+  f:function(x){return Math.sin(x*1.6*Math.PI)*.9},
+  s:["<q>Ageing is just ageing</q> (§4).","Ahaṁkāra says <q>I am losing myself</q> (§4).","The same claim, held more tightly. <q>The degree of amplification depends on how tightly ahaṁkāra has claimed the content as “mine.”</q> (§5.2)"]}
+];
+var L={e:0,p:1,last:null};
+var evChips=$("evChips");
+EV.forEach(function(e,k){var b=document.createElement("button");b.className="chip";b.textContent=e.n;b.dataset.e=k;b.setAttribute("aria-pressed",k===0?"true":"false");
+  b.addEventListener("click",function(){setEv(k)});evChips.appendChild(b)});
+var posChips=document.querySelectorAll("#posChips .chip");
+posChips.forEach(function(b){b.addEventListener("click",function(){setPos(+b.dataset.p)})});
+function path(){
+  var e=EV[L.e],a=AMP[L.p],d="";
+  for(var i=0;i<=232;i++){var x=i/232;var env=Math.sin(Math.PI*x);var y=70-e.f(x)*a*52*Math.min(1,env*2.2);d+=(i?"L":"M")+(10+x*580).toFixed(1)+" "+y.toFixed(1)}
+  $("wPath").setAttribute("d",d);
+  $("wCap").textContent="Content: "+e.n.toLowerCase()+". Gain: "+["low","raised","high"][L.p]+".";
+  $("wave").setAttribute("aria-label","Wave for "+e.n.toLowerCase()+", "+POS[L.p]+": "+["a small wave","a larger wave","a very large wave"][L.p]+".");
+}
+function render(){
+  var e=EV[L.e];
+  evChips.querySelectorAll(".chip").forEach(function(c){c.setAttribute("aria-pressed",+c.dataset.e===L.e?"true":"false")});
+  posChips.forEach(function(c){c.setAttribute("aria-pressed",+c.dataset.p===L.p?"true":"false")});
+  $("evText").textContent=e.t;
+  $("tags").innerHTML=L.p===0?'<span class="note">No self-tag.</span>':'<span class="note">Self-tag:</span> <span class="stag'+(L.p===2?' tight':'')+'">'+esc(e.tag)+'</span>';
+  $("said").innerHTML=e.s[L.p];
+  path();
+}
+function say(h){$("labMsg").innerHTML=h}
+function setEv(k){
+  var changed=k!==L.e;L.e=k;render();if(!changed)return;
+  if(L.p===0){say('<p>New content, still held lightly. The gain has not changed.</p>')}
+  else{say('<p><b>New content, same gain.</b> The wave changes shape, not height. <q>You cannot always control what happens to you. But you can, through practice and self-observation, gradually loosen the intensity with which ahaṁkāra claims it.</q></p><p><q>Reducing the gain is often more effective than changing the content.</q></p><p class="ref">§5.2</p>')}
+}
+function setPos(p){
+  var up=p>L.p;L.p=p;render();
+  if(p===0){say('<p><b>Held lightly.</b> <q>The same event, with less self-referential gain, produces less suffering.</q></p><p class="ref">§5.2</p>')}
+  else if(p===1){say('<p><b>Claimed.</b> Appropriation <q>turns neutral content into personal content</q> (§1). <q>The tagging step is where experience becomes personal.</q></p><p class="ref">§1 · §5.1</p>')}
+  else{say('<p><b>Claimed tightly.</b> <q>When a signal is tagged as “mine” or “about me,” its emotional intensity often rises dramatically.</q></p><p class="ref">§5.2</p>')}
+}
+function resetLab(first){L={e:0,p:1};render();say(first?'<p class="note">Rain on a picnic day, claimed. Try the three positions, then try changing the content instead.</p>':'<p class="note">Back to the start: rain, claimed.</p>')}
+$("labReset").addEventListener("click",function(){resetLab(false)});
+$("facesGo").addEventListener("click",function(){
+  $("facesMsg").innerHTML='<p><q>A timid ego that says “I am worthless” is as much ahaṁkāra as a grandiose ego that says “I am superior.” Both are the same function (self-referential claiming) operating on different content. The problem is not the size of the ego. It is the absoluteness of the identification.</q> (§4)</p>';
+  $("facesGo").disabled=true;
+});
+
+/* ===== Part II: four cases (scored) ===== */
+var NAMES={sel:"Selective attention",int:"Interpretive bias",nar:"Narrative fixation",def:"Defensive filtering"};
+var HINT={
+ sel:"Selective attention is about what gets noticed: ahaṁkāra <q>biases manas toward self-relevant material</q> (§6). Is this case about what was noticed and what was missed?",
+ int:"Interpretive bias is about how something ambiguous is read: <q>in the direction of “what does this mean for me?” rather than “what is actually happening here?”</q> (§6). Is that what this case turns on?",
+ nar:"Narrative fixation is a standing story built from stored impressions, which then filters new experience (§6). Is there such a story in this case?",
+ def:"Defensive filtering is when a person can see that a point is fair, yet the defence keeps that knowing from reaching them (§6). Is that what happens here?"
+};
+var CASES=[
+ {t:"Over a long, friendly lunch, Priya’s colleague says a great deal about her project. Through the whole lunch she hears only the one remark that stung, and misses the rest.",a:"sel",
+  why:"<q>Ahaṁkāra biases manas toward self-relevant material.</q> <q>This is why people often hear exactly the words that hurt them in a long conversation and miss the rest.</q>"},
+ {t:"A friend answers Tom’s long message with a single word. It could mean many things. Within seconds Tom has settled what it says about him.",a:"int",
+  why:"<q>Ambiguous situations are resolved in the direction of “what does this mean for me?” rather than “what is actually happening here?” This is the root of much misinterpretation in relationships.</q>"},
+ {t:"The team lunch is booked for a day Leela cannot come. “I am always the one who gets left out,” she thinks, and each new occasion seems to prove it again.",a:"nar",
+  why:"Ahaṁkāra <q>encourages chitta to organise stored impressions into a self-confirming story</q>. <q>These narratives become filters through which new experience is processed, creating self-fulfilling patterns.</q>"},
+ {t:"Sam’s mentor points out a gap in his report. Sam can see the point is fair, yet he cannot take it in, and finds himself defending every line.",a:"def",
+  why:"<q>When ahaṁkāra senses a threat to identity, it can override even clear buddhi-discrimination. You may know that the feedback is fair, but ahaṁkāra’s defensive reaction prevents that knowing from reaching you emotionally.</q>"}
+];
+var S={i:0,done:{},miss:{},sent:false};
+var picks=document.querySelectorAll("#csPicks .pick");
+function dots(){var d=$("csDots");d.innerHTML="";CASES.forEach(function(_,k){var e=document.createElement("i");if(S.done[k])e.className="done";else if(k===S.i)e.className="cur";d.appendChild(e)})}
+function showCase(){
+  var c=CASES[S.i];$("csText").textContent=c.t;$("csPro").textContent="Case "+(S.i+1)+" of "+CASES.length;
+  picks.forEach(function(p){p.disabled=false;p.classList.remove("wrong","right");p.setAttribute("aria-pressed","false")});
+  $("csMsg").innerHTML='<p class="note">Pick one of the four.</p>';$("csNext").hidden=true;dots();
+}
+function reveal(){
+  var c=CASES[S.i];S.done[S.i]=true;
+  picks.forEach(function(p){p.disabled=true;if(p.dataset.p===c.a){p.classList.add("right");p.setAttribute("aria-pressed","true")}});
+  $("csMsg").innerHTML='<p class="verdict">'+NAMES[c.a]+'.</p><p>'+c.why+'</p><p class="ref">§6</p>';
+  if(S.i<CASES.length-1){$("csNext").hidden=false}else{finish()}
+  dots();
+}
+picks.forEach(function(p){p.addEventListener("click",function(){
+  var c=CASES[S.i];
+  if(p.dataset.p===c.a){reveal()}
+  else{S.miss[S.i]=true;p.classList.add("wrong");p.disabled=true;$("csMsg").innerHTML='<p class="verdict">Not this one.</p><p>'+HINT[p.dataset.p]+'</p>'}
+})});
+$("csNext").addEventListener("click",function(){S.i++;showCase();try{picks[0].focus({preventScroll:true})}catch(e){}});
+$("csReset").addEventListener("click",function(){S={i:0,done:{},miss:{},sent:S.sent};$("csDone").hidden=true;$("scBox").innerHTML="";showCase()});
+
+/* ===== scoring, and hand-off to the host page when embedded ===== */
+var META={code:"ADV-P-2-3",title:"Practice: Lesson 2.3, Claim It or Hold It (Part II)",programme:"The Mind in the Light of Modern and Spiritual Sciences (Advanced)",cut:75};
+function finish(){
+  if(S.sent){$("scBox").innerHTML='<p class="saved">Your first result is the one that counts, and it has already been sent. This run was for practice.</p>';$("csDone").hidden=false;return}
+  var n=CASES.length,right=0,ans=[],wrong=[];
+  CASES.forEach(function(c,k){var ok=!S.miss[k];if(ok)right++;else wrong.push(k);ans.push({q:k+1,ok:ok,given:NAMES[c.a]+(ok?" (first pick)":" (not on first pick)")})});
+  var pct=Math.round(100*right/n),good=pct>=META.cut;
+  var h='<div class="big">'+right+' of '+n+' on the first pick</div><p class="band '+(good?'good':'')+'">'+(good?'Well grasped':'Revisit these ideas')+'</p>';
+  if(wrong.length){h+='<p>Look again at §6 for:</p><ul>'+wrong.map(function(k){return '<li>Case '+(k+1)+': '+NAMES[CASES[k].a]+'</li>'}).join('')+'</ul>'}else{h+='<p>Nothing to revisit here.</p>'}
+  h+='<p class="saved" id="scSaved">'+(EMBED?'Saving your result…':'Sign in on the course page to have your result saved.')+'</p>';
+  $("scBox").innerHTML=h;$("csDone").hidden=false;S.sent=true;
+  send({type:"quizResult",code:META.code,title:META.title,programme:META.programme,score:right,maxScore:n,percent:pct,questionsCorrect:right,questionCount:n,answers:ans});
+}
+window.addEventListener("message",function(e){
+  var d=e.data||{};if(!d||typeof d!=="object"){return}
+  var el=$("scSaved");if(!el){return}
+  if(d.type==="saved"){el.textContent="Your result has been saved to your member record."}
+  else if(d.type==="saveError"){el.textContent="Your result could not be saved this time. You can start again and finish once more."}
+  else if(d.type==="notMember"){el.textContent="Sign in as a member to have your result saved."}
+});
+
+/* tell the host page how tall this page is, so the embed grows instead of scrolling inside its frame */
+(function(){
+  var last=0;
+  function h(){var d=document.documentElement,b=document.body;var v=Math.ceil(Math.max(d.scrollHeight,b.scrollHeight,b.offsetHeight));if(v&&Math.abs(v-last)>1){last=v;send({type:"height",height:v})}}
+  window.addEventListener("load",h);window.addEventListener("resize",h);
+  if(window.ResizeObserver)new ResizeObserver(h).observe(document.body);
+  setInterval(h,700);h();
+})();
+send({type:"ready"});
+resetLab(true);showCase();
+})();
+</script>
+</body></html>

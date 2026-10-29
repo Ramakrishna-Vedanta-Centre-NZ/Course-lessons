@@ -1,0 +1,405 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Practice: Lesson 2.4, Switching Load and the Cascade</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans:wght@400..700&family=Noto+Serif:ital,wght@0,400..700;1,400..700&display=swap">
+<style>
+
+:root{
+  --bg:#FBF5EA; --surface:#FFFDF8; --ink:#1E1E1E; --muted:#5A5A5A; --line:#E6DAC3; --tint:#F3EAD3; --navy:#12285A; --gold:#C9A24A; --goldt:#6B4E0E;
+  --obj:#0B8686; --att:#C95F06; --res:#2E3192; --env:#C0245B; --ok:#1B7A52;
+  --display:"Noto Serif",Georgia,"Times New Roman",serif;
+  --body:"Noto Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0B1A3D; --surface:#12285A; --ink:#FBF5EA; --muted:#C9C3B3; --line:#2B4686; --tint:#1D3770; --gold:#E6C36A; --goldt:#E6C36A;
+    --obj:#46CFC6; --att:#F5A04D; --res:#A3AAFF; --env:#FF7BA9; --ok:#5BD59B; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0B1A3D; --surface:#12285A; --ink:#FBF5EA; --muted:#C9C3B3; --line:#2B4686; --tint:#1D3770; --gold:#E6C36A; --goldt:#E6C36A;
+  --obj:#46CFC6; --att:#F5A04D; --res:#A3AAFF; --env:#FF7BA9; --ok:#5BD59B; color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;
+  padding-left:max(14px,env(safe-area-inset-left,0px));padding-right:max(14px,env(safe-area-inset-right,0px));padding-block:22px 40px}
+.wrap{max-width:900px;margin:0 auto;display:flex;flex-direction:column;gap:32px}
+h1,h2,h3{font-family:var(--display);font-weight:500;text-wrap:balance;margin:0;letter-spacing:-.01em}
+h1{font-size:clamp(30px,5.4vw,44px);line-height:1.06}
+h2{font-size:clamp(23px,3.4vw,29px);line-height:1.15}
+h3{font-size:19px;line-height:1.25}
+p{margin:0}
+sub{font-size:.72em;line-height:0}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.lede{font-size:17.5px;max-width:64ch}
+.intro{max-width:66ch;color:var(--muted)}
+header{display:flex;flex-direction:column;gap:12px}
+section{display:flex;flex-direction:column;gap:18px;min-width:0}
+.sym{font-family:var(--mono);font-size:.92em;white-space:nowrap}
+.k-obj{color:var(--obj)} .k-att{color:var(--att)} .k-res{color:var(--res)} .k-env{color:var(--env)}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px;display:flex;flex-direction:column;gap:14px;min-width:0}
+.bar{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;justify-content:space-between}
+button:focus-visible,input:focus-visible{outline:2px solid var(--res);outline-offset:2px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{font:inherit;font-size:14px;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:7px 13px;cursor:pointer;display:inline-flex;gap:8px;align-items:center}
+.chip i{font-style:normal;font-family:var(--mono);font-size:11px;color:var(--muted)}
+.chip[aria-pressed="true"]{background:var(--res);border-color:var(--res);color:#fff}
+.chip[aria-pressed="true"] i{color:#fff;opacity:.8}
+.chip:disabled{cursor:default}
+.chip.reached:not([aria-pressed="true"]){border-color:var(--res)}
+.btn{font:inherit;font-size:14px;color:var(--ink);background:var(--surface);border:1px solid var(--ink);border-radius:8px;padding:8px 16px;cursor:pointer}
+.btn.primary{background:var(--ink);color:var(--surface)}
+.btn.ghost{border-color:var(--line);color:var(--muted)}
+.readout{font-size:14px;color:var(--muted)}
+.readout b{color:var(--ink)}
+.tag{font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);border:1px solid var(--line);border-radius:4px;padding:2px 6px}
+.note{font-size:13px;color:var(--muted);max-width:70ch}
+.balance{background:var(--tint);border-radius:10px;padding:16px 18px;display:flex;flex-direction:column;gap:8px;max-width:78ch}
+footer{font-size:13px;color:var(--muted);max-width:76ch;border-top:1px solid var(--line);padding-top:12px}
+@media (max-width:640px){.panel{padding:12px}.wrap{gap:26px}}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
+
+[hidden]{display:none!important}
+:root{--c-h:var(--res);--c-ref:var(--obj);--c-over:var(--env);--c-settle:var(--att);--c-rip:var(--obj)}
+nav.parts{display:flex;flex-wrap:wrap;gap:8px 20px;margin-top:4px}
+nav.parts a{color:var(--ink);text-decoration:none;border-bottom:1px solid var(--line);padding-bottom:2px;font-size:15px}
+nav.parts a:hover,nav.parts a:focus-visible{border-color:var(--res);color:var(--res)}
+.msg{min-height:1.5em;font-size:15px}
+.fbbox{border-top:1px solid var(--line);padding-top:12px;display:flex;flex-direction:column;gap:8px;min-height:6.5em}
+.fbbox .verdict{font-family:var(--display);font-size:19px}
+.fbbox .ref{font-family:var(--mono);font-size:11px;color:var(--muted)}
+.fbbox q{font-style:italic;quotes:"“" "”"}
+.chip:focus-visible,.pick:focus-visible,summary:focus-visible{outline:2px solid var(--res);outline-offset:2px}
+.btn:disabled{opacity:.45;cursor:default}
+/* part 2 */
+.scene{border-left:3px solid var(--line);padding:2px 0 2px 12px;font-family:var(--display);font-size:18.5px;line-height:1.45;min-height:5.6em}
+.picks{gap:10px}
+.pick{font:inherit;font-size:15px;color:var(--ink);background:var(--bg);border:1.5px solid var(--line);border-top-width:4px;border-radius:10px;padding:9px 14px;cursor:pointer;min-width:0}
+.pick.wrong{opacity:.55}
+.pick.right{background:var(--surface);box-shadow:0 0 0 2px var(--ink)}
+.pick:disabled{cursor:default}
+.dots{display:flex;gap:6px}
+.dots i{width:10px;height:10px;border-radius:50%;border:1.5px solid var(--muted)}
+.dots i.done{background:var(--ink);border-color:var(--ink)}
+.dots i.cur{border-color:var(--ink);box-shadow:0 0 0 2px var(--line)}
+@media (max-width:640px){
+  .scene{font-size:17px}
+}
+body[data-part] header{display:none}
+body[data-part="1"] #s2,body[data-part="2"] #s1{display:none}
+body[data-part]{padding-block:10px 18px}
+
+
+.brandhdr{background:#12285A;color:#FBF5EA;text-align:center;padding:18px 18px 20px;border-radius:14px;display:flex;flex-direction:column;align-items:center;gap:6px}
+.brandhdr .logos{display:flex;align-items:center;justify-content:center;gap:18px}
+.brandhdr .logos img{width:56px;height:66px;object-fit:contain;display:block}
+.brandhdr .logos img.rit{width:86px;height:65px}
+.brandhdr .eyebrow{color:#E6C36A;font-weight:700;letter-spacing:3px}
+.brandhdr h1{color:#FBF5EA;font-weight:700}
+.brandhdr .course{color:#E6C36A;font-weight:600;font-size:14px}
+.brandhdr .lede{color:#F1ECDF;font-size:15.5px;max-width:62ch}
+.brandhdr .scorenote{color:#F1ECDF;font-size:14.5px}
+nav.parts a{color:var(--ink)}
+.brandhdr nav.parts a{color:#FBF5EA;border-bottom:1px solid #E6C36A;background:none;padding-bottom:2px}
+.brandhdr nav.parts a:hover,.brandhdr nav.parts a:focus-visible{color:#E6C36A;border-color:#E6C36A}
+.tag.scored{color:var(--goldt);border-color:var(--gold)}
+.scorebox{border-left:5px solid var(--gold);background:var(--tint);border-radius:10px;padding:12px 14px;margin-bottom:14px}
+.scorebox .big{font-family:var(--display);font-size:30px;line-height:1.1;color:var(--ink)}
+.scorebox .band{font-family:var(--display);font-size:18px;margin:4px 0}
+.scorebox .band.good{color:var(--ok)}
+.scorebox .saved{font-size:13.5px;color:var(--muted)}
+.scorebox ul{margin:6px 0 0;padding-left:20px}
+
+/* PRACTICE TEMPLATE: one coloured "part" per section (part-1 .. part-4) */
+.part{--pc:#0E7A8A;--pcon:#FFFFFF;--pcbg:#E6F2F3;border:2px solid var(--pc);border-radius:14px;overflow:hidden;background:var(--pcbg)}
+.part-1{--pc:#0E7A8A;--pcbg:#E6F2F3}
+.part-2{--pc:#12285A;--pcbg:#EEF0F8}
+.part-3{--pc:#2F6B3A;--pcbg:#E6F0E3}
+.part-4{--pc:#7A2A5E;--pcbg:#F5E6F0}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .part{--pcbg:#0F2250;border-color:var(--pcl,var(--pc))}
+ :root:not([data-theme="light"]) .part-1{--pcl:#46CFC6} :root:not([data-theme="light"]) .part-2{--pcl:#E6C36A} :root:not([data-theme="light"]) .part-3{--pcl:#7FD08C} :root:not([data-theme="light"]) .part-4{--pcl:#F08CC8}}
+:root[data-theme="dark"] .part{--pcbg:#0F2250;border-color:var(--pcl,var(--pc))}
+:root[data-theme="dark"] .part-1{--pcl:#46CFC6} :root[data-theme="dark"] .part-2{--pcl:#E6C36A} :root[data-theme="dark"] .part-3{--pcl:#7FD08C} :root[data-theme="dark"] .part-4{--pcl:#F08CC8}
+.part-band{background:var(--pc);color:var(--pcon);padding:12px 16px;display:flex;align-items:center;flex-wrap:wrap;gap:6px 14px}
+.part-band h2{color:inherit;font-size:clamp(20px,3.4vw,26px);font-weight:600;flex:1 1 220px}
+.part-num{font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;font-weight:500;background:rgba(255,255,255,.18);border-radius:4px;padding:3px 9px}
+.part-band .tag{color:inherit;border-color:currentColor;background:rgba(255,255,255,.12)}
+.part-2 .part-band .tag,.part-2 .part-num{color:#E6C36A}
+.part-body{padding:16px;display:flex;flex-direction:column;gap:14px}
+.part .panel{background:var(--surface)}
+@media (max-width:640px){.part-body{padding:12px}}
+
+
+/* page-specific */
+q{font-style:italic;quotes:"“" "”"}
+.pick.right{background:var(--ok);border-color:var(--ok);color:#fff;box-shadow:none}
+.pick.wrong{opacity:.5;text-decoration:line-through}
+.qpicks .pick{border-top-width:1.5px;text-align:left}
+.ctl{display:flex;flex-direction:column;gap:6px}
+.ctl .eyebrow{font-size:10.5px}
+.radar{width:100%;max-width:520px;align-self:center;border:1px solid var(--line);border-radius:10px;background:var(--bg);overflow:hidden}
+.radar svg{display:block;width:100%;height:auto}
+.setline{font-family:var(--display);font-size:17.5px;border-left:3px solid var(--gold);padding:2px 0 2px 12px;min-height:3em}
+.cascade{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px;counter-reset:st}
+.cascade li{display:grid;grid-template-columns:28px minmax(0,1fr) auto;gap:4px 10px;align-items:baseline;border:1.5px solid var(--line);border-radius:8px;padding:7px 10px;background:var(--surface);transition:background .3s,border-color .3s}
+.cascade li::before{counter-increment:st;content:counter(st);font-family:var(--mono);font-size:12px;color:var(--muted)}
+.cascade li b{font-weight:600}
+.cascade li .d{grid-column:2/4;font-size:13.5px;color:var(--muted)}
+.cascade li .fn{font-family:var(--mono);font-size:11.5px;letter-spacing:.03em;color:var(--muted);white-space:nowrap}
+.cascade li.lit{border-color:var(--env);background:color-mix(in srgb,var(--env) 12%,var(--surface))}
+.cascade li.lit::before{color:var(--env)}
+.cascade li.clear{border-color:var(--ok)}
+.cascade li.clear::before{content:"✓";color:var(--ok)}
+.qbox{display:flex;flex-direction:column;gap:10px;border-top:1px solid var(--line);padding-top:12px}
+.qbox:first-child{border-top:0;padding-top:0}
+.qtext{font-family:var(--display);font-size:18px;line-height:1.4}
+.load{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+.load li{display:flex;gap:10px;align-items:baseline;font-size:15px}
+.load li i{font-style:normal;font-family:var(--mono);font-size:11px;color:var(--muted);min-width:9ch}
+.load li.eased span{text-decoration:line-through;color:var(--muted)}
+.load li.eased i{color:var(--ok)}
+.strip{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:4px}
+.strip span{height:14px;border-radius:3px;background:var(--env);opacity:.75;transition:background .3s,opacity .3s}
+.strip span.clear{background:var(--ok);opacity:.55}
+.striplab{display:flex;justify-content:space-between;font-family:var(--mono);font-size:10.5px;color:var(--muted);letter-spacing:.05em;text-transform:uppercase}
+@media (max-width:640px){.cascade li{grid-template-columns:22px minmax(0,1fr)}.cascade li .fn{grid-column:2}.cascade li .d{grid-column:2}}
+@media (prefers-reduced-motion: reduce){.cascade li,.strip span{transition:none}}
+</style></head><body>
+<div class="wrap">
+<header class="brandhdr">
+  <div class="logos"><img src="vedantanz-logo.png" alt="Ramakrishna Vedanta NZ emblem" width="56" height="66"><img class="rit" src="ritam-wordmark.png" alt="Ritam" width="86" height="65"></div>
+  <div class="eyebrow">Practice · Lesson 2.4</div>
+  <h1>Switching Load and the Cascade</h1>
+  <p class="course">The Mind in the Light of Modern and Spiritual Sciences · Advanced</p>
+  <p class="lede">Lesson 2.4 describes manas as the radar of the mind and traces a disturbance cascade that can begin there and spread through the whole inner instrument. Here you will raise the number of inputs competing for manas and watch the cascade, then switch on the five simple practices the lesson names and see what part of the load each one eases.</p>
+  <p class="scorenote"><b>Part I</b> is scored: only its two questions count, and your first pick on each counts. <b>Part II</b> is practice and is not scored.</p>
+  <nav class="parts" aria-label="Parts of this page"><a href="#s1">I. The disturbance cascade</a><a href="#s2">II. Five simple practices</a></nav>
+</header>
+
+<section id="s1" class="part part-1">
+  <div class="part-band"><span class="part-num">Part I</span><h2>The disturbance cascade</h2><span class="tag scored">Scored: first pick counts</span></div>
+  <div class="part-body">
+  <p class="intro">Set how many inputs are competing for manas. The radar beam stands for manas shifting from signal to signal (§1). The list below is the cascade of §3, in the lesson’s order. Explore freely: only the two questions at the end are scored.</p>
+  <div class="panel" id="lab">
+    <div class="ctl"><span class="eyebrow">Inputs competing</span>
+      <div class="chips" id="lvChips" role="group" aria-label="Inputs competing">
+        <button class="chip" data-l="0" aria-pressed="true">A few</button>
+        <button class="chip" data-l="1" aria-pressed="false">Many</button>
+        <button class="chip" data-l="2" aria-pressed="false">Too many, too fast</button>
+      </div></div>
+    <div class="radar"><svg id="radar" viewBox="0 0 520 210" role="img" aria-label="Radar">
+      <circle cx="260" cy="105" r="92" fill="none" stroke="var(--line)" stroke-width="1.5"/>
+      <circle cx="260" cy="105" r="56" fill="none" stroke="var(--line)" stroke-width="1"/>
+      <g id="dots"></g>
+      <line id="beam" x1="260" y1="105" x2="260" y2="13" stroke="var(--att)" stroke-width="3" stroke-linecap="round"/>
+      <circle cx="260" cy="105" r="6" fill="var(--att)"/>
+      <text x="260" y="203" text-anchor="middle" font-family="Noto Sans, system-ui, sans-serif" font-size="13" fill="var(--muted)">manas, the radar of the mind</text>
+    </svg></div>
+    <p class="setline" id="setLine"></p>
+    <ol class="cascade" id="cascade" aria-label="The disturbance cascade"></ol>
+    <div id="labMsg" class="msg fbbox" role="status" aria-live="polite"></div>
+    <p class="note">This illustrates the lesson’s model. It does not measure anyone’s attention or diagnose anyone’s state.</p>
+  </div>
+  <div class="balance">
+    <h3>Scanning is not the problem</h3>
+    <p><q>This scanning function is not a defect. It is biologically necessary.</q> <q>But there is a difference between responsive flexibility and compulsive scattering. The first serves life. The second fragments it.</q> (§1)</p>
+  </div>
+  <div class="panel" id="qs">
+    <h3>Two questions on §3</h3>
+    <div id="qList"></div>
+  </div>
+  <div class="panel" id="qDone" hidden>
+    <div class="scorebox" id="scBox" aria-live="polite"></div>
+    <p>Part II turns to the simple practices that work at this level.</p>
+  </div>
+  </div>
+</section>
+
+<section id="s2" class="part part-2">
+  <div class="part-band"><span class="part-num">Part II</span><h2>Five simple practices</h2><span class="tag">Practice: not scored</span></div>
+  <div class="part-body">
+  <p class="intro">The cascade is running (too many inputs, too fast). Switch on the five practices of §6 in any order. Each one eases its own part of the switching load, in the lesson’s words.</p>
+  <div class="panel" id="pr">
+    <div class="chips" id="prChips" role="group" aria-label="Practices"></div>
+    <div class="ctl"><span class="eyebrow">Parts of the switching load</span><ul class="load" id="load"></ul></div>
+    <div class="ctl"><div class="striplab"><span>manas</span><span>downstream</span><span>chitta</span></div><div class="strip" id="strip" aria-hidden="true"></div>
+      <p class="note">The strip is the cascade from Part I. The page clears its stages in order as more of the load is eased; the lesson gives no amounts.</p></div>
+    <div id="prMsg" class="msg fbbox" role="status" aria-live="polite"></div>
+    <div class="chips"><button class="btn ghost" id="prReset">Start again</button></div>
+  </div>
+  <div class="balance">
+    <h3>Simple, and foundational</h3>
+    <p><q>In every case, the practice works by reducing the switching-load on manas.</q> These practices <q>are not preliminary exercises to be outgrown but foundational disciplines that support everything else.</q> (§6)</p>
+    <p>The training <q>does not happen through suppression</q>, and its starting point <q>is often not some advanced mystical technique but the simplest of practices: sit still, breathe slowly, and give the mind one thing to rest on.</q> (§7)</p>
+  </div>
+  </div>
+</section>
+<footer>Part I is scored, and only to show you where to look again. Part II is practice and is not scored. Based on Lesson 2.4, this page illustrates the lesson’s model of manas and does not measure, diagnose or advise on anyone’s situation. For help with distress, please speak with a qualified professional or someone you trust.<br>Ritam · Ramakrishna Vedanta Centre NZ · <a href="https://www.vedanta.nz">www.vedanta.nz</a> Privacy: when you are signed in, your name, email, answers and score are saved to your member record. Only you and the course instructors can see them. They are not shared or ranked.</footer>
+</div>
+<script>
+(function(){
+"use strict";
+var $=function(id){return document.getElementById(id)};
+try{var q=new URLSearchParams(location.search).get("theme");if(q==="light"||q==="dark")document.documentElement.setAttribute("data-theme",q)}catch(e){}
+try{var pt=new URLSearchParams(location.search).get("part");if(pt==="1"||pt==="2")document.body.setAttribute("data-part",pt)}catch(e){}
+var EMBED=/[?&]embed=1/.test(location.search);
+function send(m){if(EMBED){try{parent.postMessage(m,"*")}catch(e){}}}
+function esc(t){return String(t).replace(/&/g,"&amp;").replace(/</g,"&lt;")}
+var RM=false;try{RM=window.matchMedia("(prefers-reduced-motion: reduce)").matches}catch(e){}
+
+var STAGES=[
+ ["High-noise input","too many signals, too fast, too emotionally charged","input"],
+ ["Excessive switching","manas jumping rapidly between objects","manas"],
+ ["Poor filtering","inability to distinguish what matters from what doesn’t","manas"],
+ ["Unstable foreground","no clear object of attention","manas"],
+ ["Fragmented downstream processing","","downstream"],
+ ["Weak discrimination","buddhi receives confused material and makes poor determinations","buddhi"],
+ ["Reactive selfing","ahaṁkāra tags the confused output as “my crisis”","ahaṁkāra"],
+ ["Reinforced disturbance in chitta","the fragmented, anxious impressions are stored and condition future processing","chitta"]
+];
+
+/* ===== Part I: the cascade lab (not scored) ===== */
+var LV=[
+ {n:3,ms:1700,lit:0,line:'<q>In a calm environment with few demands, it scans gently.</q> (§1)',
+  msg:'<p class="note">Few inputs: the beam moves gently, and nothing in the cascade is lit.</p>'},
+ {n:8,ms:700,lit:2,line:'<q>In a complex, noisy, or threatening environment, it scans rapidly and sometimes chaotically.</q> (§1)',
+  msg:'<p>More inputs, more switching. The page lights only the first two stages here, to show the direction; the lesson describes the full cascade for manas that is disturbed (§3).</p>'},
+ {n:18,ms:240,lit:8,line:'Notifications, messages, news headlines, social media updates, and email, <q>each one a signal competing for your attention.</q> (§2)',
+  msg:'<p>The whole cascade, in the lesson’s order. <q>The system is not in crisis. It is merely too scattered at the input-handling level, and everything downstream amplifies the disturbance.</q></p><p class="ref">§3</p>'}
+];
+var cas=$("cascade");
+STAGES.forEach(function(s){var li=document.createElement("li");li.innerHTML='<b>'+esc(s[0])+'</b><span class="fn">'+esc(s[2])+(s[2]==="manas"?" (L₂a)":"")+'</span>'+(s[1]?'<span class="d">'+esc(s[1])+'</span>':'');cas.appendChild(li)});
+var lis=cas.querySelectorAll("li");
+/* fixed, scattered signal positions */
+var PTS=[];(function(){var seed=7;function r(){seed=(seed*9301+49297)%233280;return seed/233280}for(var i=0;i<18;i++){var a=r()*Math.PI*2,d=28+r()*60;PTS.push([260+Math.cos(a)*d*1.0,105+Math.sin(a)*d*.95])}})();
+var L={lv:0,timer:0,cur:0,lt:[]};
+function drawDots(){
+  var g=$("dots"),n=LV[L.lv].n,h="";
+  for(var i=0;i<n;i++){h+='<circle cx="'+PTS[i][0].toFixed(1)+'" cy="'+PTS[i][1].toFixed(1)+'" r="5" fill="var(--obj)" opacity=".85"/>'}
+  g.innerHTML=h;
+  $("radar").setAttribute("aria-label","Radar with "+["a few signals; the beam moves gently","many signals; the beam moves rapidly","very many signals; the beam jumps constantly"][L.lv]+".");
+}
+function aim(){var n=LV[L.lv].n;L.cur=(L.cur+1+Math.floor(Math.random()*(n-1)))%n;var p=PTS[L.cur];$("beam").setAttribute("x2",p[0].toFixed(1));$("beam").setAttribute("y2",p[1].toFixed(1))}
+function run(){clearInterval(L.timer);aim();if(!RM){L.timer=setInterval(aim,LV[L.lv].ms)}}
+function light(k){
+  L.lt.forEach(clearTimeout);L.lt=[];
+  lis.forEach(function(li,i){if(i>=k)li.classList.remove("lit")});
+  for(var i=0;i<k;i++){(function(i){if(RM||lis[i].classList.contains("lit")){lis[i].classList.add("lit")}else{L.lt.push(setTimeout(function(){lis[i].classList.add("lit")},180*i))}})(i)}
+}
+function setLv(k){
+  L.lv=k;
+  document.querySelectorAll("#lvChips .chip").forEach(function(c){c.setAttribute("aria-pressed",+c.dataset.l===k?"true":"false")});
+  $("setLine").innerHTML=LV[k].line;$("labMsg").innerHTML=LV[k].msg;
+  drawDots();run();light(LV[k].lit);
+}
+document.querySelectorAll("#lvChips .chip").forEach(function(c){c.addEventListener("click",function(){setLv(+c.dataset.l)})});
+
+/* ===== Part I questions (scored) ===== */
+var QS=[
+ {t:"The cascade starts at the top of the list. According to the lesson, disturbances that seem emotional or existential often begin with what?",
+  o:[["crisis","A crisis in the person’s life"],["over","Attentional overload"],["bud","A misreading by buddhi"],["chit","A deep impression stored in chitta"]],a:"over",
+  why:"<q>This cascade explains why disturbances that seem emotional or existential often begin with something much simpler: attentional overload. The system is not in crisis.</q>",
+  hint:{crisis:"The lesson says plainly: <q>The system is not in crisis.</q> Look at the first stages of the cascade (§3).",bud:"Weak discrimination comes later in the cascade, once buddhi <q>receives confused material</q> (§3). What comes first?",chit:"Reinforced disturbance in chitta is the last stage of this cascade, not the first (§3)."}},
+ {t:"If the problem begins in manas, where should the first intervention go?",
+  o:[["bud","Buddhi: deeper analysis of meaning"],["ahm","Ahaṁkāra: loosening of identity"],["man","Manas: stabilising the input-processing layer"],["chit","Chitta: working on the stored impressions"]],a:"man",
+  why:"<q>If the problem begins in manas, then the first intervention should also target manas: not through deeper analysis of meaning (which is buddhi-work) or loosening of identity (which is ahaṁkāra-work), but through stabilising the input-processing layer itself.</q>",
+  hint:{bud:"The lesson calls deeper analysis of meaning <q>buddhi-work</q>. Where does this cascade begin (§3)?",ahm:"The lesson calls loosening of identity <q>ahaṁkāra-work</q>. Where does this cascade begin (§3)?",chit:"Chitta is where this cascade ends, not where it begins (§3)."}}
+];
+var Q={done:{},miss:{},sent:false};
+function buildQs(){
+  var h="";
+  QS.forEach(function(q,k){
+    h+='<div class="qbox" id="q'+k+'"><p class="qtext">'+(k+1)+'. '+esc(q.t)+'</p><div class="chips picks qpicks" role="group" aria-label="Question '+(k+1)+'">';
+    q.o.forEach(function(o){h+='<button class="pick" data-q="'+k+'" data-o="'+o[0]+'" aria-pressed="false">'+esc(o[1])+'</button>'});
+    h+='</div><div class="msg fbbox" id="qm'+k+'" role="status" aria-live="polite"><p class="note">Pick one of the four.</p></div></div>';
+  });
+  $("qList").innerHTML=h;
+  document.querySelectorAll("#qList .pick").forEach(function(b){b.addEventListener("click",function(){pickQ(b)})});
+}
+function pickQ(b){
+  var k=+b.dataset.q,q=QS[k],box=$("q"+k);
+  if(Q.done[k])return;
+  if(b.dataset.o===q.a){
+    Q.done[k]=true;
+    box.querySelectorAll(".pick").forEach(function(x){x.disabled=true;if(x===b){x.classList.add("right");x.setAttribute("aria-pressed","true")}});
+    $("qm"+k).innerHTML='<p class="verdict">'+esc(q.o.filter(function(o){return o[0]===q.a})[0][1])+'.</p><p>'+q.why+'</p><p class="ref">§3</p>';
+    if(Object.keys(Q.done).length===QS.length)finish();
+  }else{
+    Q.miss[k]=true;b.classList.add("wrong");b.disabled=true;
+    $("qm"+k).innerHTML='<p class="verdict">Not this one.</p><p>'+q.hint[b.dataset.o]+'</p>';
+  }
+}
+
+/* ===== scoring, and hand-off to the host page when embedded ===== */
+var META={code:"ADV-P-2-4",title:"Practice: Lesson 2.4, Switching Load and the Cascade (Part I)",programme:"The Mind in the Light of Modern and Spiritual Sciences (Advanced)",cut:75};
+function finish(){
+  if(Q.sent){$("qDone").hidden=false;return}
+  var n=QS.length,right=0,ans=[],wrong=[];
+  QS.forEach(function(q,k){var ok=!Q.miss[k];if(ok)right++;else wrong.push(k);ans.push({q:k+1,ok:ok,given:q.o.filter(function(o){return o[0]===q.a})[0][1]+(ok?" (first pick)":" (not on first pick)")})});
+  var pct=Math.round(100*right/n),good=pct>=META.cut;
+  var h='<div class="big">'+right+' of '+n+' on the first pick</div><p class="band '+(good?'good':'')+'">'+(good?'Well grasped':'Revisit these ideas')+'</p>';
+  if(wrong.length){h+='<p>Look again at §3 for:</p><ul>'+wrong.map(function(k){return '<li>Question '+(k+1)+'</li>'}).join('')+'</ul>'}else{h+='<p>Nothing to revisit here.</p>'}
+  h+='<p class="saved" id="scSaved">'+(EMBED?'Saving your result…':'Sign in on the course page to have your result saved.')+'</p>';
+  $("scBox").innerHTML=h;$("qDone").hidden=false;Q.sent=true;
+  send({type:"quizResult",code:META.code,title:META.title,programme:META.programme,score:right,maxScore:n,percent:pct,questionsCorrect:right,questionCount:n,answers:ans});
+}
+window.addEventListener("message",function(e){
+  var d=e.data||{};if(!d||typeof d!=="object"){return}
+  var el=$("scSaved");if(!el){return}
+  if(d.type==="saved"){el.textContent="Your result has been saved to your member record."}
+  else if(d.type==="saveError"){el.textContent="Your result could not be saved this time."}
+  else if(d.type==="notMember"){el.textContent="Sign in as a member to have your result saved."}
+});
+
+/* ===== Part II: five practices (not scored) ===== */
+var PR=[
+ {k:"japa",n:"Japa",load:"no single, steady object to return to",
+  s:"Japa (repetition of a sacred name or mantra) <q>gives manas a single, steady object to return to.</q> <q>In signal-processing terms, japa functions like a reference rhythm: a stable, repetitive waveform that the system can lock onto, reducing the noise that would otherwise dominate the output.</q> When the rhythm of the mantra is synchronised with the rhythm of the breath, the lesson gives its figure of <q>approximately six breaths per minute</q>."},
+ {k:"post",n:"Posture",load:"bodily signals competing for attention",
+  s:"Posture (sitting still) <q>reduces bodily signals competing for attention. When the body is still, manas receives fewer proprioceptive interruptions and can settle more easily.</q>"},
+ {k:"breath",n:"Breath regulation",load:"the urgency of the scanning",
+  s:"Breath regulation (prāṇāyāma) <q>directly influences the nervous system’s arousal level, reducing the urgency of the manas-scanning. Slow, rhythmic breathing shifts the system toward a state where manas is less reactive and more settled.</q>"},
+ {k:"sol",n:"Solitude and silence",load:"the volume and variety of incoming signals",
+  s:"<q>Solitude and silence reduce the volume and variety of incoming signals. With fewer things to scan, compare, and react to, manas naturally becomes less agitated.</q>"},
+ {k:"eka",n:"One-pointedness (ekāgratā)",load:"no trained capacity for sustained focus",
+  s:"<q>One-pointedness (ekāgratā) trains the capacity for sustained focus. It is not about forcing the mind into rigidity but about developing the ability to choose where attention rests, and to maintain that choice.</q>"}
+];
+var CLR=[0,2,3,5,6,8];
+var P={on:{}};
+var prChips=$("prChips");
+PR.forEach(function(p,k){var b=document.createElement("button");b.className="chip";b.dataset.k=k;b.setAttribute("aria-pressed","false");b.textContent=p.n;b.addEventListener("click",function(){togglePr(k)});prChips.appendChild(b)});
+var st=$("strip");for(var i=0;i<8;i++){st.appendChild(document.createElement("span"))}
+function renderPr(){
+  var cnt=0;
+  prChips.querySelectorAll(".chip").forEach(function(c){var on=!!P.on[+c.dataset.k];c.setAttribute("aria-pressed",on?"true":"false");if(on)cnt++});
+  $("load").innerHTML=PR.map(function(p,k){return '<li class="'+(P.on[k]?'eased':'')+'"><i>'+(P.on[k]?'eased':'load')+'</i><span>'+esc(p.load)+'</span></li>'}).join("");
+  var c=CLR[cnt];st.querySelectorAll("span").forEach(function(s,i){s.className=i<c?"clear":""});
+  return cnt;
+}
+function togglePr(k){
+  P.on[k]=!P.on[k];var cnt=renderPr(),p=PR[k];
+  var h;
+  if(P.on[k]){h='<p><b>'+esc(p.n)+'.</b> '+p.s+'</p><p class="ref">§6</p>'}
+  else{h='<p>'+esc(p.n)+' is off again, and that part of the load returns.</p>'}
+  if(cnt===PR.length){h+='<p><q>When manas steadies, the entire downstream chain improves: buddhi discriminates more clearly, ahaṁkāra reacts less compulsively, and chitta receives cleaner impressions.</q> (§6)</p>'}
+  $("prMsg").innerHTML=h;
+}
+function resetPr(first){P={on:{}};renderPr();$("prMsg").innerHTML='<p class="note">'+(first?'All five parts of the load are present, and the cascade is lit. Switch on a practice.':'Back to the start: no practice on.')+'</p>'}
+$("prReset").addEventListener("click",function(){resetPr(false)});
+
+/* tell the host page how tall this page is, so the embed grows instead of scrolling inside its frame */
+(function(){
+  var last=0;
+  function h(){var d=document.documentElement,b=document.body;var v=Math.ceil(Math.max(d.scrollHeight,b.scrollHeight,b.offsetHeight));if(v&&Math.abs(v-last)>1){last=v;send({type:"height",height:v})}}
+  window.addEventListener("load",h);window.addEventListener("resize",h);
+  if(window.ResizeObserver)new ResizeObserver(h).observe(document.body);
+  setInterval(h,700);h();
+})();
+send({type:"ready"});
+setLv(0);buildQs();resetPr(true);
+})();
+</script>
+</body></html>

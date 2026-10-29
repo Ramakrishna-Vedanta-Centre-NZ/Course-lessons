@@ -1,0 +1,397 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Practice: Lesson 2.1, Three Movements</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans:wght@400..700&family=Noto+Serif:ital,wght@0,400..700;1,400..700&display=swap">
+<style>
+
+:root{
+  --bg:#FBF5EA; --surface:#FFFDF8; --ink:#1E1E1E; --muted:#5A5A5A; --line:#E6DAC3; --tint:#F3EAD3; --navy:#12285A; --gold:#C9A24A; --goldt:#6B4E0E;
+  --obj:#0B8686; --att:#C95F06; --res:#2E3192; --env:#C0245B; --ok:#1B7A52;
+  --display:"Noto Serif",Georgia,"Times New Roman",serif;
+  --body:"Noto Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0B1A3D; --surface:#12285A; --ink:#FBF5EA; --muted:#C9C3B3; --line:#2B4686; --tint:#1D3770; --gold:#E6C36A; --goldt:#E6C36A;
+    --obj:#46CFC6; --att:#F5A04D; --res:#A3AAFF; --env:#FF7BA9; --ok:#5BD59B; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0B1A3D; --surface:#12285A; --ink:#FBF5EA; --muted:#C9C3B3; --line:#2B4686; --tint:#1D3770; --gold:#E6C36A; --goldt:#E6C36A;
+  --obj:#46CFC6; --att:#F5A04D; --res:#A3AAFF; --env:#FF7BA9; --ok:#5BD59B; color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;
+  padding-left:max(14px,env(safe-area-inset-left,0px));padding-right:max(14px,env(safe-area-inset-right,0px));padding-block:22px 40px}
+.wrap{max-width:900px;margin:0 auto;display:flex;flex-direction:column;gap:32px}
+h1,h2,h3{font-family:var(--display);font-weight:500;text-wrap:balance;margin:0;letter-spacing:-.01em}
+h1{font-size:clamp(30px,5.4vw,44px);line-height:1.06}
+h2{font-size:clamp(23px,3.4vw,29px);line-height:1.15}
+h3{font-size:19px;line-height:1.25}
+p{margin:0}
+sub{font-size:.72em;line-height:0}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.lede{font-size:17.5px;max-width:64ch}
+.intro{max-width:66ch;color:var(--muted)}
+header{display:flex;flex-direction:column;gap:12px}
+section{display:flex;flex-direction:column;gap:18px;min-width:0}
+.sym{font-family:var(--mono);font-size:.92em;white-space:nowrap}
+.k-obj{color:var(--obj)} .k-att{color:var(--att)} .k-res{color:var(--res)} .k-env{color:var(--env)}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px;display:flex;flex-direction:column;gap:14px;min-width:0}
+.bar{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;justify-content:space-between}
+button:focus-visible,input:focus-visible{outline:2px solid var(--res);outline-offset:2px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{font:inherit;font-size:14px;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:7px 13px;cursor:pointer;display:inline-flex;gap:8px;align-items:center}
+.chip i{font-style:normal;font-family:var(--mono);font-size:11px;color:var(--muted)}
+.chip[aria-pressed="true"]{background:var(--res);border-color:var(--res);color:#fff}
+.chip[aria-pressed="true"] i{color:#fff;opacity:.8}
+.chip:disabled{cursor:default}
+.chip.reached:not([aria-pressed="true"]){border-color:var(--res)}
+.btn{font:inherit;font-size:14px;color:var(--ink);background:var(--surface);border:1px solid var(--ink);border-radius:8px;padding:8px 16px;cursor:pointer}
+.btn.primary{background:var(--ink);color:var(--surface)}
+.btn.ghost{border-color:var(--line);color:var(--muted)}
+.readout{font-size:14px;color:var(--muted)}
+.readout b{color:var(--ink)}
+.tag{font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);border:1px solid var(--line);border-radius:4px;padding:2px 6px}
+.note{font-size:13px;color:var(--muted);max-width:70ch}
+.balance{background:var(--tint);border-radius:10px;padding:16px 18px;display:flex;flex-direction:column;gap:8px;max-width:78ch}
+footer{font-size:13px;color:var(--muted);max-width:76ch;border-top:1px solid var(--line);padding-top:12px}
+@media (max-width:640px){.panel{padding:12px}.wrap{gap:26px}}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
+
+[hidden]{display:none!important}
+:root{--c-h:var(--res);--c-ref:var(--obj);--c-over:var(--env);--c-settle:var(--att);--c-rip:var(--obj)}
+nav.parts{display:flex;flex-wrap:wrap;gap:8px 20px;margin-top:4px}
+nav.parts a{color:var(--ink);text-decoration:none;border-bottom:1px solid var(--line);padding-bottom:2px;font-size:15px}
+nav.parts a:hover,nav.parts a:focus-visible{border-color:var(--res);color:var(--res)}
+.msg{min-height:1.5em;font-size:15px}
+.fbbox{border-top:1px solid var(--line);padding-top:12px;display:flex;flex-direction:column;gap:8px;min-height:6.5em}
+.fbbox .verdict{font-family:var(--display);font-size:19px}
+.fbbox .ref{font-family:var(--mono);font-size:11px;color:var(--muted)}
+.fbbox q{font-style:italic;quotes:"“" "”"}
+.chip:focus-visible,.pick:focus-visible,summary:focus-visible{outline:2px solid var(--res);outline-offset:2px}
+.btn:disabled{opacity:.45;cursor:default}
+/* part 2 */
+.scene{border-left:3px solid var(--line);padding:2px 0 2px 12px;font-family:var(--display);font-size:18.5px;line-height:1.45;min-height:5.6em}
+.picks{gap:10px}
+.pick{font:inherit;font-size:15px;color:var(--ink);background:var(--bg);border:1.5px solid var(--line);border-top-width:4px;border-radius:10px;padding:9px 14px;cursor:pointer;min-width:0}
+.pick.wrong{opacity:.55}
+.pick.right{background:var(--surface);box-shadow:0 0 0 2px var(--ink)}
+.pick:disabled{cursor:default}
+.dots{display:flex;gap:6px}
+.dots i{width:10px;height:10px;border-radius:50%;border:1.5px solid var(--muted)}
+.dots i.done{background:var(--ink);border-color:var(--ink)}
+.dots i.cur{border-color:var(--ink);box-shadow:0 0 0 2px var(--line)}
+@media (max-width:640px){
+  .scene{font-size:17px}
+}
+body[data-part] header{display:none}
+body[data-part="1"] #s2,body[data-part="2"] #s1{display:none}
+body[data-part]{padding-block:10px 18px}
+
+
+.brandhdr{background:#12285A;color:#FBF5EA;text-align:center;padding:18px 18px 20px;border-radius:14px;display:flex;flex-direction:column;align-items:center;gap:6px}
+.brandhdr .logos{display:flex;align-items:center;justify-content:center;gap:18px}
+.brandhdr .logos img{width:56px;height:66px;object-fit:contain;display:block}
+.brandhdr .logos img.rit{width:86px;height:65px}
+.brandhdr .eyebrow{color:#E6C36A;font-weight:700;letter-spacing:3px}
+.brandhdr h1{color:#FBF5EA;font-weight:700}
+.brandhdr .course{color:#E6C36A;font-weight:600;font-size:14px}
+.brandhdr .lede{color:#F1ECDF;font-size:15.5px;max-width:62ch}
+.brandhdr .scorenote{color:#F1ECDF;font-size:14.5px}
+nav.parts a{color:var(--ink)}
+.brandhdr nav.parts a{color:#FBF5EA;border-bottom:1px solid #E6C36A;background:none;padding-bottom:2px}
+.brandhdr nav.parts a:hover,.brandhdr nav.parts a:focus-visible{color:#E6C36A;border-color:#E6C36A}
+.tag.scored{color:var(--goldt);border-color:var(--gold)}
+.scorebox{border-left:5px solid var(--gold);background:var(--tint);border-radius:10px;padding:12px 14px;margin-bottom:14px}
+.scorebox .big{font-family:var(--display);font-size:30px;line-height:1.1;color:var(--ink)}
+.scorebox .band{font-family:var(--display);font-size:18px;margin:4px 0}
+.scorebox .band.good{color:var(--ok)}
+.scorebox .saved{font-size:13.5px;color:var(--muted)}
+.scorebox ul{margin:6px 0 0;padding-left:20px}
+
+/* PRACTICE TEMPLATE: one coloured "part" per section (part-1 .. part-4) */
+.part{--pc:#0E7A8A;--pcon:#FFFFFF;--pcbg:#E6F2F3;border:2px solid var(--pc);border-radius:14px;overflow:hidden;background:var(--pcbg)}
+.part-1{--pc:#0E7A8A;--pcbg:#E6F2F3}
+.part-2{--pc:#12285A;--pcbg:#EEF0F8}
+.part-3{--pc:#2F6B3A;--pcbg:#E6F0E3}
+.part-4{--pc:#7A2A5E;--pcbg:#F5E6F0}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .part{--pcbg:#0F2250;border-color:var(--pcl,var(--pc))}
+ :root:not([data-theme="light"]) .part-1{--pcl:#46CFC6} :root:not([data-theme="light"]) .part-2{--pcl:#E6C36A} :root:not([data-theme="light"]) .part-3{--pcl:#7FD08C} :root:not([data-theme="light"]) .part-4{--pcl:#F08CC8}}
+:root[data-theme="dark"] .part{--pcbg:#0F2250;border-color:var(--pcl,var(--pc))}
+:root[data-theme="dark"] .part-1{--pcl:#46CFC6} :root[data-theme="dark"] .part-2{--pcl:#E6C36A} :root[data-theme="dark"] .part-3{--pcl:#7FD08C} :root[data-theme="dark"] .part-4{--pcl:#F08CC8}
+.part-band{background:var(--pc);color:var(--pcon);padding:12px 16px;display:flex;align-items:center;flex-wrap:wrap;gap:6px 14px}
+.part-band h2{color:inherit;font-size:clamp(20px,3.4vw,26px);font-weight:600;flex:1 1 220px}
+.part-num{font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;font-weight:500;background:rgba(255,255,255,.18);border-radius:4px;padding:3px 9px}
+.part-band .tag{color:inherit;border-color:currentColor;background:rgba(255,255,255,.12)}
+.part-2 .part-band .tag,.part-2 .part-num{color:#E6C36A}
+.part-body{padding:16px;display:flex;flex-direction:column;gap:14px}
+.part .panel{background:var(--surface)}
+@media (max-width:640px){.part-body{padding:12px}}
+
+
+/* page-specific */
+q{font-style:italic;quotes:"“" "”"}
+.lessonline{border-left:3px solid var(--gold);padding:2px 0 2px 12px;font-family:var(--display);font-size:17.5px}
+.pick.right{background:var(--ok);border-color:var(--ok);color:#fff;box-shadow:none}
+.pick.wrong{opacity:.5;text-decoration:line-through}
+:root{--sky:#DCEBF5;--room:#CDBFA3;--wall:#5A4A33;--light:#F2C95C;--sun:#E8A92B;--frame:#12285A}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--sky:#1D3770;--room:#08122B;--wall:#3B4A6E;--light:#F2C95C;--sun:#F2B640;--frame:#FBF5EA}}
+:root[data-theme="dark"]{--sky:#1D3770;--room:#08122B;--wall:#3B4A6E;--light:#F2C95C;--sun:#F2B640;--frame:#FBF5EA}
+.stage{width:100%;border-radius:10px;overflow:hidden;border:1px solid var(--line);background:var(--room)}
+.stage svg{display:block;width:100%;height:auto}
+.stepname{font-family:var(--display);font-size:22px}
+.gives{font-size:14px;color:var(--muted)}
+.cols{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px}
+.colbox{border:1px solid var(--line);border-radius:10px;background:var(--bg);padding:12px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.colbox h3{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:500}
+.colbox.same{border-color:var(--gold)}
+.steps .chip{padding:6px 11px}
+.toggle{display:flex;flex-direction:column;gap:10px;border-top:1px solid var(--line);padding-top:12px}
+.seq{font-family:var(--mono);font-size:15px;letter-spacing:.02em;overflow-wrap:anywhere}
+.card{font-family:var(--display);font-size:18.5px;line-height:1.4;border-left:3px solid var(--line);padding:2px 0 2px 12px;min-height:3em}
+.bins{display:flex;flex-wrap:wrap;gap:10px}
+.bins .pick{border-top-width:1.5px}
+@media (max-width:640px){.cols{grid-template-columns:minmax(0,1fr)}.card{font-size:17px}.stepname{font-size:20px}}
+</style></head><body>
+<div class="wrap">
+<header class="brandhdr">
+  <div class="logos"><img src="vedantanz-logo.png" alt="Ramakrishna Vedanta NZ emblem" width="56" height="66"><img class="rit" src="ritam-wordmark.png" alt="Ritam" width="86" height="65"></div>
+  <div class="eyebrow">Practice · Lesson 2.1</div>
+  <h1>Three Movements</h1>
+  <p class="course">The Mind in the Light of Modern and Spiritual Sciences · Advanced</p>
+  <p class="lede">Lesson 2.1 describes how one Consciousness-Energy comes to appear as an individual through three linked movements: localization, limitation and identification. Here you will step through them with the lesson’s picture of sunlight and a window, then sort the lesson’s own examples of the two meanings of “I”.</p>
+  <p class="scorenote"><b>Part I</b> is practice and is not scored. <b>Part II</b> is scored: your first pick on each card counts.</p>
+  <nav class="parts" aria-label="Parts of this page"><a href="#s1">I. Step through the three movements</a><a href="#s2">II. Two meanings of “I”</a></nav>
+</header>
+
+<section id="s1" class="part part-1">
+  <div class="part-band"><span class="part-num">Part I</span><h2>Step through the three movements</h2><span class="tag">Practice: not scored</span></div>
+  <div class="part-body">
+  <p class="intro">Five steps, in the lesson’s order (§2). At each step the panel shows what appears and what does not change. The light is drawn the same at every step: <q>Limitation is not the same as division</q> (§8).</p>
+  <div class="panel" id="p1">
+    <div class="bar"><span class="tag" id="stPro">Step 1 of 5</span>
+      <div class="chips steps" id="stChips" role="group" aria-label="Steps"></div></div>
+    <div class="stage"><svg id="svg" viewBox="0 0 600 250" role="img" aria-label="Sunlight and a window">
+      <defs><radialGradient id="glow" cx="15%" cy="28%" r="95%"><stop offset="0" stop-color="var(--light)" stop-opacity=".95"/><stop offset=".55" stop-color="var(--light)" stop-opacity=".55"/><stop offset="1" stop-color="var(--light)" stop-opacity=".25"/></radialGradient></defs>
+      <rect id="sky" x="0" y="0" width="600" height="250" fill="var(--sky)"/>
+      <rect id="diffuse" x="0" y="0" width="600" height="250" fill="url(#glow)"/>
+      <circle cx="90" cy="70" r="30" fill="var(--sun)"/>
+      <g id="roomG">
+        <rect x="274" y="0" width="326" height="250" fill="var(--room)"/>
+        <rect x="274" y="226" width="326" height="24" fill="var(--wall)" opacity=".35"/>
+        <polygon id="shaft" fill="var(--light)" opacity=".8"/>
+        <ellipse id="patch" fill="var(--light)"/>
+        <rect id="wallTop" x="250" y="0" width="24" fill="var(--wall)"/>
+        <rect id="wallBot" x="250" width="24" fill="var(--wall)"/>
+        <g id="frameG"><rect id="frame" fill="none" stroke="var(--frame)" stroke-width="4" rx="6"/><text id="frameT" text-anchor="middle" font-family="Noto Serif, Georgia, serif" font-size="19" fill="var(--frame)"></text></g>
+      </g>
+      <text id="cap" x="16" y="236" font-family="Noto Sans, system-ui, sans-serif" font-size="14" fill="var(--ink)"></text>
+    </svg></div>
+    <p class="stepname" id="stName"></p>
+    <p class="gives" id="stGives"></p>
+    <div class="cols">
+      <div class="colbox"><h3>What appears</h3><div id="stApp"></div></div>
+      <div class="colbox same"><h3>What does not change</h3><div id="stSame"></div></div>
+    </div>
+    <div class="toggle" id="idBox" hidden>
+      <p class="note">Switch identification off and on. The person, the body-mind, the window and the narrowed channel stay exactly as they were.</p>
+      <div class="chips" role="group" aria-label="Identification"><button class="chip" id="idOn" aria-pressed="true">Identification on</button><button class="chip" id="idOff" aria-pressed="false">Identification off</button></div>
+      <div id="idMsg" class="msg" role="status" aria-live="polite"></div>
+      <p class="note">This switch illustrates the lesson’s distinction. It is not a state to be reached by pressing a button.</p>
+    </div>
+    <div class="bar"><div class="chips"><button class="btn ghost" id="stBack">Back</button><button class="btn primary" id="stNext">Next step</button></div><span class="readout" id="stRef"></span></div>
+  </div>
+  <div class="panel" id="seqBox" hidden>
+    <h3>The lesson’s own summary line (§7.2)</h3>
+    <p class="seq">C∞ → P(B-M) → Λ → I → J</p>
+    <p><q>Universal Consciousness-Energy appears centred through a particular body-mind system. That centred mode appears under contraction. The contracted, centred mode is identified with. And the result is the individual experiencer.</q></p>
+  </div>
+  <div class="balance">
+    <h3>Not a different substance</h3>
+    <p><q>The sense of self is not made of some alien substance. It is Consciousness-Energy itself, appearing in a contracted and conditioned mode.</q> (§3)</p>
+    <p><q>Individuality as manifestation need not be a problem.</q> (§2.3) <q>Your individuality is not a mistake. It is a manifestation. But it is not the whole of what you are.</q> (§6)</p>
+  </div>
+  </div>
+</section>
+
+<section id="s2" class="part part-2">
+  <div class="part-band"><span class="part-num">Part II</span><h2>Two meanings of “I”</h2><span class="tag scored">Scored: first pick counts</span></div>
+  <div class="part-body">
+  <p class="intro">Ana is made up; her day follows the lesson’s own example (§3). Sort each card: is it one of the shifting self-images, or what remains constant through them?</p>
+  <div class="panel" id="p2">
+    <div class="bar"><span class="tag" id="cPro">Card 1 of 5</span><div class="dots" id="cDots" aria-hidden="true"></div></div>
+    <p class="card" id="cText"></p>
+    <div class="bins" id="cPicks" role="group" aria-label="Sort this card">
+      <button class="pick" data-b="shift">A shifting self-image</button>
+      <button class="pick" data-b="const">What remains constant</button>
+    </div>
+    <div id="cMsg" class="msg fbbox" role="status" aria-live="polite"><p class="note">Pick one of the two.</p></div>
+    <div class="bar"><div class="chips"><button class="btn primary" id="cNext" hidden>Next card</button><button class="btn ghost" id="cReset">Start again</button></div></div>
+  </div>
+  <div class="panel" id="cDone" hidden>
+    <div class="scorebox" id="scBox" aria-live="polite"></div>
+    <h3>The costume and the wearer</h3>
+    <p><q>The individual “I” is the universal “I” wearing a particular costume. But when the costume is mistaken for the wearer, confusion begins.</q> (§3)</p>
+    <p>Sorting is not rejecting. Distinguishing the two is the beginning of liberation, <q>not because the personal self must be destroyed, but because it can finally be seen in its proper place: as an instrument and expression of something deeper</q> (§3).</p>
+  </div>
+  </div>
+</section>
+<footer>Part I is practice and is not scored. Part II is scored, and only to show you where to look again. Based on Lesson 2.1. Ana is made up; her day follows the lesson’s example in §3. This page illustrates the lesson’s teaching and does not diagnose or advise on anyone’s situation. For help with distress, please speak with a qualified professional or someone you trust.<br>Ritam · Ramakrishna Vedanta Centre NZ · <a href="https://www.vedanta.nz">www.vedanta.nz</a> Privacy: when you are signed in, your name, email, answers and score are saved to your member record. Only you and the course instructors can see them. They are not shared or ranked.</footer>
+</div>
+<script>
+(function(){
+"use strict";
+var $=function(id){return document.getElementById(id)};
+try{var q=new URLSearchParams(location.search).get("theme");if(q==="light"||q==="dark")document.documentElement.setAttribute("data-theme",q)}catch(e){}
+try{var pt=new URLSearchParams(location.search).get("part");if(pt==="1"||pt==="2")document.body.setAttribute("data-part",pt)}catch(e){}
+var EMBED=/[?&]embed=1/.test(location.search);
+function send(m){if(EMBED){try{parent.postMessage(m,"*")}catch(e){}}}
+function esc(t){return String(t).replace(/&/g,"&amp;").replace(/</g,"&lt;")}
+
+/* ===== Part I: the stepper (not scored) ===== */
+var STEPS=[
+ {n:"One light",g:"Before the three movements.",ref:"§2.1",win:null,
+  app:'<p>Sunlight <q>before it enters a room, it is simply present, diffuse, open, filling the sky.</q></p><p>So with awareness before localization: it <q>is, so to speak, everywhere and nowhere. It is not attached to any particular viewpoint.</q></p>',
+  same:'<p><q>The same self-reflective, self-expressive reality that pulses as the whole universe is what appears here as the individual.</q></p>',cap:"Light filling the sky"},
+ {n:"1. Localization",g:"Localization gives a centre.",ref:"§2.1",win:[70,170],
+  app:'<p>The moment the light passes through a window, <q>it appears as a shaft of light in a particular place. It seems to be “here” and not “there.”</q></p><p>Awareness appears <q>as though centred in one particular body-mind system.</q></p>',
+  same:'<p><q>Yet the sun has not been divided. The light in the room is still sunlight. It has simply been given a local frame.</q></p><p><q>Localization by itself does not yet create bondage.</q></p>',cap:"A window: light in one place"},
+ {n:"2. Limitation",g:"Limitation gives finitude.",ref:"§2.2",win:[105,135],
+  app:'<p><q>It no longer knows everything; it knows only what reaches it through the senses and the mind.</q></p><p><q>A vast self-expressive field is now functioning through a finite channel.</q></p>',
+  same:'<p>The Trika traditions call this saṅkoca, contraction: <q>Consciousness-Energy is not destroyed or diminished in its own nature; it is contracted in expression.</q></p>',cap:"A narrower channel, the same light"},
+ {n:"3. Identification",g:"Identification gives ownership. This is why identification is the real beginning of bondage.",ref:"§2.3",win:[105,135],frame:"“I am this”",
+  app:'<p>The localized and limited standpoint <q>is no longer merely functioning as an instrument of experience; it is now taken to be the whole of oneself.</q></p><p><q>“I am this body.” “I am this personality.” “These are my thoughts.”</q> Like an actor <q>so absorbed in a role that they forget they are acting.</q></p>',
+  same:'<p>The actor is lost in the role, <q>not because the actor has ceased to exist.</q></p><p><q>The universal Consciousness-Energy has not ceased to be universal.</q></p>',cap:"The patch of light taken as the whole"},
+ {n:"The jīva",g:"The result of the three movements.",ref:"§2.3 · §7.3",win:[105,135],frame:"jīva",
+  app:'<p><q>This is the emergence of the jīva: the individual experiencer, doer, enjoyer, and sufferer.</q></p>',
+  same:'<p><q>The jīva is not something separate from Consciousness-Energy.</q> (§7.3)</p>',cap:"The individual experiencer"}
+];
+var ST={i:0,idOn:true,seenEnd:false};
+function setAttr(el,o){for(var k in o){el.setAttribute(k,o[k])}}
+function draw(){
+  var s=STEPS[ST.i];
+  var none=!s.win;
+  $("roomG").style.display=none?"none":"";
+  $("diffuse").setAttribute("opacity",none?"1":".55");
+  if(!none){
+    var a=s.win[0],b=s.win[1];
+    setAttr($("wallTop"),{height:a});setAttr($("wallBot"),{y:b,height:250-b});
+    var w=(b-a);var cx=470,half=w*0.55+8;
+    setAttr($("shaft"),{points:"274,"+a+" 274,"+b+" "+(cx+half)+",226 "+(cx-half)+",226"});
+    setAttr($("patch"),{cx:cx,cy:226,rx:half,ry:9});
+    var fr=s.frame&&(ST.i<4||ST.idOn);
+    $("frameG").style.display=fr?"":"none";
+    if(fr){setAttr($("frame"),{x:cx-half-22,y:196,width:2*half+44,height:46});
+      var t=$("frameT");setAttr(t,{x:cx,y:186});t.textContent=(ST.i===4)?"“happening to me”":s.frame}
+    else if(ST.i===4){/* off: label the patch without a frame */}
+  }
+  var cap=s.cap;if(ST.i===4&&!ST.idOn)cap="Experience occurring";
+  $("cap").textContent=cap;
+  $("svg").setAttribute("aria-label","Picture: "+cap);
+}
+function chips(){
+  var c=$("stChips");c.innerHTML="";
+  STEPS.forEach(function(s,k){var b=document.createElement("button");b.className="chip";b.textContent=k===0?"Light":(k===4?"Jīva":String(k));b.setAttribute("aria-label","Step "+(k+1)+": "+s.n);b.setAttribute("aria-pressed",k===ST.i?"true":"false");
+    b.addEventListener("click",function(){ST.i=k;show()});c.appendChild(b)});
+}
+function show(){
+  var s=STEPS[ST.i];
+  $("stPro").textContent="Step "+(ST.i+1)+" of "+STEPS.length;
+  $("stName").textContent=s.n;$("stGives").textContent=s.g;
+  $("stApp").innerHTML=s.app;$("stSame").innerHTML=s.same;$("stRef").textContent=s.ref;
+  $("stBack").disabled=ST.i===0;$("stNext").disabled=ST.i===STEPS.length-1;
+  $("idBox").hidden=ST.i!==4;
+  if(ST.i===4){ST.seenEnd=true;$("seqBox").hidden=false;idText()}
+  chips();draw();
+}
+function idText(){
+  $("idOn").setAttribute("aria-pressed",ST.idOn?"true":"false");$("idOff").setAttribute("aria-pressed",ST.idOn?"false":"true");
+  $("idMsg").innerHTML=ST.idOn
+   ?'<p><b>On.</b> <q>Experience is no longer just occurring; it is now felt as “happening to me.” Action is “done by me.” Enjoyment is “mine.” Suffering is “mine.” Memory becomes “my story.”</q> (§2.3)</p>'
+   :'<p><b>Off.</b> The same localized, limited centre, <q>merely functioning as an instrument of experience</q> (§2.3): experience occurring. Localization gives a centre and limitation gives finitude; without identification there is no ownership.</p>';
+  draw();
+}
+$("idOn").addEventListener("click",function(){ST.idOn=true;idText()});
+$("idOff").addEventListener("click",function(){ST.idOn=false;idText()});
+$("stNext").addEventListener("click",function(){if(ST.i<STEPS.length-1){ST.i++;show()}});
+$("stBack").addEventListener("click",function(){if(ST.i>0){ST.i--;show()}});
+
+/* ===== Part II: two meanings of "I" (scored) ===== */
+var CARDS=[
+ {t:"At work, Ana feels competent and authoritative.",a:"shift",
+  why:"<q>At work you may feel competent and authoritative.</q> It changes with the setting: <q>In each case, the sense of self shifts, sometimes dramatically.</q>"},
+ {t:"At a family dinner, she feels like a child again.",a:"shift",
+  why:"<q>At a family dinner you may feel like a child again.</q> The same person, a different self-experience."},
+ {t:"Through all of it, the simple fact of being aware.",a:"const",
+  why:"<q>Yet something remains constant through all these shifting self-experiences: the simple fact of being aware. That constant awareness is closer to the true Self.</q>"},
+ {t:"With a close friend, she feels relaxed and open.",a:"shift",
+  why:"<q>With a close friend you may feel relaxed and open.</q> A pleasant self-image is still a shifting one."},
+ {t:"Alone in the dark, old fears return.",a:"shift",
+  why:"<q>Alone in the dark, old fears may return.</q> <q>The shifting self-images are formations within</q> the constant awareness."}
+];
+var HINT={
+ shift:"Look again. This one comes and goes with the setting. In the lesson it is one of the contexts in which <q>the sense of self shifts</q> (§3).",
+ "const":"Look again. Does this change from work to dinner to the dark? The lesson finds something that <q>remains constant through all these shifting self-experiences</q> (§3)."
+};
+var NAMES={shift:"a shifting self-image","const":"what remains constant"};
+var C={i:0,done:{},miss:{},sent:false};
+var cPicks=document.querySelectorAll("#cPicks .pick");
+function cdots(){var d=$("cDots");d.innerHTML="";CARDS.forEach(function(_,k){var e=document.createElement("i");if(C.done[k])e.className="done";else if(k===C.i)e.className="cur";d.appendChild(e)})}
+function showCard(){
+  var c=CARDS[C.i];$("cText").textContent=c.t;$("cPro").textContent="Card "+(C.i+1)+" of "+CARDS.length;
+  cPicks.forEach(function(p){p.disabled=false;p.classList.remove("wrong","right");p.setAttribute("aria-pressed","false")});
+  $("cMsg").innerHTML='<p class="note">Pick one of the two.</p>';$("cNext").hidden=true;cdots();
+}
+function reveal(){
+  var c=CARDS[C.i];C.done[C.i]=true;
+  cPicks.forEach(function(p){p.disabled=true;if(p.dataset.b===c.a){p.classList.add("right");p.setAttribute("aria-pressed","true")}});
+  $("cMsg").innerHTML='<p class="verdict">'+(c.a==="const"?"What remains constant.":"A shifting self-image.")+'</p><p>'+c.why+'</p><p class="ref">§3</p>';
+  if(C.i<CARDS.length-1){$("cNext").hidden=false}else{finish()}
+  cdots();
+}
+cPicks.forEach(function(p){p.addEventListener("click",function(){
+  var c=CARDS[C.i];
+  if(p.dataset.b===c.a){reveal()}
+  else{C.miss[C.i]=true;p.classList.add("wrong");p.disabled=true;$("cMsg").innerHTML='<p class="verdict">Not this one.</p><p>'+HINT[c.a]+'</p>'}
+})});
+$("cNext").addEventListener("click",function(){C.i++;showCard();try{cPicks[0].focus({preventScroll:true})}catch(e){}});
+$("cReset").addEventListener("click",function(){C={i:0,done:{},miss:{},sent:C.sent};$("cDone").hidden=true;$("scBox").innerHTML="";showCard()});
+
+/* ===== scoring, and hand-off to the host page when embedded ===== */
+var META={code:"ADV-P-2-1",title:"Practice: Lesson 2.1, Three Movements (Part II)",programme:"The Mind in the Light of Modern and Spiritual Sciences (Advanced)",cut:75};
+function finish(){
+  if(C.sent){$("scBox").innerHTML='<p class="saved">Your first result is the one that counts, and it has already been sent. This run was for practice.</p>';$("cDone").hidden=false;return}
+  var n=CARDS.length,right=0,ans=[],wrong=[];
+  CARDS.forEach(function(c,k){var ok=!C.miss[k];if(ok)right++;else wrong.push(k);ans.push({q:k+1,ok:ok,given:c.t+" / "+NAMES[c.a]+(ok?" (first pick)":" (not on first pick)")})});
+  var pct=Math.round(100*right/n),good=pct>=META.cut;
+  var h='<div class="big">'+right+' of '+n+' on the first pick</div><p class="band '+(good?'good':'')+'">'+(good?'Well grasped':'Revisit these ideas')+'</p>';
+  if(wrong.length){h+='<p>Look again at §3 for:</p><ul>'+wrong.map(function(k){return '<li>Card '+(k+1)+': '+esc(CARDS[k].t)+'</li>'}).join('')+'</ul>'}else{h+='<p>Nothing to revisit here.</p>'}
+  h+='<p class="saved" id="scSaved">'+(EMBED?'Saving your result…':'Sign in on the course page to have your result saved.')+'</p>';
+  $("scBox").innerHTML=h;$("cDone").hidden=false;C.sent=true;
+  send({type:"quizResult",code:META.code,title:META.title,programme:META.programme,score:right,maxScore:n,percent:pct,questionsCorrect:right,questionCount:n,answers:ans});
+}
+window.addEventListener("message",function(e){
+  var d=e.data||{};if(!d||typeof d!=="object"){return}
+  var el=$("scSaved");if(!el){return}
+  if(d.type==="saved"){el.textContent="Your result has been saved to your member record."}
+  else if(d.type==="saveError"){el.textContent="Your result could not be saved this time. You can start again and finish once more."}
+  else if(d.type==="notMember"){el.textContent="Sign in as a member to have your result saved."}
+});
+
+/* tell the host page how tall this page is, so the embed grows instead of scrolling inside its frame */
+(function(){
+  var last=0;
+  function h(){var d=document.documentElement,b=document.body;var v=Math.ceil(Math.max(d.scrollHeight,b.scrollHeight,b.offsetHeight));if(v&&Math.abs(v-last)>1){last=v;send({type:"height",height:v})}}
+  window.addEventListener("load",h);window.addEventListener("resize",h);
+  if(window.ResizeObserver)new ResizeObserver(h).observe(document.body);
+  setInterval(h,700);h();
+})();
+send({type:"ready"});
+show();showCard();
+})();
+</script>
+</body></html>

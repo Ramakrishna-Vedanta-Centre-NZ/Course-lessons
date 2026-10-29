@@ -1,0 +1,451 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Practice: Lesson 2.7, Trace the Moment</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans:wght@400..700&family=Noto+Serif:ital,wght@0,400..700;1,400..700&display=swap">
+<style>
+
+:root{
+  --bg:#FBF5EA; --surface:#FFFDF8; --ink:#1E1E1E; --muted:#5A5A5A; --line:#E6DAC3; --tint:#F3EAD3; --navy:#12285A; --gold:#C9A24A; --goldt:#6B4E0E;
+  --obj:#0B8686; --att:#C95F06; --res:#2E3192; --env:#C0245B; --ok:#1B7A52;
+  --display:"Noto Serif",Georgia,"Times New Roman",serif;
+  --body:"Noto Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0B1A3D; --surface:#12285A; --ink:#FBF5EA; --muted:#C9C3B3; --line:#2B4686; --tint:#1D3770; --gold:#E6C36A; --goldt:#E6C36A;
+    --obj:#46CFC6; --att:#F5A04D; --res:#A3AAFF; --env:#FF7BA9; --ok:#5BD59B; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0B1A3D; --surface:#12285A; --ink:#FBF5EA; --muted:#C9C3B3; --line:#2B4686; --tint:#1D3770; --gold:#E6C36A; --goldt:#E6C36A;
+  --obj:#46CFC6; --att:#F5A04D; --res:#A3AAFF; --env:#FF7BA9; --ok:#5BD59B; color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;
+  padding-left:max(14px,env(safe-area-inset-left,0px));padding-right:max(14px,env(safe-area-inset-right,0px));padding-block:22px 40px}
+.wrap{max-width:900px;margin:0 auto;display:flex;flex-direction:column;gap:32px}
+h1,h2,h3{font-family:var(--display);font-weight:500;text-wrap:balance;margin:0;letter-spacing:-.01em}
+h1{font-size:clamp(30px,5.4vw,44px);line-height:1.06}
+h2{font-size:clamp(23px,3.4vw,29px);line-height:1.15}
+h3{font-size:19px;line-height:1.25}
+p{margin:0}
+sub{font-size:.72em;line-height:0}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.lede{font-size:17.5px;max-width:64ch}
+.intro{max-width:66ch;color:var(--muted)}
+header{display:flex;flex-direction:column;gap:12px}
+section{display:flex;flex-direction:column;gap:18px;min-width:0}
+.sym{font-family:var(--mono);font-size:.92em;white-space:nowrap}
+.k-obj{color:var(--obj)} .k-att{color:var(--att)} .k-res{color:var(--res)} .k-env{color:var(--env)}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px;display:flex;flex-direction:column;gap:14px;min-width:0}
+.bar{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;justify-content:space-between}
+button:focus-visible,input:focus-visible{outline:2px solid var(--res);outline-offset:2px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{font:inherit;font-size:14px;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:7px 13px;cursor:pointer;display:inline-flex;gap:8px;align-items:center}
+.chip i{font-style:normal;font-family:var(--mono);font-size:11px;color:var(--muted)}
+.chip[aria-pressed="true"]{background:var(--res);border-color:var(--res);color:#fff}
+.chip[aria-pressed="true"] i{color:#fff;opacity:.8}
+.chip:disabled{cursor:default}
+.chip.reached:not([aria-pressed="true"]){border-color:var(--res)}
+.btn{font:inherit;font-size:14px;color:var(--ink);background:var(--surface);border:1px solid var(--ink);border-radius:8px;padding:8px 16px;cursor:pointer}
+.btn.primary{background:var(--ink);color:var(--surface)}
+.btn.ghost{border-color:var(--line);color:var(--muted)}
+.readout{font-size:14px;color:var(--muted)}
+.readout b{color:var(--ink)}
+.tag{font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);border:1px solid var(--line);border-radius:4px;padding:2px 6px}
+.note{font-size:13px;color:var(--muted);max-width:70ch}
+.balance{background:var(--tint);border-radius:10px;padding:16px 18px;display:flex;flex-direction:column;gap:8px;max-width:78ch}
+footer{font-size:13px;color:var(--muted);max-width:76ch;border-top:1px solid var(--line);padding-top:12px}
+@media (max-width:640px){.panel{padding:12px}.wrap{gap:26px}}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
+
+[hidden]{display:none!important}
+:root{--c-h:var(--res);--c-ref:var(--obj);--c-over:var(--env);--c-settle:var(--att);--c-rip:var(--obj)}
+nav.parts{display:flex;flex-wrap:wrap;gap:8px 20px;margin-top:4px}
+nav.parts a{color:var(--ink);text-decoration:none;border-bottom:1px solid var(--line);padding-bottom:2px;font-size:15px}
+nav.parts a:hover,nav.parts a:focus-visible{border-color:var(--res);color:var(--res)}
+.msg{min-height:1.5em;font-size:15px}
+.fbbox{border-top:1px solid var(--line);padding-top:12px;display:flex;flex-direction:column;gap:8px;min-height:6.5em}
+.fbbox .verdict{font-family:var(--display);font-size:19px}
+.fbbox .ref{font-family:var(--mono);font-size:11px;color:var(--muted)}
+.fbbox q{font-style:italic;quotes:"“" "”"}
+.chip:focus-visible,.pick:focus-visible,summary:focus-visible{outline:2px solid var(--res);outline-offset:2px}
+.btn:disabled{opacity:.45;cursor:default}
+/* part 2 */
+.scene{border-left:3px solid var(--line);padding:2px 0 2px 12px;font-family:var(--display);font-size:18.5px;line-height:1.45;min-height:5.6em}
+.picks{gap:10px}
+.pick{font:inherit;font-size:15px;color:var(--ink);background:var(--bg);border:1.5px solid var(--line);border-top-width:4px;border-radius:10px;padding:9px 14px;cursor:pointer;min-width:0}
+.pick.wrong{opacity:.55}
+.pick.right{background:var(--surface);box-shadow:0 0 0 2px var(--ink)}
+.pick:disabled{cursor:default}
+.dots{display:flex;gap:6px}
+.dots i{width:10px;height:10px;border-radius:50%;border:1.5px solid var(--muted)}
+.dots i.done{background:var(--ink);border-color:var(--ink)}
+.dots i.cur{border-color:var(--ink);box-shadow:0 0 0 2px var(--line)}
+@media (max-width:640px){
+  .scene{font-size:17px}
+}
+
+
+.brandhdr{background:#12285A;color:#FBF5EA;text-align:center;padding:18px 18px 20px;border-radius:14px;display:flex;flex-direction:column;align-items:center;gap:6px}
+.brandhdr .logos{display:flex;align-items:center;justify-content:center;gap:18px}
+.brandhdr .logos img{width:56px;height:66px;object-fit:contain;display:block}
+.brandhdr .logos img.rit{width:86px;height:65px}
+.brandhdr .eyebrow{color:#E6C36A;font-weight:700;letter-spacing:3px}
+.brandhdr h1{color:#FBF5EA;font-weight:700}
+.brandhdr .course{color:#E6C36A;font-weight:600;font-size:14px}
+.brandhdr .lede{color:#F1ECDF;font-size:15.5px;max-width:62ch}
+.brandhdr .scorenote{color:#F1ECDF;font-size:14.5px}
+nav.parts a{color:var(--ink)}
+.brandhdr nav.parts a{color:#FBF5EA;border-bottom:1px solid #E6C36A;background:none;padding-bottom:2px}
+.brandhdr nav.parts a:hover,.brandhdr nav.parts a:focus-visible{color:#E6C36A;border-color:#E6C36A}
+.tag.scored{color:var(--goldt);border-color:var(--gold)}
+.scorebox{border-left:5px solid var(--gold);background:var(--tint);border-radius:10px;padding:12px 14px;margin-bottom:14px}
+.scorebox .big{font-family:var(--display);font-size:30px;line-height:1.1;color:var(--ink)}
+.scorebox .band{font-family:var(--display);font-size:18px;margin:4px 0}
+.scorebox .band.good{color:var(--ok)}
+.scorebox .saved{font-size:13.5px;color:var(--muted)}
+.scorebox ul{margin:6px 0 0;padding-left:20px}
+
+/* PRACTICE TEMPLATE: one coloured "part" per section (part-1 .. part-4) */
+.part{--pc:#0E7A8A;--pcon:#FFFFFF;--pcbg:#E6F2F3;border:2px solid var(--pc);border-radius:14px;overflow:hidden;background:var(--pcbg)}
+.part-1{--pc:#0E7A8A;--pcbg:#E6F2F3}
+.part-2{--pc:#12285A;--pcbg:#EEF0F8}
+.part-3{--pc:#2F6B3A;--pcbg:#E6F0E3}
+.part-4{--pc:#7A2A5E;--pcbg:#F5E6F0}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .part{--pcbg:#0F2250;border-color:var(--pcl,var(--pc))}
+ :root:not([data-theme="light"]) .part-1{--pcl:#46CFC6} :root:not([data-theme="light"]) .part-2{--pcl:#E6C36A} :root:not([data-theme="light"]) .part-3{--pcl:#7FD08C} :root:not([data-theme="light"]) .part-4{--pcl:#F08CC8}}
+:root[data-theme="dark"] .part{--pcbg:#0F2250;border-color:var(--pcl,var(--pc))}
+:root[data-theme="dark"] .part-1{--pcl:#46CFC6} :root[data-theme="dark"] .part-2{--pcl:#E6C36A} :root[data-theme="dark"] .part-3{--pcl:#7FD08C} :root[data-theme="dark"] .part-4{--pcl:#F08CC8}
+.part-band{background:var(--pc);color:var(--pcon);padding:12px 16px;display:flex;align-items:center;flex-wrap:wrap;gap:6px 14px}
+.part-band h2{color:inherit;font-size:clamp(20px,3.4vw,26px);font-weight:600;flex:1 1 220px}
+.part-num{font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;font-weight:500;background:rgba(255,255,255,.18);border-radius:4px;padding:3px 9px}
+.part-band .tag{color:inherit;border-color:currentColor;background:rgba(255,255,255,.12)}
+.part-2 .part-band .tag,.part-2 .part-num{color:#E6C36A}
+.part-body{padding:16px;display:flex;flex-direction:column;gap:14px}
+.part .panel{background:var(--surface)}
+@media (max-width:640px){.part-body{padding:12px}}
+
+
+body[data-part] header{display:none}
+body[data-part="1"] #s2,body[data-part="1"] #s3,body[data-part="2"] #s1,body[data-part="2"] #s3,body[data-part="3"] #s1,body[data-part="3"] #s2{display:none}
+body[data-part]{padding-block:10px 18px}
+
+/* page-specific */
+q{font-style:italic;quotes:"“" "”"}
+.pick.right{background:var(--ok);border-color:var(--ok);color:#fff;box-shadow:none}
+.pick.wrong{opacity:.5;text-decoration:line-through}
+.fn .pick{border-top-width:1.5px;padding:8px 14px}
+.lessonline{border-left:3px solid var(--gold);padding:2px 0 2px 12px;font-family:var(--display);font-size:17px}
+.moment{font-family:var(--display);font-size:17.5px;line-height:1.5;border-left:3px solid var(--line);padding:2px 0 2px 12px}
+.gentle{font-size:14px;color:var(--muted);max-width:70ch}
+.line{font-family:var(--display);font-size:clamp(18px,3vw,21px);line-height:1.4}
+.stephead{font-family:var(--display);font-size:19px}
+.grid2{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:16px;align-items:start}
+.loopwrap{background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:8px}
+.loop{display:block;width:100%;height:auto;max-width:380px;margin:0 auto}
+.loop .ring{fill:none;stroke:var(--muted);stroke-linecap:round;transition:stroke-width .4s ease}
+.loop .node rect{fill:var(--surface);stroke:var(--line);stroke-width:1.5;transition:fill .25s,stroke .25s}
+.loop .node text{fill:var(--ink);font-family:var(--display);font-size:16px;text-anchor:middle}
+.loop .node text.sub{font-family:var(--mono);font-size:11px;fill:var(--muted)}
+.loop .node.on rect{fill:var(--res);stroke:var(--res)}
+.loop .node.on text{fill:#fff}
+.loop .node.on text.sub{fill:#fff;opacity:.85}
+.loop .node.lit rect{stroke:var(--att);stroke-width:3}
+.loop .arrow{fill:var(--muted)}
+.cap{font-size:13px;color:var(--muted);text-align:center;margin-top:4px}
+.sets{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px}
+.set{border:1.5px solid var(--line);border-radius:10px;padding:10px 12px;display:flex;flex-direction:column;gap:6px;background:var(--bg)}
+.set h4{margin:0;font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:500}
+.set p{font-family:var(--display);font-size:15.5px}
+.set.lit{border-color:var(--att);background:var(--surface);box-shadow:0 0 0 2px var(--att) inset}
+.set.dim{opacity:.6}
+.evlist{display:flex;flex-direction:column;gap:6px;margin:0;padding:0;list-style:none}
+.evlist li{border-left:3px solid var(--line);padding:2px 0 2px 10px;transition:border-color .25s}
+.evlist li.on{border-color:var(--res)}
+.count{font-family:var(--mono);font-size:12px;color:var(--muted)}
+.formula{font-family:var(--mono);font-size:13px;line-height:1.7;word-break:break-word}
+details summary{cursor:pointer;font-size:15px}
+details[open] summary{margin-bottom:8px}
+.quiet{border:1px solid var(--line);border-radius:10px;padding:12px 14px;background:var(--surface);display:flex;flex-direction:column;gap:8px}
+.quiet p{font-family:var(--display);font-size:17px}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .loop .node.on text,:root:not([data-theme="light"]) .loop .node.on text.sub{fill:#0B1A3D}}
+:root[data-theme="dark"] .loop .node.on text,:root[data-theme="dark"] .loop .node.on text.sub{fill:#0B1A3D}
+@media (max-width:700px){.grid2{grid-template-columns:minmax(0,1fr)}.sets{grid-template-columns:minmax(0,1fr)}}
+@media (prefers-reduced-motion: reduce){.loop .ring,.loop .node rect{transition:none}}
+</style></head><body>
+<div class="wrap">
+<header class="brandhdr">
+  <div class="logos"><img src="vedantanz-logo.png" alt="Ramakrishna Vedanta NZ emblem" width="56" height="66"><img class="rit" src="ritam-wordmark.png" alt="Ritam" width="86" height="65"></div>
+  <div class="eyebrow">Practice · Lesson 2.7</div>
+  <h1>Trace the Moment</h1>
+  <p class="course">The Mind in the Light of Modern and Spiritual Sciences · Advanced</p>
+  <p class="lede">Lesson 2.7 follows one ordinary moment, a brief remark at a family gathering, through the whole inner instrument, and shows how <q>a few words have become an emotional event that occupies your inner life for hours</q>. Here you will trace the moment step by step, run the loop again on what was stored, and then go through it once more, noticing.</p>
+  <p class="scorenote"><b>Part I</b> is scored: your first pick at each step counts. <b>Parts II and III</b> are practice and are not scored.</p>
+  <nav class="parts" aria-label="Parts of this page"><a href="#s1">I. Trace the moment</a><a href="#s2">II. The loop closes</a><a href="#s3">III. Notice</a></nav>
+</header>
+
+<section id="s1" class="part part-1">
+  <div class="part-band"><span class="part-num">Part I</span><h2>Trace the moment</h2><span class="tag scored">Scored: first pick counts</span></div>
+  <div class="part-body">
+  <p class="moment"><q>You are at a family gathering. An older relative makes a remark, something about your career, your appearance, or a choice you have made. The words are brief. The tone is ambiguous. It could be concern, criticism, or a clumsy attempt at affection.</q> (§1)</p>
+  <p class="gentle">This is the lesson’s own scene, and the remark is left general. If family gatherings are painful for you, read it as any brief remark from anyone, or simply follow the diagram.</p>
+  <p class="intro">At each step you see the lesson’s description of what happens, with the function’s name left out. Which function is at work?</p>
+  <div class="panel" id="p1">
+    <div class="bar"><span class="tag" id="p1Pro">Step 1 of 4</span><div class="dots" id="p1Dots" aria-hidden="true"></div></div>
+    <div class="grid2">
+      <div style="display:flex;flex-direction:column;gap:12px;min-width:0">
+        <p class="line" id="p1Line"></p>
+        <div class="chips fn" id="p1Fn" role="group" aria-label="Which function is at work?"></div>
+        <div id="p1Msg" class="msg fbbox" role="status" aria-live="polite"><p class="note">Pick one of the four.</p></div>
+      </div>
+      <div class="loopwrap" id="loop1"></div>
+    </div>
+    <div class="bar"><div class="chips"><button class="btn primary" id="p1Next" hidden>Next step</button><button class="btn ghost" id="p1Reset">Start again</button></div></div>
+  </div>
+  <div class="panel" id="p1Done" hidden>
+    <div class="scorebox" id="scBox" aria-live="polite"></div>
+    <p>Manas detects and orients; buddhi interprets and assigns meaning; ahaṁkāra claims and amplifies; chitta stores the impression (§1, Steps 1 to 4). Part II follows what happens next.</p>
+  </div>
+  </div>
+</section>
+
+<section id="s2" class="part part-2">
+  <div class="part-band"><span class="part-num">Part II</span><h2>The loop closes</h2><span class="tag">Practice: not scored</span></div>
+  <div class="part-body">
+  <p class="intro">Step 5 of §1. The conversation has moved on, but the moment has not. Press <b>That evening</b> to replay it on stored material, as many times as you like, then <b>The next gathering</b>.</p>
+  <div class="panel" id="p2">
+    <div class="grid2">
+      <div style="display:flex;flex-direction:column;gap:12px;min-width:0">
+        <div id="p2Text" role="status" aria-live="polite"><p class="note">Nothing new has been said. Only the stored impression is there.</p></div>
+      </div>
+      <div><div class="loopwrap" id="loop2"></div><p class="cap" id="p2Count">The loop as it stood after the gathering.</p></div>
+    </div>
+    <div class="bar"><div class="chips"><button class="btn primary" id="p2Eve">That evening</button><button class="btn" id="p2Next">The next gathering</button><button class="btn ghost" id="p2Reset">Start again</button></div></div>
+  </div>
+  <div class="balance">
+    <h3>Not a punishment</h3>
+    <p><q>This recursive loop is the psychological mechanism of what the spiritual traditions call saṁsāra: the wheel of conditioned existence. It is not a punishment. It is not a cosmic conspiracy. It is pattern-reinforcement, operating automatically within the inner instrument. And it operates automatically unless awareness intervenes.</q> (§2)</p>
+    <details><summary>The full cycle, as §2 states it</summary>
+      <p class="formula">Input → L₂a/Manas (detect, compare, orient) → L₂b/Buddhi (interpret, determine meaning) → L₂c/Ahaṁkāra (self-tag, claim as “mine”) → L₂d/Chitta (store as saṁskāric trace) → Feedback into L₂a (biasing future manas) and L₂b (biasing future buddhi) → Next cycle begins from conditioned ground</p>
+    </details>
+  </div>
+  <div class="balance">
+    <h3>What you bring</h3>
+    <p>Lesson 1.1 said experience is a meeting of ψₓ (<q>what is actually in front of you</q>) and ψₘ (<q>what you bring to it</q>). Now: <q>What you bring is the accumulated output of the inner instrument’s processing over a lifetime. It is the saṁskāras stored in chitta, the habitual interpretations of buddhi, the self-referential patterns of ahaṁkāra, and the attentional biases of manas. It is not one thing.</q> (§3)</p>
+    <p><q>Changing what you bring means changing the field itself, which is why genuine transformation requires sustained practice, not just momentary insight.</q> (§3)</p>
+  </div>
+  </div>
+</section>
+
+<section id="s3" class="part part-3">
+  <div class="part-band"><span class="part-num">Part III</span><h2>Notice</h2><span class="tag">Practice: not scored</span></div>
+  <div class="part-body">
+  <p class="intro">The same moment once more. At any step, press <b>Notice</b>. Nothing is scored, and nothing here is a test of how well you notice.</p>
+  <div class="panel" id="p3">
+    <div class="chips" id="p3Tabs" role="group" aria-label="Step"></div>
+    <div class="grid2">
+      <div style="display:flex;flex-direction:column;gap:12px;min-width:0">
+        <p class="line" id="p3Line"></p>
+        <div><button class="btn" id="p3Notice" aria-expanded="false">Notice</button></div>
+        <div class="quiet" id="p3Quiet" hidden role="status" aria-live="polite"></div>
+      </div>
+      <div><div class="loopwrap" id="loop3"></div><p class="cap">The loop is drawn just as before.</p></div>
+    </div>
+  </div>
+  <div class="balance" id="p3Close" hidden>
+    <h3>But who was doing the watching?</h3>
+    <p><q>If you can observe the loop (if you can see manas reacting, catch buddhi assigning meaning, feel ahaṁkāra claiming ownership, and sense the impression forming in chitta) then you are not only the loop. There is something in you that is aware of the whole process without being caught in it.</q> (§4)</p>
+    <p><q>That something is what the traditions call the witness, the sākṣī: the awareness that sees but is not seen, that knows but is not known as an object.</q> Whatever this page could draw would be one more thing seen, so the diagram stays as it was.</p>
+    <p><q>This recognition does not happen all at once. It does not require you to stop being a person or to abandon your life. It begins simply, with the capacity to observe the loop.</q> <q>Each time you observe the loop without being caught in it, you are resting, even briefly, as the awareness that the loop has been obscuring. And that resting is the beginning of everything that follows in this course.</q> (§4)</p>
+  </div>
+  </div>
+</section>
+<footer>Part I is scored, and only to show you where to look again. Parts II and III are practice and are not scored. Based on Lesson 2.7: the scene is the lesson’s own, kept general. This page illustrates the lesson’s teaching and does not diagnose or advise on anyone’s situation. For help with distress, please speak with a qualified professional or someone you trust.<br>Ritam · Ramakrishna Vedanta Centre NZ · <a href="https://www.vedanta.nz">www.vedanta.nz</a> Privacy: when you are signed in, your name, email, answers and score are saved to your member record. Only you and the course instructors can see them. They are not shared or ranked.</footer>
+</div>
+<script>
+(function(){
+"use strict";
+var $=function(id){return document.getElementById(id)};
+try{var q=new URLSearchParams(location.search).get("theme");if(q==="light"||q==="dark")document.documentElement.setAttribute("data-theme",q)}catch(e){}
+try{var pt=new URLSearchParams(location.search).get("part");if(pt==="1"||pt==="2"||pt==="3")document.body.setAttribute("data-part",pt)}catch(e){}
+var EMBED=/[?&]embed=1/.test(location.search);
+function send(m){if(EMBED){try{parent.postMessage(m,"*")}catch(e){}}}
+function esc(t){return String(t).replace(/&/g,"&amp;").replace(/</g,"&lt;")}
+var RM=false;try{RM=window.matchMedia("(prefers-reduced-motion: reduce)").matches}catch(e){}
+
+/* ===== the loop diagram: four functions in a ring (no figure for the witness) ===== */
+var FN=[["manas","manas","L₂a"],["buddhi","buddhi","L₂b"],["ahamkara","ahaṁkāra","L₂c"],["chitta","chitta","L₂d"]];
+var POS=[[170,40],[282,125],[170,210],[58,125]];
+function loopSVG(id){
+  var s='<svg class="loop" viewBox="0 0 340 250" role="img" aria-label="The four functions in a loop: manas, buddhi, ahaṁkāra, chitta, and back to manas">';
+  s+='<defs><marker id="ah'+id+'" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="arrow" d="M0,0 L10,5 L0,10 z"/></marker></defs>';
+  var P=["M222,40 Q282,40 282,98","M282,152 Q282,210 222,210","M118,210 Q58,210 58,152","M58,98 Q58,40 118,40"];
+  P.forEach(function(d){s+='<path class="ring" d="'+d+'" stroke-width="2" marker-end="url(#ah'+id+')"/>'});
+  FN.forEach(function(f,k){var x=POS[k][0],y=POS[k][1];
+    s+='<g class="node" data-k="'+k+'"><rect x="'+(x-52)+'" y="'+(y-25)+'" width="104" height="50" rx="10"/><text x="'+x+'" y="'+(y+1)+'">'+f[1]+'</text><text class="sub" x="'+x+'" y="'+(y+17)+'">'+f[2]+'</text></g>'});
+  return s+'</svg>';
+}
+["1","2","3"].forEach(function(i){$("loop"+i).innerHTML=loopSVG(i)});
+function setLoop(i,on,lit,w){
+  $("loop"+i).querySelectorAll(".node").forEach(function(g){var k=+g.dataset.k;g.classList.toggle("on",k===on);g.classList.toggle("lit",!!(lit&&lit.indexOf(k)>=0))});
+  if(w!=null)$("loop"+i).querySelectorAll(".ring").forEach(function(r){r.setAttribute("stroke-width",w)});
+}
+
+/* ===== Part I: trace the moment (scored) ===== */
+var GLOSS=[
+ "the scanning, sampling, attention-shifting function",
+ "the determinative and discriminative faculty",
+ "the self-referential tagging function",
+ "where the whole package is stored as an impression"
+];
+var STEPS=[
+ {a:0,line:"Attention narrows. Other conversations in the room fade into background.",
+  head:"Step 1: Manas detects and orients",
+  more:'<p><q>Manas does not yet know what the remark means. It presents the material (raw, unsorted, tinged with a sense that “this might be important”) and passes it downstream.</q></p>'},
+ {a:1,line:"The ambiguous remark is collapsed into a definite meaning: ‘She is criticising me.’",
+  head:"Step 2: Buddhi interprets and assigns meaning",
+  more:'<div class="sets"><div class="set lit"><h4>How it resolves in this moment</h4><p>“She is criticising me.”</p><p>“He thinks I’m not good enough.”</p><p>“They don’t understand my life.”</p></div><div class="set dim"><h4>The same words, a different buddhi</h4><p>“She is worried about me.”</p><p>“He is trying to connect.”</p><p>“They care, even if they express it clumsily.”</p></div></div><p><q>The determination is not a free choice made in the present. It is a conditioned response, shaped by everything that has been stored in chitta.</q></p>'},
+ {a:2,line:"The remark is no longer just an interpretation of someone’s words. It is now about me.",
+  head:"Step 3: Ahaṁkāra claims and amplifies",
+  more:'<p><q>The emotional charge intensifies. What might have been a mildly unpleasant social moment becomes a personal wound.</q></p>'},
+ {a:3,line:"The entire package (the words, the interpretation, the emotional charge, the self-referential sting) sinks into … as a stored impression.",
+  head:"Step 4: Chitta stores the impression",
+  more:'<p><q>It deepens the groove. It strengthens the pattern. It makes it slightly more likely that the next ambiguous remark will be interpreted the same way, claimed the same way, and stored the same way.</q></p>'}
+];
+var S={i:0,miss:{},got:{},sent:false};
+function dots1(){var d=$("p1Dots");d.innerHTML="";STEPS.forEach(function(_,k){var e=document.createElement("i");if(S.got[k])e.className="done";else if(k===S.i)e.className="cur";d.appendChild(e)})}
+function showStep(){
+  var st=STEPS[S.i];
+  $("p1Pro").textContent="Step "+(S.i+1)+" of "+STEPS.length;
+  $("p1Line").innerHTML="<q>"+esc(st.line)+"</q>";
+  var h="";FN.forEach(function(f,k){h+='<button class="pick" data-k="'+k+'">'+f[1]+'</button>'});
+  $("p1Fn").innerHTML=h;
+  $("p1Fn").querySelectorAll(".pick").forEach(function(b){b.addEventListener("click",function(){pick(b)})});
+  $("p1Msg").innerHTML='<p class="note">Pick one of the four.</p>';
+  $("p1Next").hidden=true;setLoop("1",-1,null);dots1();
+}
+function pick(b){
+  var st=STEPS[S.i],k=+b.dataset.k;
+  if(k===st.a){
+    S.got[S.i]=true;
+    $("p1Fn").querySelectorAll(".pick").forEach(function(x){x.disabled=true;if(x===b)x.classList.add("right")});
+    $("p1Msg").innerHTML='<p class="stephead">'+esc(st.head)+'</p>'+st.more+'<p class="ref">§1, Step '+(S.i+1)+'</p>';
+    setLoop("1",st.a,null);
+    if(S.i<STEPS.length-1){$("p1Next").hidden=false}else{finish()}
+    dots1();
+  }else{
+    S.miss[S.i]=true;b.classList.add("wrong");b.disabled=true;
+    var g=k===3?'Chitta is '+GLOSS[3]+' (Step 4).':FN[k][1].charAt(0).toUpperCase()+FN[k][1].slice(1)+' is <q>'+GLOSS[k]+'</q> (§1).';
+    $("p1Msg").innerHTML='<p class="verdict">Not this one.</p><p>'+g+' Look again at what this line describes.</p>';
+  }
+}
+$("p1Next").addEventListener("click",function(){S.i++;showStep();try{$("p1Fn").querySelector(".pick").focus({preventScroll:true})}catch(e){}});
+$("p1Reset").addEventListener("click",function(){S={i:0,miss:{},got:{},sent:S.sent};$("p1Done").hidden=true;$("scBox").innerHTML="";showStep()});
+
+/* ===== scoring, and hand-off to the host page when embedded ===== */
+var META={code:"ADV-P-2-7",title:"Practice: Lesson 2.7, Trace the Moment (Part I)",programme:"The Mind in the Light of Modern and Spiritual Sciences (Advanced)",cut:75};
+function finish(){
+  if(S.sent){$("p1Done").hidden=false;return}
+  var n=STEPS.length,right=0,ans=[],wrong=[];
+  STEPS.forEach(function(st,k){var ok=!S.miss[k];if(ok)right++;else wrong.push(k);ans.push({q:k+1,ok:ok,given:"Step "+(k+1)+": "+FN[st.a][1]+(ok?" (first pick)":" (not on first pick)")})});
+  var pct=Math.round(100*right/n),good=pct>=META.cut;
+  var h='<div class="big">'+right+' of '+n+' on the first pick</div><p class="band '+(good?'good':'')+'">'+(good?'Well grasped':'Revisit these ideas')+'</p>';
+  if(wrong.length){h+='<p>Look again at §1 for:</p><ul>'+wrong.map(function(k){return '<li>'+esc(STEPS[k].head)+'</li>'}).join('')+'</ul>'}else{h+='<p>Nothing to revisit here.</p>'}
+  h+='<p class="saved" id="scSaved">'+(EMBED?'Saving your result…':'Sign in on the course page to have your result saved.')+'</p>';
+  $("scBox").innerHTML=h;$("p1Done").hidden=false;S.sent=true;
+  send({type:"quizResult",code:META.code,title:META.title,programme:META.programme,score:right,maxScore:n,percent:pct,questionsCorrect:right,questionCount:n,answers:ans});
+}
+window.addEventListener("message",function(e){
+  var d=e.data||{};if(!d||typeof d!=="object"){return}
+  var el=$("scSaved");if(!el){return}
+  if(d.type==="saved"){el.textContent="Your result has been saved to your member record."}
+  else if(d.type==="saveError"){el.textContent="Your result could not be saved this time. You can start again and finish once more."}
+  else if(d.type==="notMember"){el.textContent="Sign in as a member to have your result saved."}
+});
+
+/* ===== Part II: the loop closes (not scored) ===== */
+var EVE=[
+ "manas re-presents the memory,",
+ "buddhi re-interprets it (often with additional negative elaboration),",
+ "ahaṁkāra re-claims it,",
+ "and chitta stores the strengthened impression."
+];
+var NEXTG=[
+ [0,"bias manas (hypervigilant attention to tone of voice),"],
+ [1,"prime buddhi (predisposed to interpret ambiguity as criticism),"],
+ [2,"and sensitise ahaṁkāra (quicker to feel threatened)."]
+];
+var E={n:0,timer:null};
+function width(){return Math.min(2+E.n*1.4,8)}
+function evening(){
+  clearTimeout(E.timer);E.n++;
+  var h='<p><q>Later that evening, the impression resurfaces. You replay the moment. Each replay runs through the same loop:</q></p><ul class="evlist" id="evl">'+EVE.map(function(t){return '<li><q>'+esc(t)+'</q></li>'}).join('')+'</ul><p><q>The pattern reinforces itself even without any new external input. You are now generating suffering from within, running the loop on stored material.</q> (§1, Step 5)</p>';
+  $("p2Text").innerHTML=h;
+  $("p2Count").textContent="Replays: "+E.n+". Each pass draws the ring a little heavier.";
+  var items=$("evl").querySelectorAll("li");
+  if(RM){items.forEach(function(li){li.classList.add("on")});setLoop("2",-1,null,width());return}
+  var k=0;
+  (function step(){
+    if(k>0)items[k-1].classList.remove("on");
+    if(k<4){items[k].classList.add("on");setLoop("2",k,null,k===3?width():null);k++;E.timer=setTimeout(step,650)}
+    else{setLoop("2",-1,null,width())}
+  })();
+}
+function nextGathering(){
+  clearTimeout(E.timer);
+  var h='<p><q>And the next time you see this relative (perhaps months later) the system will not start from zero.</q> Chitta’s stored impressions will:</p><ul class="evlist">'+NEXTG.map(function(t){return '<li class="on"><q>'+esc(t[1])+'</q></li>'}).join('')+'</ul><p><q>The impression has become a filter, and with each repetition, the filter strengthens.</q> (§1, Step 5)</p>';
+  $("p2Text").innerHTML=h;
+  setLoop("2",3,[0,1,2],width());
+  $("p2Count").textContent="Chitta, and the three functions its stored impressions bias, prime and sensitise.";
+}
+function reset2(){clearTimeout(E.timer);E.n=0;$("p2Text").innerHTML='<p class="note">Nothing new has been said. Only the stored impression is there.</p>';$("p2Count").textContent="The loop as it stood after the gathering.";setLoop("2",-1,null,2)}
+$("p2Eve").addEventListener("click",evening);
+$("p2Next").addEventListener("click",nextGathering);
+$("p2Reset").addEventListener("click",reset2);
+
+/* ===== Part III: notice (not scored; the witness is never drawn or scored) ===== */
+var ST3=[
+ {tab:"Step 1",line:"Your attention snaps to the remark. Other conversations in the room fade into background.",
+  n:["see manas reacting","To watch manas move without being dragged by it."]},
+ {tab:"Step 2",line:"“She is criticising me.”",
+  n:["catch buddhi assigning meaning","To notice buddhi’s interpretation without accepting it as final truth."]},
+ {tab:"Step 3",line:"“I am being criticised.” “My choices are being judged.”",
+  n:["feel ahaṁkāra claiming ownership","To feel ahaṁkāra’s claim without being consumed by it."]},
+ {tab:"Step 4",line:"The whole package sinks into chitta as a stored impression.",
+  n:["sense the impression forming in chitta","To sense chitta’s pull without surrendering to the groove."]}
+];
+var N={i:0,open:false,seen:{}};
+function show3(){
+  var st=ST3[N.i],h="";
+  ST3.forEach(function(s,j){h+='<button class="chip" data-j="'+j+'" aria-pressed="'+(j===N.i)+'">'+s.tab+'</button>'});
+  $("p3Tabs").innerHTML=h;
+  $("p3Tabs").querySelectorAll(".chip").forEach(function(b){b.addEventListener("click",function(){N.i=+b.dataset.j;N.open=false;show3()})});
+  $("p3Line").textContent=st.line;
+  setLoop("3",N.i,null);
+  $("p3Notice").setAttribute("aria-expanded",String(N.open));
+  $("p3Notice").textContent=N.open?"Close":"Notice";
+  if(N.open){
+    $("p3Quiet").innerHTML='<p>Here you can <q>'+esc(st.n[0])+'</q>.</p><p><q>'+esc(st.n[1])+'</q></p><p class="ref">§4</p>';
+    $("p3Quiet").hidden=false;
+  }else{$("p3Quiet").hidden=true;$("p3Quiet").innerHTML=""}
+  if(Object.keys(N.seen).length===ST3.length)$("p3Close").hidden=false;
+}
+$("p3Notice").addEventListener("click",function(){N.open=!N.open;if(N.open)N.seen[N.i]=true;show3()});
+
+/* tell the host page how tall this page is, so the embed grows instead of scrolling inside its frame */
+(function(){
+  var last=0;
+  function h(){var d=document.documentElement,b=document.body;var v=Math.ceil(Math.max(d.scrollHeight,b.scrollHeight,b.offsetHeight));if(v&&Math.abs(v-last)>1){last=v;send({type:"height",height:v})}}
+  window.addEventListener("load",h);window.addEventListener("resize",h);
+  if(window.ResizeObserver)new ResizeObserver(h).observe(document.body);
+  setInterval(h,700);h();
+})();
+send({type:"ready"});
+showStep();reset2();show3();
+})();
+</script>
+</body></html>
