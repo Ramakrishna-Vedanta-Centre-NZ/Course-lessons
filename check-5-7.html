@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Understanding Check: Lesson 5.7</title>
+<meta name="description" content="Eight questions on Lesson 5.7, From Temporal Ritam to Spectral Ritam, from The Mind in the Light of Modern and Spiritual Sciences.">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400..700;1,400..700&family=Noto+Sans:wght@400..700&display=swap">
+<style>
+:root{
+ --bg:#FBF5EA; --surface:#FFFDF8; --ink:#1E1E1E; --muted:#5A5A5A; --line:#E6DAC3; --tint:#F3EAD3;
+ --navy:#12285A; --gold:#C9A24A; --goldt:#6B4E0E; --qink:#13295B;
+ --res:#12285A; --ok:#2F5A2E; --okbg:#E3EDDF; --no:#C2557A; --nobg:#F6E3EA;
+ --display:"Noto Serif",Georgia,serif; --body:"Noto Sans",system-ui,-apple-system,"Segoe UI",sans-serif; --mono:"Noto Sans",system-ui,sans-serif;
+}
+@media (prefers-color-scheme: dark){
+ :root:not([data-theme="light"]){
+  --bg:#0B1A3D; --surface:#12285A; --ink:#FBF5EA; --muted:#C9C3B3; --line:#2B4686; --tint:#1D3770;
+  --goldt:#E6C36A; --qink:#FBF5EA; --res:#E6C36A; --ok:#8FD79A; --okbg:#1E3A2A; --no:#F08FB0; --nobg:#4A2236; color-scheme:dark;
+ }
+}
+:root[data-theme="dark"]{
+ --bg:#0B1A3D; --surface:#12285A; --ink:#FBF5EA; --muted:#C9C3B3; --line:#2B4686; --tint:#1D3770;
+ --goldt:#E6C36A; --qink:#FBF5EA; --res:#E6C36A; --ok:#8FD79A; --okbg:#1E3A2A; --no:#F08FB0; --nobg:#4A2236; color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;
+ padding:18px max(14px,env(safe-area-inset-right,0px)) 30px max(14px,env(safe-area-inset-left,0px))}
+.wrap{max-width:720px;margin:0 auto;display:flex;flex-direction:column;gap:16px}
+h1{font-family:var(--display);font-weight:500;font-size:clamp(24px,5vw,32px);line-height:1.15;margin:0}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.sub{color:var(--muted);margin:0}
+.bar{height:6px;background:var(--line);border-radius:3px;overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--res);transition:width .25s}
+.meta{display:flex;justify-content:space-between;font-size:13px;color:var(--muted)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:20px 18px;display:flex;flex-direction:column;gap:14px}
+.qn{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:0}
+.q{font-family:var(--display);font-size:clamp(19px,3.4vw,22px);line-height:1.35;margin:0}
+.opts{display:flex;flex-direction:column;gap:10px}
+.opt{font:inherit;text-align:left;color:var(--ink);background:var(--surface);border:2px solid var(--line);border-radius:10px;padding:12px 14px;cursor:pointer;width:100%}
+.opt:hover:not(:disabled){border-color:var(--res)}
+.opt.right{border-color:var(--ok);background:var(--okbg)}
+.opt.wrong{border-color:var(--no);background:var(--nobg)}
+.opt:disabled{cursor:default}
+input.fill{font:inherit;width:100%;padding:12px 14px;border:2px solid var(--line);border-radius:10px;background:var(--surface);color:var(--ink)}
+input.fill:focus{outline:none;border-color:var(--res)}
+.btn{font:inherit;font-weight:600;font-size:15px;color:var(--surface);background:var(--ink);border:0;border-radius:8px;padding:11px 20px;cursor:pointer;text-decoration:none;display:inline-block}
+.btn.alt{background:var(--surface);color:var(--ink);border:1px solid var(--ink)}
+button:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(--res);outline-offset:2px}
+.fb{display:none;padding:12px 14px;border-radius:10px;font-size:15.5px;line-height:1.5}
+.fb.ok{display:block;background:var(--okbg);border-left:5px solid var(--ok)}
+.fb.no{display:block;background:var(--nobg);border-left:5px solid var(--no)}
+.fb b{display:block;margin-bottom:2px}
+.nav{display:flex;justify-content:flex-end}
+.res{text-align:center}
+.score{font-family:var(--display);margin:4px 0}
+.score .big{font-size:60px;line-height:1}
+.score .of{font-size:26px;color:var(--muted)}
+.band{font-family:var(--display);font-size:22px;margin:0}
+.band.good{color:var(--ok)} .band.rev{color:var(--res)}
+.res p{margin:0}
+.revisit{text-align:left;background:var(--tint);border-radius:10px;padding:12px 14px}
+.revisit h2,.review h2{font-family:var(--display);font-size:18px;margin:0 0 6px}
+.revisit ul{margin:0;padding-left:20px}
+.review{text-align:left;display:flex;flex-direction:column;gap:8px}
+.review .item{padding:10px 12px;border-radius:8px;font-size:15px;line-height:1.45}
+.review .r{background:var(--okbg)} .review .w{background:var(--nobg)}
+.review .item small{display:block;color:var(--muted);margin-top:4px}
+.acts{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+.saved{font-size:14px;color:var(--muted)}
+footer{text-align:center;font-size:13px;color:var(--muted)}
+footer a{color:var(--res)}
+.wrap header{background:#12285A;color:#FBF5EA;text-align:center;padding:18px 16px 20px;border-radius:14px}
+.wrap header img{width:56px;height:66px;object-fit:contain;display:block}
+.wrap header .logos{display:flex;align-items:center;justify-content:center;gap:18px}
+.wrap header img.rit{width:86px;height:65px}
+.wrap header .eyebrow{color:#E6C36A;font-weight:700;letter-spacing:3px;margin:8px 0 0}
+.wrap header h1{color:#FBF5EA;font-weight:700;margin:6px 0 4px}
+.wrap header .course{font-size:14px;color:#E6C36A;margin:0 0 8px;font-weight:600}
+.wrap header .sub{color:#F1ECDF;font-size:15px}
+.bar i{background:var(--gold)!important}
+.opt:hover:not(:disabled){border-color:var(--gold)!important}
+input.fill:focus{border-color:var(--gold)!important}
+.q{color:var(--qink)}
+.qn{color:var(--goldt);font-weight:700}
+.btn{background:var(--navy)!important;color:#FBF5EA!important}
+.btn.alt{background:transparent!important;color:var(--ink)!important;border:1px solid var(--navy)!important}
+.card{box-shadow:0 2px 8px rgba(19,41,91,.08)}
+</style>
+</head>
+<body>
+<div class="wrap">
+ <header>
+  <div class="logos"><img src="vedantanz-logo.png" alt="Ramakrishna Vedanta NZ emblem" width="56" height="66"><img class="rit" src="ritam-wordmark.png" alt="Ritam" width="86" height="65"></div>
+  <p class="eyebrow">Understanding check · Lesson 5.7</p>
+  <h1>From Temporal Ritam to Spectral Ritam</h1>
+  <p class="course">The Mind in the Light of Modern and Spiritual Sciences · Advanced</p>
+  <p class="sub">Eight questions on the lesson. Take them as often as you like; each answer comes with its explanation.</p>
+ </header>
+ <div class="bar"><i id="prog"></i></div>
+ <div class="meta"><span id="pos"></span><span id="sc"></span></div>
+ <div id="app"></div>
+ <footer>Understanding check · <a href="https://www.vedanta.nz">www.vedanta.nz</a>. Privacy: when you are signed in, your name, email, answers and score are saved to your member record. Only you and the course instructors can see them. They are not shared or ranked.</footer>
+</div>
+<script>
+/* Question bank. Types: mc (options o, correct index a; options are shuffled on display), judge (statement q; a: 0 holds, 1 does not hold, 2 holds only in part), fill (accepted answers a[], show).
+   e = explanation, c = idea to revisit, s = lesson section reference (null = lesson as a whole). All content from the text of Lesson 5.7, its key ideas and misconceptions. */
+var META={code:'ADV-5-7',lesson:'5.7',quizTitle:"Understanding check: Lesson 5.7, From Temporal Ritam to Spectral Ritam",programme:'The Mind in the Light of Modern and Spiritual Sciences (Advanced)',cut:75};
+var Q=[
+{"t": "judge", "q": "“Lesson 5.7 treats temporal Ritam as a detour on the way to the spectral goal, not itself what the course is committed to delivering.”", "a": 1, "e": "The lesson says temporal Ritam, the equation functioning coherently in everyday life, is real and primary: the module’s central deliverable, and sufficient for human flourishing. It is not a detour from spectral recognition but the preparation of the ground. The four families have been doing both jobs at once.", "c": "Temporal Ritam is real, primary and sufficient for flourishing, not a detour", "s": "2.1 and 2.3"},
+{"t": "mc", "q": "In the contemplative reading of Lesson 5.7, what is the spectral domain of the equation?", "o": ["The awareness in which the whole equation is unfolding, not a deeper layer of the signal", "A deeper and fainter signal beneath the equation, which finer instruments may one day detect", "The frequency components of ψₘ(t), read as a sum of stable underlying sinusoids", "A new content within experience, discovered once meditation has become deep enough"], "a": 0, "e": "The lesson says the spectral domain is the substrate within which the entire equation is unfolding: not a deeper layer of the signal but the awareness in which the signal is being read at all. In the Ritam Diagram it is {0}; in Vedantic language, the Ātman. To recognise it is not to discover a new content within experience.", "c": "The spectral domain is the substrate, {0}, the Ātman: not a deeper signal", "s": "2.2"},
+{"t": "fill", "q": "As temporal Ritam is established, the SNR rises and what was always present becomes perceptible. In the lesson’s words, the practitioner does not ______ the substrate; the substrate has always been there.", "a": ["produce", "produces", "create", "creates"], "show": "produce", "e": "When anṛta is high, the SNR is too low for what is always present to be discriminable from what is happening. As temporal Ritam is established the SNR rises. What changes is the practitioner’s capacity to register the substrate, not the substrate itself.", "c": "Rising SNR makes what was always present discriminable", "s": "2.3"},
+{"t": "judge", "q": "“Ordinary practice gradually clears the suṣumnā, and a clear suṣumnā is what produces the domain-transformation.”", "a": 2, "e": "The first half holds: ordinary practice gradually clears the pathway. The second does not: clearing the pathway does not by itself produce the transformation. Suṣumnā is the channel, not the operator; kuṇḍalinī is the operator. A clear suṣumnā with no kuṇḍalinī movement produces no transformation, and an active kuṇḍalinī with an obstructed suṣumnā produces difficulty rather than progress. Both must be present.", "c": "Channel (suṣumnā) and operator (kuṇḍalinī): both are needed", "s": "3.2"},
+{"t": "mc", "q": "In the seven stations of Lesson 5.7, what does Sri Ramakrishna’s account of the ājñā centre teach?", "o": ["Samādhi is available and the form can be seen, but the partition remains: not yet liberation", "The partition dissolves there, and the recognition of the substrate as itself is complete", "The beat is still large there, so samādhi only becomes available at the stations above it", "The station can be passed over, since the stations below it already prepare the sahasrāra"], "a": 0, "e": "At the ājñā, samādhi is available, the form of the Divine can be seen, and the beat is very small; but the partition still remains. In Sri Ramakrishna’s words, the form of God can be seen “as if through a glass partition; only at the sahasrāra does the partition dissolve”. Seeing the form and being the source are not the same. The chakras are not anatomical structures and are not bypassable.", "c": "At ājñā, samādhi is available but the partition remains; the stations cannot be skipped", "s": "3.2 and 3.3"},
+{"t": "mc", "q": "Where, according to Lesson 5.7, does the Fourier metaphor stop being exact, and why?", "o": ["At {9} to {0}: the transformation, once complete, does not reverse, and the Ātman is not a finite signal", "At the lower stations, where the noise is too loud for the spectrum of a signal to be read", "At the saṁskāra filter, since a convolution with h(t) has no frequency-domain reading", "Nowhere: the transform holds all the way to {0}, and can be read in both directions"], "a": 0, "e": "A Fourier transform is reversible and operates on a finite signal. The contemplative domain-transformation, when it completes, does not reverse, and the Ātman is not a finite signal but the awareness in which all signals arise. The metaphor is faithful up to {9}; at the threshold of {0} the framework releases its hold. A framework that claimed to describe {0} from within itself would show it had not understood what {0} is.", "c": "The Fourier metaphor is faithful up to {9} and releases its hold at {0}", "s": "3.5"},
+{"t": "mc", "q": "What does Lesson 5.7 say findings such as Default Mode Network deactivation in experienced meditators can and cannot establish?", "o": ["They are temporal-domain correlates, not proofs of the contemplative account of the spectral domain", "They prove that the spectral domain is real, now that the instruments have become fine enough", "They show that contemplative claims about the temporal domain have no physical anchoring", "They will reach {0} in time, once experimental design and statistics are refined enough"], "a": 0, "e": "The lesson calls these convergences real and calibrated: correlates, not proofs. They anchor the temporal claims in measurable physical changes; they do not establish, and were not designed to establish, that the contemplative descriptions of the spectral domain are correct. {0} is not a physical process but the awareness in which physical processes are registered. This is not a defect of the science: both lenses are required, and neither alone is sufficient.", "c": "Science illuminates the temporal side and cannot reach the spectral; both lenses are needed", "s": "4.1, 4.2 and 4.3"},
+{"t": "judge", "q": "“In the staircase image that closes Lesson 5.7, the course is the stairs and not the roof, and yet the stairs are made of the same material as the roof.”", "a": 0, "e": "The course is a staircase, genuinely useful for climbing. The stairs are not the roof: the course is not liberation, and no framework, however elegant, is what it describes. But the stairs are made of the same material as the roof, the same substance differently configured, so the student who has climbed the stairs has been climbing within the roof all along.", "c": "The staircase: not the roof, yet made of the same material", "s": "8"}
+];
+(function(){
+ var q=new URLSearchParams(location.search);
+ if(q.get('theme')==='light')document.documentElement.setAttribute('data-theme','light');
+ if(q.get('theme')==='dark')document.documentElement.setAttribute('data-theme','dark');
+})();
+var i=0,right=0,ans=[],saved=false;
+var app=document.getElementById('app');
+var JL=['True','False','True only in part'];
+function norm(s){return s.normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().replace(/[^a-z]/g,'')}
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;')}
+function hdr(){
+ document.getElementById('pos').textContent=i<Q.length?'Question '+(i+1)+' of '+Q.length:'Finished';
+ document.getElementById('sc').textContent=i<Q.length?right+' right so far':'';
+ document.getElementById('prog').style.width=(100*Math.min(i,Q.length)/Q.length)+'%';
+}
+function send(m){try{window.parent.postMessage(m,'*')}catch(e){}}
+function ref(s){return s?'Lesson 5.7, section'+(/ and /.test(s)?'s ':' ')+s:'Lesson 5.7'}
+function show(){
+ hdr();
+ if(i>=Q.length){return result()}
+ var qq=Q[i];
+ var h='<div class="card"><p class="qn">Question '+(i+1)+'</p><p class="q">'+esc(qq.q)+'</p>';
+ if(qq.t==='mc'){h+='<div class="opts">';var ord=qq.o.map(function(o,k){return k});for(var r=ord.length-1;r>0;r--){var s2=Math.floor(Math.random()*(r+1)),t2=ord[r];ord[r]=ord[s2];ord[s2]=t2}ord.forEach(function(k,pos){h+='<button class="opt" data-k="'+k+'">'+String.fromCharCode(65+pos)+'. '+esc(qq.o[k])+'</button>'});h+='</div>'}
+ else if(qq.t==='judge'){h+='<div class="opts">';JL.forEach(function(o,k){h+='<button class="opt" data-k="'+k+'">'+o+'</button>'});h+='</div>'}
+ else{h+='<input class="fill" id="fill" type="text" autocomplete="off" autocapitalize="off" placeholder="Type your answer"><div><button class="btn" id="chk">Check answer</button></div>'}
+ h+='<div class="fb" id="fb" role="status"></div><div class="nav"><button class="btn" id="nx" style="display:none">'+(i===Q.length-1?'See my result':'Next question')+'</button></div></div>';
+ app.innerHTML=h;
+ if(qq.t!=='fill'){app.querySelectorAll('.opt').forEach(function(b){b.onclick=function(){mark(+b.dataset.k===qq.a,b)}})}
+ else{var f=document.getElementById('fill');
+  document.getElementById('chk').onclick=function(){
+   if(!f.value.trim()){f.focus();return}
+   var ok=qq.a.some(function(x){return norm(f.value)===norm(x)});
+   f.disabled=true;this.style.display='none';mark(ok,null,f.value)};
+  f.onkeydown=function(e){if(e.key==='Enter')document.getElementById('chk').click()};f.focus()}
+ document.getElementById('nx').onclick=function(){i++;show();window.scrollTo(0,0)};
+}
+function mark(ok,btn,typed){
+ started=true;
+ var qq=Q[i];if(ok)right++;ans.push({q:i+1,ok:ok,given:typed!==undefined?typed:(btn?btn.textContent:'')});
+ if(qq.t!=='fill'){app.querySelectorAll('.opt').forEach(function(b,k){b.disabled=true;if(+b.dataset.k===qq.a)b.classList.add('right')});if(!ok&&btn)btn.classList.add('wrong')}
+ var right_ans=qq.t==='mc'?qq.o[qq.a]:qq.t==='judge'?JL[qq.a]:qq.show;
+ var fb=document.getElementById('fb');fb.className='fb '+(ok?'ok':'no');
+ fb.innerHTML='<b>'+(ok?'Right.':'Not quite. The answer is: '+esc(right_ans))+'</b>'+esc(qq.e)+' <i>('+ref(qq.s)+'.)</i>';
+ document.getElementById('nx').style.display='inline-block';hdr();
+ send({type:'progress',code:META.code,state:{i:i+1,right:right,ans:ans}});
+}
+function result(){
+ var n=Q.length,p=Math.round(100*right/n),good=p>=META.cut;
+ var h='<div class="card res"><p class="qn">Your result</p><p class="score"><span class="big">'+p+'%</span></p>'+
+  '<p class="band '+(good?'good':'rev')+'">'+(good?'Well grasped':'Revisit these ideas')+'</p>'+
+  '<p>'+right+' of '+n+' questions right.</p>';
+ var miss=[];Q.forEach(function(qq,k){if(!ans[k]||!ans[k].ok)miss.push(qq)});
+ if(miss.length){h+='<div class="revisit"><h2>Ideas to revisit</h2><ul>';miss.forEach(function(qq){h+='<li>'+esc(qq.c)+' <i>('+ref(qq.s)+')</i></li>'});h+='</ul></div>'}
+ else{h+='<div class="revisit"><h2>Nothing to revisit</h2><p>Every idea in this check was answered correctly.</p></div>'}
+ h+='<div class="review"><h2>Every question, with its answer</h2>';
+ Q.forEach(function(qq,k){var ok=ans[k]&&ans[k].ok;var a=qq.t==='mc'?qq.o[qq.a]:qq.t==='judge'?JL[qq.a]:qq.show;
+  h+='<div class="item '+(ok?'r':'w')+'">'+(ok?'Right. ':'Not quite. ')+'<b>Q'+(k+1)+'</b> '+esc(qq.q)+'<br>Answer: '+esc(a)+'<small>'+esc(qq.e)+' ('+ref(qq.s)+')</small></div>'});
+ h+='</div><p class="saved" id="savedmsg"></p><div class="acts"><button class="btn" id="again">Take it again</button></div></div>';
+ app.innerHTML=h;
+ document.getElementById('again').onclick=function(){i=0;right=0;ans=[];saved=false;show();window.scrollTo(0,0)};
+ send({type:'quizResult',code:META.code,title:META.quizTitle,programme:META.programme,score:right,maxScore:n,percent:p,questionsCorrect:right,questionCount:n,answers:ans});
+ send({type:'progress',code:META.code,state:null});
+}
+window.addEventListener('message',function(ev){
+ var d=ev.data;if(!d||!d.type)return;
+ var m=document.getElementById('savedmsg');
+ if(d.type==='saved'&&m){m.textContent='Your result has been saved to your member record.'}
+ if(d.type==='saveError'&&m){m.textContent='Your result could not be saved this time. You can take the check again.'}
+ if(d.type==='notMember'&&m){m.textContent='Sign in as a member to have your result saved.'}
+ if(d.type==='resume'&&d.state&&d.state.i>0&&d.state.i<Q.length&&!started){offerResume(d.state)}
+});
+var started=false;
+function offerResume(st){
+ var h='<div class="card"><p class="qn">Welcome back</p><p class="q">You have answered '+st.i+' of '+Q.length+' questions so far.</p><p>Would you like to continue where you left off, or start again from the beginning?</p><div class="acts"><button class="btn" id="cont">Continue from question '+(st.i+1)+'</button><button class="btn alt" id="rest">Start again</button></div></div>';
+ app.innerHTML=h;
+ document.getElementById('cont').onclick=function(){i=st.i;right=st.right||0;ans=st.ans||[];started=true;show()};
+ document.getElementById('rest').onclick=function(){i=0;right=0;ans=[];started=true;show()};
+}
+show();
+send({type:'ready'});
+</script>
+</body>
+</html>
