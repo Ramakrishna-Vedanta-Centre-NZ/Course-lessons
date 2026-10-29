@@ -103,7 +103,7 @@ input.fill:focus{border-color:var(--gold)!important}
  <footer>Understanding check · <a href="https://www.vedanta.nz">www.vedanta.nz</a>. Privacy: when you are signed in, your name, email, answers and score are saved to your member record. Only you and the course instructors can see them. They are not shared or ranked.</footer>
 </div>
 <script>
-/* Question bank. Types: mc (options o, correct index a), judge (statement q; a: 0 holds, 1 does not hold, 2 holds only in part), fill (accepted answers a[], show).
+/* Question bank. Types: mc (options o, correct index a; options are shuffled on display), judge (statement q; a: 0 holds, 1 does not hold, 2 holds only in part), fill (accepted answers a[], show).
    e = explanation, c = idea to revisit, s = lesson section reference (null = lesson as a whole). All content from the 1.1 key ideas and misconceptions. */
 var META={code:'ADV-1-1',lesson:'1.1',quizTitle:'Understanding check: Lesson 1.1, What Is the Mind? A First Look',programme:'The Mind in the Light of Modern and Spiritual Sciences (Advanced)',cut:75};
 var Q=[
@@ -113,11 +113,11 @@ var Q=[
  e:'Drinking water is direct and thinking about water is indirect. Each question points to a difference between an experience and the mind’s response to it.',c:'The gap between an experience and the mind’s response to it',s:'4'},
 {t:'judge',q:'“The lesson teaches that thought is false, so the mind should be set aside.”',a:1,
  e:'Thought is not false, it is partial: like a map, it is useful and sometimes indispensable, but it is not the land. The lesson says it is not asking you to reject the mind or distrust it. The mind is resituated, not rejected.',c:'Thought is partial, not false; the mind is resituated, not rejected',s:'6 and 12'},
-{t:'judge',q:'“Because feelings are partial, they are mistakes.”',a:1,
- e:'The lesson says feelings are not mistakes: they reveal value, relationship, vulnerability and depth. They are real as experiences, but they do not always disclose the situation as it stands.',c:'Feelings are real and informative, though partial',s:'7'},
+{t:'judge',q:'“A feeling is real as an experience, and it always discloses the situation as it stands.”',a:2,
+ e:'The first half holds: feelings are not mistakes, and a feeling is real as an experience. The second half does not: a feeling does not always disclose the situation as it stands. Fear may be present without real danger.',c:'Feelings are real and informative, though partial',s:'7'},
 {t:'mc',q:'In the lesson’s picture of perception, what are ψₓ and ψₘ?',o:['Two moods, a pleasant one and an unpleasant one','The incoming impression and what you bring to it','The thought and the feeling about it','The body’s signal and the brain’s noise'],a:1,
  e:'ψₓ is the incoming impression and ψₘ is what you bring: attention, memory, mood, expectation, history and meaning. What you experience is ψₓ mixed with ψₘ, like two waves meeting as one ripple.',c:'Perception as ψₓ (what is given) mixed with ψₘ (what you bring)',s:'10'},
-{t:'judge',q:'“If two people have a similar ψₓ, they will have the same experience of it.”',a:1,
+{t:'judge',q:'“Two people can meet a similar ψₓ and still have different experiences, because what each brings, ψₘ, is different.”',a:0,
  e:'The ψₓ may be similar, but the ψₘ is different: different memories, moods, histories and attention. The worried parent and the relaxed parent hear the same silence and experience it differently.',c:'Similar ψₓ, different ψₘ, different experience',s:'10'},
 {t:'mc',q:'What does the lesson say is more primary than thought, feeling and even the felt sense of being a self?',o:['A stronger, clearer kind of thought','The simple fact that experience is being known','The brain’s fast threat-detection system','The ethical judgment of conscience'],a:1,
  e:'Thought, feeling and the sense of “I” are each known. So there is something more primary: the simple fact that experience is being known, before any particular content is examined.',c:'Something more primary than thought, feeling and self-sense: experience being known',s:'11'},
@@ -146,7 +146,7 @@ function show(){
  if(i>=Q.length){return result()}
  var qq=Q[i];
  var h='<div class="card"><p class="qn">Question '+(i+1)+'</p><p class="q">'+esc(qq.q)+'</p>';
- if(qq.t==='mc'){h+='<div class="opts">';qq.o.forEach(function(o,k){h+='<button class="opt" data-k="'+k+'">'+String.fromCharCode(65+k)+'. '+esc(o)+'</button>'});h+='</div>'}
+ if(qq.t==='mc'){h+='<div class="opts">';var ord=qq.o.map(function(o,k){return k});for(var r=ord.length-1;r>0;r--){var s2=Math.floor(Math.random()*(r+1)),t2=ord[r];ord[r]=ord[s2];ord[s2]=t2}ord.forEach(function(k,pos){h+='<button class="opt" data-k="'+k+'">'+String.fromCharCode(65+pos)+'. '+esc(qq.o[k])+'</button>'});h+='</div>'}
  else if(qq.t==='judge'){h+='<div class="opts">';JL.forEach(function(o,k){h+='<button class="opt" data-k="'+k+'">'+o+'</button>'});h+='</div>'}
  else{h+='<input class="fill" id="fill" type="text" autocomplete="off" autocapitalize="off" placeholder="Type your answer"><div><button class="btn" id="chk">Check answer</button></div>'}
  h+='<div class="fb" id="fb" role="status"></div><div class="nav"><button class="btn" id="nx" style="display:none">'+(i===Q.length-1?'See my result':'Next question')+'</button></div></div>';
@@ -163,7 +163,7 @@ function show(){
 function mark(ok,btn,typed){
  started=true;
  var qq=Q[i];if(ok)right++;ans.push({q:i+1,ok:ok,given:typed!==undefined?typed:(btn?btn.textContent:'')});
- if(qq.t!=='fill'){app.querySelectorAll('.opt').forEach(function(b,k){b.disabled=true;if(k===qq.a)b.classList.add('right')});if(!ok&&btn)btn.classList.add('wrong')}
+ if(qq.t!=='fill'){app.querySelectorAll('.opt').forEach(function(b,k){b.disabled=true;if(+b.dataset.k===qq.a)b.classList.add('right')});if(!ok&&btn)btn.classList.add('wrong')}
  var right_ans=qq.t==='mc'?qq.o[qq.a]:qq.t==='judge'?JL[qq.a]:qq.show;
  var fb=document.getElementById('fb');fb.className='fb '+(ok?'ok':'no');
  fb.innerHTML='<b>'+(ok?'Right.':'Not quite. The answer is: '+esc(right_ans))+'</b>'+esc(qq.e)+' <i>('+ref(qq.s)+'.)</i>';

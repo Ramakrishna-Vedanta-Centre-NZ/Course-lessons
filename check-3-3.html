@@ -103,7 +103,7 @@ input.fill:focus{border-color:var(--gold)!important}
  <footer>Understanding check · <a href="https://www.vedanta.nz">www.vedanta.nz</a>. Privacy: when you are signed in, your name, email, answers and score are saved to your member record. Only you and the course instructors can see them. They are not shared or ranked.</footer>
 </div>
 <script>
-/* Question bank. Types: mc (options o, correct index a), judge (statement q; a: 0 holds, 1 does not hold, 2 holds only in part), fill (accepted answers a[], show).
+/* Question bank. Types: mc (options o, correct index a; options are shuffled on display), judge (statement q; a: 0 holds, 1 does not hold, 2 holds only in part), fill (accepted answers a[], show).
    e = explanation, c = idea to revisit, s = lesson section reference (null = lesson as a whole). All content from the 3.3 key ideas and misconceptions. */
 var META={code:'ADV-3-3',lesson:'3.3',quizTitle:'Understanding check: Lesson 3.3, Saṁskāra as Live Filter',programme:'The Mind in the Light of Modern and Spiritual Sciences (Advanced)',cut:75};
 var Q=[
@@ -146,7 +146,7 @@ function show(){
  if(i>=Q.length){return result()}
  var qq=Q[i];
  var h='<div class="card"><p class="qn">Question '+(i+1)+'</p><p class="q">'+esc(qq.q)+'</p>';
- if(qq.t==='mc'){h+='<div class="opts">';qq.o.forEach(function(o,k){h+='<button class="opt" data-k="'+k+'">'+String.fromCharCode(65+k)+'. '+esc(o)+'</button>'});h+='</div>'}
+ if(qq.t==='mc'){h+='<div class="opts">';var ord=qq.o.map(function(o,k){return k});for(var r=ord.length-1;r>0;r--){var s2=Math.floor(Math.random()*(r+1)),t2=ord[r];ord[r]=ord[s2];ord[s2]=t2}ord.forEach(function(k,pos){h+='<button class="opt" data-k="'+k+'">'+String.fromCharCode(65+pos)+'. '+esc(qq.o[k])+'</button>'});h+='</div>'}
  else if(qq.t==='judge'){h+='<div class="opts">';JL.forEach(function(o,k){h+='<button class="opt" data-k="'+k+'">'+o+'</button>'});h+='</div>'}
  else{h+='<input class="fill" id="fill" type="text" autocomplete="off" autocapitalize="off" placeholder="Type your answer"><div><button class="btn" id="chk">Check answer</button></div>'}
  h+='<div class="fb" id="fb" role="status"></div><div class="nav"><button class="btn" id="nx" style="display:none">'+(i===Q.length-1?'See my result':'Next question')+'</button></div></div>';
@@ -163,7 +163,7 @@ function show(){
 function mark(ok,btn,typed){
  started=true;
  var qq=Q[i];if(ok)right++;ans.push({q:i+1,ok:ok,given:typed!==undefined?typed:(btn?btn.textContent:'')});
- if(qq.t!=='fill'){app.querySelectorAll('.opt').forEach(function(b,k){b.disabled=true;if(k===qq.a)b.classList.add('right')});if(!ok&&btn)btn.classList.add('wrong')}
+ if(qq.t!=='fill'){app.querySelectorAll('.opt').forEach(function(b,k){b.disabled=true;if(+b.dataset.k===qq.a)b.classList.add('right')});if(!ok&&btn)btn.classList.add('wrong')}
  var right_ans=qq.t==='mc'?qq.o[qq.a]:qq.t==='judge'?JL[qq.a]:qq.show;
  var fb=document.getElementById('fb');fb.className='fb '+(ok?'ok':'no');
  fb.innerHTML='<b>'+(ok?'Right.':'Not quite. The answer is: '+esc(right_ans))+'</b>'+esc(qq.e)+' <i>('+ref(qq.s)+'.)</i>';
