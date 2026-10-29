@@ -1,0 +1,498 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Practice: Lesson 1.4, Stillness and Movement Are Not Two</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans:wght@400..700&family=Noto+Serif:ital,wght@0,400..700;1,400..700&display=swap">
+<style>
+:root{
+  --bg:#FBF5EA; --surface:#FFFDF8; --ink:#1E1E1E; --muted:#5A5A5A; --line:#E6DAC3; --tint:#F3EAD3; --navy:#12285A; --gold:#C9A24A; --goldt:#6B4E0E;
+  --obj:#0B8686; --att:#C95F06; --res:#2E3192; --env:#C0245B; --ok:#1B7A52;
+  --display:"Noto Serif",Georgia,"Times New Roman",serif;
+  --body:"Noto Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0B1A3D; --surface:#12285A; --ink:#FBF5EA; --muted:#C9C3B3; --line:#2B4686; --tint:#1D3770; --gold:#E6C36A; --goldt:#E6C36A;
+    --obj:#46CFC6; --att:#F5A04D; --res:#A3AAFF; --env:#FF7BA9; --ok:#5BD59B; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0B1A3D; --surface:#12285A; --ink:#FBF5EA; --muted:#C9C3B3; --line:#2B4686; --tint:#1D3770; --gold:#E6C36A; --goldt:#E6C36A;
+  --obj:#46CFC6; --att:#F5A04D; --res:#A3AAFF; --env:#FF7BA9; --ok:#5BD59B; color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;
+  padding-left:max(14px,env(safe-area-inset-left,0px));padding-right:max(14px,env(safe-area-inset-right,0px));padding-block:22px 40px}
+.wrap{max-width:900px;margin:0 auto;display:flex;flex-direction:column;gap:32px}
+h1,h2,h3{font-family:var(--display);font-weight:500;text-wrap:balance;margin:0;letter-spacing:-.01em}
+h1{font-size:clamp(30px,5.4vw,44px);line-height:1.06}
+h2{font-size:clamp(23px,3.4vw,29px);line-height:1.15}
+h3{font-size:19px;line-height:1.25}
+p{margin:0}
+sub{font-size:.72em;line-height:0}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.lede{font-size:17.5px;max-width:64ch}
+.intro{max-width:66ch;color:var(--muted)}
+header{display:flex;flex-direction:column;gap:12px}
+section{display:flex;flex-direction:column;gap:18px;min-width:0}
+.sym{font-family:var(--mono);font-size:.92em;white-space:nowrap}
+.k-obj{color:var(--obj)} .k-att{color:var(--att)} .k-res{color:var(--res)} .k-env{color:var(--env)}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px;display:flex;flex-direction:column;gap:14px;min-width:0}
+.bar{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;justify-content:space-between}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--bg)}
+.seg button{font:inherit;font-size:14px;color:var(--muted);background:transparent;border:0;padding:8px 13px;cursor:pointer}
+.seg button+button{border-left:1px solid var(--line)}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--surface)}
+button:focus-visible,input:focus-visible{outline:2px solid var(--res);outline-offset:2px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{font:inherit;font-size:14px;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:7px 13px;cursor:pointer;display:inline-flex;gap:8px;align-items:center}
+.chip i{font-style:normal;font-family:var(--mono);font-size:11px;color:var(--muted)}
+.chip[aria-pressed="true"]{background:var(--res);border-color:var(--res);color:#fff}
+.chip[aria-pressed="true"] i{color:#fff;opacity:.8}
+.chip:disabled{cursor:default}
+.chip.reached:not([aria-pressed="true"]){border-color:var(--res)}
+.btn{font:inherit;font-size:14px;color:var(--ink);background:var(--surface);border:1px solid var(--ink);border-radius:8px;padding:8px 16px;cursor:pointer}
+.btn.primary{background:var(--ink);color:var(--surface)}
+.btn.ghost{border-color:var(--line);color:var(--muted)}
+.scope-wrap{position:relative;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--bg)}
+canvas{display:block;width:100%}
+.playbtn{position:absolute;right:8px;bottom:8px;font:inherit;font-size:12px;background:var(--surface);color:var(--muted);border:1px solid var(--line);border-radius:6px;padding:4px 10px;cursor:pointer}
+.box{border:1px solid var(--line);border-radius:8px;background:var(--bg);padding:10px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.box .cap{font-size:12px;color:var(--muted)}
+.meters{display:flex;flex-direction:column;gap:9px}
+.meter{display:grid;grid-template-columns:1fr auto;gap:2px 8px;font-size:13px;align-items:baseline}
+.meter b{font-weight:600}
+.meter output{font-family:var(--mono);font-size:12px;color:var(--muted)}
+.meter .track{grid-column:1/-1;height:7px;background:var(--line);border-radius:4px;overflow:hidden}
+.meter .fill{height:100%;width:0;background:var(--res);border-radius:4px}
+.meter.f2 .fill{background:var(--env)} .meter.f3 .fill{background:var(--obj)}
+.slider{display:flex;align-items:center;gap:10px;flex:1 1 280px;min-width:0}
+.slider label{font-size:14px;min-width:0}
+.slider input[type=range]{flex:1;min-width:60px;accent-color:var(--res)}
+.slider small{color:var(--muted);font-size:12px;white-space:nowrap}
+.slider output{font-family:var(--mono);font-size:12.5px;color:var(--muted);min-width:46px;text-align:right}
+.readout{font-size:14px;color:var(--muted)}
+.readout b{color:var(--ink)}
+.tag{font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);border:1px solid var(--line);border-radius:4px;padding:2px 6px}
+.note{font-size:13px;color:var(--muted);max-width:70ch}
+.balance{background:var(--tint);border-radius:10px;padding:16px 18px;display:flex;flex-direction:column;gap:8px;max-width:78ch}
+footer{font-size:13px;color:var(--muted);max-width:76ch;border-top:1px solid var(--line);padding-top:12px}
+@media (max-width:640px){.panel{padding:12px}.wrap{gap:26px}}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
+
+[hidden]{display:none!important}
+.brandhdr{background:#12285A;color:#FBF5EA;text-align:center;padding:18px 18px 20px;border-radius:14px;display:flex;flex-direction:column;align-items:center;gap:6px}
+.brandhdr .logos{display:flex;align-items:center;justify-content:center;gap:18px}
+.brandhdr .logos img{width:56px;height:66px;object-fit:contain;display:block}
+.brandhdr .logos img.rit{width:86px;height:65px}
+.brandhdr .eyebrow{color:#E6C36A;font-weight:700;letter-spacing:3px}
+.brandhdr h1{color:#FBF5EA;font-weight:700}
+.brandhdr .course{color:#E6C36A;font-weight:600;font-size:14px}
+.brandhdr .lede{color:#F1ECDF;font-size:15.5px;max-width:62ch}
+.brandhdr .scorenote{color:#F1ECDF;font-size:14.5px}
+nav.parts a{color:var(--ink)}
+.brandhdr nav.parts a{color:#FBF5EA;border-bottom:1px solid #E6C36A;background:none;padding-bottom:2px}
+.brandhdr nav.parts a:hover,.brandhdr nav.parts a:focus-visible{color:#E6C36A;border-color:#E6C36A}
+.tag.scored{color:var(--goldt);border-color:var(--gold)}
+.scorebox{border-left:5px solid var(--gold);background:var(--tint);border-radius:10px;padding:12px 14px;margin-bottom:14px}
+.scorebox .big{font-family:var(--display);font-size:30px;line-height:1.1;color:var(--ink)}
+.scorebox .band{font-family:var(--display);font-size:18px;margin:4px 0}
+.scorebox .band.good{color:var(--ok)}
+.scorebox .saved{font-size:13.5px;color:var(--muted)}
+.scorebox ul{margin:6px 0 0;padding-left:20px}
+
+/* PRACTICE TEMPLATE: one coloured "part" per section (part-1 .. part-4) */
+.part{--pc:#0E7A8A;--pcon:#FFFFFF;--pcbg:#E6F2F3;border:2px solid var(--pc);border-radius:14px;overflow:hidden;background:var(--pcbg)}
+.part-1{--pc:#0E7A8A;--pcbg:#E6F2F3}
+.part-2{--pc:#12285A;--pcbg:#EEF0F8}
+.part-3{--pc:#2F6B3A;--pcbg:#E6F0E3}
+.part-4{--pc:#7A2A5E;--pcbg:#F5E6F0}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .part{--pcbg:#0F2250;border-color:var(--pcl,var(--pc))}
+ :root:not([data-theme="light"]) .part-1{--pcl:#46CFC6} :root:not([data-theme="light"]) .part-2{--pcl:#E6C36A} :root:not([data-theme="light"]) .part-3{--pcl:#7FD08C} :root:not([data-theme="light"]) .part-4{--pcl:#F08CC8}}
+:root[data-theme="dark"] .part{--pcbg:#0F2250;border-color:var(--pcl,var(--pc))}
+:root[data-theme="dark"] .part-1{--pcl:#46CFC6} :root[data-theme="dark"] .part-2{--pcl:#E6C36A} :root[data-theme="dark"] .part-3{--pcl:#7FD08C} :root[data-theme="dark"] .part-4{--pcl:#F08CC8}
+.part-band{background:var(--pc);color:var(--pcon);padding:12px 16px;display:flex;align-items:center;flex-wrap:wrap;gap:6px 14px}
+.part-band h2{color:inherit;font-size:clamp(20px,3.4vw,26px);font-weight:600;flex:1 1 220px}
+.part-num{font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;font-weight:500;background:rgba(255,255,255,.18);border-radius:4px;padding:3px 9px}
+.part-band .tag{color:inherit;border-color:currentColor;background:rgba(255,255,255,.12)}
+.part-2 .part-band .tag,.part-2 .part-num{color:#E6C36A}
+.part-body{padding:16px;display:flex;flex-direction:column;gap:14px}
+.part .panel{background:var(--surface)}
+@media (max-width:640px){.part-body{padding:12px}}
+[hidden]{display:none!important}
+nav.parts{display:flex;flex-wrap:wrap;gap:8px 20px;margin-top:4px}
+nav.parts a{color:var(--ink);text-decoration:none;border-bottom:1px solid var(--line);padding-bottom:2px;font-size:15px}
+.msg{min-height:1.5em;font-size:15px}
+.fbbox{border-top:1px solid var(--line);padding-top:12px;display:flex;flex-direction:column;gap:8px;min-height:6.5em}
+.fbbox .verdict{font-family:var(--display);font-size:19px}
+.fbbox .ref{font-family:var(--mono);font-size:11px;color:var(--muted)}
+.chip:focus-visible,.pick:focus-visible,summary:focus-visible{outline:2px solid var(--res);outline-offset:2px}
+.btn:disabled{opacity:.45;cursor:default}
+.chips.picks{gap:10px}
+.dots{display:flex;gap:6px}
+.dots i{width:10px;height:10px;border-radius:50%;border:1.5px solid var(--muted)}
+.dots i.done{background:var(--ink);border-color:var(--ink)}
+.dots i.cur{border-color:var(--ink);box-shadow:0 0 0 2px var(--line)}
+body[data-part]{padding-block:10px 18px}
+body[data-part] header{display:none}
+body[data-part="1"] #s2,body[data-part="2"] #s1{display:none}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
+
+#cv{height:300px}
+#cvb{height:300px}
+#pc{width:150px;height:150px;flex:0 0 150px}
+.tried{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.tried .chip{cursor:default}
+.tried .chip i{font-size:12px}
+.tried .chip.did{border-color:var(--ok);color:var(--ink)}
+.tried .chip.did i{color:var(--ok)}
+.tg{font:inherit;font-size:14px;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:8px 14px;cursor:pointer}
+.tg[aria-pressed="true"]{background:var(--ink);color:var(--surface);border-color:var(--ink)}
+.tg:focus-visible{outline:2px solid var(--res);outline-offset:2px}
+.legend{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:13px;color:var(--muted)}
+.legend span{display:inline-flex;align-items:center;gap:7px}
+.sw{display:inline-block;width:22px;height:0;border-top:2.5px solid var(--res)}
+.sw.sp{border-top:2px dashed var(--obj)} .sw.tg2{border-top:2px dotted var(--att)} .sw.band{height:10px;border:0;background:var(--obj);opacity:.25;width:22px}
+.sw.st{border-top:4px solid var(--obj)} .sw.mk{border-top:2.5px solid var(--att)}
+.controls .slider{flex:0 0 auto}
+.pacerow{display:flex;flex-wrap:wrap;gap:14px;align-items:center}
+.pacerow .scope-wrap{flex:1 1 320px;min-width:0}
+.pacenote{display:flex;flex-direction:column;align-items:center;gap:4px;font-size:13px;color:var(--muted);flex:0 0 150px}
+.pacenote b{color:var(--ink);font-size:15px}
+.cmp{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.cmp .box b{font-family:var(--display);font-size:19px;font-weight:500}
+@media (max-width:640px){.slider{flex-wrap:wrap}.slider label{flex-basis:100%}#cv,#cvb{height:250px}.cmp{grid-template-columns:1fr}.pacenote{flex-basis:100%}}
+</style></head><body>
+<div class="wrap">
+<header class="brandhdr">
+  <div class="logos"><img src="vedantanz-logo.png" alt="Ramakrishna Vedanta NZ emblem" width="56" height="66"><img class="rit" src="ritam-wordmark.png" alt="Ritam" width="86" height="65"></div>
+  <div class="eyebrow">Practice · Lesson 1.4</div>
+  <h1>Stillness and Movement Are Not Two</h1>
+  <p class="course">The Mind in the Light of Modern and Spiritual Sciences · Advanced</p>
+  <p class="lede">Two small explorations of one idea from Lesson 1.4: where there is life, stillness and movement are present together. First a steady quantity that stays steady only by moving, then the line you were asked to find in one breath.</p>
+  <p class="scorenote"><b>Nothing on this page is scored</b>, and the page sends no result to your record. Both parts are for exploring. There is no right answer to find.</p>
+  <nav class="parts" aria-label="Parts of this page"><a href="#s1">I. Stability is the dynamic</a><a href="#s2">II. Where does the stillness end?</a></nav>
+</header>
+
+<section id="s1" class="part part-1">
+  <div class="part-band"><span class="part-num">Part I</span><h2>Stability is the dynamic</h2><span class="tag">Practice: not scored</span></div>
+  <div class="part-body">
+  <p class="intro">Section 5 of the lesson says that a living body holds a steady state “not by stopping all activity, but precisely through continuous dynamic activity”. Here one made-up quantity is held near a set-point by many small corrections while small pushes keep arriving. Disturb it, then take away the adjusting, and then the set-point, and watch what each loss does.</p>
+  <div class="panel" id="lab" data-state="held">
+    <div class="bar">
+      <div class="chips" role="group" aria-label="Disturb the quantity">
+        <button class="btn primary" id="bUp">Push it up</button><button class="btn primary" id="bDown">Push it down</button>
+      </div>
+      <div class="chips" role="group" aria-label="Take something away">
+        <button class="tg" id="tPause" aria-pressed="false">Pause the adjusting</button>
+        <button class="tg" id="tSet" aria-pressed="false">Remove the set-point</button>
+      </div>
+    </div>
+    <div class="scope-wrap"><canvas id="cv" role="img" aria-label="Trace of one quantity over time"></canvas></div>
+    <div class="legend">
+      <span><i class="sw"></i>the quantity</span>
+      <span id="lgSp"><i class="sw sp"></i>the set-point</span>
+      <span id="lgBand"><i class="sw band"></i>near the set-point</span>
+      <span id="lgTg" hidden><i class="sw tg2"></i>what the adjusting now chases</span>
+    </div>
+    <div class="meters">
+      <div class="meter"><b>How far from the set-point</b><output id="oDist">close</output><div class="track"><div class="fill" id="fDist"></div></div></div>
+      <div class="meter f3"><b>How much adjusting is going on</b><output id="oAct">small, steady corrections</output><div class="track"><div class="fill" id="fAct"></div></div></div>
+    </div>
+    <div id="labMsg" class="msg fbbox" role="status" aria-live="polite"></div>
+    <div class="bar">
+      <div class="tried" aria-label="What you have tried"><span class="eyebrow">You have tried</span>
+        <span class="chip" id="trPush"><i>○</i>a push</span><span class="chip" id="trPause"><i>○</i>pausing the adjusting</span><span class="chip" id="trSet"><i>○</i>removing the set-point</span></div>
+      <div class="chips"><button class="btn ghost" id="bFreeze">Freeze the picture</button><button class="btn ghost" id="bReset">Start again</button></div>
+    </div>
+    <div id="take" class="balance" hidden>
+      <h3>What the three tries show</h3>
+      <p>“Remove the movement and the stability collapses. Remove the stability and the movement becomes chaos” (§5). Here, with the adjusting paused the quantity is carried away by the pushes, and with the set-point removed the adjusting goes on but has nothing to hold. “The stability is the dynamic. The stillness is the movement, held in balance” (§5).</p>
+    </div>
+    <p class="note">Illustrative only. This is one generic quantity with no units, and the time scale is chosen for the picture. It is not a model of the body: the lesson says “thousands of processes are adjusting, compensating, and restoring in every moment” (§5), and a single regulator is only a stand-in for that pattern.</p>
+  </div>
+  </div>
+</section>
+
+<section id="s2" class="part part-3">
+  <div class="part-band"><span class="part-num">Part II</span><h2>Where does the stillness end?</h2><span class="tag">Practice: not scored</span></div>
+  <div class="part-body">
+  <p class="intro">This is a companion to the lesson’s Try This (§8), not a replacement for it. The Try This asks you to notice your own breath: “where, exactly, did the stillness end and the movement begin?” Here is a drawn breath. Mark where you would put the line at the top of the breath, then change how slow counts as still.</p>
+  <div class="panel" id="br">
+    <div class="bar">
+      <div class="seg" id="shape" role="group" aria-label="Shape of the drawn breath"><button data-s="0" aria-pressed="true">A breath that flows</button><button data-s="1" aria-pressed="false">A breath with small pauses</button></div>
+      <button class="btn ghost" id="bPace">Freeze the picture</button>
+    </div>
+    <div class="pacerow">
+      <div class="pacenote"><canvas id="pc" role="img" aria-label="A circle that grows as the drawn breath goes in and shrinks as it goes out"></canvas><b id="pcWord">breathing in</b><span id="pcSub">moving</span></div>
+      <div class="scope-wrap"><canvas id="cvb" role="img" aria-label="One drawn breath over ten seconds, with the speed of the breath underneath"></canvas></div>
+    </div>
+    <div class="legend">
+      <span><i class="sw"></i>the breath (higher is further in), over one drawn breath of about ten seconds</span>
+      <span><i class="sw st"></i>counted as still, by your threshold</span>
+      <span><i class="sw mk"></i>your line</span><span><i class="sw sp"></i>below: its speed, and the threshold for “still”</span>
+    </div>
+    <div class="controls" style="display:flex;flex-direction:column;gap:12px">
+      <div class="slider"><label for="rMark">Your line at the top of the breath</label><small>earlier</small><input type="range" id="rMark" min="200" max="480" value="380"><small>later</small></div>
+      <div class="slider"><label for="rThr">How slow counts as still?</label><small>very slow only</small><input type="range" id="rThr" min="1" max="60" value="10"><small>quite slow too</small></div>
+      <div class="chips"><span class="eyebrow">Or try</span><button class="chip" data-t="3">strict</button><button class="chip" data-t="10">ordinary</button><button class="chip" data-t="25">generous</button></div>
+    </div>
+    <div class="cmp" id="cmp"></div>
+    <div id="brMsg" class="msg fbbox" role="status" aria-live="polite"></div>
+    <p class="note">The drawn breath is a smooth curve by construction, and real breathing varies from person to person and from moment to moment. The speed shown underneath is the breath’s speed as a share of its fastest. This page cannot tell you what you will find in your own breath.</p>
+  </div>
+  <div class="balance">
+    <h3>Back to your own breath</h3>
+    <p>The lesson says: “Most people, doing this honestly, find that the line cannot be drawn. The breath is one continuous event in which movement and stillness are not separate stages but two qualities of the same wholeness” (§8). The picture above only shows that, in a drawing, any line you draw is where you chose to draw it. The noticing is in the Try This, in your own breath, about thirty seconds, during ordinary activity.</p>
+  </div>
+  </div>
+</section>
+<footer>Nothing on this page is scored. Based on Lesson 1.4, this page illustrates the lesson’s picture of stability and movement and a companion to its Try This. It does not measure, diagnose or advise on any person’s breath, body or situation. For help with distress, please speak with a qualified professional or someone you trust.<br>Ritam · Ramakrishna Vedanta Centre NZ · <a href="https://www.vedanta.nz">www.vedanta.nz</a></footer>
+</div>
+
+<script>
+(function(){
+"use strict";
+function $(id){return document.getElementById(id)}
+function clamp(x,a,b){return Math.max(a,Math.min(b,x))}
+try{var q=new URLSearchParams(location.search).get("theme");if(q==="light"||q==="dark")document.documentElement.setAttribute("data-theme",q)}catch(e){}
+try{var pt=new URLSearchParams(location.search).get("part");if(pt==="1"||pt==="2")document.body.setAttribute("data-part",pt)}catch(e){}
+var RM=false;try{RM=window.matchMedia("(prefers-reduced-motion: reduce)").matches}catch(e){}
+var col={};
+function readColors(){var cs=getComputedStyle(document.documentElement);["--bg","--surface","--ink","--muted","--line","--obj","--att","--res","--env"].forEach(function(k){col[k]=cs.getPropertyValue(k).trim()});if(window.__draw)window.__draw()}
+readColors();
+try{window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change",readColors)}catch(e){}
+new MutationObserver(readColors).observe(document.documentElement,{attributes:true,attributeFilter:["data-theme"]});
+var dpr=Math.max(1,Math.min(2,window.devicePixelRatio||1));
+function fit(c){var w=c.clientWidth,h=c.clientHeight;if(!w||!h)return null;var bw=Math.round(w*dpr),bh=Math.round(h*dpr);if(c.width!==bw||c.height!==bh){c.width=bw;c.height=bh}var g=c.getContext("2d");g.setTransform(dpr,0,0,dpr,0,0);return{g:g,w:w,h:h}}
+var FONT="500 12px 'Noto Sans',system-ui,sans-serif";
+function label(g,t,x,y,color,align){g.font=FONT;g.textAlign=align||"left";g.textBaseline="alphabetic";var w=g.measureText(t).width,x0=align==="right"?x-w:(align==="center"?x-w/2:x);g.save();g.globalAlpha=.8;g.fillStyle=col["--surface"];g.fillRect(x0-4,y-12,w+8,17);g.restore();g.fillStyle=color;g.fillText(t,x,y)}
+function gauss(){var u=0,v=0;while(!u)u=Math.random();v=Math.random();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v)}
+
+/* ===== Part I: a regulated quantity ===== */
+var NH=360,GAIN=0.05,CMAX=0.06,BAND=0.3,YM=1.8;
+var X=new Float64Array(NH),TG=new Float64Array(NH),CC=new Float64Array(NH),head=0;
+var sim={x:0,target:0,drift:0,timer:0,adjust:true,setpoint:true,running:!RM,tried:{push:false,pause:false,set:false},acc:0,last:null};
+function tick(){
+  sim.drift+=-sim.drift/40+gauss()*0.002;
+  var push=gauss()*0.015+sim.drift;
+  if(sim.setpoint){sim.target=0}
+  else{sim.timer--;if(sim.timer<=0){sim.target=(Math.random()*2-1)*1.1;sim.timer=20+Math.floor(Math.random()*25)}}
+  var c=0;if(sim.adjust){c=clamp(-GAIN*(sim.x-sim.target),-CMAX,CMAX)}
+  sim.x=clamp(sim.x+push+c,-YM,YM);
+  X[head]=sim.x;TG[head]=sim.target;CC[head]=c;head=(head+1)%NH;
+}
+function resetSim(){
+  sim.x=0;sim.target=0;sim.drift=0;sim.timer=0;
+  for(var i=0;i<NH;i++){X[i]=0;TG[i]=0;CC[i]=0}head=0;
+}
+function recent(arr,n,absv){var s=0;for(var i=1;i<=n;i++){var v=arr[(head-i+NH*2)%NH];s+=absv?Math.abs(v):v}return s/n}
+function drawLab(){
+  var cv=$("cv"),f=fit(cv);if(!f)return;var g=f.g,W=f.w,H=f.h;
+  g.clearRect(0,0,W,H);g.fillStyle=col["--bg"];g.fillRect(0,0,W,H);
+  var strip=46,top=14,plotH=H-top-strip-8,x0=10,x1=W-10;
+  function PX(i){return x0+(x1-x0)*i/(NH-1)}
+  function PY(v){return top+plotH*(0.5-v/(2*YM))}
+  if(sim.setpoint){
+    g.save();g.fillStyle=col["--obj"];g.globalAlpha=.16;g.fillRect(x0,PY(BAND),x1-x0,PY(-BAND)-PY(BAND));g.restore();
+    g.save();g.strokeStyle=col["--obj"];g.lineWidth=1.6;g.setLineDash([6,4]);g.beginPath();g.moveTo(x0,PY(0));g.lineTo(x1,PY(0));g.stroke();g.restore();
+    label(g,"set-point",x1,PY(0)-6,col["--obj"],"right");
+  }else{
+    g.save();g.strokeStyle=col["--att"];g.lineWidth=1.8;g.setLineDash([2,4]);g.beginPath();
+    for(var i=0;i<NH;i++){var t=TG[(head+i)%NH],x=PX(i),y=PY(t);if(i&&Math.abs(t-TG[(head+i-1)%NH])>0.001){g.lineTo(x,PY(TG[(head+i-1)%NH]));g.lineTo(x,y)}else if(i)g.lineTo(x,y);else g.moveTo(x,y)}
+    g.stroke();g.restore();
+    label(g,"no set-point",x1,top+10,col["--muted"],"right");
+  }
+  g.save();g.strokeStyle=col["--res"];g.lineWidth=2.4;g.lineJoin="round";g.beginPath();
+  for(var j=0;j<NH;j++){var xv=X[(head+j)%NH],px=PX(j),py=PY(xv);if(j)g.lineTo(px,py);else g.moveTo(px,py)}
+  g.stroke();g.restore();
+  g.save();g.fillStyle=col["--res"];g.beginPath();g.arc(PX(NH-1),PY(sim.x),4.5,0,7);g.fill();g.restore();
+  /* corrections strip */
+  var yb=H-strip/2-2;
+  g.save();g.strokeStyle=col["--line"];g.lineWidth=1;g.beginPath();g.moveTo(x0,yb);g.lineTo(x1,yb);g.stroke();g.restore();
+  g.save();g.strokeStyle=col["--obj"];g.lineWidth=Math.max(1.2,(x1-x0)/NH*0.8);
+  for(var k=0;k<NH;k++){var c=CC[(head+k)%NH];if(Math.abs(c)<1e-5)continue;var h=clamp(c/CMAX,-1,1)*(strip/2-3);g.beginPath();g.moveTo(PX(k),yb);g.lineTo(PX(k),yb-h);g.stroke()}
+  g.restore();
+  label(g,sim.adjust?"each small correction":"no corrections",x0+4,H-4,col["--muted"],"left");
+  $("cv").setAttribute("aria-label","Trace of one quantity over time. "+stateWords().trace);
+}
+function stateWords(){
+  var d=recent(X,30,true),a=recent(CC,30,true)/CMAX;
+  var dw=!sim.setpoint?"there is no set-point":d<0.2?"close":d<0.5?"some distance":"far";
+  var aw=!sim.adjust?"none":a<0.12?"small, steady corrections":a<0.4?"steady corrections":"large corrections";
+  var tr=(sim.setpoint?"Set-point shown. ":"No set-point. ")+(sim.adjust?"Adjusting on. ":"Adjusting paused. ")+"The quantity is "+dw+".";
+  return{d:d,a:a,dw:dw,aw:aw,tr:tr,trace:tr}
+}
+function meters(){
+  var w=stateWords();
+  $("oDist").textContent=w.dw;$("oAct").textContent=w.aw;
+  $("fDist").style.width=(sim.setpoint?clamp(w.d/1.2,0,1)*100:0)+"%";
+  $("fAct").style.width=clamp(w.a,0,1)*100+"%";
+}
+var MSG={
+ held:["Held by moving.","Many small corrections keep the quantity near its set-point while small pushes keep arriving. Look at the strip underneath: it is never still, and that is why the trace is steady. “The stability is the dynamic” (§5)."],
+ paused:["The adjusting is paused.","The pushes keep arriving and nothing answers them, so the quantity is carried away from the set-point. “Remove the movement and the stability collapses” (§5). The time scale here is for the picture; the lesson’s own words are that the regulated state “collapses within seconds” (§5)."],
+ nosp:["The adjusting goes on, with nothing to hold.","The corrections continue, but they now follow a target that keeps changing. There is plenty of movement and no anchor. “Remove the stability and the movement becomes chaos” (§5)."],
+ both:["Neither adjusting nor set-point.","Nothing holds the quantity and nothing answers the pushes, so it is simply carried wherever they go. This is not a picture of rest. The lesson’s point is that stillness and movement are present together wherever there is life (§2)."]
+};
+function stateKey(){return sim.adjust?(sim.setpoint?"held":"nosp"):(sim.setpoint?"paused":"both")}
+function say(lead){
+  var m=MSG[stateKey()];
+  $("labMsg").innerHTML='<p class="verdict">'+m[0]+'</p>'+(lead?'<p>'+lead+'</p>':'')+'<p>'+m[1]+'</p><p class="ref">§5</p>';
+  $("lab").setAttribute("data-state",stateKey());
+}
+function markTried(k){
+  sim.tried[k]=true;var el=$(k==="push"?"trPush":k==="pause"?"trPause":"trSet");el.classList.add("did");el.querySelector("i").textContent="✓";
+  if(sim.tried.push&&sim.tried.pause&&sim.tried.set)$("take").hidden=false;
+}
+function push(dir){
+  sim.x=clamp(sim.x+dir*0.8,-YM,YM);X[(head-1+NH)%NH]=sim.x;markTried("push");
+  var lead=sim.adjust?(sim.setpoint?"A push of one size, answered by larger corrections that bring it back. The disturbance is met by movement, not by stiffness.":"A push of one size. The corrections answer it, but toward a target that is itself moving."):"A push of one size, and nothing answers it.";
+  say(lead);drawLab();meters();
+}
+$("bUp").addEventListener("click",function(){push(1)});
+$("bDown").addEventListener("click",function(){push(-1)});
+$("tPause").addEventListener("click",function(){
+  sim.adjust=!sim.adjust;$("tPause").setAttribute("aria-pressed",sim.adjust?"false":"true");
+  if(!sim.adjust)markTried("pause");say(sim.adjust?"The adjusting is back on.":"");drawLab();meters();
+});
+$("tSet").addEventListener("click",function(){
+  sim.setpoint=!sim.setpoint;$("tSet").setAttribute("aria-pressed",sim.setpoint?"false":"true");
+  if(!sim.setpoint){markTried("set");sim.timer=0}
+  $("lgSp").hidden=!sim.setpoint;$("lgBand").hidden=!sim.setpoint;$("lgTg").hidden=sim.setpoint;
+  say(sim.setpoint?"The set-point is back.":"");drawLab();meters();
+});
+$("bFreeze").addEventListener("click",function(){sim.running=!sim.running;$("bFreeze").textContent=sim.running?"Freeze the picture":"Run again";$("bFreeze").setAttribute("aria-pressed",sim.running?"false":"true")});
+$("bReset").addEventListener("click",function(){
+  sim.adjust=true;sim.setpoint=true;sim.tried={push:false,pause:false,set:false};resetSim();
+  ["tPause","tSet"].forEach(function(i){$(i).setAttribute("aria-pressed","false")});
+  ["trPush","trPause","trSet"].forEach(function(i){var e=$(i);e.classList.remove("did");e.querySelector("i").textContent="○"});
+  $("take").hidden=true;$("lgSp").hidden=false;$("lgBand").hidden=false;$("lgTg").hidden=true;
+  say("Back to the start.");drawLab();meters();
+});
+var lastT=0,accum=0;
+function loop(t){
+  if(sim.running){accum+=Math.min(100,t-lastT);while(accum>=33){tick();accum-=33}drawLab();meters()}
+  lastT=t;requestAnimationFrame(loop);
+}
+for(var w0=0;w0<NH;w0++)tick();
+if(RM){$("bFreeze").textContent="Run again";$("bFreeze").setAttribute("aria-pressed","true")}
+say("");
+requestAnimationFrame(function(t){lastT=t;loop(t)});
+window.__practice14={step:function(n){for(var i=0;i<n;i++)tick();drawLab();meters()},get:function(){return{x:sim.x,adjust:sim.adjust,setpoint:sim.setpoint,dist:recent(X,30,true),act:recent(CC,30,true)/CMAX,state:stateKey()}},pause:function(){sim.running=false}};
+
+/* ===== Part II: the breath line ===== */
+var P=10,NB=500;
+var SH=[{in:4.5,top:0,out:5.5,bot:0},{in:4.0,top:0.6,out:4.8,bot:0.6}];
+var shape=0,thr=0.10,mark=3.8,pacing=!RM,t0=0,tNow=0;
+function ease(u){return (1-Math.cos(Math.PI*u))/2}
+function dAt(t,s){
+  var S=SH[s];t=((t%P)+P)%P;
+  if(t<S.in)return ease(t/S.in);
+  t-=S.in;if(t<S.top)return 1;
+  t-=S.top;if(t<S.out)return 1-ease(t/S.out);
+  return 0;
+}
+var D=[],U=[];
+function prep(){
+  D=[];U=[];var dt=P/NB,v=[],mx=0,i;
+  for(i=0;i<NB;i++)D.push(dAt(i*dt,shape));
+  for(i=0;i<NB;i++){var a=dAt(i*dt-dt,shape),b=dAt(i*dt+dt,shape);var s=Math.abs(b-a)/(2*dt);v.push(s);mx=Math.max(mx,s)}
+  for(i=0;i<NB;i++)U.push(v[i]/mx);
+}
+function stillStats(th){
+  var dt=P/NB,top=0,bot=0,first=null,last=null;
+  for(var i=0;i<NB;i++){if(U[i]<th){if(D[i]>=0.5){top+=dt;if(first===null)first=i*dt;last=i*dt}else bot+=dt}}
+  return{top:top,bot:bot,start:first,end:last}
+}
+function uAtT(t){var i=clamp(Math.round(((t%P)+P)%P/P*NB),0,NB-1);return U[i]}
+function f1(x){return x.toFixed(1)}
+function drawBreath(){
+  var cv=$("cvb"),f=fit(cv);if(!f)return;var g=f.g,W=f.w,H=f.h;
+  g.clearRect(0,0,W,H);g.fillStyle=col["--bg"];g.fillRect(0,0,W,H);
+  var x0=12,x1=W-12,sp=H*0.28,top=16,pl=H-sp-top-26;
+  function PX(t){return x0+(x1-x0)*t/P}
+  function PY(d){return top+pl*(1-d)}
+  function SY(u){return H-12-(sp-18)*u}
+  var i,dt=P/NB;
+  /* breath curve: moving part in ink, still part thick */
+  g.save();g.lineJoin="round";g.lineWidth=2.4;g.strokeStyle=col["--res"];g.beginPath();
+  for(i=0;i<NB;i++){var x=PX(i*dt),y=PY(D[i]);if(i)g.lineTo(x,y);else g.moveTo(x,y)}g.stroke();g.restore();
+  g.save();g.lineWidth=7;g.lineCap="round";g.strokeStyle=col["--obj"];g.globalAlpha=.85;
+  var run=false;
+  for(i=0;i<NB;i++){var st=U[i]<thr;if(st&&!run){g.beginPath();g.moveTo(PX(i*dt),PY(D[i]));run=true}else if(st){g.lineTo(PX(i*dt),PY(D[i]))}if(run&&(!st||i===NB-1)){g.stroke();run=false}}
+  g.restore();
+  /* speed strip */
+  g.save();g.strokeStyle=col["--muted"];g.lineWidth=1.4;g.beginPath();
+  for(i=0;i<NB;i++){var xs=PX(i*dt),ys=SY(U[i]);if(i)g.lineTo(xs,ys);else g.moveTo(xs,ys)}g.stroke();g.restore();
+  g.save();g.strokeStyle=col["--obj"];g.lineWidth=1.6;g.setLineDash([5,4]);g.beginPath();g.moveTo(x0,SY(thr));g.lineTo(x1,SY(thr));g.stroke();g.restore();
+  /* user's line */
+  g.save();g.strokeStyle=col["--att"];g.lineWidth=2.6;g.beginPath();g.moveTo(PX(mark),top-4);g.lineTo(PX(mark),H-6);g.stroke();g.restore();
+  /* moving dot */
+  var tp=((tNow%P)+P)%P,dd=dAt(tp,shape);
+  g.save();g.fillStyle=col["--ink"];g.beginPath();g.arc(PX(tp),PY(dd),5,0,7);g.fill();g.restore();
+  /* pacer circle */
+  var pc=$("pc"),pf=fit(pc);
+  if(pf){var h=pf.g,r=26+36*dd,cx=pf.w/2,cy=pf.h/2;h.clearRect(0,0,pf.w,pf.h);
+    h.save();h.fillStyle=col["--obj"];h.globalAlpha=.25;h.beginPath();h.arc(cx,cy,r,0,7);h.fill();h.restore();
+    h.save();h.strokeStyle=col["--obj"];h.lineWidth=3;h.beginPath();h.arc(cx,cy,r,0,7);h.stroke();h.restore()}
+  var u=uAtT(tp),still=u<thr,going=dAt(tp+0.05,shape)>=dAt(tp-0.05,shape);
+  var wd=still?(dd>=0.5?"top of the breath":"bottom of the breath"):(going?"breathing in":"breathing out");
+  if($("pcWord").textContent!==wd)$("pcWord").textContent=wd;
+  var sb=still?"counts as still, at this threshold":"counts as moving";if($("pcSub").textContent!==sb)$("pcSub").textContent=sb;
+}
+window.__draw=function(){try{drawLab();drawBreath()}catch(e){}};
+function cmp(){
+  var out="";
+  [["strict",0.03],["ordinary",0.10],["generous",0.25]].forEach(function(p){
+    var s=stillStats(p[1]);
+    out+='<div class="box"><span class="eyebrow">'+p[0]+': '+Math.round(p[1]*100)+'%</span><b>'+f1(s.top)+' s still at the top</b><span class="cap">and '+f1(s.bot)+' s at the bottom</span></div>';
+  });
+  $("cmp").innerHTML=out;
+}
+function sayBreath(){
+  var s=stillStats(thr),u=uAtT(mark),pcnt=Math.round(u*100),h="";
+  h+='<p class="verdict">Your line, and the threshold’s line.</p>';
+  h+='<p>You put your line at '+f1(mark)+' s, where the breath is moving at '+pcnt+'% of its fastest. ';
+  if(s.start===null){h+='At this threshold nothing counts as still at the top.</p>'}
+  else{
+    var diff=mark-s.start;
+    h+='At '+Math.round(thr*100)+'%, the still stretch at the top starts at '+f1(s.start)+' s and lasts '+f1(s.top)+' s. ';
+    h+=(Math.abs(diff)<0.15?'Your line and the threshold agree here. Move the threshold, and they part.':'Your line is '+f1(Math.abs(diff))+' s '+(diff<0?'before':'after')+' it.')+'</p>';
+  }
+  h+='<p>Neither line is found in the breath. Each is chosen. Slow the threshold down or speed it up and the boundary moves smoothly with it, with no place where it clicks into position.</p>';
+  $("brMsg").innerHTML=h;
+}
+$("rMark").addEventListener("input",function(){mark=+this.value/100;drawBreath();sayBreath()});
+$("rThr").addEventListener("input",function(){thr=+this.value/100;drawBreath();sayBreath()});
+document.querySelectorAll("#br .chip[data-t]").forEach(function(b){b.addEventListener("click",function(){thr=+b.dataset.t/100;$("rThr").value=b.dataset.t;drawBreath();sayBreath()})});
+document.querySelectorAll("#shape button").forEach(function(b){b.addEventListener("click",function(){
+  shape=+b.dataset.s;document.querySelectorAll("#shape button").forEach(function(c){c.setAttribute("aria-pressed",c===b?"true":"false")});
+  prep();cmp();drawBreath();sayBreath();
+})});
+$("bPace").addEventListener("click",function(){pacing=!pacing;$("bPace").textContent=pacing?"Freeze the picture":"Run again"});
+var lb=0;
+function bloop(ts){if(pacing){tNow+=Math.min(0.1,(ts-lb)/1000);drawBreath()}lb=ts;requestAnimationFrame(bloop)}
+prep();cmp();sayBreath();
+if(RM){$("bPace").textContent="Run again";tNow=3.8}
+requestAnimationFrame(function(ts){lb=ts;bloop(ts)});
+window.__practice14.breath={stats:stillStats,setThr:function(v){thr=v}};
+
+/* nothing is scored, so there is no result to send; the host page is only told that the page is ready and how tall it is */
+var EMBED=/[?&]embed=1/.test(location.search);
+function send(m){if(EMBED){try{parent.postMessage(m,"*")}catch(e){}}}
+(function(){
+  var last=0;
+  function h(){var d=document.documentElement,b=document.body;var v=Math.ceil(Math.max(d.scrollHeight,b.scrollHeight,b.offsetHeight));if(v&&Math.abs(v-last)>1){last=v;send({type:"height",height:v})}}
+  window.addEventListener("load",h);window.addEventListener("resize",h);
+  if(window.ResizeObserver)new ResizeObserver(h).observe(document.body);
+  setInterval(h,700);h();
+})();
+send({type:"ready"});
+window.addEventListener("resize",function(){drawLab();drawBreath()});
+drawLab();meters();drawBreath();
+})();
+</script>
+</body></html>

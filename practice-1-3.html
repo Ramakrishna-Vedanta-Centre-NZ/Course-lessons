@@ -1,0 +1,502 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Practice: Lesson 1.3, What Is Missing?</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans:wght@400..700&family=Noto+Serif:ital,wght@0,400..700;1,400..700&display=swap">
+<style>
+:root{
+  --bg:#FBF5EA; --surface:#FFFDF8; --ink:#1E1E1E; --muted:#5A5A5A; --line:#E6DAC3; --tint:#F3EAD3; --navy:#12285A; --gold:#C9A24A; --goldt:#6B4E0E;
+  --obj:#0B8686; --att:#C95F06; --res:#2E3192; --env:#C0245B; --ok:#1B7A52;
+  --display:"Noto Serif",Georgia,"Times New Roman",serif;
+  --body:"Noto Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0B1A3D; --surface:#12285A; --ink:#FBF5EA; --muted:#C9C3B3; --line:#2B4686; --tint:#1D3770; --gold:#E6C36A; --goldt:#E6C36A;
+    --obj:#46CFC6; --att:#F5A04D; --res:#A3AAFF; --env:#FF7BA9; --ok:#5BD59B; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0B1A3D; --surface:#12285A; --ink:#FBF5EA; --muted:#C9C3B3; --line:#2B4686; --tint:#1D3770; --gold:#E6C36A; --goldt:#E6C36A;
+  --obj:#46CFC6; --att:#F5A04D; --res:#A3AAFF; --env:#FF7BA9; --ok:#5BD59B; color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;
+  padding-left:max(14px,env(safe-area-inset-left,0px));padding-right:max(14px,env(safe-area-inset-right,0px));padding-block:22px 40px}
+.wrap{max-width:900px;margin:0 auto;display:flex;flex-direction:column;gap:32px}
+h1,h2,h3{font-family:var(--display);font-weight:500;text-wrap:balance;margin:0;letter-spacing:-.01em}
+h1{font-size:clamp(30px,5.4vw,44px);line-height:1.06}
+h2{font-size:clamp(23px,3.4vw,29px);line-height:1.15}
+h3{font-size:19px;line-height:1.25}
+p{margin:0}
+sub{font-size:.72em;line-height:0}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.lede{font-size:17.5px;max-width:64ch}
+.intro{max-width:66ch;color:var(--muted)}
+header{display:flex;flex-direction:column;gap:12px}
+section{display:flex;flex-direction:column;gap:18px;min-width:0}
+.sym{font-family:var(--mono);font-size:.92em;white-space:nowrap}
+.k-obj{color:var(--obj)} .k-att{color:var(--att)} .k-res{color:var(--res)} .k-env{color:var(--env)}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px;display:flex;flex-direction:column;gap:14px;min-width:0}
+.bar{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;justify-content:space-between}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--bg)}
+.seg button{font:inherit;font-size:14px;color:var(--muted);background:transparent;border:0;padding:8px 13px;cursor:pointer}
+.seg button+button{border-left:1px solid var(--line)}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--surface)}
+button:focus-visible,input:focus-visible{outline:2px solid var(--res);outline-offset:2px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{font:inherit;font-size:14px;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:7px 13px;cursor:pointer;display:inline-flex;gap:8px;align-items:center}
+.chip i{font-style:normal;font-family:var(--mono);font-size:11px;color:var(--muted)}
+.chip[aria-pressed="true"]{background:var(--res);border-color:var(--res);color:#fff}
+.chip[aria-pressed="true"] i{color:#fff;opacity:.8}
+.chip:disabled{cursor:default}
+.chip.reached:not([aria-pressed="true"]){border-color:var(--res)}
+.btn{font:inherit;font-size:14px;color:var(--ink);background:var(--surface);border:1px solid var(--ink);border-radius:8px;padding:8px 16px;cursor:pointer}
+.btn.primary{background:var(--ink);color:var(--surface)}
+.btn.ghost{border-color:var(--line);color:var(--muted)}
+.scope-wrap{position:relative;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--bg)}
+canvas{display:block;width:100%}
+.playbtn{position:absolute;right:8px;bottom:8px;font:inherit;font-size:12px;background:var(--surface);color:var(--muted);border:1px solid var(--line);border-radius:6px;padding:4px 10px;cursor:pointer}
+.box{border:1px solid var(--line);border-radius:8px;background:var(--bg);padding:10px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.box .cap{font-size:12px;color:var(--muted)}
+.meters{display:flex;flex-direction:column;gap:9px}
+.meter{display:grid;grid-template-columns:1fr auto;gap:2px 8px;font-size:13px;align-items:baseline}
+.meter b{font-weight:600}
+.meter output{font-family:var(--mono);font-size:12px;color:var(--muted)}
+.meter .track{grid-column:1/-1;height:7px;background:var(--line);border-radius:4px;overflow:hidden}
+.meter .fill{height:100%;width:0;background:var(--res);border-radius:4px}
+.meter.f2 .fill{background:var(--env)} .meter.f3 .fill{background:var(--obj)}
+.slider{display:flex;align-items:center;gap:10px;flex:1 1 280px;min-width:0}
+.slider label{font-size:14px;min-width:0}
+.slider input[type=range]{flex:1;min-width:60px;accent-color:var(--res)}
+.slider small{color:var(--muted);font-size:12px;white-space:nowrap}
+.slider output{font-family:var(--mono);font-size:12.5px;color:var(--muted);min-width:46px;text-align:right}
+.readout{font-size:14px;color:var(--muted)}
+.readout b{color:var(--ink)}
+.tag{font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);border:1px solid var(--line);border-radius:4px;padding:2px 6px}
+.note{font-size:13px;color:var(--muted);max-width:70ch}
+.balance{background:var(--tint);border-radius:10px;padding:16px 18px;display:flex;flex-direction:column;gap:8px;max-width:78ch}
+footer{font-size:13px;color:var(--muted);max-width:76ch;border-top:1px solid var(--line);padding-top:12px}
+@media (max-width:640px){.panel{padding:12px}.wrap{gap:26px}}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
+
+[hidden]{display:none!important}
+nav.parts{display:flex;flex-wrap:wrap;gap:8px 20px;margin-top:4px}
+nav.parts a{color:var(--ink);text-decoration:none;border-bottom:1px solid var(--line);padding-bottom:2px;font-size:15px}
+nav.parts a:hover,nav.parts a:focus-visible{border-color:var(--res);color:var(--res)}
+.brandhdr{background:#12285A;color:#FBF5EA;text-align:center;padding:18px 18px 20px;border-radius:14px;display:flex;flex-direction:column;align-items:center;gap:6px}
+.brandhdr .logos{display:flex;align-items:center;justify-content:center;gap:18px}
+.brandhdr .logos img{width:56px;height:66px;object-fit:contain;display:block}
+.brandhdr .logos img.rit{width:86px;height:65px}
+.brandhdr .eyebrow{color:#E6C36A;font-weight:700;letter-spacing:3px}
+.brandhdr h1{color:#FBF5EA;font-weight:700}
+.brandhdr .course{color:#E6C36A;font-weight:600;font-size:14px}
+.brandhdr .lede{color:#F1ECDF;font-size:15.5px;max-width:62ch}
+.brandhdr .scorenote{color:#F1ECDF;font-size:14.5px}
+nav.parts a{color:var(--ink)}
+.brandhdr nav.parts a{color:#FBF5EA;border-bottom:1px solid #E6C36A;background:none;padding-bottom:2px}
+.brandhdr nav.parts a:hover,.brandhdr nav.parts a:focus-visible{color:#E6C36A;border-color:#E6C36A}
+.tag.scored{color:var(--goldt);border-color:var(--gold)}
+.scorebox{border-left:5px solid var(--gold);background:var(--tint);border-radius:10px;padding:12px 14px;margin-bottom:14px}
+.scorebox .big{font-family:var(--display);font-size:30px;line-height:1.1;color:var(--ink)}
+.scorebox .band{font-family:var(--display);font-size:18px;margin:4px 0}
+.scorebox .band.good{color:var(--ok)}
+.scorebox .saved{font-size:13.5px;color:var(--muted)}
+.scorebox ul{margin:6px 0 0;padding-left:20px}
+
+/* PRACTICE TEMPLATE: one coloured "part" per section (part-1 .. part-4) */
+.part{--pc:#0E7A8A;--pcon:#FFFFFF;--pcbg:#E6F2F3;border:2px solid var(--pc);border-radius:14px;overflow:hidden;background:var(--pcbg)}
+.part-1{--pc:#0E7A8A;--pcbg:#E6F2F3}
+.part-2{--pc:#12285A;--pcbg:#EEF0F8}
+.part-3{--pc:#2F6B3A;--pcbg:#E6F0E3}
+.part-4{--pc:#7A2A5E;--pcbg:#F5E6F0}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .part{--pcbg:#0F2250;border-color:var(--pcl,var(--pc))}
+ :root:not([data-theme="light"]) .part-1{--pcl:#46CFC6} :root:not([data-theme="light"]) .part-2{--pcl:#E6C36A} :root:not([data-theme="light"]) .part-3{--pcl:#7FD08C} :root:not([data-theme="light"]) .part-4{--pcl:#F08CC8}}
+:root[data-theme="dark"] .part{--pcbg:#0F2250;border-color:var(--pcl,var(--pc))}
+:root[data-theme="dark"] .part-1{--pcl:#46CFC6} :root[data-theme="dark"] .part-2{--pcl:#E6C36A} :root[data-theme="dark"] .part-3{--pcl:#7FD08C} :root[data-theme="dark"] .part-4{--pcl:#F08CC8}
+.part-band{background:var(--pc);color:var(--pcon);padding:12px 16px;display:flex;align-items:center;flex-wrap:wrap;gap:6px 14px}
+.part-band h2{color:inherit;font-size:clamp(20px,3.4vw,26px);font-weight:600;flex:1 1 220px}
+.part-num{font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;font-weight:500;background:rgba(255,255,255,.18);border-radius:4px;padding:3px 9px}
+.part-band .tag{color:inherit;border-color:currentColor;background:rgba(255,255,255,.12)}
+.part-2 .part-band .tag,.part-2 .part-num{color:#E6C36A}
+.part-body{padding:16px;display:flex;flex-direction:column;gap:14px}
+.part .panel{background:var(--surface)}
+@media (max-width:640px){.part-body{padding:12px}}
+.intro b{color:var(--ink);font-weight:600}
+.rows{display:flex;flex-direction:column;gap:12px}
+.row{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 16px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.row.done{border-color:var(--line)}
+.row .top{display:flex;flex-wrap:wrap;gap:6px 12px;align-items:baseline;justify-content:space-between}
+.row h3{font-size:20px}
+.row .desc{font-family:var(--display);font-size:17px;line-height:1.4;color:var(--ink)}
+.row .kind{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.row.final{border-left:3px solid var(--ok)}
+.row .chips .chip{min-height:40px}
+.row .chip.none{border-style:dashed}
+.row .chip.hit:disabled{border-color:var(--ok);color:var(--ink);background:color-mix(in srgb,var(--ok) 12%,var(--surface))}
+.row .chip.hit i{color:var(--ok)}
+.row .chip[aria-pressed="true"].hit{background:color-mix(in srgb,var(--ok) 12%,var(--surface));color:var(--ink);border-color:var(--ok)}
+.row .chip.off:disabled{opacity:.55}
+.fb{display:none;border-top:1px solid var(--line);padding-top:12px;font-size:15px;flex-direction:column;gap:8px}
+.fb.show{display:flex}
+.fb .verdict{font-family:var(--display);font-size:19px;line-height:1.35}
+.fb .quote{font-family:var(--display);font-style:italic;font-size:16.5px;border-left:3px solid var(--line);padding-left:12px;color:var(--ink)}
+.fb .ref{font-family:var(--mono);font-size:11px;color:var(--muted)}
+.fb .has{color:var(--muted);font-size:14px}
+.sumlist{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:8px}
+.choices{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.choice{font:inherit;text-align:left;border:1.5px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);padding:10px 12px;cursor:pointer;display:flex;flex-direction:column;gap:3px;min-width:0}
+.choice b{font-family:var(--display);font-size:18px;font-weight:500}
+.choice span{font-size:13px;color:var(--muted);line-height:1.35}
+.choice:disabled{cursor:default}
+.choice.pick{box-shadow:0 0 0 2px var(--ink)}
+.choice.right{border-color:var(--ok);background:color-mix(in srgb,var(--ok) 10%,var(--surface))}
+.case-text{font-family:var(--display);font-size:19px;line-height:1.45}
+#field{width:100%;height:auto;display:block;border:1px solid var(--line);border-radius:8px;background:var(--bg)}
+#field text{font-family:var(--body);font-size:16px;fill:var(--muted)}
+#field text.nm{font-family:var(--display);font-size:19px;fill:var(--ink)}
+#field .lane{fill:none;stroke-linecap:round;transition:stroke-width .5s}
+#field .edge{fill:none;stroke:var(--line);stroke-linecap:round;transition:stroke-width .5s}
+.walk{display:flex;flex-wrap:wrap;gap:10px}
+.walk .btn{display:flex;flex-direction:column;align-items:flex-start;gap:1px;padding:9px 16px;text-align:left}
+.walk .btn span{font-size:12.5px;color:var(--muted)}
+.walk .btn b{font-weight:600}
+.g-read{min-height:3.2em;color:var(--ink)}
+@media (max-width:640px){.choices{grid-template-columns:minmax(0,1fr)}.row{padding:12px}}
+@media (prefers-reduced-motion: reduce){#field .lane,#field .edge{transition:none}}
+body[data-part="1"] #s2,body[data-part="1"] footer,
+body[data-part="2"] #s1{display:none}
+body[data-part]{padding-block:10px 18px}
+
+body[data-part] header{display:none}
+body[data-part="1"] #s2,body[data-part="2"] #s1{display:none}
+body[data-part]{padding-block:10px 18px}
+.tag.scored{color:inherit}
+.part .scorebox{margin-bottom:0}
+</style></head><body>
+<div class="wrap">
+<header class="brandhdr">
+  <div class="logos"><img src="vedantanz-logo.png" alt="Ramakrishna Vedanta NZ emblem" width="56" height="66"><img class="rit" src="ritam-wordmark.png" alt="Ritam" width="86" height="65"></div>
+  <div class="eyebrow">Practice · Lesson 1.3</div>
+  <h1>What Is Missing?</h1>
+  <p class="course">The Mind in the Light of Modern and Spiritual Sciences · Advanced</p>
+  <p class="lede">Lesson 1.3 says awareness is luminous and alive, and that the two cannot be separated. Here you will test that by prediction. First, for six things, decide what is absent and see how the lesson answers. Then compare two pictures of the mind: one that only records, and one that is living and self-shaping.</p>
+  <p class="scorenote"><b>Part I</b> is scored: your first check on each of the six cases counts. <b>Part II</b> is practice and is not scored.</p>
+  <nav class="parts" aria-label="Parts of this page"><a href="#s1">I. What is missing?</a><a href="#s2">II. Grooves</a></nav>
+</header>
+
+<section id="s1" class="part part-1">
+  <div class="part-band"><span class="part-num">Part I</span><h2>What is missing?</h2><span class="tag scored">Scored: first pick counts</span></div>
+  <div class="part-body">
+  <p class="intro">Three things are in play: <b>it reveals</b>, <b>it knows it reveals</b>, and <b>it is felt as presence</b>. For each case below, mark what you think is absent. You may mark more than one, or choose that nothing is missing. Then check, and the lesson answers in its own words. Your first check on each case is the one that counts.</p>
+  <div id="rows" class="rows"></div>
+  <div id="sum" class="panel" hidden>
+    <div class="scorebox" id="scBox" aria-live="polite"></div>
+    <h3>What the six show</h3>
+    <ul class="sumlist">
+      <li>A mirror, a screen and a camera each do something: reflect, display, record. Each lacks something the lesson names (§3).</li>
+      <li>Take away the knowing, and light that reveals is “a mechanical process”. Take away the revealing, and self-presence is “a closed point without content” (§4).</li>
+      <li>Awareness is both at once: “It illuminates, and it knows itself as illuminating” (§4). The light is Prakāśa, the living self-presence is Vimarśa, and the course names the one Reality Consciousness-Energy (§5).</li>
+      <li>They are not “two stages joined together” but “two aspects of one indivisible Reality”, as warmth and brightness are inseparable in a flame (§4).</li>
+    </ul>
+    <div class="bar"><button class="btn ghost" id="sAgain">Start Part I again</button></div>
+    <p class="note">This page illustrates an argument, and it speaks only of the lesson’s own examples. The discovery itself is in the two notices of §8: that whatever is present is being known, and that you are here.</p>
+  </div>
+  </div>
+</section>
+
+<section id="s2" class="part part-2">
+  <div class="part-band"><span class="part-num">Part II</span><h2>Grooves</h2><span class="tag">Practice: not scored</span></div>
+  <div class="part-body">
+  <p class="intro">Lesson 1.3 sets two pictures of the mind side by side (§7). In the first, the mind is a recording device. In the second, it is a living, self-modifying system. Try the same simple actions in each and watch what changes, and what does not.</p>
+  <div class="panel">
+    <div class="bar">
+      <div class="seg" id="gmSeg" role="group" aria-label="Picture of the mind">
+        <button data-m="rec" aria-pressed="true">A recording device</button>
+        <button data-m="liv" aria-pressed="false">A living, self-modifying system</button>
+      </div>
+      <button class="btn ghost" id="gReset">Start again</button>
+    </div>
+    <p class="note" id="gDef"></p>
+    <svg id="field" viewBox="0 0 700 270" role="img" aria-labelledby="fT fD"><title id="fT">Two paths through a moment</title><desc id="fD">A moment arises on the left and carries on to the right by one of two paths. Path A is the familiar, already worn way. Path B is a different way.</desc></svg>
+    <div class="walk">
+      <button class="btn" id="wA"><b>Take path A</b><span>the familiar, worn way</span></button>
+      <button class="btn" id="wB"><b>Take path B</b><span>a different way</span></button>
+    </div>
+    <p class="readout g-read" id="gRead" role="status" aria-live="polite"></p>
+  </div>
+  <div class="panel" id="gq">
+    <h3>Which picture is this?</h3>
+    <p class="case-text">Someone says: “These patterns were deposited in me, and the task is to get them out.” Which picture of the mind is that, according to §7?</p>
+    <div class="choices two-col" id="gqChoices">
+      <button class="choice" data-k="rec"><b>The recording device</b><span>Experiences happen to the mind and are stored.</span></button>
+      <button class="choice" data-k="liv"><b>The living, self-modifying system</b><span>The mind actively shapes and sustains its patterns.</span></button>
+    </div>
+    <div class="fb" id="gqFb" role="status" aria-live="polite"></div>
+  </div>
+  <div class="balance">
+    <h3>Hold it lightly</h3>
+    <p>This is a picture of what the lesson claims, not a measurement. It has no timelines and says nothing about how long any change takes. The lesson also says its convergence with neuroscience “is not proof of the spiritual teaching”: contemplative inquiry from the inside and research from the outside illuminate each other “without reducing to each other” (§6).</p>
+  </div>
+  </div>
+</section>
+<footer>Part I is scored, and only to show you where to look again. Part II is practice and is not scored. Based on Lesson 1.3. This page illustrates a teaching and does not diagnose or advise on any person's situation. For help with distress, please speak with a qualified professional or someone you trust.<br>Ritam · Ramakrishna Vedanta Centre NZ · <a href="https://www.vedanta.nz">www.vedanta.nz</a> Privacy: when you are signed in, your name, email, answers and score are saved to your member record. Only you and the course instructors can see them. They are not shared or ranked.</footer>
+</div>
+
+<script>
+(function(){
+"use strict";
+var $=function(id){return document.getElementById(id)};
+try{var q=new URLSearchParams(location.search).get("theme");if(q==="light"||q==="dark")document.documentElement.setAttribute("data-theme",q)}catch(e){}
+try{var pt=new URLSearchParams(location.search).get("part");if(pt==="1"||pt==="2")document.body.setAttribute("data-part",pt)}catch(e){}
+function mk(tag,cls,html){var e=document.createElement(tag);if(cls)e.className=cls;if(html!=null)e.innerHTML=html;return e}
+var reduce=false;try{reduce=window.matchMedia("(prefers-reduced-motion: reduce)").matches}catch(e){}
+var Core=(function(){
+  var col={},subs=[];
+  function readColors(){var cs=getComputedStyle(document.documentElement);["--bg","--surface","--ink","--muted","--line","--obj","--att","--res","--env","--ok"].forEach(function(k){col[k]=cs.getPropertyValue(k).trim()});subs.forEach(function(f){try{f()}catch(e){}})}
+  readColors();
+  try{window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change",readColors)}catch(e){}
+  new MutationObserver(readColors).observe(document.documentElement,{attributes:true,attributeFilter:["data-theme"]});
+  return {col:col,onTheme:function(f){subs.push(f)}};
+})();
+var EMBED=/[?&]embed=1/.test(location.search);
+var META={code:"ADV-P-1-3",title:"Practice: Lesson 1.3, What Is Missing? (Part I)",programme:"The Mind in the Light of Modern and Spiritual Sciences (Advanced)",cut:75};
+function send(m){if(EMBED){try{parent.postMessage(m,"*")}catch(e){}}}
+
+/* ---------- Part I (scored: first check counts) ---------- */
+var T={rev:"It reveals",kno:"It knows it reveals",fel:"It is felt as presence"};
+var KEYS=["rev","kno","fel"];
+var NAMES={rev:"that it reveals",kno:"that it knows it reveals",fel:"that it is felt as presence"};
+/* need: marks the lesson names (all required). any: at least one of these is required (camera).
+   ok: further marks that are in the lesson's wording and are not counted against you. */
+var ROWS=[
+ {n:"A mirror",kind:"Device",d:"A mirror reflects whatever is placed before it.",need:["kno"],any:null,ok:["fel"],none:false,
+  has:"It does reflect what is put before it.",q:"the mirror does not know that it is reflecting.",ref:"§3",
+  v:"The lesson names the knowing as absent."},
+ {n:"A screen",kind:"Device",d:"A screen displays whatever image is projected on it.",need:["fel"],any:null,ok:["kno"],none:false,
+  has:"It does display what is projected on it.",q:"the screen has no felt presence of its own.",ref:"§3",
+  v:"The lesson names felt presence as absent."},
+ {n:"A camera",kind:"Device",d:"A camera records.",need:[],any:["kno","fel"],ok:["kno","fel"],none:false,
+  has:"It does record.",q:"the camera does not experience.",ref:"§3",
+  v:"The lesson says “does not experience”. Of your three, the nearest are felt presence and knowing that it reveals, and either counts here."},
+ {n:"Light that reveals, known by no one",kind:"Thought experiment",d:"Imagine awareness that is purely luminous, with no self-presence. There would be illumination, but no one knowing the illumination.",need:["kno"],any:null,ok:["fel"],none:false,
+  has:"The revealing is there.",q:"Light that revealed without being known to reveal would not be awareness at all; it would be a mechanical process.",ref:"§4",
+  v:"The lesson names the knowing as absent. The self-presence is absent too, since the case is “purely luminous but with no self-presence”."},
+ {n:"Self-presence with nothing to be present to",kind:"Thought experiment",d:"Imagine awareness that is purely self-aware, with no illumination. There would be a felt sense of being present, but nothing would appear.",need:["rev"],any:null,ok:[],none:false,
+  has:"The felt presence is there, and so is the self-awareness.",q:"Self-presence without something to be present to would not be awareness; it would be a closed point without content.",ref:"§4",
+  v:"The lesson names the revealing as absent: “nothing would appear, nothing would be known”."},
+ {n:"Awareness, as you examined it",kind:"The lesson's subject",d:"The awareness in which experience appears, as examined in Sections 2 and 3.",need:[],any:null,ok:[],none:true,
+  has:"",q:"It illuminates, and it knows itself as illuminating. It reveals, and it lives in its own revealing.",ref:"§4",
+  v:"Nothing is missing. This is Prakāśa and Vimarśa together, the one Reality the course calls Consciousness-Energy (§5)."}
+];
+var rowsEl=$("rows"),doneN=0,results=[],sent=false;
+function has(a,k){return a.indexOf(k)>=0}
+function list(a){return a.map(function(k){return NAMES[k]}).join(" and ")}
+function judge(r,s,noneSel){
+  if(r.none)return noneSel;
+  if(noneSel)return false;
+  var allowed=r.need.concat(r.ok),i;
+  for(i=0;i<r.need.length;i++)if(!has(s,r.need[i]))return false;
+  if(r.any){var any=false;for(i=0;i<r.any.length;i++)if(has(s,r.any[i]))any=true;if(!any)return false}
+  for(i=0;i<s.length;i++)if(!has(allowed,s[i]))return false;
+  return true;
+}
+function named(r){return r.any?"that it knows it reveals, or that it is felt as presence":list(r.need)}
+function buildRows(){
+  rowsEl.innerHTML="";doneN=0;results=[];sent=false;
+  $("sum").hidden=true;$("scBox").innerHTML="";
+  ROWS.forEach(function(r,i){
+    var art=mk("article","row"+(i===5?" final":""));
+    var top=mk("div","top");top.appendChild(mk("h3",null,r.n));top.appendChild(mk("span","kind",r.kind));art.appendChild(top);
+    art.appendChild(mk("p","desc",r.d));
+    var grp=mk("div","chips");grp.setAttribute("role","group");grp.setAttribute("aria-label","What is absent from "+r.n.toLowerCase()+"?");
+    var chips={};
+    KEYS.forEach(function(k){
+      var c=mk("button","chip",T[k]+" <i>absent?</i>");c.type="button";c.setAttribute("aria-pressed","false");c.setAttribute("data-k",k);
+      c.addEventListener("click",function(){
+        var on=c.getAttribute("aria-pressed")!=="true";c.setAttribute("aria-pressed",on?"true":"false");
+        if(on)chips.none.setAttribute("aria-pressed","false");upd()});
+      chips[k]=c;grp.appendChild(c)});
+    var none=mk("button","chip none","Nothing is missing");none.type="button";none.setAttribute("aria-pressed","false");
+    none.addEventListener("click",function(){
+      var on=none.getAttribute("aria-pressed")!=="true";none.setAttribute("aria-pressed",on?"true":"false");
+      if(on)KEYS.forEach(function(k){chips[k].setAttribute("aria-pressed","false")});upd()});
+    chips.none=none;grp.appendChild(none);art.appendChild(grp);
+    var bar=mk("div","bar");var chk=mk("button","btn primary","Check my prediction");chk.type="button";chk.disabled=true;bar.appendChild(chk);art.appendChild(bar);
+    var fb=mk("div","fb");fb.setAttribute("role","status");fb.setAttribute("aria-live","polite");art.appendChild(fb);
+    function sel(){var s=[];KEYS.forEach(function(k){if(chips[k].getAttribute("aria-pressed")==="true")s.push(k)});return s}
+    function anyMark(){return sel().length>0||none.getAttribute("aria-pressed")==="true"}
+    function upd(){chk.disabled=!anyMark()}
+    chk.addEventListener("click",function(){
+      var s=sel(),noneSel=none.getAttribute("aria-pressed")==="true",v;
+      var ok=judge(r,s,noneSel);
+      var allowed=r.need.concat(r.ok);
+      var outside=s.filter(function(k){return !has(allowed,k)});
+      var added=s.filter(function(k){return !has(r.need,k)&&has(r.ok,k)});
+      if(r.none){
+        v=noneSel?"That matches the lesson.":"The lesson finds nothing missing here.";
+      }else if(noneSel){
+        v="You chose that nothing is missing. The lesson names "+named(r)+" as absent.";
+      }else if(ok){
+        v="That matches the lesson."+(added.length&&!r.any?" You also marked "+list(added)+"; the lesson does not say that here, so treat it as your own addition. It is not counted against you.":"");
+      }else{
+        v="The lesson names "+named(r)+" as absent here."+(outside.length?" You also marked "+list(outside)+"; the lesson does not say that here.":"");
+      }
+      var shown=noneSel?"Nothing is missing":(s.map(function(k){return T[k]}).join(" + "));
+      results[i]={ok:ok,given:shown+(ok?" (first check)":" (first check, not matching)")+": "+r.n};
+      fb.innerHTML="";
+      fb.appendChild(mk("p","verdict",v));
+      fb.appendChild(mk("p","quote","“"+r.q+"” <span class=\"ref\">"+r.ref+"</span>"));
+      fb.appendChild(mk("p",null,r.v));
+      if(r.has)fb.appendChild(mk("p","has",r.has));
+      fb.classList.add("show");
+      KEYS.forEach(function(k){var c=chips[k];c.disabled=true;if(has(r.need,k)||(r.any&&has(r.any,k)))c.classList.add("hit");else if(c.getAttribute("aria-pressed")!=="true")c.classList.add("off")});
+      none.disabled=true;if(r.none)none.classList.add("hit");
+      chk.hidden=true;art.classList.add("done");
+      doneN++;if(doneN===ROWS.length){finish()}
+    });
+    rowsEl.appendChild(art);
+  });
+}
+function finish(){
+  $("sum").hidden=false;
+  if(sent)return;
+  var n=ROWS.length,right=0,wrong=[],ans=[];
+  results.forEach(function(x,k){if(x.ok)right++;else wrong.push(k);ans.push({q:k+1,ok:x.ok,given:x.given})});
+  var pct=Math.round(100*right/n),good=pct>=META.cut;
+  var h='<div class="big">'+right+' of '+n+' on the first check</div>'+
+        '<p class="band '+(good?'good':'')+'">'+(good?'Well grasped':'Revisit these ideas')+'</p>';
+  if(wrong.length){h+='<p>Look again at §3 and §4 for:</p><ul>'+wrong.map(function(k){return '<li>'+ROWS[k].n+'</li>'}).join('')+'</ul>'}
+  else{h+='<p>Nothing to revisit here.</p>'}
+  h+='<p class="saved" id="scSaved">'+(EMBED?'Saving your result…':'Sign in on the course page to have your result saved.')+'</p>';
+  $("scBox").innerHTML=h;sent=true;
+  send({type:"quizResult",code:META.code,title:META.title,programme:META.programme,score:right,maxScore:n,percent:pct,questionsCorrect:right,questionCount:n,answers:ans});
+}
+$("sAgain").addEventListener("click",function(){buildRows();try{$("s1").scrollIntoView({behavior:reduce?"auto":"smooth",block:"start"})}catch(e){}});
+buildRows();
+window.addEventListener("message",function(e){
+  var d=e.data||{};if(!d||typeof d!=="object"){return}
+  var el=$("scSaved");if(!el){return}
+  if(d.type==="saved"){el.textContent="Your result has been saved to your member record."}
+  else if(d.type==="saveError"){el.textContent="Your result could not be saved this time. You can start again and finish once more."}
+  else if(d.type==="notMember"){el.textContent="Sign in as a member to have your result saved."}
+});
+send({type:"ready"});
+(function(){
+  var last=0;
+  function h(){var d=document.documentElement,b=document.body;var v=Math.ceil(Math.max(d.scrollHeight,b.scrollHeight,b.offsetHeight));if(v&&Math.abs(v-last)>1){last=v;send({type:"height",height:v})}}
+  window.addEventListener("load",h);window.addEventListener("resize",h);
+  if(window.ResizeObserver)new ResizeObserver(h).observe(document.body);
+  setInterval(h,700);h();
+})();
+
+/* ---------- Part II ---------- */
+var NS="http://www.w3.org/2000/svg";
+var fld=$("field");
+function s(tag,at,txt){var e=document.createElementNS(NS,tag);for(var k in at)e.setAttribute(k,at[k]);if(txt!=null)e.textContent=txt;return e}
+var PA="M150 135 C 250 40, 450 40, 550 135",PB="M150 135 C 250 230, 450 230, 550 135";
+var WID=[2,6,11,17],LAB=["barely marked","lightly worn","worn","deeply worn"];
+var laneA,laneB,edgeA,edgeB,labA,labB,store,dot,pathA,pathB;
+function build(){
+  fld.innerHTML="";
+  fld.appendChild(s("path",{d:PA,"class":"edge",id:"eA","stroke-width":8}));fld.appendChild(s("path",{d:PB,"class":"edge",id:"eB","stroke-width":8}));
+  edgeA=fld.lastChild.previousSibling;edgeB=fld.lastChild;
+  laneA=s("path",{d:PA,"class":"lane",stroke:Core.col["--env"],"stroke-width":3});laneB=s("path",{d:PB,"class":"lane",stroke:Core.col["--obj"],"stroke-width":3});
+  fld.appendChild(laneA);fld.appendChild(laneB);pathA=laneA;pathB=laneB;
+  fld.appendChild(s("circle",{cx:150,cy:135,r:9,fill:Core.col["--ink"]}));
+  fld.appendChild(s("circle",{cx:550,cy:135,r:9,fill:"none",stroke:Core.col["--ink"],"stroke-width":2}));
+  ["A moment","arises"].forEach(function(w,i){fld.appendChild(s("text",{x:132,y:132+i*19,"text-anchor":"end","class":"nm"},w))});
+  ["The next","moment"].forEach(function(w,i){fld.appendChild(s("text",{x:568,y:132+i*19,"text-anchor":"start","class":"nm"},w))});
+  fld.appendChild(s("text",{x:350,y:30,"text-anchor":"middle"},"Path A (the familiar way)"));
+  fld.appendChild(s("text",{x:350,y:262,"text-anchor":"middle"},"Path B (a different way)"));
+  labA=s("text",{x:350,y:112,"text-anchor":"middle","class":"nm"},"");labB=s("text",{x:350,y:168,"text-anchor":"middle","class":"nm"},"");
+  fld.appendChild(labA);fld.appendChild(labB);
+  store=s("g",{});fld.appendChild(store);
+  dot=s("circle",{r:7,fill:Core.col["--att"],opacity:0,stroke:Core.col["--surface"],"stroke-width":2});fld.appendChild(dot);
+}
+var mode="rec";
+var st={rec:{A:4,B:0},liv:{A:3,B:0}};
+var DEF={
+ rec:"The mind is a recording device. Experiences happen to it, it stores them, and over time patterns harden. Suffering is something deposited in the system (§7).",
+ liv:"The mind is a living, self-modifying system. It is “actively constructing, interpreting, reinforcing, and shaping moment by moment”. A pattern is an ongoing process that the system continues to sustain (§7)."
+};
+var READ0={
+ rec:"Take a path and see what is stored. The paths themselves stay as they were.",
+ liv:"Take a path and see what the use does to it."
+};
+function draw(){
+  var c=st[mode];
+  if(mode==="liv"){
+    laneA.setAttribute("stroke-width",WID[c.A]);laneB.setAttribute("stroke-width",WID[c.B]);
+    edgeA.setAttribute("stroke-width",WID[c.A]+7);edgeB.setAttribute("stroke-width",WID[c.B]+7);
+    labA.textContent=LAB[c.A];labB.textContent=LAB[c.B];
+    store.innerHTML="";
+  }else{
+    laneA.setAttribute("stroke-width",3);laneB.setAttribute("stroke-width",3);
+    edgeA.setAttribute("stroke-width",8);edgeB.setAttribute("stroke-width",8);
+    labA.textContent="";labB.textContent="";
+    store.innerHTML="";
+    [["A",c.A,Core.col["--env"],86],["B",c.B,Core.col["--obj"],150]].forEach(function(p){
+      var n=Math.min(p[1],14);
+      for(var i=0;i<n;i++){
+        var cx=262+(i%7)*26,cy=p[3]+(i<7?0:19);
+        store.appendChild(s("rect",{x:cx,y:cy,width:18,height:14,rx:3,fill:p[2],opacity:.85}));
+      }
+      if(n)store.appendChild(s("text",{x:252,y:p[3]+12,"text-anchor":"end"},"stored"));
+    });
+  }
+}
+function setMode(m){
+  mode=m;
+  Array.prototype.forEach.call($("gmSeg").children,function(b){b.setAttribute("aria-pressed",b.getAttribute("data-m")===m?"true":"false")});
+  $("gDef").textContent=DEF[m];$("gRead").textContent=READ0[m];draw();
+}
+function msg(k){
+  var c=st[mode],t;
+  if(mode==="rec"){
+    t=k==="A"?"Another moment by the familiar path is stored. The path itself is unchanged. On this picture, the question is how to extract what was deposited or work around it (§7)."
+              :"The moment by a different path is stored too. Nothing about the paths has changed, and nothing here shapes what happens next (§7).";
+  }else if(k==="A"){
+    t=c.A>=3?"The familiar path is already deeply worn, and use keeps it so. “A person who repeatedly rehearses worry strengthens the neural circuits that generate worry” (§7)."
+            :"Use wears the path deeper (§7).";
+  }else{
+    t=c.B>=c.A?"Now there are two worn paths. Nothing was removed: “the same expressive power that wore them can wear different grooves” (§7)."
+              :"A different path, taken again, begins to wear its own groove: “the same self-modifying power that built them can build differently” (§7).";
+  }
+  $("gRead").textContent=t;
+}
+function walk(k){
+  var c=st[mode];
+  if(mode==="liv")c[k]=Math.min(3,c[k]+1);else c[k]=Math.min(14,c[k]+1);
+  var path=k==="A"?pathA:pathB;
+  function fin(){dot.setAttribute("opacity",0);draw();msg(k)}
+  if(reduce||!path.getTotalLength){fin();return}
+  var L=path.getTotalLength(),t0=null,D=800;
+  dot.setAttribute("opacity",1);
+  function step(ts){if(t0==null)t0=ts;var p=Math.min(1,(ts-t0)/D),pt=path.getPointAtLength(L*p);dot.setAttribute("cx",pt.x);dot.setAttribute("cy",pt.y);if(p<1)requestAnimationFrame(step);else fin()}
+  requestAnimationFrame(step);
+}
+Array.prototype.forEach.call($("gmSeg").children,function(b){b.addEventListener("click",function(){setMode(b.getAttribute("data-m"))})});
+$("wA").addEventListener("click",function(){walk("A")});
+$("wB").addEventListener("click",function(){walk("B")});
+$("gReset").addEventListener("click",function(){st={rec:{A:4,B:0},liv:{A:3,B:0}};setMode(mode)});
+build();setMode("rec");
+Core.onTheme(function(){var m=mode;build();setMode(m)});
+
+/* question */
+var gq=$("gqChoices"),gqFb=$("gqFb");
+Array.prototype.forEach.call(gq.children,function(b){b.addEventListener("click",function(){
+  var k=b.getAttribute("data-k");
+  Array.prototype.forEach.call(gq.children,function(x){x.disabled=true;if(x.getAttribute("data-k")==="rec")x.classList.add("right")});
+  b.classList.add("pick");
+  gqFb.innerHTML="";
+  gqFb.appendChild(mk("p","verdict",k==="rec"?"Yes, that is the recording picture.":"That is the first picture, the recording device."));
+  gqFb.appendChild(mk("p","quote","“On this picture, suffering is something that has been deposited in the system, and the question is how to extract it or work around it.” <span class=\"ref\">§7</span>"));
+  gqFb.appendChild(mk("p",null,"The second picture sees the same patterns as “ongoing processes that the system continues to sustain”, and so as something that “can be reshaped”. This is a description of two pictures, not a judgement of anyone who speaks in the first."));
+  gqFb.classList.add("show");
+})});
+})();
+</script>
+</body></html>

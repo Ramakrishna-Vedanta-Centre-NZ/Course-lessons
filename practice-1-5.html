@@ -1,0 +1,418 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Practice: Lesson 1.5, How the One Becomes the Many</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans:wght@400..700&family=Noto+Serif:ital,wght@0,400..700;1,400..700&display=swap">
+<style>
+:root{
+  --bg:#FBF5EA; --surface:#FFFDF8; --ink:#1E1E1E; --muted:#5A5A5A; --line:#E6DAC3; --tint:#F3EAD3; --navy:#12285A; --gold:#C9A24A; --goldt:#6B4E0E;
+  --obj:#0B8686; --att:#C95F06; --res:#2E3192; --env:#C0245B; --ok:#1B7A52;
+  --display:"Noto Serif",Georgia,"Times New Roman",serif;
+  --body:"Noto Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0B1A3D; --surface:#12285A; --ink:#FBF5EA; --muted:#C9C3B3; --line:#2B4686; --tint:#1D3770; --gold:#E6C36A; --goldt:#E6C36A;
+    --obj:#46CFC6; --att:#F5A04D; --res:#A3AAFF; --env:#FF7BA9; --ok:#5BD59B; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0B1A3D; --surface:#12285A; --ink:#FBF5EA; --muted:#C9C3B3; --line:#2B4686; --tint:#1D3770; --gold:#E6C36A; --goldt:#E6C36A;
+  --obj:#46CFC6; --att:#F5A04D; --res:#A3AAFF; --env:#FF7BA9; --ok:#5BD59B; color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;
+  padding-left:max(14px,env(safe-area-inset-left,0px));padding-right:max(14px,env(safe-area-inset-right,0px));padding-block:22px 40px}
+.wrap{max-width:900px;margin:0 auto;display:flex;flex-direction:column;gap:32px}
+h1,h2,h3{font-family:var(--display);font-weight:500;text-wrap:balance;margin:0;letter-spacing:-.01em}
+h1{font-size:clamp(30px,5.4vw,44px);line-height:1.06}
+h2{font-size:clamp(23px,3.4vw,29px);line-height:1.15}
+h3{font-size:19px;line-height:1.25}
+p{margin:0}
+sub{font-size:.72em;line-height:0}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.lede{font-size:17.5px;max-width:64ch}
+.intro{max-width:66ch;color:var(--muted)}
+header{display:flex;flex-direction:column;gap:12px}
+section{display:flex;flex-direction:column;gap:18px;min-width:0}
+.sym{font-family:var(--mono);font-size:.92em;white-space:nowrap}
+.k-obj{color:var(--obj)} .k-att{color:var(--att)} .k-res{color:var(--res)} .k-env{color:var(--env)}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px;display:flex;flex-direction:column;gap:14px;min-width:0}
+.bar{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;justify-content:space-between}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--bg)}
+.seg button{font:inherit;font-size:14px;color:var(--muted);background:transparent;border:0;padding:8px 13px;cursor:pointer}
+.seg button+button{border-left:1px solid var(--line)}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--surface)}
+button:focus-visible,input:focus-visible{outline:2px solid var(--res);outline-offset:2px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{font:inherit;font-size:14px;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:7px 13px;cursor:pointer;display:inline-flex;gap:8px;align-items:center}
+.chip i{font-style:normal;font-family:var(--mono);font-size:11px;color:var(--muted)}
+.chip[aria-pressed="true"]{background:var(--res);border-color:var(--res);color:#fff}
+.chip[aria-pressed="true"] i{color:#fff;opacity:.8}
+.chip:disabled{cursor:default}
+.chip.reached:not([aria-pressed="true"]){border-color:var(--res)}
+.btn{font:inherit;font-size:14px;color:var(--ink);background:var(--surface);border:1px solid var(--ink);border-radius:8px;padding:8px 16px;cursor:pointer}
+.btn.primary{background:var(--ink);color:var(--surface)}
+.btn.ghost{border-color:var(--line);color:var(--muted)}
+.scope-wrap{position:relative;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--bg)}
+canvas{display:block;width:100%}
+.playbtn{position:absolute;right:8px;bottom:8px;font:inherit;font-size:12px;background:var(--surface);color:var(--muted);border:1px solid var(--line);border-radius:6px;padding:4px 10px;cursor:pointer}
+.box{border:1px solid var(--line);border-radius:8px;background:var(--bg);padding:10px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.box .cap{font-size:12px;color:var(--muted)}
+.meters{display:flex;flex-direction:column;gap:9px}
+.meter{display:grid;grid-template-columns:1fr auto;gap:2px 8px;font-size:13px;align-items:baseline}
+.meter b{font-weight:600}
+.meter output{font-family:var(--mono);font-size:12px;color:var(--muted)}
+.meter .track{grid-column:1/-1;height:7px;background:var(--line);border-radius:4px;overflow:hidden}
+.meter .fill{height:100%;width:0;background:var(--res);border-radius:4px}
+.meter.f2 .fill{background:var(--env)} .meter.f3 .fill{background:var(--obj)}
+.slider{display:flex;align-items:center;gap:10px;flex:1 1 280px;min-width:0}
+.slider label{font-size:14px;min-width:0}
+.slider input[type=range]{flex:1;min-width:60px;accent-color:var(--res)}
+.slider small{color:var(--muted);font-size:12px;white-space:nowrap}
+.slider output{font-family:var(--mono);font-size:12.5px;color:var(--muted);min-width:46px;text-align:right}
+.readout{font-size:14px;color:var(--muted)}
+.readout b{color:var(--ink)}
+.tag{font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);border:1px solid var(--line);border-radius:4px;padding:2px 6px}
+.note{font-size:13px;color:var(--muted);max-width:70ch}
+.balance{background:var(--tint);border-radius:10px;padding:16px 18px;display:flex;flex-direction:column;gap:8px;max-width:78ch}
+footer{font-size:13px;color:var(--muted);max-width:76ch;border-top:1px solid var(--line);padding-top:12px}
+@media (max-width:640px){.panel{padding:12px}.wrap{gap:26px}}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
+
+[hidden]{display:none!important}
+.brandhdr{background:#12285A;color:#FBF5EA;text-align:center;padding:18px 18px 20px;border-radius:14px;display:flex;flex-direction:column;align-items:center;gap:6px}
+.brandhdr .logos{display:flex;align-items:center;justify-content:center;gap:18px}
+.brandhdr .logos img{width:56px;height:66px;object-fit:contain;display:block}
+.brandhdr .logos img.rit{width:86px;height:65px}
+.brandhdr .eyebrow{color:#E6C36A;font-weight:700;letter-spacing:3px}
+.brandhdr h1{color:#FBF5EA;font-weight:700}
+.brandhdr .course{color:#E6C36A;font-weight:600;font-size:14px}
+.brandhdr .lede{color:#F1ECDF;font-size:15.5px;max-width:62ch}
+.brandhdr .scorenote{color:#F1ECDF;font-size:14.5px}
+nav.parts a{color:var(--ink)}
+.brandhdr nav.parts a{color:#FBF5EA;border-bottom:1px solid #E6C36A;background:none;padding-bottom:2px}
+.brandhdr nav.parts a:hover,.brandhdr nav.parts a:focus-visible{color:#E6C36A;border-color:#E6C36A}
+.tag.scored{color:var(--goldt);border-color:var(--gold)}
+.scorebox{border-left:5px solid var(--gold);background:var(--tint);border-radius:10px;padding:12px 14px;margin-bottom:14px}
+.scorebox .big{font-family:var(--display);font-size:30px;line-height:1.1;color:var(--ink)}
+.scorebox .band{font-family:var(--display);font-size:18px;margin:4px 0}
+.scorebox .band.good{color:var(--ok)}
+.scorebox .saved{font-size:13.5px;color:var(--muted)}
+.scorebox ul{margin:6px 0 0;padding-left:20px}
+
+/* PRACTICE TEMPLATE: one coloured "part" per section (part-1 .. part-4) */
+.part{--pc:#0E7A8A;--pcon:#FFFFFF;--pcbg:#E6F2F3;border:2px solid var(--pc);border-radius:14px;overflow:hidden;background:var(--pcbg)}
+.part-1{--pc:#0E7A8A;--pcbg:#E6F2F3}
+.part-2{--pc:#12285A;--pcbg:#EEF0F8}
+.part-3{--pc:#2F6B3A;--pcbg:#E6F0E3}
+.part-4{--pc:#7A2A5E;--pcbg:#F5E6F0}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .part{--pcbg:#0F2250;border-color:var(--pcl,var(--pc))}
+ :root:not([data-theme="light"]) .part-1{--pcl:#46CFC6} :root:not([data-theme="light"]) .part-2{--pcl:#E6C36A} :root:not([data-theme="light"]) .part-3{--pcl:#7FD08C} :root:not([data-theme="light"]) .part-4{--pcl:#F08CC8}}
+:root[data-theme="dark"] .part{--pcbg:#0F2250;border-color:var(--pcl,var(--pc))}
+:root[data-theme="dark"] .part-1{--pcl:#46CFC6} :root[data-theme="dark"] .part-2{--pcl:#E6C36A} :root[data-theme="dark"] .part-3{--pcl:#7FD08C} :root[data-theme="dark"] .part-4{--pcl:#F08CC8}
+.part-band{background:var(--pc);color:var(--pcon);padding:12px 16px;display:flex;align-items:center;flex-wrap:wrap;gap:6px 14px}
+.part-band h2{color:inherit;font-size:clamp(20px,3.4vw,26px);font-weight:600;flex:1 1 220px}
+.part-num{font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;font-weight:500;background:rgba(255,255,255,.18);border-radius:4px;padding:3px 9px}
+.part-band .tag{color:inherit;border-color:currentColor;background:rgba(255,255,255,.12)}
+.part-2 .part-band .tag,.part-2 .part-num{color:#E6C36A}
+.part-body{padding:16px;display:flex;flex-direction:column;gap:14px}
+.part .panel{background:var(--surface)}
+@media (max-width:640px){.part-body{padding:12px}}
+[hidden]{display:none!important}
+nav.parts{display:flex;flex-wrap:wrap;gap:8px 20px;margin-top:4px}
+nav.parts a{color:var(--ink);text-decoration:none;border-bottom:1px solid var(--line);padding-bottom:2px;font-size:15px}
+.msg{min-height:1.5em;font-size:15px}
+.fbbox{border-top:1px solid var(--line);padding-top:12px;display:flex;flex-direction:column;gap:8px;min-height:6.5em}
+.fbbox .verdict{font-family:var(--display);font-size:19px}
+.fbbox .ref{font-family:var(--mono);font-size:11px;color:var(--muted)}
+.chip:focus-visible,.pick:focus-visible,summary:focus-visible{outline:2px solid var(--res);outline-offset:2px}
+.btn:disabled{opacity:.45;cursor:default}
+.chips.picks{gap:10px}
+.dots{display:flex;gap:6px}
+.dots i{width:10px;height:10px;border-radius:50%;border:1.5px solid var(--muted)}
+.dots i.done{background:var(--ink);border-color:var(--ink)}
+.dots i.cur{border-color:var(--ink);box-shadow:0 0 0 2px var(--line)}
+body[data-part]{padding-block:10px 18px}
+body[data-part] header{display:none}
+body[data-part="1"] #s2,body[data-part="2"] #s1{display:none}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
+
+.card{border-left:3px solid var(--line);padding:2px 0 2px 12px;font-family:var(--display);font-size:20px;line-height:1.4;min-height:3.6em}
+.pick{font:inherit;font-size:15px;color:var(--ink);background:var(--bg);border:1.5px solid var(--line);border-top-width:4px;border-radius:10px;padding:9px 14px;cursor:pointer;min-width:0}
+.pick[data-p="w"]{border-top-color:var(--obj)} .pick[data-p="a"]{border-top-color:var(--env)}
+.pick.right{background:var(--surface);box-shadow:0 0 0 2px var(--ink)}
+.pick.wrong{opacity:.55}
+.pick:disabled{cursor:default}
+.rs{border:1px dashed var(--line);border-radius:10px;padding:12px;display:flex;flex-direction:column;gap:10px}
+.rs .opts{display:flex;flex-direction:column;gap:8px}
+.opt{font:inherit;font-size:15px;text-align:left;color:var(--ink);background:var(--bg);border:1.5px solid var(--line);border-radius:10px;padding:9px 13px;cursor:pointer}
+.opt.right{box-shadow:0 0 0 2px var(--ink);background:var(--surface)}
+.opt.no{opacity:.55}
+.opt:focus-visible{outline:2px solid var(--res);outline-offset:2px}
+.sortlegend{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.sortlegend div{border-top:4px solid var(--line);padding-top:6px;font-size:13.5px;color:var(--muted)}
+.sortlegend b{display:block;color:var(--ink);font-family:var(--display);font-weight:500;font-size:16px}
+.sortlegend .lw{border-color:var(--obj)} .sortlegend .la{border-color:var(--env)}
+@media (max-width:640px){.sortlegend{grid-template-columns:1fr}.card{font-size:18px}}
+/* part II */
+.lean{display:inline-flex;flex-wrap:wrap;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--bg)}
+.lean button{font:inherit;font-size:14px;color:var(--muted);background:transparent;border:0;padding:8px 13px;cursor:pointer}
+.lean button+button{border-left:1px solid var(--line)}
+.lean button[aria-pressed="true"]{background:var(--ink);color:var(--surface)}
+.lean button:focus-visible{outline:2px solid var(--res);outline-offset:-2px}
+.facts{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:6px 14px}
+.facts li{font-size:14.5px;padding:6px 10px;border-radius:8px;border:1px solid var(--line);background:var(--bg);transition:opacity .2s}
+.facts li.off{opacity:.5}
+.facts li.on{border-color:var(--ink);font-weight:500}
+.tell{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.tell .box{gap:8px}
+.tell .when{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.tell p.t{font-family:var(--display);font-size:17.5px;line-height:1.4;min-height:4.4em}
+.tl{width:100%;height:auto;display:block}
+.tl text{font-family:var(--body);font-size:12px;fill:var(--muted)}
+.tl .now text{fill:var(--ink);font-weight:600}
+.tl line,.tl path{stroke:var(--muted);fill:none}
+@media (max-width:640px){.tl text{font-size:17px}.facts,.tell{grid-template-columns:1fr}.tell p.t{min-height:0}}
+</style></head><body>
+<div class="wrap">
+<header class="brandhdr">
+  <div class="logos"><img src="vedantanz-logo.png" alt="Ramakrishna Vedanta NZ emblem" width="56" height="66"><img class="rit" src="ritam-wordmark.png" alt="Ritam" width="86" height="65"></div>
+  <div class="eyebrow">Practice · Lesson 1.5</div>
+  <h1>How the One Becomes the Many</h1>
+  <p class="course">The Mind in the Light of Modern and Spiritual Sciences · Advanced</p>
+  <p class="lede">Lesson 1.5 says that differentiation is real and useful, and that the trouble begins when a working distinction is taken as an ultimate truth. Here you will sort the lesson’s own examples, then watch how the same facts can be put together in different ways.</p>
+  <p class="scorenote"><b>Part I</b> is scored: your first pick on each card counts, and the restating step after it does not. <b>Part II</b> is practice and is not scored.</p>
+  <nav class="parts" aria-label="Parts of this page"><a href="#s1">I. Working distinction or wall?</a><a href="#s2">II. Built now</a></nav>
+</header>
+
+<section id="s1" class="part part-2">
+  <div class="part-band"><span class="part-num">Part I</span><h2>Working distinction or wall?</h2><span class="tag scored">Scored: first pick counts</span></div>
+  <div class="part-body">
+  <p class="intro">Ten cards, taken from the examples in Section 4 of the lesson. For each, decide whether the distinction is being held as a working distinction or as an absolute. Nobody is being judged here: the lesson describes this hardening as something that happens, and it says each identification “had a useful function”.</p>
+  <div class="sortlegend"><div class="lw"><b>Working distinction</b>contextual and functional, so that life can be lived</div><div class="la"><b>Absolutised: a wall</b>a relative distinction taken as an ultimate truth</div></div>
+  <div class="panel" id="st">
+    <div class="bar"><span class="tag" id="stPro">Card 1 of 10</span><div class="dots" id="stDots" aria-hidden="true"></div></div>
+    <div class="card"><p id="stText"></p></div>
+    <div class="chips picks" id="stPicks" role="group" aria-label="How is the distinction held?">
+      <button class="pick" data-p="w">Working distinction</button>
+      <button class="pick" data-p="a">Absolutised: a wall</button>
+    </div>
+    <div id="stMsg" class="msg fbbox" role="status" aria-live="polite"><p class="note">Pick one of the two.</p></div>
+    <div class="rs" id="rs" hidden>
+      <div><span class="tag">Next step, not counted in the score</span></div>
+      <p id="rsQ"><b>Re-draw the wall.</b> Which restatement keeps the distinction but puts it back in its context?</p>
+      <div class="opts" id="rsOpts" role="group" aria-label="Restatements"></div>
+      <div id="rsMsg" class="msg" role="status" aria-live="polite"></div>
+    </div>
+    <div class="bar"><div class="chips"><button class="btn primary" id="stNext" hidden>Next card</button><button class="btn ghost" id="stReset">Start again</button></div></div>
+  </div>
+  <div class="panel" id="stDone" hidden>
+    <div class="scorebox" id="scBox" aria-live="polite"></div>
+    <h3>Distinctions kept, forgetting undone</h3>
+    <p>“The bondage does not arise from difference; it arises from forgetting the unity within the difference, from taking the slice for the whole” (§4). So the work of insight “is not to destroy Māyā” but to undo the forgetting. Food and poison stay different.</p>
+  </div>
+  <div class="balance">
+    <h3>Not a verdict on anyone</h3>
+    <p>“This is what suffering through Māyā actually looks like. It is not that the differentiation is wrong; the distinctions are real” (§4). The cards are made-up statements, not descriptions of any person, and nothing here is a diagnosis. A medical reading remains useful information: the lesson lists “Health must be distinguished from illness” among the working distinctions.</p>
+  </div>
+  </div>
+</section>
+
+<section id="s2" class="part part-1">
+  <div class="part-band"><span class="part-num">Part II</span><h2>Built now</h2><span class="tag">Practice: not scored</span></div>
+  <div class="part-body">
+  <p class="intro">Section 6 says the past and future you live with are assembled in present awareness. Here is a made-up example: Mira, a talk she gave last spring, and another she is to give next month. The facts below never change. Only what the telling leans on changes. This page does not ask you to recall anything of your own, and no setting is the right one.</p>
+  <div class="panel" id="bn">
+    <div class="bar"><span class="eyebrow">The telling leans on</span>
+      <div class="lean" id="lean" role="group" aria-label="What the telling leans on">
+        <button data-l="0" aria-pressed="false">what went wrong</button>
+        <button data-l="1" aria-pressed="true">both</button>
+        <button data-l="2" aria-pressed="false">what went well</button>
+      </div>
+    </div>
+    <div><p class="eyebrow" style="margin-bottom:6px">The facts about the talk (the same every time)</p>
+    <ul class="facts" id="facts"></ul></div>
+    <svg class="tl" viewBox="0 0 640 120" role="img" aria-label="A timeline. The talk last spring and next month’s talk are both drawn toward one point in the middle labelled now: the remembering and the imagining both happen now.">
+      <line x1="30" y1="86" x2="610" y2="86" stroke-width="1.5"/>
+      <circle cx="90" cy="86" r="6" fill="var(--muted)" stroke="none"/><text x="90" y="110" text-anchor="middle">last spring’s talk</text>
+      <circle cx="550" cy="86" r="6" fill="none" stroke-dasharray="3 3"/><text x="550" y="110" text-anchor="middle">next month’s talk</text>
+      <path d="M96 78 C 170 20, 250 20, 304 70" stroke-width="1.5" stroke-dasharray="5 4"/>
+      <path d="M544 78 C 470 20, 390 20, 336 70" stroke-width="1.5" stroke-dasharray="5 4"/>
+      <g class="now"><circle cx="320" cy="86" r="11" fill="var(--gold)" stroke="none"/><text x="320" y="112" text-anchor="middle">now</text></g>
+      <text x="190" y="30" text-anchor="middle">remembered now</text><text x="450" y="30" text-anchor="middle">imagined now</text>
+    </svg>
+    <div class="tell">
+      <div class="box"><span class="when">Looking back, assembled now</span><p class="t" id="tPast"></p><p class="cap">The lesson: remembering is “reconstructing an event, filling in gaps, and colouring it with current mood and meaning” (§6).</p></div>
+      <div class="box"><span class="when">Looking ahead, imagined now</span><p class="t" id="tFut"></p><p class="cap">Next month’s talk has not happened. This picture draws on the facts above, “drawing on templates from the past” (§6).</p></div>
+    </div>
+    <div id="bnMsg" class="msg fbbox" role="status" aria-live="polite"></div>
+    <p class="note">Mira is made up. Here you set the leaning with a button; in life it is not a switch that anyone flips, and this page does not say how any person’s mind works or that anyone chooses their memories. It illustrates one point of the lesson: the same facts can be put together in more than one way, and the putting-together happens now.</p>
+  </div>
+  <div class="balance">
+    <h3>The suffering is entirely real</h3>
+    <p>“This does not mean the suffering is not real; the suffering is entirely real, because the construction is happening, and the brain is responding to it as if it were real. What it means is that the structure that generates the suffering is workable” (§6). The lesson’s own Try This (§8) is a gentle noticing, and it says to carry it “lightly”. If it feels too much, you can leave it, and speaking with someone you trust or a qualified professional is always open to you.</p>
+  </div>
+  </div>
+</section>
+<footer>Part I is scored, only to show you where to look again. Part II is not scored. Based on Lesson 1.5, this page illustrates the lesson’s teaching about differentiation and about time, using made-up examples. It does not explain, diagnose or advise on any person’s situation, and nothing on it replaces medical or professional care. For help with distress, please speak with a qualified professional or someone you trust.<br>Ritam · Ramakrishna Vedanta Centre NZ · <a href="https://www.vedanta.nz">www.vedanta.nz</a> Privacy: when you are signed in, your name, email, answers and score are saved to your member record. Only you and the course instructors can see them. They are not shared or ranked.</footer>
+</div>
+
+<script>
+(function(){
+"use strict";
+function $(id){return document.getElementById(id)}
+try{var q=new URLSearchParams(location.search).get("theme");if(q==="light"||q==="dark")document.documentElement.setAttribute("data-theme",q)}catch(e){}
+try{var pt=new URLSearchParams(location.search).get("part");if(pt==="1"||pt==="2")document.body.setAttribute("data-part",pt)}catch(e){}
+
+/* ===== Part I: the sorter ===== */
+var CARDS=[
+ {t:"Food has to be told apart from poison.",k:"w",
+  why:"“Food must be distinguished from poison” (§4). The lesson lists this among distinctions without which “embodied life would not be possible”. It stays useful: the work of insight is not to destroy Māyā, which “would mean destroying the ability to function”."},
+ {t:"I am ONLY this body.",k:"a",
+  why:"“I am this body turns into I am ONLY this body, and the prospect of the body’s eventual illness or death becomes existential terror” (§4). The distinction “this body” was useful. The word ONLY makes it a wall.",
+  rs:["This body is mine and not someone else’s.","I am not this body, so it need not matter to me.","I am only this body, but I will try not to fear its end."],
+  rsOk:"Yes. “A child needs to know that this body is hers and not someone else’s” (§4). The distinction stays and the ONLY goes.",
+  rsNo:["The lesson does not ask for the body to be dismissed: “The world is experienced” (§2).","That keeps the ONLY. The wall is still standing; it has just been given a calmer name."]},
+ {t:"A worker takes on a role in order to perform it well.",k:"w",
+  why:"“A worker needs to identify with a role to perform it well” (§4). The lesson says each identification “had a useful function”: this is the working side."},
+ {t:"I am my role, and I cannot be anything else.",k:"a",
+  why:"“I am my role turns into I cannot be anything else, and a career setback becomes a verdict on one’s whole being” (§4). Taking a role is useful; reading it as all of who one is makes it a wall.",
+  rs:["I take on this role in order to perform it well.","A role is only an illusion, so there is no need to take it seriously.","I am my role, and a setback in it is a verdict on my whole being."],
+  rsOk:"Yes, the working form: “a worker needs to identify with a role to perform it well” (§4).",
+  rsNo:["The lesson warns against that reading of Māyā: it is wrong to assume that “relationships and ethical life do not matter” (§2). The role is real and useful.","That is the hardened form again, in the lesson’s own words."]},
+ {t:"True reports have to be told apart from false ones.",k:"w",
+  why:"“Practical life depends on distinctions” (§4), and “true reports from false ones” is one of the lesson’s examples. This is the useful side of differentiation: “what makes the lived world workable”."},
+ {t:"This passing mood is my whole life.",k:"a",
+  why:"“A passing mood becomes ‘my whole life.’” The contextual form is “this mood now” (§4). The mood is felt and real. Read as the whole of life, a slice has been taken for the whole.",
+  rs:["This is the mood I am in now.","Moods are not real, so this one does not count.","This mood is what my life is."],
+  rsOk:"Yes: “this mood now” (§4). The mood is not denied. It is put back in its moment.",
+  rsNo:["The lesson says the opposite: “The world is experienced. Joy is felt, pain is felt” (§2).","That is the wall again: the mood is read as the whole."]},
+ {t:"This failure is my final identity.",k:"a",
+  why:"“A momentary failure becomes ‘my final identity.’” The contextual form is “this failure today” (§4): a real event, in its own time.",
+  rs:["This went badly today.","Failure is only an illusion, so nothing needs to change.","This failure shows what I am for good."],
+  rsOk:"Yes, in the spirit of “this failure today” (§4): the event is kept, and it stays an event.",
+  rsNo:["The lesson does not say that: “the distinctions are real” (§4). What it names is the mistaking of a distinction for ultimacy.","That is the hardened form again."]},
+ {t:"A child needs to know that this body is hers and not someone else’s.",k:"w",
+  why:"This is the lesson’s own sentence (§4). The same distinction that turns into “I am ONLY this body” is, in its place, what a child needs. It is a working distinction."},
+ {t:"This conflict means we are total enemies.",k:"a",
+  why:"“A conflict with another person becomes ‘we are total enemies.’” The contextual form is “this conflict in these circumstances” (§4).",
+  rs:["We disagree about this, in these circumstances.","Conflicts between people are illusions, so there is nothing to settle.","We have always been enemies, and always will be."],
+  rsOk:"Yes: “this conflict in these circumstances” (§4). The difference is real, and it is not total.",
+  rsNo:["The lesson says that “the distinctions are real” (§4); it does not ask for them to be set aside.","That makes the wall longer, not lower."]},
+ {t:"This medical reading is a verdict on who I am.",k:"a",
+  why:"“A diagnosis becomes ‘a verdict on who I am.’” The contextual form is “this medical reading at this time” (§4). The reading is information. It is not the whole of a person.",
+  rs:["This is a medical reading, at this time.","This reading is a verdict on my whole being.","A medical reading is the same thing as who I am."],
+  rsOk:"Yes: “this medical reading at this time” (§4). It stays useful information, held in its context.",
+  rsNo:["That is the absolute form again.","That is the absolute form again, said more quietly."]}
+];
+var S={i:0,done:{},miss:{},sent:false,rs:{}};
+var picks=document.querySelectorAll("#stPicks .pick"),stMsg=$("stMsg"),rs=$("rs"),rsOpts=$("rsOpts"),rsMsg=$("rsMsg");
+var NAME={w:"Working distinction",a:"Absolutised: a wall"};
+function dots(){var d=$("stDots");d.innerHTML="";CARDS.forEach(function(_,k){var e=document.createElement("i");if(S.done[k])e.className="done";else if(k===S.i)e.className="cur";d.appendChild(e)})}
+function showCard(){
+  var c=CARDS[S.i];$("stText").textContent=c.t;$("stPro").textContent="Card "+(S.i+1)+" of "+CARDS.length;
+  picks.forEach(function(p){p.disabled=false;p.classList.remove("wrong","right");p.setAttribute("aria-pressed","false")});
+  stMsg.innerHTML='<p class="note">Pick one of the two.</p>';
+  rs.hidden=true;$("stNext").hidden=true;dots();
+}
+function buildRs(c){
+  rsOpts.innerHTML="";rsMsg.textContent="";
+  var order=[0,1,2];
+  c.rs.forEach(function(txt,j){
+    var b=document.createElement("button");b.className="opt";b.type="button";b.textContent=txt;b.dataset.j=j;
+    b.addEventListener("click",function(){
+      if(j===0){
+        [].forEach.call(rsOpts.children,function(o){o.disabled=true;if(o===b)o.classList.add("right")});
+        rsMsg.innerHTML='<b>'+c.rsOk+'</b>';
+      }else{b.classList.add("no");b.disabled=true;rsMsg.textContent=c.rsNo[j-1]+" Try another."}
+    });
+    rsOpts.appendChild(b);
+  });
+  /* show options in a fixed but mixed order so the right one is not always first */
+  var mix=[1,0,2];if(CARDS.indexOf(c)%2===0){mix=[2,0,1]}
+  var kids=[].slice.call(rsOpts.children);rsOpts.innerHTML="";mix.forEach(function(m){rsOpts.appendChild(kids[m])});
+}
+function pick(v){
+  var c=CARDS[S.i];if(S.done[S.i])return;
+  S.done[S.i]=true;var ok=v===c.k;if(!ok)S.miss[S.i]=true;
+  picks.forEach(function(p){p.disabled=true;if(p.dataset.p===c.k){p.classList.add("right");p.setAttribute("aria-pressed","true")}else p.classList.add("wrong")});
+  var vd=ok?"Yes: "+NAME[c.k].toLowerCase()+".":"Not on this one: it is a "+NAME[c.k].toLowerCase()+".";
+  stMsg.innerHTML='<p class="verdict">'+vd+'</p><p>'+c.why+'</p><p class="ref">§4</p>';
+  if(c.rs){buildRs(c);rs.hidden=false}
+  if(S.i<CARDS.length-1){$("stNext").hidden=false}else{$("stDone").hidden=false;finish()}
+  dots();
+}
+picks.forEach(function(p){p.addEventListener("click",function(){pick(p.dataset.p)})});
+$("stNext").addEventListener("click",function(){S.i++;showCard();try{$("stPicks").querySelector(".pick").focus({preventScroll:true})}catch(e){}});
+$("stReset").addEventListener("click",function(){S.i=0;S.done={};S.miss={};$("stDone").hidden=true;$("scBox").innerHTML="";showCard()});
+showCard();
+
+/* ===== scoring for Part I, and hand-off to the host page when embedded ===== */
+var EMBED=/[?&]embed=1/.test(location.search);
+var META={code:"ADV-P-1-5",title:"Practice: Lesson 1.5, How the One Becomes the Many (Part I)",programme:"The Mind in the Light of Modern and Spiritual Sciences (Advanced)",cut:75};
+function send(m){if(EMBED){try{parent.postMessage(m,"*")}catch(e){}}}
+function finish(){
+  if(S.sent){return}
+  var n=CARDS.length,right=0,ans=[],wrong=[];
+  CARDS.forEach(function(c,k){var ok=!S.miss[k];if(ok){right++}else{wrong.push(k)}ans.push({q:k+1,ok:ok,given:NAME[c.k]+(ok?" (first pick)":" (not on first pick)")})});
+  var pct=Math.round(100*right/n),good=pct>=META.cut;
+  var h='<div class="big">'+right+' of '+n+' on the first pick</div><p class="band '+(good?'good':'')+'">'+(good?'Well grasped':'Revisit these ideas')+'</p>';
+  if(wrong.length){h+='<p>Look again at §4 for:</p><ul>'+wrong.map(function(k){return '<li>Card '+(k+1)+': '+CARDS[k].t+'</li>'}).join('')+'</ul>'}
+  else{h+='<p>Nothing to revisit here.</p>'}
+  h+='<p class="saved" id="scSaved">'+(EMBED?'Saving your result…':'Sign in on the course page to have your result saved.')+'</p>';
+  $("scBox").innerHTML=h;S.sent=true;
+  send({type:"quizResult",code:META.code,title:META.title,programme:META.programme,score:right,maxScore:n,percent:pct,questionsCorrect:right,questionCount:n,answers:ans});
+}
+window.addEventListener("message",function(e){
+  var d=e.data||{};if(!d||typeof d!=="object"){return}
+  var el=$("scSaved");if(!el){return}
+  if(d.type==="saved"){el.textContent="Your result has been saved to your member record."}
+  else if(d.type==="saveError"){el.textContent="Your result could not be saved this time. You can start again and finish once more."}
+  else if(d.type==="notMember"){el.textContent="Sign in as a member to have your result saved."}
+});
+
+/* ===== Part II: built now ===== */
+var FACTS=[
+ {t:"The projector failed for the first five minutes.",g:"w"},
+ {t:"She lost her place twice in the middle.",g:"w"},
+ {t:"One question at the end went unanswered.",g:"w"},
+ {t:"She finished within the time.",g:"g"},
+ {t:"Three people stayed to talk afterwards.",g:"g"},
+ {t:"She has given two more talks since.",g:"g"}
+];
+var LEAN=[
+ {on:[0,1,2],past:"Mira remembers the talk as the one where the projector failed, she lost her place twice, and a question went unanswered.",fut:"She imagines the projector failing again, and losing her place.",
+  say:"Every fact is still on the page. The telling uses only the three that went wrong, and the others sit in the background. Nothing has been made up; something has been left out."},
+ {on:[1,3,4],past:"Mira remembers a rocky middle, and also finishing on time and people staying to talk.",fut:"She imagines a rocky moment or two, and people staying to talk afterwards.",
+  say:"Here the telling holds some of each. It is still a selection: three of the six facts are used. Nothing here says this is the correct way to remember."},
+ {on:[3,4,5],past:"Mira remembers the talk as one she finished on time, with people staying to talk, and two more talks since.",fut:"She imagines finishing on time, and people staying to talk afterwards.",
+  say:"Now the telling uses only the three that went well. The same six facts, a different story, and again it is put together now."}
+];
+var ul=$("facts");
+FACTS.forEach(function(f,i){var li=document.createElement("li");li.textContent=f.t;li.dataset.n=i;ul.appendChild(li)});
+var leanBtns=document.querySelectorAll("#lean button");
+function setLean(k,user){
+  var L=LEAN[k];
+  leanBtns.forEach(function(b){b.setAttribute("aria-pressed",+b.dataset.l===k?"true":"false")});
+  [].forEach.call(ul.children,function(li){var on=L.on.indexOf(+li.dataset.n)>=0;li.className=on?"on":"off"});
+  $("tPast").textContent=L.past;$("tFut").textContent=L.fut;
+  $("bnMsg").innerHTML='<p class="verdict">The facts did not change.</p><p>'+L.say+'</p><p>Both tellings are assembled “here, in present awareness” (§8): the memory is made now, and so is the picture of next month.</p><p class="ref">§6</p>';
+}
+leanBtns.forEach(function(b){b.addEventListener("click",function(){setLean(+b.dataset.l,true)})});
+setLean(1);
+
+/* tell the host page how tall this page is */
+(function(){
+  var last=0;
+  function h(){var d=document.documentElement,b=document.body;var v=Math.ceil(Math.max(d.scrollHeight,b.scrollHeight,b.offsetHeight));if(v&&Math.abs(v-last)>1){last=v;send({type:"height",height:v})}}
+  window.addEventListener("load",h);window.addEventListener("resize",h);
+  if(window.ResizeObserver)new ResizeObserver(h).observe(document.body);
+  setInterval(h,700);h();
+})();
+send({type:"ready"});
+})();
+</script>
+</body></html>

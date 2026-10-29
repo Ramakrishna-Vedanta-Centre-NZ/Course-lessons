@@ -1,0 +1,358 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Practice: Lesson 1.2, Catch the I</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans:wght@400..700&family=Noto+Serif:ital,wght@0,400..700;1,400..700&display=swap">
+<style>
+
+:root{
+  --bg:#FBF5EA; --surface:#FFFDF8; --ink:#1E1E1E; --muted:#5A5A5A; --line:#E6DAC3; --tint:#F3EAD3; --navy:#12285A; --gold:#C9A24A; --goldt:#6B4E0E;
+  --obj:#0B8686; --att:#C95F06; --res:#2E3192; --env:#C0245B; --ok:#1B7A52;
+  --display:"Noto Serif",Georgia,"Times New Roman",serif;
+  --body:"Noto Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0B1A3D; --surface:#12285A; --ink:#FBF5EA; --muted:#C9C3B3; --line:#2B4686; --tint:#1D3770; --gold:#E6C36A; --goldt:#E6C36A;
+    --obj:#46CFC6; --att:#F5A04D; --res:#A3AAFF; --env:#FF7BA9; --ok:#5BD59B; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0B1A3D; --surface:#12285A; --ink:#FBF5EA; --muted:#C9C3B3; --line:#2B4686; --tint:#1D3770; --gold:#E6C36A; --goldt:#E6C36A;
+  --obj:#46CFC6; --att:#F5A04D; --res:#A3AAFF; --env:#FF7BA9; --ok:#5BD59B; color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;
+  padding-left:max(14px,env(safe-area-inset-left,0px));padding-right:max(14px,env(safe-area-inset-right,0px));padding-block:22px 40px}
+.wrap{max-width:900px;margin:0 auto;display:flex;flex-direction:column;gap:32px}
+h1,h2,h3{font-family:var(--display);font-weight:500;text-wrap:balance;margin:0;letter-spacing:-.01em}
+h1{font-size:clamp(30px,5.4vw,44px);line-height:1.06}
+h2{font-size:clamp(23px,3.4vw,29px);line-height:1.15}
+h3{font-size:19px;line-height:1.25}
+p{margin:0}
+sub{font-size:.72em;line-height:0}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.lede{font-size:17.5px;max-width:64ch}
+.intro{max-width:66ch;color:var(--muted)}
+header{display:flex;flex-direction:column;gap:12px}
+section{display:flex;flex-direction:column;gap:18px;min-width:0}
+.sym{font-family:var(--mono);font-size:.92em;white-space:nowrap}
+.k-obj{color:var(--obj)} .k-att{color:var(--att)} .k-res{color:var(--res)} .k-env{color:var(--env)}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px;display:flex;flex-direction:column;gap:14px;min-width:0}
+.bar{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;justify-content:space-between}
+button:focus-visible,input:focus-visible{outline:2px solid var(--res);outline-offset:2px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{font:inherit;font-size:14px;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:7px 13px;cursor:pointer;display:inline-flex;gap:8px;align-items:center}
+.chip i{font-style:normal;font-family:var(--mono);font-size:11px;color:var(--muted)}
+.chip[aria-pressed="true"]{background:var(--res);border-color:var(--res);color:#fff}
+.chip[aria-pressed="true"] i{color:#fff;opacity:.8}
+.chip:disabled{cursor:default}
+.chip.reached:not([aria-pressed="true"]){border-color:var(--res)}
+.btn{font:inherit;font-size:14px;color:var(--ink);background:var(--surface);border:1px solid var(--ink);border-radius:8px;padding:8px 16px;cursor:pointer}
+.btn.primary{background:var(--ink);color:var(--surface)}
+.btn.ghost{border-color:var(--line);color:var(--muted)}
+.readout{font-size:14px;color:var(--muted)}
+.readout b{color:var(--ink)}
+.tag{font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);border:1px solid var(--line);border-radius:4px;padding:2px 6px}
+.note{font-size:13px;color:var(--muted);max-width:70ch}
+.balance{background:var(--tint);border-radius:10px;padding:16px 18px;display:flex;flex-direction:column;gap:8px;max-width:78ch}
+footer{font-size:13px;color:var(--muted);max-width:76ch;border-top:1px solid var(--line);padding-top:12px}
+@media (max-width:640px){.panel{padding:12px}.wrap{gap:26px}}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
+
+[hidden]{display:none!important}
+:root{--c-h:var(--res);--c-ref:var(--obj);--c-over:var(--env);--c-settle:var(--att);--c-rip:var(--obj)}
+nav.parts{display:flex;flex-wrap:wrap;gap:8px 20px;margin-top:4px}
+nav.parts a{color:var(--ink);text-decoration:none;border-bottom:1px solid var(--line);padding-bottom:2px;font-size:15px}
+nav.parts a:hover,nav.parts a:focus-visible{border-color:var(--res);color:var(--res)}
+.msg{min-height:1.5em;font-size:15px}
+.fbbox{border-top:1px solid var(--line);padding-top:12px;display:flex;flex-direction:column;gap:8px;min-height:6.5em}
+.fbbox .verdict{font-family:var(--display);font-size:19px}
+.fbbox .ref{font-family:var(--mono);font-size:11px;color:var(--muted)}
+.fbbox q{font-style:italic;quotes:"“" "”"}
+.chip:focus-visible,.pick:focus-visible,summary:focus-visible{outline:2px solid var(--res);outline-offset:2px}
+.btn:disabled{opacity:.45;cursor:default}
+/* part 2 */
+.scene{border-left:3px solid var(--line);padding:2px 0 2px 12px;font-family:var(--display);font-size:18.5px;line-height:1.45;min-height:5.6em}
+.picks{gap:10px}
+.pick{font:inherit;font-size:15px;color:var(--ink);background:var(--bg);border:1.5px solid var(--line);border-top-width:4px;border-radius:10px;padding:9px 14px;cursor:pointer;min-width:0}
+.pick.wrong{opacity:.55}
+.pick.right{background:var(--surface);box-shadow:0 0 0 2px var(--ink)}
+.pick:disabled{cursor:default}
+.dots{display:flex;gap:6px}
+.dots i{width:10px;height:10px;border-radius:50%;border:1.5px solid var(--muted)}
+.dots i.done{background:var(--ink);border-color:var(--ink)}
+.dots i.cur{border-color:var(--ink);box-shadow:0 0 0 2px var(--line)}
+@media (max-width:640px){
+  .scene{font-size:17px}
+}
+body[data-part] header{display:none}
+body[data-part="1"] #s2,body[data-part="2"] #s1{display:none}
+body[data-part]{padding-block:10px 18px}
+
+
+.brandhdr{background:#12285A;color:#FBF5EA;text-align:center;padding:18px 18px 20px;border-radius:14px;display:flex;flex-direction:column;align-items:center;gap:6px}
+.brandhdr .logos{display:flex;align-items:center;justify-content:center;gap:18px}
+.brandhdr .logos img{width:56px;height:66px;object-fit:contain;display:block}
+.brandhdr .logos img.rit{width:86px;height:65px}
+.brandhdr .eyebrow{color:#E6C36A;font-weight:700;letter-spacing:3px}
+.brandhdr h1{color:#FBF5EA;font-weight:700}
+.brandhdr .course{color:#E6C36A;font-weight:600;font-size:14px}
+.brandhdr .lede{color:#F1ECDF;font-size:15.5px;max-width:62ch}
+.brandhdr .scorenote{color:#F1ECDF;font-size:14.5px}
+nav.parts a{color:var(--ink)}
+.brandhdr nav.parts a{color:#FBF5EA;border-bottom:1px solid #E6C36A;background:none;padding-bottom:2px}
+.brandhdr nav.parts a:hover,.brandhdr nav.parts a:focus-visible{color:#E6C36A;border-color:#E6C36A}
+.tag.scored{color:var(--goldt);border-color:var(--gold)}
+.scorebox{border-left:5px solid var(--gold);background:var(--tint);border-radius:10px;padding:12px 14px;margin-bottom:14px}
+.scorebox .big{font-family:var(--display);font-size:30px;line-height:1.1;color:var(--ink)}
+.scorebox .band{font-family:var(--display);font-size:18px;margin:4px 0}
+.scorebox .band.good{color:var(--ok)}
+.scorebox .saved{font-size:13.5px;color:var(--muted)}
+.scorebox ul{margin:6px 0 0;padding-left:20px}
+
+/* PRACTICE TEMPLATE: one coloured "part" per section (part-1 .. part-4) */
+.part{--pc:#0E7A8A;--pcon:#FFFFFF;--pcbg:#E6F2F3;border:2px solid var(--pc);border-radius:14px;overflow:hidden;background:var(--pcbg)}
+.part-1{--pc:#0E7A8A;--pcbg:#E6F2F3}
+.part-2{--pc:#12285A;--pcbg:#EEF0F8}
+.part-3{--pc:#2F6B3A;--pcbg:#E6F0E3}
+.part-4{--pc:#7A2A5E;--pcbg:#F5E6F0}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .part{--pcbg:#0F2250;border-color:var(--pcl,var(--pc))}
+ :root:not([data-theme="light"]) .part-1{--pcl:#46CFC6} :root:not([data-theme="light"]) .part-2{--pcl:#E6C36A} :root:not([data-theme="light"]) .part-3{--pcl:#7FD08C} :root:not([data-theme="light"]) .part-4{--pcl:#F08CC8}}
+:root[data-theme="dark"] .part{--pcbg:#0F2250;border-color:var(--pcl,var(--pc))}
+:root[data-theme="dark"] .part-1{--pcl:#46CFC6} :root[data-theme="dark"] .part-2{--pcl:#E6C36A} :root[data-theme="dark"] .part-3{--pcl:#7FD08C} :root[data-theme="dark"] .part-4{--pcl:#F08CC8}
+.part-band{background:var(--pc);color:var(--pcon);padding:12px 16px;display:flex;align-items:center;flex-wrap:wrap;gap:6px 14px}
+.part-band h2{color:inherit;font-size:clamp(20px,3.4vw,26px);font-weight:600;flex:1 1 220px}
+.part-num{font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;font-weight:500;background:rgba(255,255,255,.18);border-radius:4px;padding:3px 9px}
+.part-band .tag{color:inherit;border-color:currentColor;background:rgba(255,255,255,.12)}
+.part-2 .part-band .tag,.part-2 .part-num{color:#E6C36A}
+.part-body{padding:16px;display:flex;flex-direction:column;gap:14px}
+.part .panel{background:var(--surface)}
+@media (max-width:640px){.part-body{padding:12px}}
+
+/* page-specific */
+q{font-style:italic;quotes:"“" "”"}
+.row{display:flex;flex-direction:column;gap:8px;border-top:1px solid var(--line);padding-top:12px}
+.row:first-of-type{border-top:0;padding-top:0}
+.phrase{font-family:var(--display);font-size:18.5px;line-height:1.35}
+.roles{display:flex;flex-wrap:wrap;gap:8px}
+.roles .pick{border-top-width:1.5px;padding:8px 14px}
+.pick.right{background:var(--ok);border-color:var(--ok);color:#fff;box-shadow:none}
+.pick.wrong{opacity:.5;text-decoration:line-through}
+.row.done .phrase::after{content:" ✓";color:var(--ok);font-family:var(--body);font-size:15px}
+.cases-note{font-size:14px;color:var(--muted)}
+.lessonline{border-left:3px solid var(--gold);padding:2px 0 2px 12px;font-family:var(--display);font-size:17.5px}
+.cols{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px}
+.colbox{border:1px solid var(--line);border-radius:10px;background:var(--bg);padding:12px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.colbox h3{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:500}
+.tok{display:inline-block;font-family:var(--display);font-size:17px;border:1.5px solid var(--line);border-radius:8px;padding:6px 11px;background:var(--surface);align-self:flex-start}
+.tok.known{border-color:var(--obj)}
+.tok.seems{border-color:var(--att);border-style:dashed}
+.tok.whole{border-color:var(--ink)}
+.stage2 .tok.fresh{animation:land .5s ease}
+@keyframes land{from{transform:translateY(-10px);opacity:0}to{transform:none;opacity:1}}
+@media (prefers-reduced-motion: reduce){.stage2 .tok.fresh{animation:none}}
+.sentence{font-family:var(--display);font-size:clamp(22px,4vw,28px);line-height:1.2}
+.one{grid-column:1/-1}
+@media (max-width:640px){.cols{grid-template-columns:minmax(0,1fr)}}
+</style></head><body>
+<div class="wrap">
+<header class="brandhdr">
+  <div class="logos"><img src="vedantanz-logo.png" alt="Ramakrishna Vedanta NZ emblem" width="56" height="66"><img class="rit" src="ritam-wordmark.png" alt="Ritam" width="86" height="65"></div>
+  <div class="eyebrow">Practice · Lesson 1.2</div>
+  <h1>Catch the I</h1>
+  <p class="course">The Mind in the Light of Modern and Spiritual Sciences · Advanced</p>
+  <p class="lede">Lesson 1.2 says every act of knowing has the same shape, and that the “I” you take yourself to be turns up on the known side the moment you notice it. Here you will tag the parts of the lesson’s own examples, then watch that happen to four self-statements.</p>
+  <p class="scorenote"><b>Part I</b> is scored: your first pick on each part counts. <b>Part II</b> is practice and is not scored.</p>
+  <nav class="parts" aria-label="Parts of this page"><a href="#s1">I. Tag the parts</a><a href="#s2">II. Now you notice that sentence</a></nav>
+</header>
+
+<section id="s1" class="part part-1">
+  <div class="part-band"><span class="part-num">Part I</span><h2>Tag the parts</h2><span class="tag scored">Scored: first pick counts</span></div>
+  <div class="part-body">
+  <p class="intro">Four examples, each in the lesson’s own words (§2). Each has three parts. Tag every part as the <b>object</b> (grāhya, <q>the apprehended</q>), the <b>act</b>, or the <b>subject</b> (grāhaka, <q>the apprehender</q>).</p>
+  <div class="panel" id="p1">
+    <div class="bar"><span class="tag" id="p1Pro">Example 1 of 4</span><div class="dots" id="p1Dots" aria-hidden="true"></div></div>
+    <p class="lessonline" id="p1Lead"></p>
+    <div id="p1Rows"></div>
+    <div id="p1Msg" class="msg fbbox" role="status" aria-live="polite"><p class="note">Tag each of the three parts.</p></div>
+    <div class="bar"><div class="chips"><button class="btn primary" id="p1Next" hidden>Next example</button><button class="btn ghost" id="p1Reset">Start again</button></div></div>
+  </div>
+  <div class="panel" id="p1Done" hidden>
+    <div class="scorebox" id="scBox" aria-live="polite"></div>
+    <p>The lesson’s point about this structure is that it is so constant that <q>you usually do not notice it</q> (§2). Part II turns to the sentences in which you say “I”.</p>
+  </div>
+  </div>
+</section>
+
+<section id="s2" class="part part-2">
+  <div class="part-band"><span class="part-num">Part II</span><h2>Now you notice that sentence</h2><span class="tag">Practice: not scored</span></div>
+  <div class="part-body">
+  <p class="intro">Four sentences taken from §4 of the lesson. Nothing here is right or wrong. Read each as it first presents itself, then press the button. The two groups below are a picture of the lesson’s argument, not a way of parsing grammar.</p>
+  <div class="panel" id="p2">
+    <div class="bar"><span class="tag" id="p2Pro">Sentence 1 of 4</span><div class="dots" id="p2Dots" aria-hidden="true"></div></div>
+    <p class="sentence" id="p2Sent"></p>
+    <div class="cols" id="p2Cols"></div>
+    <div class="chips"><button class="btn primary" id="p2Go">Now you notice that sentence</button><button class="btn ghost" id="p2Back" hidden>See it as it first seemed</button><button class="btn" id="p2Next" hidden>Next sentence</button></div>
+    <div id="p2Msg" class="msg fbbox" role="status" aria-live="polite"><p class="note">As it first presents itself, the sentence seems to have a known part and a knower.</p></div>
+  </div>
+  <div class="balance" id="p2Close" hidden>
+    <h3>Where the sorting stops</h3>
+    <p>In every case the “I” in the sentence turned out to be something noticed. Then who noticed? The lesson does not answer with a thing: <q>You can notice a thought. You can notice the I who is noticing the thought. But when you try to notice the one who is noticing the I-who-is-noticing, you find that you cannot get behind the observing. The observing is what is looking. It is not another thing being looked at.</q> (§5)</p>
+    <p>So the observing is not among the things known, and this page has nowhere to put it: no column, no button. Whatever could be drawn on a page would be one more thing looked at. The sorting above only illustrates the argument; it does not find anything.</p>
+    <p>What the lesson offers instead is looking. Inquiry One: <q>Do not try to find the something that is aware. Just notice that the noticing is happening.</q> Inquiry Two: <q>The point is not to answer with words.</q> (§8)</p>
+    <p>And, as the lesson says plainly: <q>You have not discovered that you do not exist.</q> <q>The empirical “I” (the particular person reading these words) is entirely real.</q> <q>If the observation does not land yet, that is fine.</q> (§6)</p>
+  </div>
+  </div>
+</section>
+<footer>Part I is scored, and only to show you where to look again. Part II is practice and is not scored. Based on Lesson 1.2, this page illustrates the lesson’s argument. It is not a way of finding the Self, and it does not diagnose or advise on anyone’s situation. For help with distress, please speak with a qualified professional or someone you trust.<br>Ritam · Ramakrishna Vedanta Centre NZ · <a href="https://www.vedanta.nz">www.vedanta.nz</a> Privacy: when you are signed in, your name, email, answers and score are saved to your member record. Only you and the course instructors can see them. They are not shared or ranked.</footer>
+</div>
+<script>
+(function(){
+"use strict";
+var $=function(id){return document.getElementById(id)};
+try{var q=new URLSearchParams(location.search).get("theme");if(q==="light"||q==="dark")document.documentElement.setAttribute("data-theme",q)}catch(e){}
+try{var pt=new URLSearchParams(location.search).get("part");if(pt==="1"||pt==="2")document.body.setAttribute("data-part",pt)}catch(e){}
+var EMBED=/[?&]embed=1/.test(location.search);
+function send(m){if(EMBED){try{parent.postMessage(m,"*")}catch(e){}}}
+function esc(t){return String(t).replace(/&/g,"&amp;").replace(/</g,"&lt;")}
+var RM=false;try{RM=window.matchMedia("(prefers-reduced-motion: reduce)").matches}catch(e){}
+
+/* ===== Part I: tag the parts (scored) ===== */
+var ROLES=[["obj","Object (grāhya)"],["act","Act"],["sub","Subject (grāhaka)"]];
+var RN={obj:"object",act:"act",sub:"subject"};
+var HINT={
+ obj:"Not this one. The object is what is known: grāhya, <q>the apprehended</q> (§2).",
+ act:"Not this one. The act is the knowing itself, between the two poles: the seeing, hearing, remembering or feeling (§2).",
+ sub:"Not this one. The subject is the one who knows: grāhaka, <q>the apprehender</q> (§2)."
+};
+var CASES=[
+ {lead:"Pick up something near you: a cup, a pen, a phone. Look at it.",
+  parts:[["the object you are looking at","obj"],["the seeing of it","act"],["you, the one doing the seeing","sub"]],order:[2,0,1],
+  line:"There is the object you are looking at. There is the seeing of it. There is, somewhere, you, the one doing the seeing."},
+ {lead:"You hear a sound.",
+  parts:[["the sound","obj"],["the hearing","act"],["the one who hears","sub"]],order:[1,2,0],
+  line:"When you hear a sound, there is the sound (object), the hearing (act), and the one who hears (subject)."},
+ {lead:"You remember last week.",
+  parts:[["the memory","obj"],["the remembering","act"],["the one who remembers","sub"]],order:[0,2,1],
+  line:"When you remember last week, there is the memory (object), the remembering (act), and the one who remembers (subject)."},
+ {lead:"You feel anxious.",
+  parts:[["the anxiety","obj"],["the feeling","act"],["the one who feels","sub"]],order:[2,1,0],
+  line:"When you feel anxious, there is the anxiety (object, in the sense that it is felt), the feeling (act), and the one who feels (subject)."}
+];
+var S={c:0,got:{},miss:{},sent:false};
+function key(c,r){return c+"-"+r}
+function dots1(){var d=$("p1Dots");d.innerHTML="";CASES.forEach(function(_,k){var e=document.createElement("i");var all=[0,1,2].every(function(r){return S.got[key(k,r)]});if(all)e.className="done";else if(k===S.c)e.className="cur";d.appendChild(e)})}
+function showCase(){
+  var cs=CASES[S.c];
+  $("p1Pro").textContent="Example "+(S.c+1)+" of "+CASES.length;
+  $("p1Lead").textContent=cs.lead;
+  var h="";
+  cs.order.forEach(function(r){
+    h+='<div class="row" id="row'+r+'"><p class="phrase">'+esc(cs.parts[r][0])+'</p><div class="roles" role="group" aria-label="Tag: '+esc(cs.parts[r][0])+'">';
+    ROLES.forEach(function(ro){h+='<button class="pick" data-r="'+r+'" data-role="'+ro[0]+'" aria-pressed="false">'+ro[1]+'</button>'});
+    h+='</div></div>';
+  });
+  $("p1Rows").innerHTML=h;
+  $("p1Msg").innerHTML='<p class="note">Tag each of the three parts.</p>';
+  $("p1Next").hidden=true;dots1();
+  document.querySelectorAll("#p1Rows .pick").forEach(function(b){b.addEventListener("click",function(){tag(b)})});
+}
+function tag(b){
+  var r=+b.dataset.r,role=b.dataset.role,cs=CASES[S.c],right=cs.parts[r][1];
+  if(role===right){
+    S.got[key(S.c,r)]=true;
+    var row=$("row"+r);row.classList.add("done");
+    row.querySelectorAll(".pick").forEach(function(x){x.disabled=true;if(x===b){x.classList.add("right");x.setAttribute("aria-pressed","true")}});
+    var all=[0,1,2].every(function(k){return S.got[key(S.c,k)]});
+    if(all){
+      $("p1Msg").innerHTML='<p class="verdict">All three placed.</p><p><q>'+esc(cs.line)+'</q></p><p class="ref">§2</p>';
+      if(S.c<CASES.length-1){$("p1Next").hidden=false}else{finish()}
+      dots1();
+    }else{
+      $("p1Msg").innerHTML='<p class="verdict">'+esc(cs.parts[r][0])+": the "+RN[right]+".</p>"+'<p class="note">Tag the remaining parts.</p>';
+    }
+  }else{
+    S.miss[key(S.c,r)]=true;b.classList.add("wrong");b.disabled=true;
+    $("p1Msg").innerHTML='<p class="verdict">Not this one.</p><p>'+HINT[right].replace(/^Not this one\. /,"")+'</p>';
+  }
+}
+$("p1Next").addEventListener("click",function(){S.c++;showCase();try{document.querySelector("#p1Rows .pick").focus({preventScroll:true})}catch(e){}});
+$("p1Reset").addEventListener("click",function(){S={c:0,got:{},miss:{},sent:S.sent};$("p1Done").hidden=true;$("scBox").innerHTML="";showCase()});
+
+/* ===== scoring, and hand-off to the host page when embedded ===== */
+var META={code:"ADV-P-1-2",title:"Practice: Lesson 1.2, Catch the I (Part I)",programme:"The Mind in the Light of Modern and Spiritual Sciences (Advanced)",cut:75};
+function finish(){
+  if(S.sent){$("p1Done").hidden=false;return}
+  var n=CASES.length*3,right=0,ans=[],wrongCases={};
+  CASES.forEach(function(cs,c){cs.parts.forEach(function(p,r){var ok=!S.miss[key(c,r)];if(ok)right++;else wrongCases[c]=true;ans.push({q:c*3+r+1,ok:ok,given:cs.lead+" / "+p[0]+": "+RN[p[1]]+(ok?" (first pick)":" (not on first pick)")})})});
+  var pct=Math.round(100*right/n),good=pct>=META.cut;
+  var h='<div class="big">'+right+' of '+n+' on the first pick</div><p class="band '+(good?'good':'')+'">'+(good?'Well grasped':'Revisit these ideas')+'</p>';
+  var wc=Object.keys(wrongCases);
+  if(wc.length){h+='<p>Look again at §2 for:</p><ul>'+wc.map(function(c){return '<li>Example '+(+c+1)+': '+esc(CASES[c].lead)+'</li>'}).join('')+'</ul>'}else{h+='<p>Nothing to revisit here.</p>'}
+  h+='<p class="saved" id="scSaved">'+(EMBED?'Saving your result…':'Sign in on the course page to have your result saved.')+'</p>';
+  $("scBox").innerHTML=h;$("p1Done").hidden=false;S.sent=true;
+  send({type:"quizResult",code:META.code,title:META.title,programme:META.programme,score:right,maxScore:n,percent:pct,questionsCorrect:right,questionCount:n,answers:ans});
+}
+window.addEventListener("message",function(e){
+  var d=e.data||{};if(!d||typeof d!=="object"){return}
+  var el=$("scSaved");if(!el){return}
+  if(d.type==="saved"){el.textContent="Your result has been saved to your member record."}
+  else if(d.type==="saveError"){el.textContent="Your result could not be saved this time. You can start again and finish once more."}
+  else if(d.type==="notMember"){el.textContent="Sign in as a member to have your result saved."}
+});
+
+/* ===== Part II: now you notice that sentence (not scored) ===== */
+var SENT=[
+ {s:"I am tired",obj:"the tiredness",who:"the I who is tired",
+  say:"there is the tiredness (object), and there is the I who is tired (which seems to be the subject). But the moment you notice “I am tired,” the “I am tired” has become something you are aware of.",
+  say2:"The “I” that was supposed to be the subject is now showing up as part of what you are observing."},
+ {s:"I am anxious",obj:"the anxiety",who:"the “I” who is anxious",
+  say:"The anxiety is observed; the “I” who is anxious is also now observed.",
+  say2:"In every case, the empirical “I” (the particular person you take yourself to be) turns out to be something that appears in your experience and can be noticed."},
+ {s:"I am the kind of person who worries too much",obj:"the thought",who:"the “I” in the thought",
+  say:"The thought is observed; the “I” in the thought is also observed.",
+  say2:"The “I” you usually take to be the knower can itself be known."},
+ {s:"I am the one watching this thought",obj:"the thought",who:"the I watching it",
+  say:"there is the thought (object), and there is the I watching it (subject). But the moment you notice “I am the one watching,” the watching-I has become another thing in awareness.",
+  say2:"Which means: it is not, ultimately, the knower. It is one more thing within your experience."}
+];
+var P={i:0,seen:{},noticed:false};
+function dots2(){var d=$("p2Dots");d.innerHTML="";SENT.forEach(function(_,k){var e=document.createElement("i");if(P.seen[k])e.className="done";else if(k===P.i)e.className="cur";d.appendChild(e)})}
+function show2(){
+  var s=SENT[P.i];P.noticed=false;
+  $("p2Pro").textContent="Sentence "+(P.i+1)+" of "+SENT.length;
+  $("p2Sent").innerHTML="“"+esc(s.s)+"”";
+  $("p2Cols").className="cols";
+  $("p2Cols").innerHTML='<div class="colbox"><h3>What seems to be known</h3><span class="tok known">'+esc(s.obj)+'</span></div><div class="colbox"><h3>What seems to be the subject</h3><span class="tok seems">'+esc(s.who)+'</span></div>';
+  $("p2Msg").innerHTML='<p class="note">As it first presents itself, the sentence seems to have a known part and a knower.</p>';
+  $("p2Go").hidden=false;$("p2Back").hidden=true;$("p2Next").hidden=true;dots2();
+}
+function notice(){
+  var s=SENT[P.i];P.noticed=true;P.seen[P.i]=true;
+  $("p2Cols").className="cols stage2";
+  $("p2Cols").innerHTML='<div class="colbox one"><h3>Now in what is being noticed</h3><span class="tok whole fresh">“'+esc(s.s)+'”</span><span class="tok known">'+esc(s.obj)+'</span><span class="tok known fresh">'+esc(s.who)+'</span></div>';
+  $("p2Msg").innerHTML='<p><q>'+esc(s.say)+'</q></p><p><q>'+esc(s.say2)+'</q></p><p class="ref">§4</p>';
+  $("p2Go").hidden=true;$("p2Back").hidden=false;
+  if(P.i<SENT.length-1){$("p2Next").hidden=false}else{$("p2Close").hidden=false}
+  dots2();
+}
+$("p2Go").addEventListener("click",notice);
+$("p2Back").addEventListener("click",show2);
+$("p2Next").addEventListener("click",function(){P.i++;show2();try{$("p2Go").focus({preventScroll:true})}catch(e){}});
+
+/* tell the host page how tall this page is, so the embed grows instead of scrolling inside its frame */
+(function(){
+  var last=0;
+  function h(){var d=document.documentElement,b=document.body;var v=Math.ceil(Math.max(d.scrollHeight,b.scrollHeight,b.offsetHeight));if(v&&Math.abs(v-last)>1){last=v;send({type:"height",height:v})}}
+  window.addEventListener("load",h);window.addEventListener("resize",h);
+  if(window.ResizeObserver)new ResizeObserver(h).observe(document.body);
+  setInterval(h,700);h();
+})();
+send({type:"ready"});
+showCase();show2();
+})();
+</script>
+</body></html>

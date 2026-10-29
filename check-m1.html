@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Understanding Check: Module 1</title>
+<meta name="description" content="Fifteen optional questions across Lessons 1.1 to 1.6, Module 1, The Whole before the Parts, from The Mind in the Light of Modern and Spiritual Sciences.">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400..700;1,400..700&family=Noto+Sans:wght@400..700&display=swap">
+<style>
+:root{
+ --bg:#FBF5EA; --surface:#FFFDF8; --ink:#1E1E1E; --muted:#5A5A5A; --line:#E6DAC3; --tint:#F3EAD3;
+ --navy:#12285A; --gold:#C9A24A; --goldt:#6B4E0E; --qink:#13295B;
+ --res:#12285A; --ok:#2F5A2E; --okbg:#E3EDDF; --no:#C2557A; --nobg:#F6E3EA;
+ --display:"Noto Serif",Georgia,serif; --body:"Noto Sans",system-ui,-apple-system,"Segoe UI",sans-serif; --mono:"Noto Sans",system-ui,sans-serif;
+}
+@media (prefers-color-scheme: dark){
+ :root:not([data-theme="light"]){
+  --bg:#0B1A3D; --surface:#12285A; --ink:#FBF5EA; --muted:#C9C3B3; --line:#2B4686; --tint:#1D3770;
+  --goldt:#E6C36A; --qink:#FBF5EA; --res:#E6C36A; --ok:#8FD79A; --okbg:#1E3A2A; --no:#F08FB0; --nobg:#4A2236; color-scheme:dark;
+ }
+}
+:root[data-theme="dark"]{
+ --bg:#0B1A3D; --surface:#12285A; --ink:#FBF5EA; --muted:#C9C3B3; --line:#2B4686; --tint:#1D3770;
+ --goldt:#E6C36A; --qink:#FBF5EA; --res:#E6C36A; --ok:#8FD79A; --okbg:#1E3A2A; --no:#F08FB0; --nobg:#4A2236; color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;
+ padding:18px max(14px,env(safe-area-inset-right,0px)) 30px max(14px,env(safe-area-inset-left,0px))}
+.wrap{max-width:720px;margin:0 auto;display:flex;flex-direction:column;gap:16px}
+h1{font-family:var(--display);font-weight:500;font-size:clamp(24px,5vw,32px);line-height:1.15;margin:0}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.sub{color:var(--muted);margin:0}
+.bar{height:6px;background:var(--line);border-radius:3px;overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--res);transition:width .25s}
+.meta{display:flex;justify-content:space-between;font-size:13px;color:var(--muted)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:20px 18px;display:flex;flex-direction:column;gap:14px}
+.qn{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:0}
+.q{font-family:var(--display);font-size:clamp(19px,3.4vw,22px);line-height:1.35;margin:0}
+.opts{display:flex;flex-direction:column;gap:10px}
+.opt{font:inherit;text-align:left;color:var(--ink);background:var(--surface);border:2px solid var(--line);border-radius:10px;padding:12px 14px;cursor:pointer;width:100%}
+.opt:hover:not(:disabled){border-color:var(--res)}
+.opt.right{border-color:var(--ok);background:var(--okbg)}
+.opt.wrong{border-color:var(--no);background:var(--nobg)}
+.opt:disabled{cursor:default}
+input.fill{font:inherit;width:100%;padding:12px 14px;border:2px solid var(--line);border-radius:10px;background:var(--surface);color:var(--ink)}
+input.fill:focus{outline:none;border-color:var(--res)}
+.btn{font:inherit;font-weight:600;font-size:15px;color:var(--surface);background:var(--ink);border:0;border-radius:8px;padding:11px 20px;cursor:pointer;text-decoration:none;display:inline-block}
+.btn.alt{background:var(--surface);color:var(--ink);border:1px solid var(--ink)}
+button:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(--res);outline-offset:2px}
+.fb{display:none;padding:12px 14px;border-radius:10px;font-size:15.5px;line-height:1.5}
+.fb.ok{display:block;background:var(--okbg);border-left:5px solid var(--ok)}
+.fb.no{display:block;background:var(--nobg);border-left:5px solid var(--no)}
+.fb b{display:block;margin-bottom:2px}
+.nav{display:flex;justify-content:flex-end}
+.res{text-align:center}
+.score{font-family:var(--display);margin:4px 0}
+.score .big{font-size:60px;line-height:1}
+.score .of{font-size:26px;color:var(--muted)}
+.band{font-family:var(--display);font-size:22px;margin:0}
+.band.good{color:var(--ok)} .band.rev{color:var(--res)}
+.res p{margin:0}
+.revisit{text-align:left;background:var(--tint);border-radius:10px;padding:12px 14px}
+.revisit h2,.review h2{font-family:var(--display);font-size:18px;margin:0 0 6px}
+.revisit ul{margin:0;padding-left:20px}
+.review{text-align:left;display:flex;flex-direction:column;gap:8px}
+.review .item{padding:10px 12px;border-radius:8px;font-size:15px;line-height:1.45}
+.review .r{background:var(--okbg)} .review .w{background:var(--nobg)}
+.review .item small{display:block;color:var(--muted);margin-top:4px}
+.acts{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+.saved{font-size:14px;color:var(--muted)}
+footer{text-align:center;font-size:13px;color:var(--muted)}
+footer a{color:var(--res)}
+.wrap header{background:#12285A;color:#FBF5EA;text-align:center;padding:18px 16px 20px;border-radius:14px}
+.wrap header img{width:56px;height:66px;object-fit:contain;display:block}
+.wrap header .logos{display:flex;align-items:center;justify-content:center;gap:18px}
+.wrap header img.rit{width:86px;height:65px}
+.wrap header .eyebrow{color:#E6C36A;font-weight:700;letter-spacing:3px;margin:8px 0 0}
+.wrap header h1{color:#FBF5EA;font-weight:700;margin:6px 0 4px}
+.wrap header .course{font-size:14px;color:#E6C36A;margin:0 0 8px;font-weight:600}
+.wrap header .sub{color:#F1ECDF;font-size:15px}
+.bar i{background:var(--gold)!important}
+.opt:hover:not(:disabled){border-color:var(--gold)!important}
+input.fill:focus{border-color:var(--gold)!important}
+.q{color:var(--qink)}
+.qn{color:var(--goldt);font-weight:700}
+.btn{background:var(--navy)!important;color:#FBF5EA!important}
+.btn.alt{background:transparent!important;color:var(--ink)!important;border:1px solid var(--navy)!important}
+.card{box-shadow:0 2px 8px rgba(19,41,91,.08)}
+</style>
+</head>
+<body>
+<div class="wrap">
+ <header>
+  <div class="logos"><img src="vedantanz-logo.png" alt="Ramakrishna Vedanta NZ emblem" width="56" height="66"><img class="rit" src="ritam-wordmark.png" alt="Ritam" width="86" height="65"></div>
+  <p class="eyebrow">Understanding check · Module 1</p>
+  <h1>The Whole before the Parts</h1>
+  <p class="course">The Mind in the Light of Modern and Spiritual Sciences · Advanced</p>
+  <p class="sub">Fifteen questions across Lessons 1.1 to 1.6. This check is optional. Take it as often as you like; each answer comes with its explanation and the lesson and section to revisit.</p>
+ </header>
+ <div class="bar"><i id="prog"></i></div>
+ <div class="meta"><span id="pos"></span><span id="sc"></span></div>
+ <div id="app"></div>
+ <footer>Understanding check · <a href="https://www.vedanta.nz">www.vedanta.nz</a>. Privacy: when you are signed in, your name, email, answers and score are saved to your member record. Only you and the course instructors can see them. They are not shared or ranked.</footer>
+</div>
+<script>
+/* Question bank. Types: mc (options o, correct index a), judge (statement q; a: 0 holds, 1 does not hold, 2 holds only in part), fill (accepted answers a[], show).
+   e = explanation, c = idea to revisit, s = [lesson, section] reference (null = the module as a whole). Content from the key ideas and corrected misconceptions of Lessons 1.1 to 1.6. */
+var META={code:'ADV-M1',lesson:'M1',quizTitle:'Understanding check: Module 1, The Whole before the Parts',programme:'The Mind in the Light of Modern and Spiritual Sciences (Advanced)',cut:75};
+var Q=[
+{t:'mc',q:'According to Lesson 1.1, how should thought be understood?',o:['As false, so it should be set aside','As valuable but partial, like a map that is not the land','As the deepest knower','As the same thing as direct experience'],a:1,
+ e:'“This does not mean thought is false. It means thought is partial.” It is like a map: useful and sometimes indispensable, but not the land itself.',c:'Thought is valuable but partial, a map and not the land',s:['1.1','6']},
+{t:'mc',q:'A worried parent and a relaxed parent hear the same silence from a teenager’s room. One experiences danger, the other peace. In the lesson’s picture, why?',o:['The ψₓ is similar, but each brings a different ψₘ','One of them is hearing the silence more accurately','Only the worried parent is adding anything to the scene','The silence is not the same for the two of them'],a:0,
+ e:'The scene in front of each person is essentially the same. What each one experiences is shaped by what they bring: ψₓ (what is given) mixed with ψₘ (what you bring).',c:'Every perception is ψₓ mixed with ψₘ: what is given and what you bring',s:['1.1','10']},
+{t:'judge',q:'“Because the mind is not the deepest knower, the course asks you to reject it.”',a:1,
+ e:'“The mind is not rejected here. It is resituated.” It is a powerful instrument operating within a wider field now open to inquiry: something you use, not something you are.',c:'The mind is resituated, not rejected: something you use, not something you are',s:['1.1','12']},
+{t:'mc',q:'In Lesson 1.2, you notice “I am tired.” What has happened to the “I” in that statement?',o:['It has become one more content you are aware of','It has been shown to be the deepest knower','It has disappeared','It has been shown not to be real'],a:0,
+ e:'The moment “I am tired” is noticed, the “I” that seemed to be the subject shows up as part of what is observed. The “I” you usually take to be the knower can itself be known.',c:'The empirical “I” can itself be noticed, so it is one more content within awareness',s:['1.2','4']},
+{t:'judge',q:'“Noticing that the empirical ‘I’ can be observed shows that you do not exist.”',a:1,
+ e:'“You have not discovered that you do not exist.” The empirical “I” is entirely real; what has been noticed is that it is observable, not the deepest observer.',c:'The empirical “I” is real; it is observable, not the deepest observer',s:['1.2','6']},
+{t:'mc',q:'Why does Lesson 1.3 say that luminosity (Prakāśa) and living presence (Vimarśa) cannot be separated?',o:['Because one comes first and the other follows','Because light with no self-knowing would be a mechanical process, and self-presence with nothing to be present to would be a closed point','Because they are the same word in two languages','Because each can stand alone, but they usually appear together'],a:1,
+ e:'Light that revealed without being known to reveal would be a mechanical process. Self-presence without something to be present to would be a closed point. They are “not two stages joined together but two aspects of one indivisible Reality.”',c:'Prakāśa and Vimarśa are inseparable: two faces of one Consciousness-Energy',s:['1.3','4']},
+{t:'judge',q:'“The deepest layer of yourself is best pictured as a still, inert witness against which an illusory world plays out.”',a:1,
+ e:'The course parts company with this reading. Awareness “is not inert. It is living. It is dynamic.” The world that unfolds within it is not an illusion projected onto a passive screen.',c:'Awareness is not a blank, inert witness: the ground is alive',s:['1.3','5']},
+{t:'mc',q:'In the lesson’s second picture of the mind, as a living, self-modifying system, what are the patterns that harden into habits, anxieties and identifications?',o:['Deposits stored in the system, to be extracted','Permanent verdicts on who you are','Fixed features of the brain that practice cannot reach','Ongoing processes the system continues to sustain, which can be reshaped'],a:3,
+ e:'They “are not deposits; they are ongoing processes that the system continues to sustain.” The same self-modifying power that built them can build differently: grooves worn by repeated use can be worn differently.',c:'Patterns are ongoing processes, grooves worn by use, not fixed deposits',s:['1.3','7']},
+{t:'fill',q:'Lesson 1.4 says: remove the stillness and you do not have life; you have agitation without ______.',a:['anchor','an anchor'],show:'anchor',
+ e:'“Remove the movement and you do not have rest; you have lifelessness. Remove the stillness and you do not have life; you have agitation without anchor.”',c:'Where there is genuine life, stillness and movement are present together',s:['1.4','2']},
+{t:'judge',q:'“A perfectly still awareness could also be genuinely alive.”',a:1,
+ e:'“You cannot have a perfectly still awareness that is also genuinely alive.” Stillness is what the ocean is; waving is what it does. A truly motionless ocean would not be water; it would be ice.',c:'Stillness and the capacity for movement belong together in one Reality (ocean and waves)',s:['1.4','4']},
+{t:'mc',q:'In Lesson 1.5, what does Māyā name?',o:['The falsity of the world','A veil that stands between you and Reality','The principle of differentiation, limitation and relational appearance, by which the undivided takes the form of “this and that” without becoming divided','The force by which the world is gradually undone'],a:2,
+ e:'Māyā is not simply “illusion.” The world that appears through Māyā “is not a screen between you and Reality. It is Reality, in expressive mode.” Differentiation is not separation.',c:'Māyā is differentiation, not illusion; differentiation is not separation',s:['1.5','2']},
+{t:'mc',q:'Which of these is the lesson’s example of a useful distinction hardening into a binding wall?',o:['Food must be distinguished from poison','“I am my role” turns into “I cannot be anything else”','A child needs to know that this body is hers and not someone else’s','One responsibility must be distinguished from another'],a:1,
+ e:'The other three are working distinctions that make embodied life possible. The problem begins when relative distinctions are treated as ultimate truths: “The bondage does not arise from difference; it arises from forgetting the unity within the difference.”',c:'Useful versus binding differentiation: working distinctions kept, absolutised ones loosened',s:['1.5','4']},
+{t:'judge',q:'“Space, time and causation are real and indispensable for embodied life, and they are the final nature of the Self.”',a:2,
+ e:'The first part holds: they are real and pragmatically indispensable. The second does not: they belong to the flow side, not the ground side, and “are not the final nature of the Self.”',c:'Space, time and causation belong to the flow, not to the ground',s:['1.5','5']},
+{t:'mc',q:'Which of these is one of the three recognitions Lesson 1.6 asks you to carry forward?',o:['The empirical “I” is the deepest knower','Reality is alive at its deepest layer','Space and time are fixed containers','The world is an illusion over a still ground'],a:1,
+ e:'The three are: the Self is the awareness in which the empirical “I” appears; reality is alive at its deepest layer (“The ground is not a blank emptiness”); and the world is real but conditioned.',c:'The three recognitions: the Self as awareness, a living ground, a real but conditioned world',s:['1.6','5']},
+{t:'judge',q:'“Module 1 hands you a set of doctrines to accept.”',a:1,
+ e:'“You have not been handed doctrines to accept. You have been walked through a sequence of observations that you can verify in your own experience.”',c:'Module 1 is a sequence of observations to verify, not doctrines',s:['1.6','1']}
+];
+(function(){
+ var q=new URLSearchParams(location.search);
+ if(q.get('theme')==='light')document.documentElement.setAttribute('data-theme','light');
+ if(q.get('theme')==='dark')document.documentElement.setAttribute('data-theme','dark');
+})();
+var i=0,right=0,ans=[],saved=false;
+var app=document.getElementById('app');
+var JL=['Holds','Does not hold','Holds only in part'];
+function norm(s){return s.normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().replace(/[^a-z]/g,'')}
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;')}
+function hdr(){
+ document.getElementById('pos').textContent=i<Q.length?'Question '+(i+1)+' of '+Q.length:'Finished';
+ document.getElementById('sc').textContent=i<Q.length?right+' right so far':'';
+ document.getElementById('prog').style.width=(100*Math.min(i,Q.length)/Q.length)+'%';
+}
+function send(m){try{window.parent.postMessage(m,'*')}catch(e){}}
+function ref(s){return s?'Lesson '+s[0]+', section '+s[1]:'the module as a whole'}
+function show(){
+ hdr();
+ if(i>=Q.length){return result()}
+ var qq=Q[i];
+ var h='<div class="card"><p class="qn">Question '+(i+1)+'</p><p class="q">'+esc(qq.q)+'</p>';
+ if(qq.t==='mc'){h+='<div class="opts">';qq.o.forEach(function(o,k){h+='<button class="opt" data-k="'+k+'">'+String.fromCharCode(65+k)+'. '+esc(o)+'</button>'});h+='</div>'}
+ else if(qq.t==='judge'){h+='<div class="opts">';JL.forEach(function(o,k){h+='<button class="opt" data-k="'+k+'">'+o+'</button>'});h+='</div>'}
+ else{h+='<input class="fill" id="fill" type="text" autocomplete="off" autocapitalize="off" placeholder="Type your answer"><div><button class="btn" id="chk">Check answer</button></div>'}
+ h+='<div class="fb" id="fb" role="status"></div><div class="nav"><button class="btn" id="nx" style="display:none">'+(i===Q.length-1?'See my result':'Next question')+'</button></div></div>';
+ app.innerHTML=h;
+ if(qq.t!=='fill'){app.querySelectorAll('.opt').forEach(function(b){b.onclick=function(){mark(+b.dataset.k===qq.a,b)}})}
+ else{var f=document.getElementById('fill');
+  document.getElementById('chk').onclick=function(){
+   if(!f.value.trim()){f.focus();return}
+   var ok=qq.a.some(function(x){return norm(f.value)===norm(x)});
+   f.disabled=true;this.style.display='none';mark(ok,null,f.value)};
+  f.onkeydown=function(e){if(e.key==='Enter')document.getElementById('chk').click()};f.focus()}
+ document.getElementById('nx').onclick=function(){i++;show();window.scrollTo(0,0)};
+}
+function mark(ok,btn,typed){
+ started=true;
+ var qq=Q[i];if(ok)right++;ans.push({q:i+1,ok:ok,given:typed!==undefined?typed:(btn?btn.textContent:'')});
+ if(qq.t!=='fill'){app.querySelectorAll('.opt').forEach(function(b,k){b.disabled=true;if(k===qq.a)b.classList.add('right')});if(!ok&&btn)btn.classList.add('wrong')}
+ var right_ans=qq.t==='mc'?qq.o[qq.a]:qq.t==='judge'?JL[qq.a]:qq.show;
+ var fb=document.getElementById('fb');fb.className='fb '+(ok?'ok':'no');
+ fb.innerHTML='<b>'+(ok?'Right.':'Not quite. The answer is: '+esc(right_ans))+'</b>'+esc(qq.e)+' <i>('+ref(qq.s)+'.)</i>';
+ document.getElementById('nx').style.display='inline-block';hdr();
+ send({type:'progress',code:META.code,state:{i:i+1,right:right,ans:ans}});
+}
+function result(){
+ var n=Q.length,p=Math.round(100*right/n),good=p>=META.cut;
+ var h='<div class="card res"><p class="qn">Your result</p><p class="score"><span class="big">'+p+'%</span></p>'+
+  '<p class="band '+(good?'good':'rev')+'">'+(good?'Well grasped':'Revisit these ideas')+'</p>'+
+  '<p>'+right+' of '+n+' questions right.</p>';
+ var miss=[];Q.forEach(function(qq,k){if(!ans[k]||!ans[k].ok)miss.push(qq)});
+ if(miss.length){h+='<div class="revisit"><h2>Ideas to revisit</h2><ul>';miss.forEach(function(qq){h+='<li>'+esc(qq.c)+' <i>('+ref(qq.s)+')</i></li>'});h+='</ul></div>'}
+ else{h+='<div class="revisit"><h2>Nothing to revisit</h2><p>Every idea in this check was answered correctly.</p></div>'}
+ h+='<div class="review"><h2>Every question, with its answer</h2>';
+ Q.forEach(function(qq,k){var ok=ans[k]&&ans[k].ok;var a=qq.t==='mc'?qq.o[qq.a]:qq.t==='judge'?JL[qq.a]:qq.show;
+  h+='<div class="item '+(ok?'r':'w')+'">'+(ok?'Right. ':'Not quite. ')+'<b>Q'+(k+1)+'</b> '+esc(qq.q)+'<br>Answer: '+esc(a)+'<small>'+esc(qq.e)+' ('+ref(qq.s)+')</small></div>'});
+ h+='</div><p class="saved" id="savedmsg"></p><div class="acts"><button class="btn" id="again">Take it again</button></div></div>';
+ app.innerHTML=h;
+ document.getElementById('again').onclick=function(){i=0;right=0;ans=[];saved=false;show();window.scrollTo(0,0)};
+ send({type:'quizResult',code:META.code,title:META.quizTitle,programme:META.programme,score:right,maxScore:n,percent:p,questionsCorrect:right,questionCount:n,answers:ans});
+ send({type:'progress',code:META.code,state:null});
+}
+window.addEventListener('message',function(ev){
+ var d=ev.data;if(!d||!d.type)return;
+ var m=document.getElementById('savedmsg');
+ if(d.type==='saved'&&m){m.textContent='Your result has been saved to your member record.'}
+ if(d.type==='saveError'&&m){m.textContent='Your result could not be saved this time. You can take the check again.'}
+ if(d.type==='notMember'&&m){m.textContent='Sign in as a member to have your result saved.'}
+ if(d.type==='resume'&&d.state&&d.state.i>0&&d.state.i<Q.length&&!started){offerResume(d.state)}
+});
+var started=false;
+function offerResume(st){
+ var h='<div class="card"><p class="qn">Welcome back</p><p class="q">You have answered '+st.i+' of '+Q.length+' questions so far.</p><p>Would you like to continue where you left off, or start again from the beginning?</p><div class="acts"><button class="btn" id="cont">Continue from question '+(st.i+1)+'</button><button class="btn alt" id="rest">Start again</button></div></div>';
+ app.innerHTML=h;
+ document.getElementById('cont').onclick=function(){i=st.i;right=st.right||0;ans=st.ans||[];started=true;show()};
+ document.getElementById('rest').onclick=function(){i=0;right=0;ans=[];started=true;show()};
+}
+show();
+send({type:'ready'});
+</script>
+</body>
+</html>
