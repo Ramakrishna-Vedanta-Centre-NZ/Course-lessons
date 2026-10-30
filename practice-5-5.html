@@ -1,0 +1,520 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Practice: Lesson 5.5, Knowledge, Solitude and Community</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans:wght@400..700&family=Noto+Serif:ital,wght@0,400..700;1,400..700&display=swap">
+<style>
+:root{
+  --bg:#FBF5EA; --surface:#FFFDF8; --ink:#1E1E1E; --muted:#5A5A5A; --line:#E6DAC3; --tint:#F3EAD3; --navy:#12285A; --gold:#C9A24A; --goldt:#6B4E0E;
+  --obj:#0B8686; --att:#C95F06; --res:#2E3192; --env:#C0245B; --ok:#1B7A52;
+  --display:"Noto Serif",Georgia,"Times New Roman",serif;
+  --body:"Noto Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0B1A3D; --surface:#12285A; --ink:#FBF5EA; --muted:#C9C3B3; --line:#2B4686; --tint:#1D3770; --gold:#E6C36A; --goldt:#E6C36A;
+    --obj:#46CFC6; --att:#F5A04D; --res:#A3AAFF; --env:#FF7BA9; --ok:#5BD59B; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0B1A3D; --surface:#12285A; --ink:#FBF5EA; --muted:#C9C3B3; --line:#2B4686; --tint:#1D3770; --gold:#E6C36A; --goldt:#E6C36A;
+  --obj:#46CFC6; --att:#F5A04D; --res:#A3AAFF; --env:#FF7BA9; --ok:#5BD59B; color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;
+  padding-left:max(14px,env(safe-area-inset-left,0px));padding-right:max(14px,env(safe-area-inset-right,0px));padding-block:22px 40px}
+.wrap{max-width:900px;margin:0 auto;display:flex;flex-direction:column;gap:32px}
+h1,h2,h3{font-family:var(--display);font-weight:500;text-wrap:balance;margin:0;letter-spacing:-.01em}
+h1{font-size:clamp(30px,5.4vw,44px);line-height:1.06}
+h2{font-size:clamp(23px,3.4vw,29px);line-height:1.15}
+h3{font-size:19px;line-height:1.25}
+p{margin:0}
+sub{font-size:.72em;line-height:0}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.lede{font-size:17.5px;max-width:64ch}
+.intro{max-width:66ch;color:var(--muted)}
+header{display:flex;flex-direction:column;gap:12px}
+section{display:flex;flex-direction:column;gap:18px;min-width:0}
+.sym{font-family:var(--mono);font-size:.92em;white-space:nowrap}
+.k-obj{color:var(--obj)} .k-att{color:var(--att)} .k-res{color:var(--res)} .k-env{color:var(--env)}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px;display:flex;flex-direction:column;gap:14px;min-width:0}
+.bar{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;justify-content:space-between}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--bg)}
+.seg button{font:inherit;font-size:14px;color:var(--muted);background:transparent;border:0;padding:8px 13px;cursor:pointer}
+.seg button+button{border-left:1px solid var(--line)}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--surface)}
+button:focus-visible,input:focus-visible{outline:2px solid var(--res);outline-offset:2px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{font:inherit;font-size:14px;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:7px 13px;cursor:pointer;display:inline-flex;gap:8px;align-items:center}
+.chip i{font-style:normal;font-family:var(--mono);font-size:11px;color:var(--muted)}
+.chip[aria-pressed="true"]{background:var(--res);border-color:var(--res);color:#fff}
+.chip[aria-pressed="true"] i{color:#fff;opacity:.8}
+.chip:disabled{cursor:default}
+.chip.reached:not([aria-pressed="true"]){border-color:var(--res)}
+.btn{font:inherit;font-size:14px;color:var(--ink);background:var(--surface);border:1px solid var(--ink);border-radius:8px;padding:8px 16px;cursor:pointer}
+.btn.primary{background:var(--ink);color:var(--surface)}
+.btn.ghost{border-color:var(--line);color:var(--muted)}
+.scope-wrap{position:relative;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--bg)}
+canvas{display:block;width:100%}
+.playbtn{position:absolute;right:8px;bottom:8px;font:inherit;font-size:12px;background:var(--surface);color:var(--muted);border:1px solid var(--line);border-radius:6px;padding:4px 10px;cursor:pointer}
+.box{border:1px solid var(--line);border-radius:8px;background:var(--bg);padding:10px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.box .cap{font-size:12px;color:var(--muted)}
+.meters{display:flex;flex-direction:column;gap:9px}
+.meter{display:grid;grid-template-columns:1fr auto;gap:2px 8px;font-size:13px;align-items:baseline}
+.meter b{font-weight:600}
+.meter output{font-family:var(--mono);font-size:12px;color:var(--muted)}
+.meter .track{grid-column:1/-1;height:7px;background:var(--line);border-radius:4px;overflow:hidden}
+.meter .fill{height:100%;width:0;background:var(--res);border-radius:4px}
+.meter.f2 .fill{background:var(--env)} .meter.f3 .fill{background:var(--obj)}
+.slider{display:flex;align-items:center;gap:10px;flex:1 1 280px;min-width:0}
+.slider label{font-size:14px;min-width:0}
+.slider input[type=range]{flex:1;min-width:60px;accent-color:var(--res)}
+.slider small{color:var(--muted);font-size:12px;white-space:nowrap}
+.slider output{font-family:var(--mono);font-size:12.5px;color:var(--muted);min-width:46px;text-align:right}
+.readout{font-size:14px;color:var(--muted)}
+.readout b{color:var(--ink)}
+.tag{font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);border:1px solid var(--line);border-radius:4px;padding:2px 6px}
+.note{font-size:13px;color:var(--muted);max-width:70ch}
+.balance{background:var(--tint);border-radius:10px;padding:16px 18px;display:flex;flex-direction:column;gap:8px;max-width:78ch}
+footer{font-size:13px;color:var(--muted);max-width:76ch;border-top:1px solid var(--line);padding-top:12px}
+@media (max-width:640px){.panel{padding:12px}.wrap{gap:26px}}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
+
+[hidden]{display:none!important}
+:root{--c-h:var(--res);--c-ref:var(--obj);--c-over:var(--env);--c-settle:var(--att);--c-rip:var(--obj)}
+nav.parts{display:flex;flex-wrap:wrap;gap:8px 20px;margin-top:4px}
+nav.parts a{color:var(--ink);text-decoration:none;border-bottom:1px solid var(--line);padding-bottom:2px;font-size:15px}
+nav.parts a:hover,nav.parts a:focus-visible{border-color:var(--res);color:var(--res)}
+.msg{min-height:1.5em;font-size:15px}
+.fbbox{border-top:1px solid var(--line);padding-top:12px;display:flex;flex-direction:column;gap:8px;min-height:6.5em}
+.fbbox .verdict{font-family:var(--display);font-size:19px}
+.fbbox .ref{font-family:var(--mono);font-size:11px;color:var(--muted)}
+.fbbox q{font-style:italic;quotes:"“" "”"}
+.strikebar{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center}
+.chip:focus-visible,.pick:focus-visible,summary:focus-visible{outline:2px solid var(--res);outline-offset:2px}
+.scene{border-left:3px solid var(--line);padding:2px 0 2px 12px;font-family:var(--display);font-size:18.5px;line-height:1.45;min-height:5.6em}
+.picks{gap:10px}
+.pick{font:inherit;font-size:15px;color:var(--ink);background:var(--bg);border:1.5px solid var(--line);border-top-width:4px;border-radius:10px;padding:9px 14px;cursor:pointer;min-width:0}
+.pick[data-p="settle"]{border-top-color:var(--c-settle)}
+.pick[data-p="over"]{border-top-color:var(--c-over)}
+.pick[data-p="ripple"]{border-top-color:var(--c-rip)}
+.pick.wrong{opacity:.55}
+.pick.right{background:var(--surface);box-shadow:0 0 0 2px var(--ink)}
+.pick:disabled{cursor:default}
+.dots{display:flex;gap:6px}
+.dots i{width:10px;height:10px;border-radius:50%;border:1.5px solid var(--muted)}
+.dots i.done{background:var(--ink);border-color:var(--ink)}
+.dots i.cur{border-color:var(--ink);box-shadow:0 0 0 2px var(--line)}
+.brandhdr{background:#12285A;color:#FBF5EA;text-align:center;padding:18px 18px 20px;border-radius:14px;display:flex;flex-direction:column;align-items:center;gap:6px}
+.brandhdr .logos{display:flex;align-items:center;justify-content:center;gap:18px}
+.brandhdr .logos img{width:56px;height:66px;object-fit:contain;display:block}
+.brandhdr .logos img.rit{width:86px;height:65px}
+.brandhdr .eyebrow{color:#E6C36A;font-weight:700;letter-spacing:3px}
+.brandhdr h1{color:#FBF5EA;font-weight:700}
+.brandhdr .course{color:#E6C36A;font-weight:600;font-size:14px}
+.brandhdr .lede{color:#F1ECDF;font-size:15.5px;max-width:62ch}
+.brandhdr .scorenote{color:#F1ECDF;font-size:14.5px}
+nav.parts a{color:var(--ink)}
+.brandhdr nav.parts a{color:#FBF5EA;border-bottom:1px solid #E6C36A;background:none;padding-bottom:2px}
+.brandhdr nav.parts a:hover,.brandhdr nav.parts a:focus-visible{color:#E6C36A;border-color:#E6C36A}
+.tag.scored{color:var(--goldt);border-color:var(--gold)}
+.scorebox{border-left:5px solid var(--gold);background:var(--tint);border-radius:10px;padding:12px 14px;margin-bottom:14px}
+.scorebox .big{font-family:var(--display);font-size:30px;line-height:1.1;color:var(--ink)}
+.scorebox .band{font-family:var(--display);font-size:18px;margin:4px 0}
+.scorebox .band.good{color:var(--ok)}
+.scorebox .saved{font-size:13.5px;color:var(--muted)}
+.scorebox ul{margin:6px 0 0;padding-left:20px}
+
+/* PRACTICE TEMPLATE: one coloured "part" per section (part-1 .. part-4) */
+.part{--pc:#0E7A8A;--pcon:#FFFFFF;--pcbg:#E6F2F3;border:2px solid var(--pc);border-radius:14px;overflow:hidden;background:var(--pcbg)}
+.part-1{--pc:#0E7A8A;--pcbg:#E6F2F3}
+.part-2{--pc:#12285A;--pcbg:#EEF0F8}
+.part-3{--pc:#2F6B3A;--pcbg:#E6F0E3}
+.part-4{--pc:#7A2A5E;--pcbg:#F5E6F0}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .part{--pcbg:#0F2250;border-color:var(--pcl,var(--pc))}
+ :root:not([data-theme="light"]) .part-1{--pcl:#46CFC6} :root:not([data-theme="light"]) .part-2{--pcl:#E6C36A} :root:not([data-theme="light"]) .part-3{--pcl:#7FD08C} :root:not([data-theme="light"]) .part-4{--pcl:#F08CC8}}
+:root[data-theme="dark"] .part{--pcbg:#0F2250;border-color:var(--pcl,var(--pc))}
+:root[data-theme="dark"] .part-1{--pcl:#46CFC6} :root[data-theme="dark"] .part-2{--pcl:#E6C36A} :root[data-theme="dark"] .part-3{--pcl:#7FD08C} :root[data-theme="dark"] .part-4{--pcl:#F08CC8}
+.part-band{background:var(--pc);color:var(--pcon);padding:12px 16px;display:flex;align-items:center;flex-wrap:wrap;gap:6px 14px}
+.part-band h2{color:inherit;font-size:clamp(20px,3.4vw,26px);font-weight:600;flex:1 1 220px}
+.part-num{font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;font-weight:500;background:rgba(255,255,255,.18);border-radius:4px;padding:3px 9px}
+.part-band .tag{color:inherit;border-color:currentColor;background:rgba(255,255,255,.12)}
+.part-2 .part-band .tag,.part-2 .part-num{color:#E6C36A}
+.part-body{padding:16px;display:flex;flex-direction:column;gap:14px}
+.part .panel{background:var(--surface)}
+@media (max-width:640px){.part-body{padding:12px}}
+
+
+/* page-specific */
+q{font-style:italic;quotes:"“" "”"}
+.btn:disabled{opacity:.45;cursor:default}
+.btn[aria-pressed="true"]{background:var(--ink);color:var(--surface)}
+.pick{font:inherit;font-size:15px;color:var(--ink);background:var(--bg);border:1.5px solid var(--line);border-radius:10px;padding:9px 14px;cursor:pointer;min-width:0;text-align:left}
+.pick.wrong{opacity:.55}
+.pick.right{background:var(--ok);border-color:var(--ok);color:#fff}
+.pick:disabled{cursor:default}
+.pick:focus-visible,.node:focus-visible{outline:2px solid var(--res);outline-offset:2px}
+.part-5{--pc:#B5651D;--pcbg:#FBEEDD}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .part-5{--pcl:#F5B060}}
+:root[data-theme="dark"] .part-5{--pcl:#F5B060}
+.made{font-size:12.5px;color:var(--muted);font-style:italic}
+.slider{display:flex;align-items:center;gap:10px;flex-wrap:wrap;flex:0 0 auto}
+.slider label{font-weight:600;min-width:200px}
+.slider input[type=range]{flex:1;min-width:120px;accent-color:var(--res)}
+.cohbar{height:10px;border-radius:5px;background:var(--line);overflow:hidden}
+.cohbar i{display:block;height:100%;width:0;background:var(--ok);border-radius:5px;transition:width .25s}
+.cohrow{display:flex;flex-direction:column;gap:4px;font-size:14px}
+canvas.gr{width:100%;height:230px;border:1px solid var(--line);border-radius:8px;background:var(--bg)}
+canvas.lp{width:100%;max-width:520px;height:230px;margin:0 auto;border:1px solid var(--line);border-radius:10px;background:var(--bg)}
+canvas.ch{width:100%;height:210px;border:1px solid var(--line);border-radius:8px;background:var(--bg)}
+canvas.nz{width:100%;height:170px;border:1px solid var(--line);border-radius:8px;background:var(--bg)}
+.flow{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.flow .arrow{color:var(--muted)}
+.rung{font:inherit;font-size:15px;border:1.5px solid var(--line);border-bottom-width:4px;border-radius:10px;background:var(--bg);color:var(--ink);padding:8px 14px;cursor:pointer}
+.rung[aria-pressed="true"]{background:var(--ink);color:var(--surface)}
+.rung.seen:not([aria-pressed="true"]){border-color:var(--ink)}
+.act2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.act2 .box2{border:1px solid var(--line);border-radius:10px;background:var(--bg);padding:12px 14px;display:flex;flex-direction:column;gap:6px}
+@media (max-width:640px){.act2{grid-template-columns:1fr}}
+.bars2{display:flex;flex-direction:column;gap:8px;font-size:14px}
+.bar2{display:grid;grid-template-columns:150px 1fr;gap:10px;align-items:center}
+.bar2 .tr{height:10px;background:var(--line);border-radius:5px;overflow:hidden}
+.bar2 .tr i{display:block;height:100%;width:0;border-radius:5px;transition:width .4s}
+.part-1{--pc:#0E7A8A;--pcbg:#E6F2F3}
+.balance{background:var(--tint);border-radius:10px;padding:16px 18px;display:flex;flex-direction:column;gap:8px;max-width:78ch}
+.btn.primary{background:var(--ink);color:var(--surface)}
+canvas.sk{width:100%;height:210px;border:1px solid var(--line);border-radius:10px;background:var(--bg)}
+canvas.st{width:100%;height:150px;border:1px solid var(--line);border-radius:10px;background:var(--bg)}
+canvas.rm{width:100%;height:200px;border:1px solid var(--line);border-radius:10px;background:var(--bg)}
+canvas.bm{width:100%;height:160px;border:1px solid var(--line);border-radius:10px;background:var(--bg)}
+.sw{display:flex;flex-wrap:wrap;gap:14px 24px}
+.sw .grp{display:flex;flex-direction:column;gap:6px}
+.sw .grp b{font-size:14px}
+</style></head><body>
+<div class="wrap">
+<header class="brandhdr">
+  <div class="logos"><img src="vedantanz-logo.png" alt="Ramakrishna Vedanta NZ emblem" width="56" height="66"><img class="rit" src="ritam-wordmark.png" alt="Ritam" width="86" height="65"></div>
+  <div class="eyebrow">Practice · Lesson 5.5</div>
+  <h1>Knowledge, Solitude and Community</h1>
+  <p class="course">The Mind in the Light of Modern and Spiritual Sciences · Advanced</p>
+  <p class="lede">Lesson 5.5 asks what changes when a wave of the mind is seen as a wave, rather than as “me”. Here you will watch a wave cross the sky of awareness, examine the assumptions beneath it, tell the three stages of knowing apart, see how solitude and good company shape the field, and look at what makes the ground ready.</p>
+  <p class="scorenote"><b>Parts II and III</b> are scored: your first pick counts. <b>Parts I, IV and V</b> are practice and are not scored.</p>
+  <nav class="parts" aria-label="Parts of this page"><a href="#s1">I. Wave, or me?</a><a href="#s2">II. The assumptions</a><a href="#s3">III. Which stage?</a><a href="#s4">IV. The field</a><a href="#s5">V. The ground</a></nav>
+</header>
+
+<section id="s1" class="part part-1">
+  <div class="part-band"><span class="part-num">Part I</span><h2>Wave, or me?</h2><span class="tag">Practice: not scored</span></div>
+  <div class="part-body">
+  <p class="intro">Awareness is drawn here as a still sky. A wave of the mind crosses it. Choose a wave, then choose how to meet it: by identifying with it, or by asking what it is passing through. The bar shows the weight of the filter h(t), as a simple model.</p>
+  <div class="panel" id="wv">
+    <div class="seg" role="group" aria-label="Which wave"><button type="button" data-w="irr" aria-pressed="true">Irritation at a voice</button><button type="button" data-w="cra" aria-pressed="false">Craving for recognition</button><button type="button" data-w="wor" aria-pressed="false">Worry when the phone rings</button></div>
+    <canvas class="sk" id="cvSky" role="img" aria-label="A still sky with a wave crossing it; the wave fills the sky when identified with, and shows as a wave against the sky when seen as one"></canvas>
+    <div class="scene"><p id="wvText"></p></div>
+    <div class="bar"><div class="chips"><button class="btn" id="bId">Identify with the wave</button><button class="btn primary" id="bDis">See it as a wave</button><button class="btn ghost" id="bWv">Start again</button></div><div class="cohrow" style="min-width:200px"><span class="readout">Weight of the filter (model)</span><div class="cohbar"><i id="wvBar"></i></div></div></div>
+    <div class="msg fbbox" id="wvMsg" role="status" aria-live="polite"></div>
+    <p class="note">The bar is an illustration of the lesson’s idea, not a measurement of anyone’s mind.</p>
+  </div>
+  <div class="balance">
+    <h3>Who is doing the discriminating?</h3>
+    <p>The Pratyabhijñā lens in the lesson says: <q>When the practitioner discriminates the transient from the permanent, it is not the small individual mind doing the discriminating from outside the equation.</q> And on letting go: <q>willed renunciation usually strengthens what it pushes against.</q> (§2.2 and §4) <q>The practitioner consents. The Śakti operates.</q> (§4)</p>
+  </div>
+  </div>
+</section>
+
+<section id="s2" class="part part-2">
+  <div class="part-band"><span class="part-num">Part II</span><h2>Examine the assumptions</h2><span class="tag scored">Scored: first pick counts</span></div>
+  <div class="part-body">
+  <p class="intro">The lesson says the standing tilt still carries assumptions: <q>I am this body; I am this set of memories; I am the one who has these problems; I am the one who must achieve this outcome.</q> (§2.3) Mananam takes them one at a time. For each of three, pick the observation that loosens it, and a weight lifts from the filter. Your first pick counts.</p>
+  <div class="panel" id="as">
+    <canvas class="st" id="cvStones" role="img" aria-label="Five weights on a bar, which lift one at a time as the assumptions are examined"></canvas>
+    <div class="bar"><span class="tag" id="asPro">Assumption 1 of 3</span><div class="dots" id="asDots" aria-hidden="true"></div></div>
+    <div class="scene"><p id="asText"></p></div>
+    <div class="chips picks" id="asPicks" role="group" aria-label="Your answer"></div>
+    <div id="asMsg" class="msg fbbox" role="status" aria-live="polite"><p class="note">Pick one.</p></div>
+    <div class="bar"><div class="chips"><button class="btn primary" id="asNext" hidden>Next assumption</button><button class="btn ghost" id="asShow">Show me</button><button class="btn ghost" id="asReset">Start again</button></div></div>
+    <p class="note">The lesson names other assumptions too. <q>Each examination, sustained over weeks and months, weakens one more loop.</q> (§2.3)</p>
+  </div>
+  </div>
+</section>
+
+<section id="s3" class="part part-3">
+  <div class="part-band"><span class="part-num">Part III</span><h2>Which stage?</h2><span class="tag scored">Scored: first pick counts</span></div>
+  <div class="part-body">
+  <p class="intro">The lesson gives a three-stage sequence for knowing: listening, reflection and continuous recognition. Four made-up moments. Say which stage each shows. Your first pick counts.</p>
+  <div class="panel" id="sg">
+    <div class="bar"><span class="tag" id="sgPro">Moment 1 of 4</span><div class="dots" id="sgDots" aria-hidden="true"></div></div>
+    <div class="scene"><p id="sgText"></p></div>
+    <div class="chips picks" id="sgPicks" role="group" aria-label="Your answer"></div>
+    <div id="sgMsg" class="msg fbbox" role="status" aria-live="polite"><p class="note">Pick one.</p></div>
+    <div class="bar"><div class="chips"><button class="btn primary" id="sgNext" hidden>Next moment</button><button class="btn ghost" id="sgShow">Show me</button><button class="btn ghost" id="sgReset">Start again</button></div></div>
+    <p class="made">The people in these moments are made up.</p>
+  </div>
+  <div class="panel" id="sgDone" hidden>
+    <div class="scorebox" id="scBox" aria-live="polite"></div>
+    <p>The score only shows where to look again in the lesson. It says nothing about you.</p>
+  </div>
+  </div>
+</section>
+
+<section id="s4" class="part part-4">
+  <div class="part-band"><span class="part-num">Part IV</span><h2>The field: solitude and good company</h2><span class="tag">Practice: not scored</span></div>
+  <div class="part-body">
+  <p class="intro">The lesson says the practitioner is <q>embedded in a continuous environmental field.</q> (§3) Two practices shape it: one reduces what comes in, the other selects who it comes from.</p>
+  <div class="panel">
+    <h3>The room and the retreat</h3>
+    <canvas class="rm" id="cvRoom" role="img" aria-label="A busy field of incoming signals that fades as the input is reduced, letting the mind's own slow movements show"></canvas>
+    <div class="slider"><label for="kIn">How much comes in from outside</label><input type="range" id="kIn" min="0" max="100" value="85" aria-valuetext="a great deal"></div>
+    <div class="msg fbbox" id="inMsg" role="status" aria-live="polite"></div>
+  </div>
+  <div class="panel">
+    <h3>The company of the true</h3>
+    <canvas class="st" id="cvSat" role="img" aria-label="One steady clock hand and four wobbly ones, which fall into step as time in the company grows"></canvas>
+    <div class="slider"><label for="kSat">Time in good company</label><input type="range" id="kSat" min="0" max="100" value="0" aria-valuetext="none"></div>
+    <div class="cohrow"><div class="bar"><span>In step</span><b id="satVal">0%</b></div><div class="cohbar"><i id="satFill"></i></div></div>
+    <div class="msg fbbox" id="satMsg" role="status" aria-live="polite"></div>
+  </div>
+  </div>
+</section>
+
+<section id="s5" class="part part-5">
+  <div class="part-band"><span class="part-num">Part V</span><h2>The ground</h2><span class="tag">Practice: not scored</span></div>
+  <div class="part-body">
+  <p class="intro">The lesson says <q>This is not a hierarchy of value among the families. It is structural fact about what each family requires of the system to which it is applied.</q> (§3.3) Set the three conditions of the practice and watch a beam of discrimination meet an assumption.</p>
+  <div class="panel">
+    <div class="sw">
+      <div class="grp"><b>The state of buddhi</b><div class="seg" role="group" aria-label="The state of buddhi"><button type="button" data-c="b" data-v="clear" aria-pressed="true">Clear</button><button type="button" data-c="b" data-v="dim" aria-pressed="false">Dim</button><button type="button" data-c="b" data-v="scat" aria-pressed="false">Scattered</button></div></div>
+      <div class="grp"><b>The filter h(t)</b><div class="seg" role="group" aria-label="The filter"><button type="button" data-c="h" data-v="light" aria-pressed="true">Light enough</button><button type="button" data-c="h" data-v="heavy" aria-pressed="false">Heavily loaded</button></div></div>
+      <div class="grp"><b>The longing to know</b><div class="seg" role="group" aria-label="The longing to know"><button type="button" data-c="m" data-v="yes" aria-pressed="true">Genuinely present</button><button type="button" data-c="m" data-v="no" aria-pressed="false">Absent</button></div></div>
+    </div>
+    <canvas class="bm" id="cvBeam" role="img" aria-label="A beam from the teaching toward an assumption, which goes through, fogs, scatters or bends depending on the conditions"></canvas>
+    <div class="msg fbbox" id="bmMsg" role="status" aria-live="polite"></div>
+    <p class="note">These switches describe the conditions of the practice, not a verdict on anyone. Each can change.</p>
+  </div>
+  </div>
+</section>
+
+<footer>Parts II and III are scored, and only to show you where to look again. Parts I, IV and V are practice and are not scored. Based on Lesson 5.5. This page illustrates the lesson’s ideas and does not measure, diagnose or advise on anyone’s mind or situation. If anything here touches something difficult for you, please be gentle with yourself, and consider speaking with someone you trust or a qualified professional.<br>Ritam · Ramakrishna Vedanta Centre NZ · <a href="https://www.vedanta.nz">www.vedanta.nz</a> Privacy: when you are signed in, your name, email, answers and score are saved to your member record. Only you and the course instructors can see them. They are not shared or ranked.</footer>
+</div>
+<script>
+(function(){
+"use strict";
+var $=function(id){return document.getElementById(id)};
+try{var q=new URLSearchParams(location.search).get("theme");if(q==="light"||q==="dark")document.documentElement.setAttribute("data-theme",q)}catch(e){}
+try{var pt=new URLSearchParams(location.search).get("part");if(pt==="1"||pt==="2"||pt==="3")document.body.setAttribute("data-part",pt)}catch(e){}
+var EMBED=/[?&]embed=1/.test(location.search);
+function send(m){if(EMBED){try{parent.postMessage(m,"*")}catch(e){}}}
+var RM=false;try{RM=window.matchMedia("(prefers-reduced-motion: reduce)").matches}catch(e){}
+var C={};
+function readColors(){var cs=getComputedStyle(document.documentElement);["--bg","--surface","--ink","--muted","--line","--obj","--att","--res","--env","--ok"].forEach(function(k){C[k]=cs.getPropertyValue(k).trim()})}
+readColors();
+var dpr=Math.max(1,Math.min(2,window.devicePixelRatio||1));
+function fit(c){var w=c.clientWidth,h=c.clientHeight;if(!w||!h)return null;var bw=Math.round(w*dpr),bh=Math.round(h*dpr);if(c.width!==bw||c.height!==bh){c.width=bw;c.height=bh}var g=c.getContext("2d");g.setTransform(dpr,0,0,dpr,0,0);return {g:g,w:w,h:h}}
+function label(g,t,x,y,color){g.font="500 11.5px 'Noto Sans',system-ui,sans-serif";g.textAlign="left";g.textBaseline="alphabetic";var w=g.measureText(t).width;g.save();g.globalAlpha=.85;g.fillStyle=C["--bg"];g.fillRect(x-4,y-12,w+8,16);g.restore();g.fillStyle=color;g.fillText(t,x,y)}
+
+/* ===== Part I: wave, or me? (not scored) ===== */
+var WV={
+ irr:{c:"#C0245B",lab:"irritation",t:"A familiar flicker of irritation rises at a colleague’s voice.",id:"I am angry; this is who I am right now.",ds:"this is a wave passing through awareness; it is transient. The awareness in which it is passing, what is that?"},
+ cra:{c:"#C95F06",lab:"craving",t:"Years of pursuing recognition. Each new achievement brings a brief satisfaction, then hunger for the next.",id:"treating itself as incomplete without it",ds:"the recognition is a transient appearance; the system pursuing it has been treating itself as incomplete without it."},
+ wor:{c:"#2E3192",lab:"worry",t:"The phone rings, and the same anxieties arise.",id:"I am the one who has these problems.",ds:"this is a wave passing through awareness; it is transient. The awareness in which it is passing, what is that?"}};
+var W={k:"irr",id:0,tid:0,F:50,x:0,last:0,first:true};
+function wvText(){$("wvText").textContent=WV[W.k].t}
+function skyDraw(ts){
+  var f=fit($("cvSky"));
+  if(f){var g=f.g,w=f.w,h=f.h,dt=Math.min(.05,(ts-W.last)/1000||0);W.last=ts;if(!RM)W.x=(W.x+dt*.12)%1.3;W.id+=(W.tid-W.id)*Math.min(1,dt*3.5);
+    g.clearRect(0,0,w,h);var gr=g.createLinearGradient(0,0,0,h);gr.addColorStop(0,"#BFE3F2");gr.addColorStop(1,"#F6F1E1");g.fillStyle=gr;g.fillRect(0,0,w,h);
+    var dark=document.documentElement.getAttribute("data-theme")==="dark"||(!document.documentElement.getAttribute("data-theme")&&window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches);
+    if(dark){var g2=g.createLinearGradient(0,0,0,h);g2.addColorStop(0,"#1D3770");g2.addColorStop(1,"#0F2250");g.fillStyle=g2;g.fillRect(0,0,w,h)}
+    var col=WV[W.k].c,cx=(RM?.5:W.x-.15)*w;
+    g.fillStyle=col;g.globalAlpha=.9;g.beginPath();g.moveTo(cx-90,h*.7);
+    for(var i=0;i<=40;i++){var x=cx-90+i*(180/40),y=h*.5-Math.sin(i/40*Math.PI)*h*.22*(1+W.id*.5)+Math.sin(i*.8+(RM?0:ts/400))*3;g.lineTo(x,y)}
+    g.lineTo(cx+90,h*.7);g.closePath();g.fill();g.globalAlpha=1;
+    g.globalAlpha=.88*W.id;g.fillStyle=col;g.fillRect(0,0,w,h);g.globalAlpha=1;
+    g.textAlign="center";g.font="500 15px 'Noto Serif',Georgia,serif";
+    if(W.id>.5){g.globalAlpha=Math.min(1,(W.id-.4)*2);g.fillStyle="#fff";g.fillText("“"+WV[W.k].id+"”",w/2,h/2);g.globalAlpha=1}
+    else{g.fillStyle=dark?"#FBF5EA":"#12285A";g.globalAlpha=1-W.id*2;g.fillText("the awareness in which it is passing",w/2,h*.2);
+      g.font="500 13px 'Noto Sans',sans-serif";g.fillStyle="#fff";g.fillText("a wave of "+WV[W.k].lab,Math.max(70,Math.min(w-70,cx)),h*.62);g.globalAlpha=1}
+  }
+  requestAnimationFrame(skyDraw);
+}
+function wvBar(){$("wvBar").style.width=Math.round(W.F)+"%"}
+$("bId").addEventListener("click",function(){W.tid=1;W.F=Math.min(100,W.F+8);wvBar();
+  $("wvMsg").innerHTML='<p>The wave fills the sky: <q>'+WV[W.k].id+'</q> <q>The identification weights the impression.</q> The filter thickens a little. (§2.1)</p>'});
+$("bDis").addEventListener("click",function(){W.tid=0;W.F=Math.max(0,W.F-6);wvBar();
+  var extra=W.k==="cra"?' The pursuit begins to slacken, <q>not because the practitioner has decided to stop</q>, but because the contraction driving it has loosened. (§2.2)':' The sky is seen behind the wave: <q>a wave arose and was seen as a wave.</q> (§2.1)';
+  $("wvMsg").innerHTML='<p>Discrimination: <q>'+WV[W.k].ds+'</q>'+extra+' The filter lightens a little.</p>'});
+$("bWv").addEventListener("click",function(){W.tid=0;W.F=50;wvBar();$("wvMsg").innerHTML='<p class="note">Choose a wave, then how to meet it.</p>'});
+document.querySelectorAll("[data-w]").forEach(function(b){b.addEventListener("click",function(){W.k=b.dataset.w;W.tid=0;document.querySelectorAll("[data-w]").forEach(function(x){x.setAttribute("aria-pressed",x===b?"true":"false")});wvText();$("wvMsg").innerHTML='<p class="note">Choose how to meet it.</p>'})});
+/* ===== quiz engine (Parts III and V, scored together) ===== */
+var META={code:"ADV-P-5-5",title:"Practice: Lesson 5.5, Knowledge, Solitude and Community (Parts II and III)",programme:"The Mind in the Light of Modern and Spiritual Sciences (Advanced)",cut:75};
+var quizzes=[],sent=false;
+function shuffle(a){a=a.slice();for(var z=a.length-1;z>0;z--){var y=Math.floor(Math.random()*(z+1)),t=a[z];a[z]=a[y];a[y]=t}return a}
+function Quiz(c){
+  var Q={i:0,done:{},miss:{},fin:false},el=function(s){return $(c.p+s)};
+  function dots(){var d=el("Dots");d.innerHTML="";c.items.forEach(function(_,k){var e=document.createElement("i");if(Q.done[k])e.className="done";else if(k===Q.i)e.className="cur";d.appendChild(e)})}
+  function showItem(){
+    var s=c.items[Q.i];el("Text").innerHTML=s.t;el("Pro").textContent=c.noun+" "+(Q.i+1)+" of "+c.items.length;
+    el("Picks").innerHTML=shuffle(s.o).map(function(k){return '<button class="pick" data-p="'+k+'" aria-pressed="false">'+c.L[k]+'</button>'}).join("");
+    el("Picks").querySelectorAll(".pick").forEach(function(p){p.addEventListener("click",function(){onPick(p)})});
+    el("Msg").innerHTML='<p class="note">Pick one.</p>';el("Next").hidden=true;el("Show").hidden=false;dots();
+  }
+  function reveal(){
+    var s=c.items[Q.i];Q.done[Q.i]=true;
+    el("Picks").querySelectorAll(".pick").forEach(function(p){p.disabled=true;if(p.dataset.p===s.a){p.classList.add("right");p.setAttribute("aria-pressed","true")}});
+    el("Msg").innerHTML='<p class="verdict">'+c.V[s.a]+'</p><p>'+s.why+'</p><p class="ref">'+s.ref+'</p>';
+    el("Show").hidden=true;
+    if(Q.i<c.items.length-1){el("Next").hidden=false}else{Q.fin=true;check()}
+    dots();if(c.onReveal)c.onReveal(Q);
+  }
+  function onPick(p){
+    var s=c.items[Q.i],k=p.dataset.p;
+    if(k===s.a){reveal()}else{Q.miss[Q.i]=true;p.classList.add("wrong");p.disabled=true;
+      el("Msg").innerHTML='<p class="verdict">Not this one.</p><p>'+((s.hint&&s.hint[k])||c.H[k])+'</p>'}
+  }
+  el("Next").addEventListener("click",function(){Q.i++;showItem();try{el("Picks").querySelector(".pick").focus({preventScroll:true})}catch(e){}});
+  el("Show").addEventListener("click",function(){Q.miss[Q.i]=true;reveal()});
+  el("Reset").addEventListener("click",function(){Q.i=0;Q.done={};Q.miss={};Q.fin=false;showItem();if(c.onReveal)c.onReveal(Q)});
+  Q.items=c.items;Q.cfg=c;Q.show=showItem;quizzes.push(Q);return Q;
+}
+function plain(s){return String(s).replace(/<[^>]*>/g,"")}
+function check(){
+  var allDone=quizzes.every(function(q){return q.fin});
+  $("sgDone").hidden=false;
+  if(!allDone){$("scBox").innerHTML='<p>Finish Parts II and III to see your combined result.</p>';return}
+  var right=0,n=0,ans=[],wrong=[];
+  quizzes.forEach(function(q){q.items.forEach(function(it,k){n++;var ok=!q.miss[k];if(ok)right++;else wrong.push(q.cfg.name+": "+plain(it.t).slice(0,60)+"…");ans.push({q:n,ok:ok,given:plain(q.cfg.L[it.a])+(ok?" (first pick)":" (not on first pick)")})})});
+  var pct=Math.round(100*right/n),good=pct>=META.cut;
+  var h='<div class="big">'+right+' of '+n+' on the first pick</div><p class="band '+(good?'good':'')+'">'+(good?'Well grasped':'Revisit these ideas')+'</p>';
+  if(wrong.length){h+='<p>Look again at the lesson for:</p><ul>'+wrong.map(function(w){return '<li>'+w+'</li>'}).join('')+'</ul>'}else{h+='<p>Nothing to revisit here.</p>'}
+  h+='<p class="saved" id="scSaved">'+(EMBED?'Saving your result…':'Sign in on the course page to have your result saved.')+'</p>';
+  $("scBox").innerHTML=h;
+  if(!sent){sent=true;send({type:"quizResult",code:META.code,title:META.title,programme:META.programme,score:right,maxScore:n,percent:pct,questionsCorrect:right,questionCount:n,answers:ans})}
+}
+window.addEventListener("message",function(e){var d=e.data||{};if(!d||typeof d!=="object")return;var el=$("scSaved");if(!el)return;
+  if(d.type==="saved")el.textContent="Your result has been saved to your member record.";
+  else if(d.type==="saveError")el.textContent="Your result could not be saved this time.";
+  else if(d.type==="notMember")el.textContent="Sign in as a member to have your result saved."});
+
+/* ===== Part II items (scored) ===== */
+var ASL={ob:"The body changes continuously and its cells turn over, yet something remains that knows itself as the same throughout",om:"Memories are themselves objects of awareness, and the awareness that knows a memory is closer to what “I” refers to than the memory itself",od:"The actual doer of every action is the inner Power; the ego only appropriates the appearance of agency (Lesson 5.4)"};
+var ASV={ob:"The body.",om:"The memories.",od:"The doer."};
+var ASH={ob:"That is the observation that loosens “I am this body”. Look at the assumption again.",om:"That is the observation that loosens “I am this set of memories”. Look at the assumption again.",od:"That is the observation that loosens “I am the doer”. Look at the assumption again."};
+var AO=["ob","om","od"];
+var lifted=0;
+Quiz({p:"as",name:"Part II",noun:"Assumption",L:ASL,V:ASV,H:ASH,onReveal:function(Q){lifted=Object.keys(Q.done).length;stonesDraw()},items:[
+ {t:"“I am this body.”",o:AO,a:"ob",why:"<q>The body changes continuously; its cells turn over; the body of childhood is not the body of adulthood; yet something has remained that knows itself as the same throughout.</q> <q>So I cannot be simply the body. The assumption weakens.</q>",ref:"§2.3"},
+ {t:"“I am this set of memories.”",o:AO,a:"om",why:"<q>Memories are themselves objects of awareness.</q> <q>The assumption weakens further.</q>",ref:"§2.3"},
+ {t:"“I am the doer.”",o:AO,a:"od",why:"<q>Lesson 5.4 already applied this discrimination; mananam holds it now in the contemplative register, deepening what action-practice introduced.</q>",ref:"§2.3"}
+]}).show();
+function stonesDraw(){
+  var f=fit($("cvStones"));if(!f)return;var g=f.g,w=f.w,h=f.h;g.clearRect(0,0,w,h);
+  var names=["body","memories","doer","problems","achieve"],n=5,cell=(w-40)/n,base=h-34;
+  g.strokeStyle=C["--ink"];g.lineWidth=3;g.beginPath();g.moveTo(14,base);g.lineTo(w-14,base);g.stroke();
+  label(g,"the filter h(t)",16,h-10,C["--muted"]);
+  for(var i=0;i<n;i++){var lifted_=i<lifted,x=20+cell*i+cell/2,rw=Math.min(cell*.8,92),rh=36,y=lifted_?base-rh-44:base-rh;
+    g.fillStyle=lifted_?C["--tint"]:C["--att"];g.globalAlpha=lifted_?.55:.95;g.beginPath();var r=8,x0=x-rw/2;g.moveTo(x0+r,y);g.arcTo(x0+rw,y,x0+rw,y+rh,r);g.arcTo(x0+rw,y+rh,x0,y+rh,r);g.arcTo(x0,y+rh,x0,y,r);g.arcTo(x0,y,x0+rw,y,r);g.fill();g.globalAlpha=1;
+    g.fillStyle=lifted_?C["--muted"]:"#fff";g.font="500 10px 'Noto Sans',sans-serif";g.textAlign="center";g.fillText(names[i],x,y+rh/2+4)}
+}
+/* ===== Part III items (scored) ===== */
+var SGL={sr:"Śravaṇam (listening)",mn:"Mananam (reflection)",nd:"Nididhyāsanam (continuous recognition)"};
+var SGV={sr:"Śravaṇam.",mn:"Mananam.",nd:"Nididhyāsanam."};
+var SGH={sr:"That would be śravaṇam: <q>sustained, attentive reception of the teaching transmission of the realised tradition.</q>",mn:"That would be mananam: <q>reflection, sustained intellectual examination.</q>",nd:"That would be nididhyāsanam: <q>continuous recognition</q>, no longer only in formal practice."};
+var SGO=["sr","mn","nd"];
+Quiz({p:"sg",name:"Part III",noun:"Moment",L:SGL,V:SGV,H:SGH,items:[
+ {t:"Every week, Ana sits in a class where a qualified teacher expounds an Upaniṣad aloud.",o:SGO,a:"sr",why:"<q>The classical primary form is listening to a qualified teacher expound the scriptures aloud.</q>",ref:"§2.3"},
+ {t:"On retreat, the teacher says, “What you have been searching for is the one searching.” For a few seconds the sentence lands, then fades.",o:SGO,a:"sr",why:"<q>The moment is not random; it is the moment in which the years of broader śravaṇam concentrate.</q>",ref:"§2.3"},
+ {t:"Each morning, Tom takes the worry of the day before and asks what assumption lies underneath it.",o:SGO,a:"mn",why:"<q>With mananam, the practitioner takes time daily to sit with the most active assumptions and submit them to viveka.</q>",ref:"§2.3"},
+ {t:"Mei is no longer practising toward recognition. She lives from it, and the witness is known within each thought as it arises.",o:SGO,a:"nd",why:"<q>The practitioner is no longer practising toward recognition but from recognition.</q>",ref:"§2.3"}
+]}).show();
+
+/* ===== Part IV (not scored) ===== */
+var Rm={t:0,last:0};
+function roomDraw(ts){
+  var f=fit($("cvRoom"));
+  if(f){var g=f.g,w=f.w,h=f.h,v=(+$("kIn").value)/100,t=RM?0:ts/1000;g.clearRect(0,0,w,h);
+    g.strokeStyle=C["--res"];g.lineWidth=2.4;g.globalAlpha=.25+.75*(1-v);g.beginPath();
+    for(var x=0;x<=w;x+=3){var y=h/2+Math.sin(x/w*Math.PI*3+t*.8)*h*.12+Math.sin(x/w*Math.PI*5-t*.5)*h*.05;if(x)g.lineTo(x,y);else g.moveTo(x,y)}g.stroke();g.globalAlpha=1;
+    var n=Math.round(90*v);for(var i=0;i<n;i++){var px=(i*97.3+t*60*(.4+(i%5)/5))%w,py=(i*53.7+Math.sin(t*2+i)*18+h)%h,sz=2+(i%4);g.globalAlpha=.55*v+.15;g.fillStyle=i%3?C["--att"]:C["--env"];g.fillRect(px,py,sz*2,sz)}
+    g.globalAlpha=1;label(g,"the mind’s own movements",10,16,C["--res"]);label(g,"signals from outside",w-130,h-8,C["--att"]);}
+  requestAnimationFrame(roomDraw);
+}
+function inMsg(){
+  var v=+$("kIn").value;$("kIn").setAttribute("aria-valuetext",v>66?"a great deal":v>33?"some":v>8?"little":"almost none");
+  $("inMsg").innerHTML=v>66?'<p><q>Even a system with strong viveka cannot easily make headway when the ψₓ side of the equation is saturated with input that constantly reinforces the assumptions mananam is trying to dissolve.</q> (§3.1)</p>'
+   :v>8?'<p class="note">As input drops, the mind’s own movements begin to show.</p>'
+   :'<p><q>With external input quieted, the system’s own internal dynamics become audible.</q> <q>Solitude does not produce the recognition; it removes the conditions under which recognition is structurally crowded out.</q> (§3.1)</p><p class="note">Sattvic solitude is <q>the deliberate stepping-back of an engaged system in order to do specific inner work.</q> <q>One is collapse; the other is recalibration.</q></p>';
+}
+$("kIn").addEventListener("input",inMsg);
+var St={th:[0,1.4,2.6,3.9,5.1],om:[2.0,2.25,1.8,2.45,1.95],r:0,last:0};
+function satStep(dt,k){
+  var n=5,d=[],i;for(i=0;i<n;i++){if(i===0)d[i]=2.1;else d[i]=St.om[i]+k*Math.sin(St.th[0]-St.th[i])*1.0}
+  for(i=0;i<n;i++)St.th[i]+=d[i]*dt;
+  var cx=0,cy=0;for(i=0;i<n;i++){cx+=Math.cos(St.th[i]);cy+=Math.sin(St.th[i])}St.r=Math.sqrt(cx*cx+cy*cy)/n;
+}
+function satDraw(ts){
+  var dt=Math.min(.05,(ts-St.last)/1000||0);St.last=ts;satStep(dt,+$("kSat").value*.06);
+  var f=fit($("cvSat"));if(f){var g=f.g,w=f.w,h=f.h;g.clearRect(0,0,w,h);var n=5,cell=w/n,rad=Math.min(cell*.34,h*.36),cols=[C["--gold"]||"#C9A24A",C["--obj"],C["--att"],C["--env"],C["--res"]];
+    for(var i=0;i<n;i++){var cx=cell*(i+.5),cy=h/2;g.beginPath();g.arc(cx,cy,rad,0,7);g.strokeStyle=i===0?"#C9A24A":C["--line"];g.lineWidth=i===0?3:2;g.stroke();
+      var a=St.th[i]-Math.PI/2;g.beginPath();g.moveTo(cx,cy);g.lineTo(cx+rad*Math.cos(a),cy+rad*Math.sin(a));g.strokeStyle=i===0?"#C9A24A":cols[i];g.lineWidth=3.5;g.lineCap="round";g.stroke();
+      g.beginPath();g.arc(cx+rad*Math.cos(a),cy+rad*Math.sin(a),5,0,7);g.fillStyle=i===0?"#C9A24A":cols[i];g.fill()}
+    label(g,"steady",cell*.5-18,h-6,"#8a6a1c");var pct=Math.round(St.r*100);$("satVal").textContent=pct+"%";$("satFill").style.width=pct+"%"}
+  requestAnimationFrame(satDraw);
+}
+function satMsg(){
+  var v=+$("kSat").value;$("kSat").setAttribute("aria-valuetext",v===0?"none":v<40?"a little":v<75?"quite a lot":"a great deal");
+  $("satMsg").innerHTML=v===0?'<p class="note">Alone, each keeps its own rhythm. <q>If solitude reduces the field, satsaṅga selects the field.</q> (§3.2)</p>'
+   :St.r>.9?'<p><q>A community of practitioners meeting regularly to study, sit, and discuss creates a sustained field whose collective frequency is higher than any of its members would maintain in isolation.</q> The lesson adds that the tradition knows a hierarchy: fellow practitioners, a circle gathered around a serious teacher, and darśana, <q>the seeing that is also a being-seen.</q> (§3.2)</p>'
+   :'<p class="note">The wobbly ones are being drawn into step.</p>';
+}
+$("kSat").addEventListener("input",satMsg);setInterval(satMsg,500);
+
+/* ===== Part V (not scored) ===== */
+var Bm={b:"clear",h:"light",m:"yes"};
+function beamDraw(ts){
+  var f=fit($("cvBeam"));
+  if(f){var g=f.g,w=f.w,h=f.h,t=RM?0:ts/1000;g.clearRect(0,0,w,h);var cy=h/2,x0=70,x1=w-70;
+    g.fillStyle=C["--obj"];g.beginPath();g.arc(x0-30,cy,18,0,7);g.fill();label(g,"the teaching",x0-62,cy+38,C["--obj"]);
+    g.fillStyle=C["--att"];g.beginPath();g.arc(x1+26,cy,20,0,7);g.fill();label(g,"an assumption",x1-34,cy+38,C["--att"]);
+    var ok=Bm.b==="clear"&&Bm.h==="light"&&Bm.m==="yes";
+    g.lineWidth=ok?5:3.5;g.lineCap="round";g.strokeStyle=ok?"#C9A24A":C["--muted"];
+    if(Bm.b==="dim"){g.globalAlpha=.9;g.fillStyle=C["--line"];g.fillRect(x0+(x1-x0)*.25,cy-50,(x1-x0)*.28,100);g.globalAlpha=1;label(g,"fog",x0+(x1-x0)*.35,cy-56,C["--muted"]);
+      for(var k=0;k<6;k++){g.globalAlpha=1-k*.17;g.beginPath();g.moveTo(x0,cy);g.lineTo(x0+(x1-x0)*(.2+k*.05),cy+Math.sin(t*3+k)*3);g.stroke()}g.globalAlpha=1}
+    else if(Bm.b==="scat"){for(var s=0;s<7;s++){var a=Math.sin(t*5+s*1.9)*.55;g.beginPath();g.moveTo(x0,cy);g.lineTo(x0+(x1-x0)*.3,cy+Math.sin(a)*60);g.lineTo(x0+(x1-x0)*(.45+s*.02),cy+Math.sin(a*2)*80);g.globalAlpha=.55;g.stroke();g.globalAlpha=1}}
+    else if(Bm.h==="heavy"){g.beginPath();g.moveTo(x0,cy);g.bezierCurveTo(x0+(x1-x0)*.4,cy,x0+(x1-x0)*.5,cy-70,x1,cy-70+Math.sin(t*2)*4);g.stroke();label(g,"arrives as just another idea",x0+(x1-x0)*.35,cy-82,C["--muted"])}
+    else if(Bm.m==="no"){g.globalAlpha=.55;g.setLineDash([2,10]);g.beginPath();g.moveTo(x0,cy);g.lineTo(x1,cy);g.stroke();g.setLineDash([]);g.globalAlpha=1;label(g,"nothing to push against",x0+(x1-x0)*.35,cy-14,C["--muted"])}
+    else{g.beginPath();g.moveTo(x0,cy);g.lineTo(x1,cy);g.stroke();g.globalAlpha=.25+.2*Math.sin(t*3);g.lineWidth=14;g.stroke();g.globalAlpha=1;
+      g.strokeStyle=C["--ok"];g.lineWidth=3;g.beginPath();g.arc(x1+26,cy,28,0,7);g.stroke()}}
+  requestAnimationFrame(beamDraw);
+}
+function bmMsg(){
+  var m=[];
+  if(Bm.b==="dim")m.push('<p><q>Tamas-dominated buddhi cannot sustain viveka; the discriminative pressure dissipates into fog before any identification can be loosened.</q> The lesson’s sequence: <q>where tamas is severe, the rhythm-and-sound family of Lesson 5.2 must do its work first.</q> (§3.3 and §5)</p>');
+  if(Bm.b==="scat")m.push('<p><q>Rajas-dominated buddhi cannot sustain mananam; the examination scatters within seconds.</q> The lesson’s sequence: <q>the attention practices of Lesson 5.3 must do their work first.</q> (§3.3 and §5)</p>');
+  if(Bm.h==="heavy"&&Bm.b==="clear")m.push('<p><q>A heavily-loaded filter will distort the mahāvākya rather than receive it.</q> (§3.3)</p>');
+  if(Bm.m==="no"&&Bm.b==="clear"&&Bm.h==="light")m.push('<p><q>Without it, mananam is intellectual exercise rather than living practice.</q> (§3.3)</p>');
+  if(Bm.b!=="clear"||Bm.h==="heavy"||Bm.m==="no")m.push('<p class="note"><q>Where any of these conditions is absent, the path lies through the preceding practice-families until the ground is prepared.</q> (§3.3)</p>');
+  else m.push('<p>The beam goes through. <q>The jñāna family does not replace the work of 5.2, 5.3, and 5.4; it builds on it.</q> (§5) <q>The practitioner consents. The Śakti operates.</q> (§4)</p>');
+  $("bmMsg").innerHTML=m.join("");
+}
+document.querySelectorAll("[data-c]").forEach(function(b){b.addEventListener("click",function(){Bm[b.dataset.c]=b.dataset.v;document.querySelectorAll('[data-c="'+b.dataset.c+'"]').forEach(function(x){x.setAttribute("aria-pressed",x===b?"true":"false")});bmMsg()})});
+
+send({type:"ready"});
+(function(){
+  var last=0;
+  function h(){var d=document.documentElement,b=document.body;var v=Math.ceil(Math.max(d.scrollHeight,b.scrollHeight,b.offsetHeight));if(v&&Math.abs(v-last)>1){last=v;send({type:"height",height:v})}}
+  window.addEventListener("load",h);window.addEventListener("resize",h);
+  if(window.ResizeObserver)new ResizeObserver(h).observe(document.body);
+  setInterval(h,700);h();
+})();
+var rt=0;
+window.addEventListener("resize",function(){clearTimeout(rt);rt=setTimeout(stonesDraw,80)});
+function retheme(){readColors();stonesDraw()}
+try{window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change",retheme)}catch(e){}
+new MutationObserver(retheme).observe(document.documentElement,{attributes:true,attributeFilter:["data-theme"]});
+wvText();wvBar();$("wvMsg").innerHTML='<p class="note">Choose how to meet the wave.</p>';stonesDraw();inMsg();satMsg();bmMsg();
+requestAnimationFrame(skyDraw);requestAnimationFrame(roomDraw);requestAnimationFrame(satDraw);requestAnimationFrame(beamDraw);
+
+})();
+</script>
+</body></html>
