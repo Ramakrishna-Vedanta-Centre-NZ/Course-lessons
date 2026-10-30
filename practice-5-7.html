@@ -1,0 +1,496 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Practice: Lesson 5.7, One Signal, Two Readings</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans:wght@400..700&family=Noto+Serif:ital,wght@0,400..700;1,400..700&display=swap">
+<style>
+:root{
+  --bg:#FBF5EA; --surface:#FFFDF8; --ink:#1E1E1E; --muted:#5A5A5A; --line:#E6DAC3; --tint:#F3EAD3; --navy:#12285A; --gold:#C9A24A; --goldt:#6B4E0E;
+  --obj:#0B8686; --att:#C95F06; --res:#2E3192; --env:#C0245B; --ok:#1B7A52;
+  --display:"Noto Serif",Georgia,"Times New Roman",serif;
+  --body:"Noto Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0B1A3D; --surface:#12285A; --ink:#FBF5EA; --muted:#C9C3B3; --line:#2B4686; --tint:#1D3770; --gold:#E6C36A; --goldt:#E6C36A;
+    --obj:#46CFC6; --att:#F5A04D; --res:#A3AAFF; --env:#FF7BA9; --ok:#5BD59B; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0B1A3D; --surface:#12285A; --ink:#FBF5EA; --muted:#C9C3B3; --line:#2B4686; --tint:#1D3770; --gold:#E6C36A; --goldt:#E6C36A;
+  --obj:#46CFC6; --att:#F5A04D; --res:#A3AAFF; --env:#FF7BA9; --ok:#5BD59B; color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;
+  padding-left:max(14px,env(safe-area-inset-left,0px));padding-right:max(14px,env(safe-area-inset-right,0px));padding-block:22px 40px}
+.wrap{max-width:900px;margin:0 auto;display:flex;flex-direction:column;gap:32px}
+h1,h2,h3{font-family:var(--display);font-weight:500;text-wrap:balance;margin:0;letter-spacing:-.01em}
+h1{font-size:clamp(30px,5.4vw,44px);line-height:1.06}
+h2{font-size:clamp(23px,3.4vw,29px);line-height:1.15}
+h3{font-size:19px;line-height:1.25}
+p{margin:0}
+sub{font-size:.72em;line-height:0}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.lede{font-size:17.5px;max-width:64ch}
+.intro{max-width:66ch;color:var(--muted)}
+header{display:flex;flex-direction:column;gap:12px}
+section{display:flex;flex-direction:column;gap:18px;min-width:0}
+.sym{font-family:var(--mono);font-size:.92em;white-space:nowrap}
+.k-obj{color:var(--obj)} .k-att{color:var(--att)} .k-res{color:var(--res)} .k-env{color:var(--env)}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px;display:flex;flex-direction:column;gap:14px;min-width:0}
+.bar{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;justify-content:space-between}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--bg)}
+.seg button{font:inherit;font-size:14px;color:var(--muted);background:transparent;border:0;padding:8px 13px;cursor:pointer}
+.seg button+button{border-left:1px solid var(--line)}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--surface)}
+button:focus-visible,input:focus-visible{outline:2px solid var(--res);outline-offset:2px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{font:inherit;font-size:14px;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:7px 13px;cursor:pointer;display:inline-flex;gap:8px;align-items:center}
+.chip i{font-style:normal;font-family:var(--mono);font-size:11px;color:var(--muted)}
+.chip[aria-pressed="true"]{background:var(--res);border-color:var(--res);color:#fff}
+.chip[aria-pressed="true"] i{color:#fff;opacity:.8}
+.chip:disabled{cursor:default}
+.chip.reached:not([aria-pressed="true"]){border-color:var(--res)}
+.btn{font:inherit;font-size:14px;color:var(--ink);background:var(--surface);border:1px solid var(--ink);border-radius:8px;padding:8px 16px;cursor:pointer}
+.btn.primary{background:var(--ink);color:var(--surface)}
+.btn.ghost{border-color:var(--line);color:var(--muted)}
+.scope-wrap{position:relative;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--bg)}
+canvas{display:block;width:100%}
+.playbtn{position:absolute;right:8px;bottom:8px;font:inherit;font-size:12px;background:var(--surface);color:var(--muted);border:1px solid var(--line);border-radius:6px;padding:4px 10px;cursor:pointer}
+.box{border:1px solid var(--line);border-radius:8px;background:var(--bg);padding:10px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.box .cap{font-size:12px;color:var(--muted)}
+.meters{display:flex;flex-direction:column;gap:9px}
+.meter{display:grid;grid-template-columns:1fr auto;gap:2px 8px;font-size:13px;align-items:baseline}
+.meter b{font-weight:600}
+.meter output{font-family:var(--mono);font-size:12px;color:var(--muted)}
+.meter .track{grid-column:1/-1;height:7px;background:var(--line);border-radius:4px;overflow:hidden}
+.meter .fill{height:100%;width:0;background:var(--res);border-radius:4px}
+.meter.f2 .fill{background:var(--env)} .meter.f3 .fill{background:var(--obj)}
+.slider{display:flex;align-items:center;gap:10px;flex:1 1 280px;min-width:0}
+.slider label{font-size:14px;min-width:0}
+.slider input[type=range]{flex:1;min-width:60px;accent-color:var(--res)}
+.slider small{color:var(--muted);font-size:12px;white-space:nowrap}
+.slider output{font-family:var(--mono);font-size:12.5px;color:var(--muted);min-width:46px;text-align:right}
+.readout{font-size:14px;color:var(--muted)}
+.readout b{color:var(--ink)}
+.tag{font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);border:1px solid var(--line);border-radius:4px;padding:2px 6px}
+.note{font-size:13px;color:var(--muted);max-width:70ch}
+.balance{background:var(--tint);border-radius:10px;padding:16px 18px;display:flex;flex-direction:column;gap:8px;max-width:78ch}
+footer{font-size:13px;color:var(--muted);max-width:76ch;border-top:1px solid var(--line);padding-top:12px}
+@media (max-width:640px){.panel{padding:12px}.wrap{gap:26px}}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
+
+[hidden]{display:none!important}
+:root{--c-h:var(--res);--c-ref:var(--obj);--c-over:var(--env);--c-settle:var(--att);--c-rip:var(--obj)}
+nav.parts{display:flex;flex-wrap:wrap;gap:8px 20px;margin-top:4px}
+nav.parts a{color:var(--ink);text-decoration:none;border-bottom:1px solid var(--line);padding-bottom:2px;font-size:15px}
+nav.parts a:hover,nav.parts a:focus-visible{border-color:var(--res);color:var(--res)}
+.msg{min-height:1.5em;font-size:15px}
+.fbbox{border-top:1px solid var(--line);padding-top:12px;display:flex;flex-direction:column;gap:8px;min-height:6.5em}
+.fbbox .verdict{font-family:var(--display);font-size:19px}
+.fbbox .ref{font-family:var(--mono);font-size:11px;color:var(--muted)}
+.fbbox q{font-style:italic;quotes:"“" "”"}
+.strikebar{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center}
+.chip:focus-visible,.pick:focus-visible,summary:focus-visible{outline:2px solid var(--res);outline-offset:2px}
+.scene{border-left:3px solid var(--line);padding:2px 0 2px 12px;font-family:var(--display);font-size:18.5px;line-height:1.45;min-height:5.6em}
+.picks{gap:10px}
+.pick{font:inherit;font-size:15px;color:var(--ink);background:var(--bg);border:1.5px solid var(--line);border-top-width:4px;border-radius:10px;padding:9px 14px;cursor:pointer;min-width:0}
+.pick[data-p="settle"]{border-top-color:var(--c-settle)}
+.pick[data-p="over"]{border-top-color:var(--c-over)}
+.pick[data-p="ripple"]{border-top-color:var(--c-rip)}
+.pick.wrong{opacity:.55}
+.pick.right{background:var(--surface);box-shadow:0 0 0 2px var(--ink)}
+.pick:disabled{cursor:default}
+.dots{display:flex;gap:6px}
+.dots i{width:10px;height:10px;border-radius:50%;border:1.5px solid var(--muted)}
+.dots i.done{background:var(--ink);border-color:var(--ink)}
+.dots i.cur{border-color:var(--ink);box-shadow:0 0 0 2px var(--line)}
+.brandhdr{background:#12285A;color:#FBF5EA;text-align:center;padding:18px 18px 20px;border-radius:14px;display:flex;flex-direction:column;align-items:center;gap:6px}
+.brandhdr .logos{display:flex;align-items:center;justify-content:center;gap:18px}
+.brandhdr .logos img{width:56px;height:66px;object-fit:contain;display:block}
+.brandhdr .logos img.rit{width:86px;height:65px}
+.brandhdr .eyebrow{color:#E6C36A;font-weight:700;letter-spacing:3px}
+.brandhdr h1{color:#FBF5EA;font-weight:700}
+.brandhdr .course{color:#E6C36A;font-weight:600;font-size:14px}
+.brandhdr .lede{color:#F1ECDF;font-size:15.5px;max-width:62ch}
+.brandhdr .scorenote{color:#F1ECDF;font-size:14.5px}
+nav.parts a{color:var(--ink)}
+.brandhdr nav.parts a{color:#FBF5EA;border-bottom:1px solid #E6C36A;background:none;padding-bottom:2px}
+.brandhdr nav.parts a:hover,.brandhdr nav.parts a:focus-visible{color:#E6C36A;border-color:#E6C36A}
+.tag.scored{color:var(--goldt);border-color:var(--gold)}
+.scorebox{border-left:5px solid var(--gold);background:var(--tint);border-radius:10px;padding:12px 14px;margin-bottom:14px}
+.scorebox .big{font-family:var(--display);font-size:30px;line-height:1.1;color:var(--ink)}
+.scorebox .band{font-family:var(--display);font-size:18px;margin:4px 0}
+.scorebox .band.good{color:var(--ok)}
+.scorebox .saved{font-size:13.5px;color:var(--muted)}
+.scorebox ul{margin:6px 0 0;padding-left:20px}
+
+/* PRACTICE TEMPLATE: one coloured "part" per section (part-1 .. part-4) */
+.part{--pc:#0E7A8A;--pcon:#FFFFFF;--pcbg:#E6F2F3;border:2px solid var(--pc);border-radius:14px;overflow:hidden;background:var(--pcbg)}
+.part-1{--pc:#0E7A8A;--pcbg:#E6F2F3}
+.part-2{--pc:#12285A;--pcbg:#EEF0F8}
+.part-3{--pc:#2F6B3A;--pcbg:#E6F0E3}
+.part-4{--pc:#7A2A5E;--pcbg:#F5E6F0}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .part{--pcbg:#0F2250;border-color:var(--pcl,var(--pc))}
+ :root:not([data-theme="light"]) .part-1{--pcl:#46CFC6} :root:not([data-theme="light"]) .part-2{--pcl:#E6C36A} :root:not([data-theme="light"]) .part-3{--pcl:#7FD08C} :root:not([data-theme="light"]) .part-4{--pcl:#F08CC8}}
+:root[data-theme="dark"] .part{--pcbg:#0F2250;border-color:var(--pcl,var(--pc))}
+:root[data-theme="dark"] .part-1{--pcl:#46CFC6} :root[data-theme="dark"] .part-2{--pcl:#E6C36A} :root[data-theme="dark"] .part-3{--pcl:#7FD08C} :root[data-theme="dark"] .part-4{--pcl:#F08CC8}
+.part-band{background:var(--pc);color:var(--pcon);padding:12px 16px;display:flex;align-items:center;flex-wrap:wrap;gap:6px 14px}
+.part-band h2{color:inherit;font-size:clamp(20px,3.4vw,26px);font-weight:600;flex:1 1 220px}
+.part-num{font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;font-weight:500;background:rgba(255,255,255,.18);border-radius:4px;padding:3px 9px}
+.part-band .tag{color:inherit;border-color:currentColor;background:rgba(255,255,255,.12)}
+.part-2 .part-band .tag,.part-2 .part-num{color:#E6C36A}
+.part-body{padding:16px;display:flex;flex-direction:column;gap:14px}
+.part .panel{background:var(--surface)}
+@media (max-width:640px){.part-body{padding:12px}}
+
+
+/* page-specific */
+q{font-style:italic;quotes:"“" "”"}
+.btn:disabled{opacity:.45;cursor:default}
+.btn[aria-pressed="true"]{background:var(--ink);color:var(--surface)}
+.pick{font:inherit;font-size:15px;color:var(--ink);background:var(--bg);border:1.5px solid var(--line);border-radius:10px;padding:9px 14px;cursor:pointer;min-width:0;text-align:left}
+.pick.wrong{opacity:.55}
+.pick.right{background:var(--ok);border-color:var(--ok);color:#fff}
+.pick:disabled{cursor:default}
+.pick:focus-visible,.node:focus-visible{outline:2px solid var(--res);outline-offset:2px}
+.part-5{--pc:#B5651D;--pcbg:#FBEEDD}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .part-5{--pcl:#F5B060}}
+:root[data-theme="dark"] .part-5{--pcl:#F5B060}
+.made{font-size:12.5px;color:var(--muted);font-style:italic}
+.slider{display:flex;align-items:center;gap:10px;flex-wrap:wrap;flex:0 0 auto}
+.slider label{font-weight:600;min-width:200px}
+.slider input[type=range]{flex:1;min-width:120px;accent-color:var(--res)}
+.cohbar{height:10px;border-radius:5px;background:var(--line);overflow:hidden}
+.cohbar i{display:block;height:100%;width:0;background:var(--ok);border-radius:5px;transition:width .25s}
+.cohrow{display:flex;flex-direction:column;gap:4px;font-size:14px}
+canvas.gr{width:100%;height:230px;border:1px solid var(--line);border-radius:8px;background:var(--bg)}
+canvas.lp{width:100%;max-width:520px;height:230px;margin:0 auto;border:1px solid var(--line);border-radius:10px;background:var(--bg)}
+canvas.ch{width:100%;height:210px;border:1px solid var(--line);border-radius:8px;background:var(--bg)}
+canvas.nz{width:100%;height:170px;border:1px solid var(--line);border-radius:8px;background:var(--bg)}
+.flow{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.flow .arrow{color:var(--muted)}
+.rung{font:inherit;font-size:15px;border:1.5px solid var(--line);border-bottom-width:4px;border-radius:10px;background:var(--bg);color:var(--ink);padding:8px 14px;cursor:pointer}
+.rung[aria-pressed="true"]{background:var(--ink);color:var(--surface)}
+.rung.seen:not([aria-pressed="true"]){border-color:var(--ink)}
+.act2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.act2 .box2{border:1px solid var(--line);border-radius:10px;background:var(--bg);padding:12px 14px;display:flex;flex-direction:column;gap:6px}
+@media (max-width:640px){.act2{grid-template-columns:1fr}}
+.bars2{display:flex;flex-direction:column;gap:8px;font-size:14px}
+.bar2{display:grid;grid-template-columns:150px 1fr;gap:10px;align-items:center}
+.bar2 .tr{height:10px;background:var(--line);border-radius:5px;overflow:hidden}
+.bar2 .tr i{display:block;height:100%;width:0;border-radius:5px;transition:width .4s}
+.part-1{--pc:#0E7A8A;--pcbg:#E6F2F3}
+.balance{background:var(--tint);border-radius:10px;padding:16px 18px;display:flex;flex-direction:column;gap:8px;max-width:78ch}
+.btn.primary{background:var(--ink);color:var(--surface)}
+canvas.sk{width:100%;height:210px;border:1px solid var(--line);border-radius:10px;background:var(--bg)}
+canvas.st{width:100%;height:150px;border:1px solid var(--line);border-radius:10px;background:var(--bg)}
+canvas.rm{width:100%;height:200px;border:1px solid var(--line);border-radius:10px;background:var(--bg)}
+canvas.bm{width:100%;height:160px;border:1px solid var(--line);border-radius:10px;background:var(--bg)}
+.sw{display:flex;flex-wrap:wrap;gap:14px 24px}
+.sw .grp{display:flex;flex-direction:column;gap:6px}
+.sw .grp b{font-size:14px}
+canvas.ts{width:100%;height:220px;border:1px solid var(--line);border-radius:10px;background:var(--bg)}
+canvas.sp{width:100%;height:330px;border:1px solid var(--line);border-radius:10px;background:var(--bg)}
+canvas.gl{width:100%;height:150px;border:1px solid var(--line);border-radius:10px;background:var(--bg)}
+canvas.sr{width:100%;height:210px;border:1px solid var(--line);border-radius:10px;background:var(--bg)}
+.stn{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+.stn button.sbtn{width:100%;text-align:left;display:flex;justify-content:space-between;gap:10px;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--ink);font:inherit;font-weight:600;cursor:pointer}
+.stn button.sbtn span{font-weight:400;color:var(--muted);font-size:13px}
+.stn button.sbtn[aria-expanded="true"]{border-color:var(--res);background:var(--bg)}
+.stn .srow{padding:8px 12px 12px;font-size:14.5px;line-height:1.5;border-left:3px solid var(--res);margin:2px 0 6px 6px}
+.stn .srow dt{font-weight:700;margin-top:6px;font-size:13px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.stn .srow dd{margin:2px 0 0}
+details.open2{border:1px solid var(--line);border-radius:10px;padding:8px 12px;margin-top:10px;background:var(--surface)}
+details.open2 summary{cursor:pointer;font-weight:600}
+.g22{display:flex;flex-wrap:wrap;gap:14px 28px}
+</style></head><body>
+<div class="wrap">
+<header class="brandhdr">
+  <div class="logos"><img src="vedantanz-logo.png" alt="Ramakrishna Vedanta NZ emblem" width="56" height="66"><img class="rit" src="ritam-wordmark.png" alt="Ritam" width="86" height="65"></div>
+  <div class="eyebrow">Practice · Lesson 5.7</div>
+  <h1>One Signal, Two Readings</h1>
+  <p class="course">The Mind in the Light of Modern and Spiritual Sciences · Advanced</p>
+  <p class="lede">Lesson 5.7 says the temporal and the spectral are two readings of one thing, and that lowering the noise lets what was always present register. Here you will read one signal two ways, watch the noise fall, look at the seven stations as the lesson draws them, sort what science can and cannot reach, and look at the staircase.</p>
+  <p class="scorenote"><b>Part IV</b> is scored: your first pick counts. <b>Parts I, II, III and V</b> are practice and are not scored. Nothing here takes you through any experience. It is a way of looking again at what the lesson says.</p>
+  <nav class="parts" aria-label="Parts of this page"><a href="#s1">I. Two readings</a><a href="#s2">II. The noise falls</a><a href="#s3">III. The stations</a><a href="#s4">IV. What can it reach?</a><a href="#s5">V. Stairs and roof</a></nav>
+</header>
+
+<section id="s1" class="part part-1">
+  <div class="part-band"><span class="part-num">Part I</span><h2>One signal, read two ways</h2><span class="tag">Practice: not scored</span></div>
+  <div class="part-body">
+  <p class="intro">The lesson says <q>The two readings are different views of the same thing</q>: the temporal view shows what is happening now; the spectral view shows the structure that is generating the now. (§2.2) Here a signal is built from three steady waves. Change any of them and watch both readings change together.</p>
+  <div class="panel">
+    <div class="seg" role="group" aria-label="Which reading"><button type="button" data-v1="t" aria-pressed="true">Read in time</button><button type="button" data-v1="f" aria-pressed="false">Read in frequency</button></div>
+    <canvas class="ts" id="cvA" role="img" aria-label="One signal drawn either as a changing line over time, or as three steady bars by frequency"></canvas>
+    <div class="slider"><label for="a1">Slow wave</label><input type="range" id="a1" min="0" max="100" value="70"></div>
+    <div class="slider"><label for="a2">Middle wave</label><input type="range" id="a2" min="0" max="100" value="45"></div>
+    <div class="slider"><label for="a3">Quick wave</label><input type="range" id="a3" min="0" max="100" value="30"></div>
+    <div class="msg fbbox" id="aMsg" role="status" aria-live="polite"></div>
+    <p class="note">Teaching picture, not a measurement. The frame around the picture is not one of the three waves.</p>
+  </div>
+  </div>
+</section>
+
+<section id="s2" class="part part-2">
+  <div class="part-band"><span class="part-num">Part II</span><h2>When the noise falls</h2><span class="tag">Practice: not scored</span></div>
+  <div class="part-body">
+  <p class="intro">The lesson says that when anṛta is high, <q>the spectral ground is occluded</q>, and that as temporal Ritam is established the signal-to-noise ratio rises. (§2.3) Below, the slow wave is a steady hum. Lower the noise and watch it become discriminable in both readings.</p>
+  <div class="panel">
+    <canvas class="sp" id="cvB" role="img" aria-label="A signal over time above and its frequency bars below, with noise that hides a steady hum until the noise is lowered"></canvas>
+    <div class="slider"><label for="nz">How much noise</label><input type="range" id="nz" min="0" max="100" value="90" aria-valuetext="a great deal"></div>
+    <div class="msg fbbox" id="bMsg" role="status" aria-live="polite"></div>
+    <details class="open2"><summary>The honest turn: the hum is a stand-in</summary>
+      <p>The hum is only a picture. The lesson says the substrate is <q>Not a deeper layer of the signal but the awareness in which the signal is being read at all.</q> (§2.2) <q>The practitioner does not produce the substrate; the substrate has always been there.</q> (§2.3) No amplifier could make it louder, because it is not one of the waves.</p></details>
+    <details class="open2"><summary>What the metaphor cannot carry</summary>
+      <p>A standard Fourier transform is <q>reversible</q>, and it acts on a finite signal. The Ātman <q>is not a finite signal. It is the awareness in which all signals arise.</q> The lesson says the metaphor is faithful up to {9}, and that beyond it <q>the mathematics points beyond itself.</q> (§3.5)</p></details>
+    <p class="made">The lesson’s own example is a practitioner noticing the gap between thoughts at a traffic light. (§2.3)</p>
+  </div>
+  </div>
+</section>
+
+<section id="s3" class="part part-3">
+  <div class="part-band"><span class="part-num">Part III</span><h2>Channel, operator, stations</h2><span class="tag">Practice: not scored</span></div>
+  <div class="part-body">
+  <p class="intro">This is a reading aid for the lesson’s table, in any order. The lesson says the chakras <q>are not anatomical structures and are not bypassable.</q> (§3.2) Nothing here places you on a station, and nothing unlocks. It is a map of the lesson, not of you.</p>
+  <div class="panel">
+    <h3>The seven stations</h3>
+    <ul class="stn" id="stn"></ul>
+  </div>
+  <div class="panel">
+    <h3>The partition at ājñā and sahasrāra</h3>
+    <div class="seg" role="group" aria-label="Which station"><button type="button" data-gl="aj" aria-pressed="true">At ājñā</button><button type="button" data-gl="sa" aria-pressed="false">At sahasrāra</button></div>
+    <canvas class="gl" id="cvG" role="img" aria-label="At ājñā a pane of glass stands between the one seeing and the form; at sahasrāra the pane is gone"></canvas>
+    <div class="msg fbbox" id="glMsg" role="status" aria-live="polite"></div>
+  </div>
+  <div class="panel">
+    <h3>Channel and operator</h3>
+    <div class="g22">
+      <div class="grp"><b>Suṣumnā, the channel</b><div class="seg" role="group" aria-label="The channel"><button type="button" data-ch="c" aria-pressed="true">Clear</button><button type="button" data-ch="o" aria-pressed="false">Obstructed</button></div></div>
+      <div class="grp"><b>Kuṇḍalinī, the operator</b><div class="seg" role="group" aria-label="The operator"><button type="button" data-op="a" aria-pressed="true">Moving</button><button type="button" data-op="l" aria-pressed="false">Latent</button></div></div>
+    </div>
+    <div class="msg fbbox" id="coMsg" role="status" aria-live="polite"></div>
+  </div>
+  </div>
+</section>
+
+<section id="s4" class="part part-4">
+  <div class="part-band"><span class="part-num">Part IV</span><h2>What can this method reach?</h2><span class="tag scored">Scored: first pick counts</span></div>
+  <div class="part-body">
+  <p class="intro">The lesson says the research findings <q>are correlates, not proofs</q>, and that some questions fall outside what such methods can address. (§4.1 and §4.2) For each of six statements, say which kind it is. Your first pick counts.</p>
+  <div class="panel" id="rc">
+    <div class="bar"><span class="tag" id="rcPro">Statement 1 of 6</span><div class="dots" id="rcDots" aria-hidden="true"></div></div>
+    <div class="scene"><p id="rcText"></p></div>
+    <div class="chips picks" id="rcPicks" role="group" aria-label="Your answer"></div>
+    <div id="rcMsg" class="msg fbbox" role="status" aria-live="polite"><p class="note">Pick one.</p></div>
+    <div class="bar"><div class="chips"><button class="btn primary" id="rcNext" hidden>Next statement</button><button class="btn ghost" id="rcShow">Show me</button><button class="btn ghost" id="rcReset">Start again</button></div></div>
+  </div>
+  <div class="panel" id="rcDone" hidden>
+    <div class="scorebox" id="scBox" aria-live="polite"></div>
+    <p>The score only shows where to look again in the lesson. It says nothing about you.</p>
+  </div>
+  </div>
+</section>
+
+<section id="s5" class="part part-5">
+  <div class="part-band"><span class="part-num">Part V</span><h2>Stairs and roof</h2><span class="tag">Practice: not scored</span></div>
+  <div class="part-body">
+  <p class="intro">Sri Ramakrishna’s metaphor, as the lesson uses it, says what this course is. It is a picture to look at. There is nothing to climb.</p>
+  <div class="panel">
+    <canvas class="sr" id="cvS" role="img" aria-label="A flight of steps leading to a roof, all built of the same bricks"></canvas>
+    <p><q>The stairs are not the roof.</q> <q>But the stairs are made of the same material as the roof.</q> <q>Brick, lime, brick-dust.</q> (§8)</p>
+  </div>
+  <div class="panel">
+    <h3>Two ways to read the stations</h3>
+    <div class="seg" role="group" aria-label="Which reading"><button type="button" data-rd="me" aria-pressed="true">Something happening to me</button><button type="button" data-rd="sh" aria-pressed="false">The Śakti’s own return</button></div>
+    <div class="msg fbbox" id="rdMsg" role="status" aria-live="polite"></div>
+  </div>
+  </div>
+</section>
+
+<footer>Part IV is scored, and only to show you where to look again. Parts I, II, III and V are practice and are not scored. Based on Lesson 5.7. This page illustrates the lesson’s ideas and does not measure, diagnose or advise on anyone’s mind or situation. If anything here touches something difficult for you, please be gentle with yourself, and consider speaking with someone you trust or a qualified professional.<br>Ritam · Ramakrishna Vedanta Centre NZ · <a href="https://www.vedanta.nz">www.vedanta.nz</a><br>Privacy: when you are signed in, your name, email, answers and score are saved to your member record. Only you and the course instructors can see them. They are not shared or ranked.</footer>
+</div>
+<script>
+(function(){
+"use strict";
+var $=function(id){return document.getElementById(id)};
+try{var q=new URLSearchParams(location.search).get("theme");if(q==="light"||q==="dark")document.documentElement.setAttribute("data-theme",q)}catch(e){}
+try{var pt=new URLSearchParams(location.search).get("part");if(pt==="1"||pt==="2"||pt==="3")document.body.setAttribute("data-part",pt)}catch(e){}
+var EMBED=/[?&]embed=1/.test(location.search);
+function send(m){if(EMBED){try{parent.postMessage(m,"*")}catch(e){}}}
+var RM=false;try{RM=window.matchMedia("(prefers-reduced-motion: reduce)").matches}catch(e){}
+var C={};
+function readColors(){var cs=getComputedStyle(document.documentElement);["--bg","--surface","--ink","--muted","--line","--obj","--att","--res","--env","--ok"].forEach(function(k){C[k]=cs.getPropertyValue(k).trim()})}
+readColors();
+var dpr=Math.max(1,Math.min(2,window.devicePixelRatio||1));
+function fit(c){var w=c.clientWidth,h=c.clientHeight;if(!w||!h)return null;var bw=Math.round(w*dpr),bh=Math.round(h*dpr);if(c.width!==bw||c.height!==bh){c.width=bw;c.height=bh}var g=c.getContext("2d");g.setTransform(dpr,0,0,dpr,0,0);return {g:g,w:w,h:h}}
+function label(g,t,x,y,color){g.font="500 11.5px 'Noto Sans',system-ui,sans-serif";g.textAlign="left";g.textBaseline="alphabetic";var w=g.measureText(t).width;g.save();g.globalAlpha=.85;g.fillStyle=C["--bg"];g.fillRect(x-4,y-12,w+8,16);g.restore();g.fillStyle=color;g.fillText(t,x,y)}
+
+/* ===== quiz engine (Part IV) ===== */
+var META={code:"ADV-P-5-7",title:"Practice: Lesson 5.7, One Signal, Two Readings (Part IV)",programme:"The Mind in the Light of Modern and Spiritual Sciences (Advanced)",cut:75};
+var quizzes=[],sent=false;
+function shuffle(a){a=a.slice();for(var z=a.length-1;z>0;z--){var y=Math.floor(Math.random()*(z+1)),t=a[z];a[z]=a[y];a[y]=t}return a}
+function Quiz(c){
+  var Q={i:0,done:{},miss:{},fin:false},el=function(s){return $(c.p+s)};
+  function dots(){var d=el("Dots");d.innerHTML="";c.items.forEach(function(_,k){var e=document.createElement("i");if(Q.done[k])e.className="done";else if(k===Q.i)e.className="cur";d.appendChild(e)})}
+  function showItem(){
+    var s=c.items[Q.i];el("Text").innerHTML=s.t;el("Pro").textContent=c.noun+" "+(Q.i+1)+" of "+c.items.length;
+    el("Picks").innerHTML=shuffle(s.o).map(function(k){return '<button class="pick" data-p="'+k+'" aria-pressed="false">'+c.L[k]+'</button>'}).join("");
+    el("Picks").querySelectorAll(".pick").forEach(function(p){p.addEventListener("click",function(){onPick(p)})});
+    el("Msg").innerHTML='<p class="note">Pick one.</p>';el("Next").hidden=true;el("Show").hidden=false;dots();
+  }
+  function reveal(){
+    var s=c.items[Q.i];Q.done[Q.i]=true;
+    el("Picks").querySelectorAll(".pick").forEach(function(p){p.disabled=true;if(p.dataset.p===s.a){p.classList.add("right");p.setAttribute("aria-pressed","true")}});
+    el("Msg").innerHTML='<p class="verdict">'+c.V[s.a]+'</p><p>'+s.why+'</p><p class="ref">'+s.ref+'</p>';
+    el("Show").hidden=true;
+    if(Q.i<c.items.length-1){el("Next").hidden=false}else{Q.fin=true;check()}
+    dots();if(c.onReveal)c.onReveal(Q);
+  }
+  function onPick(p){
+    var s=c.items[Q.i],k=p.dataset.p;
+    if(k===s.a){reveal()}else{Q.miss[Q.i]=true;p.classList.add("wrong");p.disabled=true;
+      el("Msg").innerHTML='<p class="verdict">Not this one.</p><p>'+((s.hint&&s.hint[k])||c.H[k])+'</p>'}
+  }
+  el("Next").addEventListener("click",function(){Q.i++;showItem();try{el("Picks").querySelector(".pick").focus({preventScroll:true})}catch(e){}});
+  el("Show").addEventListener("click",function(){Q.miss[Q.i]=true;reveal()});
+  el("Reset").addEventListener("click",function(){Q.i=0;Q.done={};Q.miss={};Q.fin=false;showItem();if(c.onReveal)c.onReveal(Q)});
+  Q.items=c.items;Q.cfg=c;Q.show=showItem;quizzes.push(Q);return Q;
+}
+function plain(s){return String(s).replace(/<[^>]*>/g,"")}
+function check(){
+  var allDone=quizzes.every(function(q){return q.fin});
+  $("rcDone").hidden=false;
+  if(!allDone){$("scBox").innerHTML='<p>Finish Part IV to see your combined result.</p>';return}
+  var right=0,n=0,ans=[],wrong=[];
+  quizzes.forEach(function(q){q.items.forEach(function(it,k){n++;var ok=!q.miss[k];if(ok)right++;else wrong.push(q.cfg.name+": "+plain(it.t).slice(0,60)+"…");ans.push({q:n,ok:ok,given:plain(q.cfg.L[it.a])+(ok?" (first pick)":" (not on first pick)")})})});
+  var pct=Math.round(100*right/n),good=pct>=META.cut;
+  var h='<div class="big">'+right+' of '+n+' on the first pick</div><p class="band '+(good?'good':'')+'">'+(good?'Well grasped':'Revisit these ideas')+'</p>';
+  if(wrong.length){h+='<p>Look again at the lesson for:</p><ul>'+wrong.map(function(w){return '<li>'+w+'</li>'}).join('')+'</ul>'}else{h+='<p>Nothing to revisit here.</p>'}
+  h+='<p class="saved" id="scSaved">'+(EMBED?'Saving your result…':'Sign in on the course page to have your result saved.')+'</p>';
+  $("scBox").innerHTML=h;
+  if(!sent){sent=true;send({type:"quizResult",code:META.code,title:META.title,programme:META.programme,score:right,maxScore:n,percent:pct,questionsCorrect:right,questionCount:n,answers:ans})}
+}
+window.addEventListener("message",function(e){var d=e.data||{};if(!d||typeof d!=="object")return;var el=$("scSaved");if(!el)return;
+  if(d.type==="saved")el.textContent="Your result has been saved to your member record.";
+  else if(d.type==="saveError")el.textContent="Your result could not be saved this time.";
+  else if(d.type==="notMember")el.textContent="Sign in as a member to have your result saved."});
+
+/* ===== shared signal ===== */
+var FQ=[2,5,9];                       /* the three waves, in cycles per window */
+var NZ=[];for(var ni=0;ni<24;ni++)NZ.push({f:3+Math.random()*40,p:Math.random()*6.28,a:.6+Math.random()*.4});
+function amps(){return[+$("a1").value/100,+$("a2").value/100,+$("a3").value/100]}
+function sigAt(x,a,t){var s=0;for(var i=0;i<3;i++)s+=a[i]*Math.sin(2*Math.PI*FQ[i]*x+t*(.6+i*.3));return s/ (a[0]+a[1]+a[2]+.3)}
+function noiseAt(x,t){var s=0;for(var i=0;i<NZ.length;i++)s+=NZ[i].a*Math.sin(2*Math.PI*NZ[i].f*x+NZ[i].p+t*(.8+i*.07));return s/Math.sqrt(NZ.length)*.9}
+function frame(g,w,h,pad,col){g.strokeStyle=col;g.lineWidth=1;g.setLineDash([4,4]);g.strokeRect(pad,pad,w-2*pad,h-2*pad);g.setLineDash([])}
+function drawTime(g,x0,y0,w,h,a,nz,t,hum){
+  g.strokeStyle=C["--line"];g.lineWidth=1;g.beginPath();g.moveTo(x0,y0+h/2);g.lineTo(x0+w,y0+h/2);g.stroke();
+  g.lineWidth=2.4;g.strokeStyle=C["--res"];g.beginPath();
+  for(var i=0;i<=240;i++){var x=i/240,y=sigAt(x,a,t)+nz*noiseAt(x,t)*1.6;y=Math.max(-1.3,Math.min(1.3,y));var px=x0+x*w,py=y0+h/2-y*h*.38;if(i)g.lineTo(px,py);else g.moveTo(px,py)}g.stroke();
+  if(hum){g.lineWidth=2;g.strokeStyle="#C9A24A";g.globalAlpha=.9;g.beginPath();for(var j=0;j<=120;j++){var xx=j/120,yy=a[0]*Math.sin(2*Math.PI*FQ[0]*xx+t*.6)/(a[0]+a[1]+a[2]+.3);var qx=x0+xx*w,qy=y0+h/2-yy*h*.38;if(j)g.lineTo(qx,qy);else g.moveTo(qx,qy)}g.stroke();g.globalAlpha=1}
+}
+function drawSpec(g,x0,y0,w,h,a,nz,hum){
+  var maxF=12,col=[C["--obj"],C["--att"],C["--env"]];
+  g.strokeStyle=C["--line"];g.lineWidth=1.5;g.beginPath();g.moveTo(x0,y0+h);g.lineTo(x0+w,y0+h);g.stroke();
+  var bins=48;for(var i=0;i<bins;i++){var fr=i/bins*maxF,fl=nz*(.25+.45*Math.abs(Math.sin(i*12.9898)))*.9,bw=w/bins*.7;g.fillStyle=C["--muted"];g.globalAlpha=.35;g.fillRect(x0+i*w/bins,y0+h-fl*h*.75,bw,fl*h*.75);g.globalAlpha=1}
+  for(var k=0;k<3;k++){var bx=x0+FQ[k]/maxF*w,bh=a[k]*h*.85/(1);g.fillStyle=(hum&&k===0)?"#C9A24A":col[k];g.fillRect(bx-4,y0+h-bh,8,bh)}
+  label(g,"frequency →",x0+w-84,y0+h+14,C["--muted"]);
+}
+var V1="t";
+function aDraw(ts){var f=fit($("cvA"));if(f){var g=f.g,w=f.w,h=f.h,t=RM?0:ts/1000,a=amps();g.clearRect(0,0,w,h);frame(g,w,h,8,C["--line"]);
+  if(V1==="t"){drawTime(g,20,16,w-40,h-32,a,0,t,false);label(g,"read in time: what is happening now",16,h-12,C["--muted"])}
+  else{drawSpec(g,24,18,w-48,h-48,a,0,false);label(g,"read in frequency: the structure generating the now",16,h-12,C["--muted"])}}
+  requestAnimationFrame(aDraw)}
+function aMsg(){$("aMsg").innerHTML=V1==="t"?'<p>In time, three steady waves add into one changing line. Every vṛtti would be a point on a line like this: arising and subsiding. (§2.1)</p>':'<p>In frequency, the same signal is three steady bars. <q>The frequency-domain representation is, in a sense, the deeper structural truth of which the time-domain trace is the surface.</q> (§3.1)</p>'}
+document.querySelectorAll("[data-v1]").forEach(function(b){b.addEventListener("click",function(){V1=b.dataset.v1;document.querySelectorAll("[data-v1]").forEach(function(x){x.setAttribute("aria-pressed",x===b?"true":"false")});aMsg()})});
+["a1","a2","a3"].forEach(function(i){$(i).addEventListener("input",aMsg)});
+
+function bDraw(ts){var f=fit($("cvB"));if(f){var g=f.g,w=f.w,h=f.h,t=RM?0:ts/1000,a=[.7,.4,.3],nz=(+$("nz").value)/100;g.clearRect(0,0,w,h);frame(g,w,h,8,C["--line"]);
+  var h1=(h-30)*.46;drawTime(g,20,14,w-40,h1,a,nz,t,nz<.35);label(g,"in time",16,h1+26,C["--muted"]);
+  drawSpec(g,24,h1+40,w-48,h-h1-70,a,nz,nz<.35);label(g,"in frequency",16,h-8,C["--muted"]);
+  if(nz<.35)label(g,"the steady hum",w-120,24,"#8a6a1c")}
+  requestAnimationFrame(bDraw)}
+function bMsg(){var v=+$("nz").value;$("nz").setAttribute("aria-valuetext",v>66?"a great deal":v>33?"some":"little");
+  $("bMsg").innerHTML=v>66?'<p>With the noise high, the hum cannot be told from the wobble. <q>The student of contemplative practice in this state can be told repeatedly that the Ātman is the witnessing presence in every cognition, and the words will not land.</q> <q>Not because the Ātman is absent</q> but because the SNR is too low. (§2.3)</p>'
+   :v>33?'<p class="note">As the noise falls, the hum begins to stand out from the floor.</p>'
+   :'<p><q>The signal of the substrate, which had been drowned in the temporal noise, becomes progressively perceptible.</q> (§2.3) The hum did not change. Only the floor beneath it fell.</p>'}
+$("nz").addEventListener("input",bMsg);
+
+/* ===== Part III ===== */
+var ST=[
+ {n:"Sahasrāra",loc:"Crown",reg:"{0}: Self-Recognition",rd:"9 → 0 involution",wv:"The equation recognises that what was watching it was never in it",ph:"The <q>glass partition</q> dissolves; the resultant is recognised as the medium itself; the recognition, once complete, does not unwind"},
+ {n:"Ājñā",loc:"Third eye, forehead",reg:"Formless seeing",rd:"{9} approached: the integrating axis",wv:"Beat very small; the resultant approaching the object’s own frequency; the equation at near-resonance",ph:"Sri Ramakrishna: <q>the form of God can be seen, but as if through a glass partition; only at the sahasrāra does the partition dissolve</q>. Samādhi is available but not yet liberation"},
+ {n:"Viśuddha",loc:"Throat",reg:"Sound-axis stability",rd:"{3,6} stable",wv:"ψₘ(t) tuned away from worldly ψₓ; speech becomes restrained because lower-frequency content no longer resonates",ph:"Sri Ramakrishna: <q>only source-oriented content can be heard or spoken</q>; ordinary chatter falls silent; the system rests in the rhythm-axis"},
+ {n:"Anāhata",loc:"Heart",reg:"First sattvic register",rd:"{1,2,4,8,7,5} → {3,6}",wv:"ψₘ(t) tunes toward higher-frequency content; n(t) begins to drop; first glimpse of the {3,6} rhythm-axis",ph:"Sri Ramakrishna: <q>sees light</q>; devotional feeling arises spontaneously; kindness becomes natural; the first taste of sattva as a felt quality"},
+ {n:"Maṇipūra",loc:"Solar plexus",reg:"Ego-power, will",rd:"{1,2,4,8,7,5}: rajas dominant",wv:"Standing offset Δφ (ahaṁkāra) tilted toward power-seeking; G(t) elevated by competitive engagement",ph:"<q>I am the doer</q>; ambition, drive, the gross expression of ahaṁkāra; rajas-dominant baseline"},
+ {n:"Svādhiṣṭhāna",loc:"Sacral",reg:"Pleasure-pain reactivity",rd:"{1,2,4,8,7,5}: kāma pole",wv:"h(t) shaped by pleasure-pain conditioning; ψₘ(t) drawn by lower kāma",ph:"Strong attraction-aversion; sense-pleasure dominance; the system mostly running on appetitive saṁskāras"},
+ {n:"Mūlādhāra",loc:"Base of spine",reg:"Gross temporal anchoring",rd:"{1,2,4,8,7,5}: survival pole of the doubling loop",wv:"h(t) heavily loaded with body-identification saṁskāras; G(t) survival-driven; n(t) high",ph:"Identification with the body; basic security and fear; the ordinary waking baseline of the unawakened sādhaka"}];
+(function(){var ul=$("stn");ST.forEach(function(s,i){var li=document.createElement("li");li.innerHTML='<button type="button" class="sbtn" aria-expanded="false" aria-controls="sr'+i+'">'+s.n+'<span>'+s.loc+' · '+s.reg+'</span></button><dl class="srow" id="sr'+i+'" hidden><dt>Ritam Diagram</dt><dd>'+s.rd+'</dd><dt>Wave equation</dt><dd>'+s.wv+'</dd><dt>What the lesson says it is like</dt><dd>'+s.ph+'</dd></dl>';ul.appendChild(li);
+  li.querySelector("button").addEventListener("click",function(){var b=this,o=b.getAttribute("aria-expanded")==="true";b.setAttribute("aria-expanded",o?"false":"true");$("sr"+i).hidden=o})})})();
+var GL="aj";
+function glDraw(){var f=fit($("cvG"));if(!f)return;var g=f.g,w=f.w,h=f.h;g.clearRect(0,0,w,h);
+  g.fillStyle=C["--obj"];g.beginPath();g.arc(w*.2,h/2,22,0,7);g.fill();label(g,"the form",w*.2-26,h/2+42,C["--obj"]);
+  g.fillStyle=C["--res"];g.beginPath();g.arc(w*.8,h/2,16,0,7);g.fill();label(g,"the one seeing",w*.8-42,h/2+42,C["--res"]);
+  g.strokeStyle=C["--muted"];g.lineWidth=2;g.setLineDash([2,6]);g.beginPath();g.moveTo(w*.2+24,h/2);g.lineTo(w*.8-18,h/2);g.stroke();g.setLineDash([]);
+  if(GL==="aj"){g.fillStyle=C["--env"];g.globalAlpha=.28;g.fillRect(w*.5-9,12,18,h-24);g.globalAlpha=1;g.strokeStyle=C["--env"];g.lineWidth=2;g.strokeRect(w*.5-9,12,18,h-24);label(g,"glass partition",w*.5-44,h-2,C["--muted"])}
+  else{label(g,"the medium itself",w*.5-46,h/2-14,C["--muted"])}}
+function glMsg(){$("glMsg").innerHTML=GL==="aj"?'<p>At ājñā <q>samādhi is available; the form of the Divine can be seen</q>, but <q>the partition still remains. Seeing the form and being the source are not the same.</q> (§3.3)</p>':'<p><q>Only at the sahasrāra does the recognition complete: what was watching the equation was never in the equation.</q> (§3.3) {0} is not drawn as a thing: it is the whole frame.</p>'}
+document.querySelectorAll("[data-gl]").forEach(function(b){b.addEventListener("click",function(){GL=b.dataset.gl;document.querySelectorAll("[data-gl]").forEach(function(x){x.setAttribute("aria-pressed",x===b?"true":"false")});glDraw();glMsg()})});
+var CH="c",OP="a";
+function coMsg(){var m;
+  if(CH==="c"&&OP==="l")m='<p>A clear channel with no movement: <q>a clear suṣumnā with no kuṇḍalinī movement produces no transformation</q>.</p>';
+  else if(CH==="o"&&OP==="a")m='<p>An active operator in an obstructed channel: <q>an active kuṇḍalinī with an obstructed suṣumnā produces difficulty rather than progress.</q></p>';
+  else if(CH==="c"&&OP==="a")m='<p><q>Both must be present.</q> Then <q>Kuṇḍalinī</q> <q>progressively performs the domain-transformation as it moves through the channel.</q></p>';
+  else m='<p>Obstructed and latent: the lesson does not name this case on its own. It says that <q>lightening h(t) and lowering n(t) clear the channel, and the same sustained practice develops the energetic baseline at which kuṇḍalinī begins to move.</q></p>';
+  $("coMsg").innerHTML=m+'<p class="note">(§3.2) A reading of the lesson’s four cases, not a description of anyone.</p>'}
+document.querySelectorAll("[data-ch]").forEach(function(b){b.addEventListener("click",function(){CH=b.dataset.ch;document.querySelectorAll("[data-ch]").forEach(function(x){x.setAttribute("aria-pressed",x===b?"true":"false")});coMsg()})});
+document.querySelectorAll("[data-op]").forEach(function(b){b.addEventListener("click",function(){OP=b.dataset.op;document.querySelectorAll("[data-op]").forEach(function(x){x.setAttribute("aria-pressed",x===b?"true":"false")});coMsg()})});
+
+/* ===== Part IV (scored) ===== */
+var RL={me:"A temporal-domain correlate the method can measure",sg:"A suggestive map, not yet rigorous",ou:"Outside what any method of this kind can reach"};
+var RV={me:"A measurable correlate.",sg:"A suggestive map.",ou:"Outside the method’s reach."};
+var RH={me:"This one is a physical change that the method can record. Look at §4.1 again.",sg:"This one is a way of reading, offered as suggestive. Look at §4.1 again.",ou:"This one is a question the method’s own structure cannot settle. Look at §4.2 again."};
+var RO=["me","sg","ou"];
+Quiz({p:"rc",name:"Part IV",noun:"Statement",L:RL,V:RV,H:RH,items:[
+ {t:"Experienced meditators deactivate the default mode network, at rest and during practice.",o:RO,a:"me",why:"<q>a direct empirical correlate</q> of the releasing of the standing tilt, though <q>They are correlates, not proofs.</q>",ref:"§4.1"},
+ {t:"Long-term meditators show gamma-band synchrony and trans-frequency coupling beyond what untrained controls show.",o:RO,a:"me",why:"<q>These are the empirical signature of cross-frequency integration</q>, a temporal-domain signature of states the tradition describes from the inside.",ref:"§4.1"},
+ {t:"Integrated information, Φ, maps onto the {9} integrating axis as the maximum-integration state of the equation.",o:RO,a:"sg",why:"The lesson says it <q>maps suggestively, though not yet rigorously</q> onto the {9} axis.",ref:"§4.1"},
+ {t:"Contemplative practice read as a relaxing of the high-precision predictions that keep up the felt sense of a bounded self.",o:RO,a:"sg",why:"Practice <q>can be read, within this framework</q>, in this way. It is a reading, not a measurement.",ref:"§4.1"},
+ {t:"Whether the awareness in which every measurement is registered is real.",o:RO,a:"ou",why:"<q>the question of the spectral domain falls outside the domain its methods cover</q>. This is <q>not a defect of the science</q>.",ref:"§4.2"},
+ {t:"Whether a finer instrument could one day detect the substrate.",o:RO,a:"ou",why:"The substrate is <q>not a deeper signal that better instruments could detect</q>; it is <q>the substrate in which any signal is encountered at all.</q>",ref:"§4.2"}
+]}).show();
+
+/* ===== Part V ===== */
+function stairDraw(){var f=fit($("cvS"));if(!f)return;var g=f.g,w=f.w,h=f.h;g.clearRect(0,0,w,h);
+  var n=6,bh=24,x0=18,base=h-26,sw=(w-36)*.5/n,brick="#B5651D",line="#F5E8D5";
+  function br(x,y,ww){g.fillStyle=brick;g.fillRect(x,y,ww,bh-2);g.strokeStyle=line;g.lineWidth=1;g.strokeRect(x,y,ww,bh-2)}
+  for(var i=0;i<n;i++){for(var r=0;r<=i;r++){br(x0+i*sw,base-(r+1)*bh,sw)}}
+  var top=base-(n+1)*bh,rx=x0+n*sw,rw=w-18-rx,k=4;
+  for(var c=0;c<k;c++)br(rx+c*rw/k,top,rw/k);
+  for(var d=0;d<=n;d++)for(var e=0;e<k;e++){if(d<n)br(rx+e*rw/k,base-(d+1)*bh,rw/k)}
+  label(g,"the stairs",x0,base+16,C["--muted"]);label(g,"the roof, the same brick",rx,top-6,C["--muted"])}
+var RD="me";
+function rdMsg(){$("rdMsg").innerHTML=RD==="me"?'<p>The lesson says the traditional language <q>can sound, on first reading, like a description of something happening to the practitioner: an energy rising, a series of openings, transformations one passes through.</q> (§5)</p>':'<p>The lesson says the Pratyabhijñā lens corrects this: <q>it is not something happening to the practitioner.</q> <q>The practitioner consents. The Power operates.</q> (§5) The lesson reads the stations as stations of the Śakti’s own staged return.</p>'}
+document.querySelectorAll("[data-rd]").forEach(function(b){b.addEventListener("click",function(){RD=b.dataset.rd;document.querySelectorAll("[data-rd]").forEach(function(x){x.setAttribute("aria-pressed",x===b?"true":"false")});rdMsg()})});
+
+send({type:"ready"});
+(function(){
+  var last=0;
+  function h(){var d=document.documentElement,b=document.body;var v=Math.ceil(Math.max(d.scrollHeight,b.scrollHeight,b.offsetHeight));if(v&&Math.abs(v-last)>1){last=v;send({type:"height",height:v})}}
+  window.addEventListener("load",h);window.addEventListener("resize",h);
+  if(window.ResizeObserver)new ResizeObserver(h).observe(document.body);
+  setInterval(h,700);h();
+})();
+var rt=0;
+window.addEventListener("resize",function(){clearTimeout(rt);rt=setTimeout(function(){glDraw();stairDraw()},80)});
+function retheme(){readColors();glDraw();stairDraw()}
+try{window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change",retheme)}catch(e){}
+new MutationObserver(retheme).observe(document.documentElement,{attributes:true,attributeFilter:["data-theme"]});
+aMsg();bMsg();glDraw();glMsg();coMsg();stairDraw();rdMsg();
+requestAnimationFrame(aDraw);requestAnimationFrame(bDraw);
+
+})();
+</script>
+</body></html>
