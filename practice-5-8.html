@@ -1,0 +1,315 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Practice: Lesson 5.8, The Same Afternoon, Seen from Six Depths</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans:wght@400..700&family=Noto+Serif:ital,wght@0,400..700;1,400..700&display=swap">
+<style>
+:root{
+  --bg:#FBF5EA; --surface:#FFFDF8; --ink:#1E1E1E; --muted:#5A5A5A; --line:#E6DAC3; --tint:#F3EAD3; --navy:#12285A; --gold:#C9A24A; --goldt:#6B4E0E;
+  --obj:#0B8686; --att:#C95F06; --res:#2E3192; --env:#C0245B; --ok:#1B7A52;
+  --display:"Noto Serif",Georgia,"Times New Roman",serif;
+  --body:"Noto Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0B1A3D; --surface:#12285A; --ink:#FBF5EA; --muted:#C9C3B3; --line:#2B4686; --tint:#1D3770; --gold:#E6C36A; --goldt:#E6C36A;
+    --obj:#46CFC6; --att:#F5A04D; --res:#A3AAFF; --env:#FF7BA9; --ok:#5BD59B; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0B1A3D; --surface:#12285A; --ink:#FBF5EA; --muted:#C9C3B3; --line:#2B4686; --tint:#1D3770; --gold:#E6C36A; --goldt:#E6C36A;
+  --obj:#46CFC6; --att:#F5A04D; --res:#A3AAFF; --env:#FF7BA9; --ok:#5BD59B; color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;
+  padding-left:max(14px,env(safe-area-inset-left,0px));padding-right:max(14px,env(safe-area-inset-right,0px));padding-block:22px 40px}
+.wrap{max-width:900px;margin:0 auto;display:flex;flex-direction:column;gap:32px}
+h1,h2,h3{font-family:var(--display);font-weight:500;text-wrap:balance;margin:0;letter-spacing:-.01em}
+h1{font-size:clamp(30px,5.4vw,44px);line-height:1.06}
+h2{font-size:clamp(23px,3.4vw,29px);line-height:1.15}
+h3{font-size:19px;line-height:1.25}
+p{margin:0}
+sub{font-size:.72em;line-height:0}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.lede{font-size:17.5px;max-width:64ch}
+.intro{max-width:66ch;color:var(--muted)}
+header{display:flex;flex-direction:column;gap:12px}
+section{display:flex;flex-direction:column;gap:18px;min-width:0}
+.sym{font-family:var(--mono);font-size:.92em;white-space:nowrap}
+.k-obj{color:var(--obj)} .k-att{color:var(--att)} .k-res{color:var(--res)} .k-env{color:var(--env)}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px;display:flex;flex-direction:column;gap:14px;min-width:0}
+.bar{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;justify-content:space-between}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--bg)}
+.seg button{font:inherit;font-size:14px;color:var(--muted);background:transparent;border:0;padding:8px 13px;cursor:pointer}
+.seg button+button{border-left:1px solid var(--line)}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--surface)}
+button:focus-visible,input:focus-visible{outline:2px solid var(--res);outline-offset:2px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{font:inherit;font-size:14px;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:7px 13px;cursor:pointer;display:inline-flex;gap:8px;align-items:center}
+.chip i{font-style:normal;font-family:var(--mono);font-size:11px;color:var(--muted)}
+.chip[aria-pressed="true"]{background:var(--res);border-color:var(--res);color:#fff}
+.chip[aria-pressed="true"] i{color:#fff;opacity:.8}
+.chip:disabled{cursor:default}
+.chip.reached:not([aria-pressed="true"]){border-color:var(--res)}
+.btn{font:inherit;font-size:14px;color:var(--ink);background:var(--surface);border:1px solid var(--ink);border-radius:8px;padding:8px 16px;cursor:pointer}
+.btn.primary{background:var(--ink);color:var(--surface)}
+.btn.ghost{border-color:var(--line);color:var(--muted)}
+.scope-wrap{position:relative;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--bg)}
+canvas{display:block;width:100%}
+.playbtn{position:absolute;right:8px;bottom:8px;font:inherit;font-size:12px;background:var(--surface);color:var(--muted);border:1px solid var(--line);border-radius:6px;padding:4px 10px;cursor:pointer}
+.box{border:1px solid var(--line);border-radius:8px;background:var(--bg);padding:10px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.box .cap{font-size:12px;color:var(--muted)}
+.meters{display:flex;flex-direction:column;gap:9px}
+.meter{display:grid;grid-template-columns:1fr auto;gap:2px 8px;font-size:13px;align-items:baseline}
+.meter b{font-weight:600}
+.meter output{font-family:var(--mono);font-size:12px;color:var(--muted)}
+.meter .track{grid-column:1/-1;height:7px;background:var(--line);border-radius:4px;overflow:hidden}
+.meter .fill{height:100%;width:0;background:var(--res);border-radius:4px}
+.meter.f2 .fill{background:var(--env)} .meter.f3 .fill{background:var(--obj)}
+.slider{display:flex;align-items:center;gap:10px;flex:1 1 280px;min-width:0}
+.slider label{font-size:14px;min-width:0}
+.slider input[type=range]{flex:1;min-width:60px;accent-color:var(--res)}
+.slider small{color:var(--muted);font-size:12px;white-space:nowrap}
+.slider output{font-family:var(--mono);font-size:12.5px;color:var(--muted);min-width:46px;text-align:right}
+.readout{font-size:14px;color:var(--muted)}
+.readout b{color:var(--ink)}
+.tag{font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);border:1px solid var(--line);border-radius:4px;padding:2px 6px}
+.note{font-size:13px;color:var(--muted);max-width:70ch}
+.balance{background:var(--tint);border-radius:10px;padding:16px 18px;display:flex;flex-direction:column;gap:8px;max-width:78ch}
+footer{font-size:13px;color:var(--muted);max-width:76ch;border-top:1px solid var(--line);padding-top:12px}
+@media (max-width:640px){.panel{padding:12px}.wrap{gap:26px}}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
+
+[hidden]{display:none!important}
+:root{--c-h:var(--res);--c-ref:var(--obj);--c-over:var(--env);--c-settle:var(--att);--c-rip:var(--obj)}
+nav.parts{display:flex;flex-wrap:wrap;gap:8px 20px;margin-top:4px}
+nav.parts a{color:var(--ink);text-decoration:none;border-bottom:1px solid var(--line);padding-bottom:2px;font-size:15px}
+nav.parts a:hover,nav.parts a:focus-visible{border-color:var(--res);color:var(--res)}
+.msg{min-height:1.5em;font-size:15px}
+.fbbox{border-top:1px solid var(--line);padding-top:12px;display:flex;flex-direction:column;gap:8px;min-height:6.5em}
+.fbbox .verdict{font-family:var(--display);font-size:19px}
+.fbbox .ref{font-family:var(--mono);font-size:11px;color:var(--muted)}
+.fbbox q{font-style:italic;quotes:"“" "”"}
+.strikebar{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center}
+.chip:focus-visible,.pick:focus-visible,summary:focus-visible{outline:2px solid var(--res);outline-offset:2px}
+.scene{border-left:3px solid var(--line);padding:2px 0 2px 12px;font-family:var(--display);font-size:18.5px;line-height:1.45;min-height:5.6em}
+.picks{gap:10px}
+.pick{font:inherit;font-size:15px;color:var(--ink);background:var(--bg);border:1.5px solid var(--line);border-top-width:4px;border-radius:10px;padding:9px 14px;cursor:pointer;min-width:0}
+.pick[data-p="settle"]{border-top-color:var(--c-settle)}
+.pick[data-p="over"]{border-top-color:var(--c-over)}
+.pick[data-p="ripple"]{border-top-color:var(--c-rip)}
+.pick.wrong{opacity:.55}
+.pick.right{background:var(--surface);box-shadow:0 0 0 2px var(--ink)}
+.pick:disabled{cursor:default}
+.dots{display:flex;gap:6px}
+.dots i{width:10px;height:10px;border-radius:50%;border:1.5px solid var(--muted)}
+.dots i.done{background:var(--ink);border-color:var(--ink)}
+.dots i.cur{border-color:var(--ink);box-shadow:0 0 0 2px var(--line)}
+.brandhdr{background:#12285A;color:#FBF5EA;text-align:center;padding:18px 18px 20px;border-radius:14px;display:flex;flex-direction:column;align-items:center;gap:6px}
+.brandhdr .logos{display:flex;align-items:center;justify-content:center;gap:18px}
+.brandhdr .logos img{width:56px;height:66px;object-fit:contain;display:block}
+.brandhdr .logos img.rit{width:86px;height:65px}
+.brandhdr .eyebrow{color:#E6C36A;font-weight:700;letter-spacing:3px}
+.brandhdr h1{color:#FBF5EA;font-weight:700}
+.brandhdr .course{color:#E6C36A;font-weight:600;font-size:14px}
+.brandhdr .lede{color:#F1ECDF;font-size:15.5px;max-width:62ch}
+.brandhdr .scorenote{color:#F1ECDF;font-size:14.5px}
+nav.parts a{color:var(--ink)}
+.brandhdr nav.parts a{color:#FBF5EA;border-bottom:1px solid #E6C36A;background:none;padding-bottom:2px}
+.brandhdr nav.parts a:hover,.brandhdr nav.parts a:focus-visible{color:#E6C36A;border-color:#E6C36A}
+.tag.scored{color:var(--goldt);border-color:var(--gold)}
+.scorebox{border-left:5px solid var(--gold);background:var(--tint);border-radius:10px;padding:12px 14px;margin-bottom:14px}
+.scorebox .big{font-family:var(--display);font-size:30px;line-height:1.1;color:var(--ink)}
+.scorebox .band{font-family:var(--display);font-size:18px;margin:4px 0}
+.scorebox .band.good{color:var(--ok)}
+.scorebox .saved{font-size:13.5px;color:var(--muted)}
+.scorebox ul{margin:6px 0 0;padding-left:20px}
+
+/* PRACTICE TEMPLATE: one coloured "part" per section (part-1 .. part-4) */
+.part{--pc:#0E7A8A;--pcon:#FFFFFF;--pcbg:#E6F2F3;border:2px solid var(--pc);border-radius:14px;overflow:hidden;background:var(--pcbg)}
+.part-1{--pc:#0E7A8A;--pcbg:#E6F2F3}
+.part-2{--pc:#12285A;--pcbg:#EEF0F8}
+.part-3{--pc:#2F6B3A;--pcbg:#E6F0E3}
+.part-4{--pc:#7A2A5E;--pcbg:#F5E6F0}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .part{--pcbg:#0F2250;border-color:var(--pcl,var(--pc))}
+ :root:not([data-theme="light"]) .part-1{--pcl:#46CFC6} :root:not([data-theme="light"]) .part-2{--pcl:#E6C36A} :root:not([data-theme="light"]) .part-3{--pcl:#7FD08C} :root:not([data-theme="light"]) .part-4{--pcl:#F08CC8}}
+:root[data-theme="dark"] .part{--pcbg:#0F2250;border-color:var(--pcl,var(--pc))}
+:root[data-theme="dark"] .part-1{--pcl:#46CFC6} :root[data-theme="dark"] .part-2{--pcl:#E6C36A} :root[data-theme="dark"] .part-3{--pcl:#7FD08C} :root[data-theme="dark"] .part-4{--pcl:#F08CC8}
+.part-band{background:var(--pc);color:var(--pcon);padding:12px 16px;display:flex;align-items:center;flex-wrap:wrap;gap:6px 14px}
+.part-band h2{color:inherit;font-size:clamp(20px,3.4vw,26px);font-weight:600;flex:1 1 220px}
+.part-num{font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;font-weight:500;background:rgba(255,255,255,.18);border-radius:4px;padding:3px 9px}
+.part-band .tag{color:inherit;border-color:currentColor;background:rgba(255,255,255,.12)}
+.part-2 .part-band .tag,.part-2 .part-num{color:#E6C36A}
+.part-body{padding:16px;display:flex;flex-direction:column;gap:14px}
+.part .panel{background:var(--surface)}
+@media (max-width:640px){.part-body{padding:12px}}
+
+
+/* page-specific */
+q{font-style:italic;quotes:"“" "”"}
+.btn:disabled{opacity:.45;cursor:default}
+.btn[aria-pressed="true"]{background:var(--ink);color:var(--surface)}
+.pick{font:inherit;font-size:15px;color:var(--ink);background:var(--bg);border:1.5px solid var(--line);border-radius:10px;padding:9px 14px;cursor:pointer;min-width:0;text-align:left}
+.pick.wrong{opacity:.55}
+.pick.right{background:var(--ok);border-color:var(--ok);color:#fff}
+.pick:disabled{cursor:default}
+.pick:focus-visible,.node:focus-visible{outline:2px solid var(--res);outline-offset:2px}
+.part-5{--pc:#B5651D;--pcbg:#FBEEDD}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .part-5{--pcl:#F5B060}}
+:root[data-theme="dark"] .part-5{--pcl:#F5B060}
+.made{font-size:12.5px;color:var(--muted);font-style:italic}
+.slider{display:flex;align-items:center;gap:10px;flex-wrap:wrap;flex:0 0 auto}
+.slider label{font-weight:600;min-width:200px}
+.slider input[type=range]{flex:1;min-width:120px;accent-color:var(--res)}
+.cohbar{height:10px;border-radius:5px;background:var(--line);overflow:hidden}
+.cohbar i{display:block;height:100%;width:0;background:var(--ok);border-radius:5px;transition:width .25s}
+.cohrow{display:flex;flex-direction:column;gap:4px;font-size:14px}
+canvas.gr{width:100%;height:230px;border:1px solid var(--line);border-radius:8px;background:var(--bg)}
+canvas.lp{width:100%;max-width:520px;height:230px;margin:0 auto;border:1px solid var(--line);border-radius:10px;background:var(--bg)}
+canvas.ch{width:100%;height:210px;border:1px solid var(--line);border-radius:8px;background:var(--bg)}
+canvas.nz{width:100%;height:170px;border:1px solid var(--line);border-radius:8px;background:var(--bg)}
+.flow{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.flow .arrow{color:var(--muted)}
+.rung{font:inherit;font-size:15px;border:1.5px solid var(--line);border-bottom-width:4px;border-radius:10px;background:var(--bg);color:var(--ink);padding:8px 14px;cursor:pointer}
+.rung[aria-pressed="true"]{background:var(--ink);color:var(--surface)}
+.rung.seen:not([aria-pressed="true"]){border-color:var(--ink)}
+.act2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.act2 .box2{border:1px solid var(--line);border-radius:10px;background:var(--bg);padding:12px 14px;display:flex;flex-direction:column;gap:6px}
+@media (max-width:640px){.act2{grid-template-columns:1fr}}
+.bars2{display:flex;flex-direction:column;gap:8px;font-size:14px}
+.bar2{display:grid;grid-template-columns:150px 1fr;gap:10px;align-items:center}
+.bar2 .tr{height:10px;background:var(--line);border-radius:5px;overflow:hidden}
+.bar2 .tr i{display:block;height:100%;width:0;border-radius:5px;transition:width .4s}
+.part-1{--pc:#0E7A8A;--pcbg:#E6F2F3}
+.balance{background:var(--tint);border-radius:10px;padding:16px 18px;display:flex;flex-direction:column;gap:8px;max-width:78ch}
+.btn.primary{background:var(--ink);color:var(--surface)}
+canvas.sk{width:100%;height:210px;border:1px solid var(--line);border-radius:10px;background:var(--bg)}
+canvas.st{width:100%;height:150px;border:1px solid var(--line);border-radius:10px;background:var(--bg)}
+canvas.rm{width:100%;height:200px;border:1px solid var(--line);border-radius:10px;background:var(--bg)}
+canvas.bm{width:100%;height:160px;border:1px solid var(--line);border-radius:10px;background:var(--bg)}
+.sw{display:flex;flex-wrap:wrap;gap:14px 24px}
+.sw .grp{display:flex;flex-direction:column;gap:6px}
+.sw .grp b{font-size:14px}
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin-top:10px}
+.colbox{border:1px solid var(--line);border-radius:10px;padding:12px;background:var(--surface)}
+.colbox h3{margin:0 0 6px;font-size:14px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted)}
+.colbox p{margin:6px 0;font-size:15px;line-height:1.5}
+.frame{border:2px dashed var(--line);border-radius:12px;padding:10px 12px;margin-top:6px;min-height:120px}
+.frame .fl{font-size:12px;color:var(--muted);margin-bottom:4px}
+.frame.zero{display:flex;align-items:center;justify-content:center;text-align:center;border-color:var(--res);font-size:15px;line-height:1.5}
+.tbox{border:1px solid var(--res);border-radius:8px;padding:6px 10px;margin:6px 0;font-size:14px;line-height:1.4;background:var(--bg)}
+.tbox b{display:block;font-size:13px}
+.strip{margin-top:12px;padding:10px 14px;border-left:4px solid var(--res);background:var(--surface);font-size:15px;line-height:1.5}
+.stagehead{font-family:'Noto Serif',Georgia,serif;font-size:19px;line-height:1.4;margin:10px 0 0}
+.dial{display:flex;flex-wrap:wrap;gap:6px}
+.dial button{flex:1 1 90px;padding:10px 6px;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--ink);font:inherit;font-size:14px;cursor:pointer}
+.dial button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+</style></head><body>
+<div class="wrap">
+<header class="brandhdr">
+  <div class="logos"><img src="vedantanz-logo.png" alt="Ramakrishna Vedanta NZ emblem" width="56" height="66"><img class="rit" src="ritam-wordmark.png" alt="Ritam" width="86" height="65"></div>
+  <div class="eyebrow">Practice · Lesson 5.8</div>
+  <h1>The Same Afternoon, Seen from Six Depths</h1>
+  <p class="course">The Mind in the Light of Modern and Spiritual Sciences · Advanced</p>
+  <p class="lede">This page shows the six stages of one man’s account as Lesson 5.8 reads them. It does not take you through them and cannot produce the experience. The afternoon was given, not produced (§2.3). Nothing here is scored.</p>
+  <p class="scorenote"><b>Nothing on this page is scored.</b> It is a way of looking again at what the lesson says, one stage at a time, in any order.</p>
+</header>
+
+<section id="s1" class="part part-1">
+  <div class="part-band"><span class="part-num">Part I</span><h2>The six stages</h2><span class="tag">Practice: not scored</span></div>
+  <div class="part-body">
+  <p class="intro">Choose a stage. Each card shows what the lesson reads there, the level of vāk the lesson names, and a labelled teaching picture. The lesson says <q>The four levels of vāk, introduced in Lesson 5.2 for speech and sound, are used here for what is perceived.</q> (§2.2)</p>
+  <div class="panel">
+    <div class="dial" id="dial" role="group" aria-label="Stage"></div>
+    <h3 class="stagehead" id="sHead"></h3>
+    <div class="cols">
+      <div class="colbox"><h3>What the lesson reads here</h3><div id="sRead"></div></div>
+      <div class="colbox"><h3>Level of vāk</h3><div id="sVak"></div></div>
+      <div class="colbox"><h3>Teaching picture</h3><div class="frame" id="sPic" role="img"></div><p class="note">Teaching picture, not a measurement.</p></div>
+    </div>
+    <div class="strip">At every stage the frame is the same; only what appears in it changes. <q>The awakening is not the production of a new state. It is the recognition that the substrate was never the contents.</q> (§4.1)</div>
+  </div>
+  </div>
+</section>
+
+<section id="s2" class="part part-2">
+  <div class="part-band"><span class="part-num">Part II</span><h2>Two registers of śaktipāta</h2><span class="tag">Practice: not scored</span></div>
+  <div class="part-body">
+  <p class="intro">The lesson says <q>The recognition was not his accomplishment. It was given.</q> (§2.3) It names the same fact at two registers.</p>
+  <div class="cols">
+    <div class="colbox"><h3>The mind-wave equation register</h3><p><q>At the mind-wave equation register, śaktipāta is entrainment.</q></p><p>In temporal-domain language, the teacher’s presence raised the signal-to-noise ratio of Manmatha Nath’s system <q>far above what his own practice could have produced in that hour</q>.</p></div>
+    <div class="colbox"><h3>The Pratyabhijñā register</h3><p><q>Śaktipāta at this register is not a transmission between two consciousnesses but a self-recognition by the one consciousness across the apparent gap.</q></p><p>The lesson says <q>These are not two competing accounts.</q> They are the same fact described at two registers.</p></div>
+  </div>
+  <p class="note">To go back to the full account, return to Lesson 5.8 on the course page.</p>
+  </div>
+</section>
+
+<footer>Nothing on this page is scored. Based on Lesson 5.8. This page illustrates the lesson’s ideas and does not measure, diagnose or advise on anyone’s mind or situation. If anything here touches something difficult for you, please be gentle with yourself, and consider speaking with someone you trust or a qualified professional.<br>Ritam · Ramakrishna Vedanta Centre NZ · <a href="https://www.vedanta.nz">www.vedanta.nz</a></footer>
+</div>
+<script>
+(function(){
+"use strict";
+var $=function(id){return document.getElementById(id)};
+try{var q=new URLSearchParams(location.search).get("theme");if(q==="light"||q==="dark")document.documentElement.setAttribute("data-theme",q)}catch(e){}
+try{var pt=new URLSearchParams(location.search).get("part");if(pt==="1"||pt==="2"||pt==="3")document.body.setAttribute("data-part",pt)}catch(e){}
+var EMBED=/[?&]embed=1/.test(location.search);
+function send(m){if(EMBED){try{parent.postMessage(m,"*")}catch(e){}}}
+var RM=false;try{RM=window.matchMedia("(prefers-reduced-motion: reduce)").matches}catch(e){}
+var C={};
+function readColors(){var cs=getComputedStyle(document.documentElement);["--bg","--surface","--ink","--muted","--line","--obj","--att","--res","--env","--ok"].forEach(function(k){C[k]=cs.getPropertyValue(k).trim()})}
+readColors();
+var dpr=Math.max(1,Math.min(2,window.devicePixelRatio||1));
+function fit(c){var w=c.clientWidth,h=c.clientHeight;if(!w||!h)return null;var bw=Math.round(w*dpr),bh=Math.round(h*dpr);if(c.width!==bw||c.height!==bh){c.width=bw;c.height=bh}var g=c.getContext("2d");g.setTransform(dpr,0,0,dpr,0,0);return {g:g,w:w,h:h}}
+function label(g,t,x,y,color){g.font="500 11.5px 'Noto Sans',system-ui,sans-serif";g.textAlign="left";g.textBaseline="alphabetic";var w=g.measureText(t).width;g.save();g.globalAlpha=.85;g.fillStyle=C["--bg"];g.fillRect(x-4,y-12,w+8,16);g.restore();g.fillStyle=color;g.fillText(t,x,y)}
+
+var STG=[
+ {n:"1 The inward turn",h:"“By and by, my mind lost the contact of the sense-organs.”",
+  read:'<p><q>The senses are still functioning</q>, <q>but the mind is no longer being drawn outward by what they bring.</q> The classical name for this is pratyāhāra.</p>',
+  vak:'<p>Vaikharī. <q>The world is still there as form, still there as object.</q> <q>But its grip is loosening.</q></p>',
+  pic:'<div class="fl">In the frame</div><div class="tbox"><b>ψₓ(t)</b>no longer the focus of awareness</div><div class="tbox"><b>h(t)</b>no longer re-excited by a stream of fresh sensory impressions</div><div class="tbox"><b>ψₘ(t)</b>beginning to settle</div>',
+  alt:"Three labelled boxes inside a frame: the object-signal no longer the focus, the filter no longer re-excited, the attention wave beginning to settle"},
+ {n:"2 Everything vibrating",h:"“The Math, the trees, and everything before me vibrating. The objects were oscillating and vibrating before my eyes.”",
+  read:'<p><q>The objects do not disappear; they reveal themselves as something other than what they had appeared to be.</q> And <q>The witnessing remains intact.</q></p>',
+  vak:'<p>The shift is from vaikharī toward madhyamā: <q>the level at which the world is heard and seen as living movement rather than as fixed object.</q></p>',
+  pic:'<div class="fl">In the frame</div><div class="tbox"><b>SNR</b>risen enough for the substrate to begin showing through the signal</div><div class="tbox"><b>h(t)</b>the filter has thinned</div><div class="tbox"><b>Station</b>anāhata, the heart-centre</div>',
+  alt:"Three labelled boxes inside a frame: signal-to-noise ratio risen, the filter thinned, the anāhata station"},
+ {n:"3 Form, voice, void",h:"“Slowly even Swamiji vanished from my eyes. Even then I could hear his voice, but I did not follow its meaning. Then suddenly I was aware of a vibration within my brain and there was only the void.”",
+  read:'<p>Three sub-movements. <q>even Swamiji vanished from my eyes</q>; <q>I could hear his voice, but I did not follow its meaning</q>; <q>a vibration within my brain… only the void.</q></p><p><q>The “void” Manmatha Nath describes is not absence; it is the spectral ground approaching, no longer obscured by content.</q></p>',
+  vak:'<p>Paśyantī: <q>the level at which sound exists as unified vibrating awareness</q>.</p>',
+  pic:'<div class="fl">In the frame</div><div class="tbox"><b>Beat</b>has become very small</div><div class="tbox"><b>Resultant</b>approaching the object’s own frequency</div><div class="tbox"><b>Station</b>from viśuddha toward ājñā</div>',
+  alt:"Three labelled boxes inside a frame: the beat very small, the resultant near the object's frequency, the stations viśuddha toward ājñā"},
+ {n:"4 Undivided Chit",h:"“Nothing but an undivided chit”",
+  read:'<p><q>The threshold is reached, for a moment.</q></p><p><q>This is a glimpse, not the completed transformation of Lesson 5.7, Section 3.5, which does not reverse; Stage 6 describes the return.</q></p>',
+  vak:'<p>Parā-vāk: <q>not a level of sound at all, the silence from which all sound arises</q>. The station is sahasrāra.</p>',
+  pic:'<div class="zero">The frame itself.<br><small>The content boxes are absent. The lesson calls this <q>Not a term in the mind-wave equation but the awareness within which the entire equation has always been running.</q></small></div>',zero:true,
+  alt:"An empty frame. The content boxes are absent and the frame carries the lesson's label"},
+ {n:"5 The question",h:"“You are also in the maya… You yourself are within the meshes of maya.”",
+  read:'<p><q>He surfaces partially, enough to speak</q>. <q>Stage 5 is the stage at which the question itself becomes possible</q>, asked <q>from the threshold between the recognition and the ordinary self</q>.</p>',
+  vak:'<p>Vaikharī: <q>the question is asked in spoken words</q>.</p>',
+  pic:'<div class="fl">In the frame</div><p>No equation terms are named for this stage in the lesson.</p>',
+  alt:"A frame with a note that the lesson names no equation terms for this stage"},
+ {n:"6 The little shell",h:"“I entered the little shell of my own self… Swamiji and myself were not of the same substance anymore and I felt the vast difference.”",
+  read:'<p><q>The temporal-domain signal reconstitutes.</q> <q>The shell is now known as a shell.</q> <q>The individual self that has reconstituted is no longer mistaken for the totality of what one is.</q></p>',
+  vak:'<p><q>the return is to vaikharī and madhyamā consciousness, the ordinary world of speech and prāṇic activity</q>.</p>',
+  pic:'<div class="fl">In the frame</div><div class="tbox"><b>The time-domain signal</b>reconstitutes</div><div class="tbox"><b>The individual self</b>body, personal history, mental contents: back in the foreground, known as a shell</div>',
+  alt:"Two labelled boxes inside a frame: the time-domain signal reconstitutes, the individual self back in the foreground and known as a shell"}
+];
+var SI=0;
+(function(){var d=$("dial");STG.forEach(function(s,i){var b=document.createElement("button");b.type="button";b.textContent=s.n;b.setAttribute("aria-pressed",i===0?"true":"false");b.addEventListener("click",function(){SI=i;[].forEach.call(d.children,function(x,k){x.setAttribute("aria-pressed",k===i?"true":"false")});show()});d.appendChild(b)})})();
+function show(){var s=STG[SI];$("sHead").innerHTML=s.h;$("sRead").innerHTML=s.read;$("sVak").innerHTML=s.vak;
+  var f=$("sPic");f.innerHTML=s.zero?s.pic.replace('<div class="zero">','<div style="width:100%">'):s.pic;f.className="frame"+(s.zero?" zero":"");f.setAttribute("aria-label",s.alt)}
+show();
+send({type:"ready"});
+(function(){
+  var last=0;
+  function h(){var d=document.documentElement,b=document.body;var v=Math.ceil(Math.max(d.scrollHeight,b.scrollHeight,b.offsetHeight));if(v&&Math.abs(v-last)>1){last=v;send({type:"height",height:v})}}
+  window.addEventListener("load",h);window.addEventListener("resize",h);
+  if(window.ResizeObserver)new ResizeObserver(h).observe(document.body);
+  setInterval(h,700);h();
+})();
+
+})();
+</script>
+</body></html>
