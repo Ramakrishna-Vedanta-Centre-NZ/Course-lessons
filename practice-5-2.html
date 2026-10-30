@@ -1,0 +1,582 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Practice: Lesson 5.2, Rhythm and Sound</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans:wght@400..700&family=Noto+Serif:ital,wght@0,400..700;1,400..700&display=swap">
+<style>
+:root{
+  --bg:#FBF5EA; --surface:#FFFDF8; --ink:#1E1E1E; --muted:#5A5A5A; --line:#E6DAC3; --tint:#F3EAD3; --navy:#12285A; --gold:#C9A24A; --goldt:#6B4E0E;
+  --obj:#0B8686; --att:#C95F06; --res:#2E3192; --env:#C0245B; --ok:#1B7A52;
+  --display:"Noto Serif",Georgia,"Times New Roman",serif;
+  --body:"Noto Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0B1A3D; --surface:#12285A; --ink:#FBF5EA; --muted:#C9C3B3; --line:#2B4686; --tint:#1D3770; --gold:#E6C36A; --goldt:#E6C36A;
+    --obj:#46CFC6; --att:#F5A04D; --res:#A3AAFF; --env:#FF7BA9; --ok:#5BD59B; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0B1A3D; --surface:#12285A; --ink:#FBF5EA; --muted:#C9C3B3; --line:#2B4686; --tint:#1D3770; --gold:#E6C36A; --goldt:#E6C36A;
+  --obj:#46CFC6; --att:#F5A04D; --res:#A3AAFF; --env:#FF7BA9; --ok:#5BD59B; color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;
+  padding-left:max(14px,env(safe-area-inset-left,0px));padding-right:max(14px,env(safe-area-inset-right,0px));padding-block:22px 40px}
+.wrap{max-width:900px;margin:0 auto;display:flex;flex-direction:column;gap:32px}
+h1,h2,h3{font-family:var(--display);font-weight:500;text-wrap:balance;margin:0;letter-spacing:-.01em}
+h1{font-size:clamp(30px,5.4vw,44px);line-height:1.06}
+h2{font-size:clamp(23px,3.4vw,29px);line-height:1.15}
+h3{font-size:19px;line-height:1.25}
+p{margin:0}
+sub{font-size:.72em;line-height:0}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.lede{font-size:17.5px;max-width:64ch}
+.intro{max-width:66ch;color:var(--muted)}
+header{display:flex;flex-direction:column;gap:12px}
+section{display:flex;flex-direction:column;gap:18px;min-width:0}
+.sym{font-family:var(--mono);font-size:.92em;white-space:nowrap}
+.k-obj{color:var(--obj)} .k-att{color:var(--att)} .k-res{color:var(--res)} .k-env{color:var(--env)}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px;display:flex;flex-direction:column;gap:14px;min-width:0}
+.bar{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;justify-content:space-between}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--bg)}
+.seg button{font:inherit;font-size:14px;color:var(--muted);background:transparent;border:0;padding:8px 13px;cursor:pointer}
+.seg button+button{border-left:1px solid var(--line)}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--surface)}
+button:focus-visible,input:focus-visible{outline:2px solid var(--res);outline-offset:2px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{font:inherit;font-size:14px;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:7px 13px;cursor:pointer;display:inline-flex;gap:8px;align-items:center}
+.chip i{font-style:normal;font-family:var(--mono);font-size:11px;color:var(--muted)}
+.chip[aria-pressed="true"]{background:var(--res);border-color:var(--res);color:#fff}
+.chip[aria-pressed="true"] i{color:#fff;opacity:.8}
+.chip:disabled{cursor:default}
+.chip.reached:not([aria-pressed="true"]){border-color:var(--res)}
+.btn{font:inherit;font-size:14px;color:var(--ink);background:var(--surface);border:1px solid var(--ink);border-radius:8px;padding:8px 16px;cursor:pointer}
+.btn.primary{background:var(--ink);color:var(--surface)}
+.btn.ghost{border-color:var(--line);color:var(--muted)}
+.scope-wrap{position:relative;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--bg)}
+canvas{display:block;width:100%}
+.playbtn{position:absolute;right:8px;bottom:8px;font:inherit;font-size:12px;background:var(--surface);color:var(--muted);border:1px solid var(--line);border-radius:6px;padding:4px 10px;cursor:pointer}
+.box{border:1px solid var(--line);border-radius:8px;background:var(--bg);padding:10px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.box .cap{font-size:12px;color:var(--muted)}
+.meters{display:flex;flex-direction:column;gap:9px}
+.meter{display:grid;grid-template-columns:1fr auto;gap:2px 8px;font-size:13px;align-items:baseline}
+.meter b{font-weight:600}
+.meter output{font-family:var(--mono);font-size:12px;color:var(--muted)}
+.meter .track{grid-column:1/-1;height:7px;background:var(--line);border-radius:4px;overflow:hidden}
+.meter .fill{height:100%;width:0;background:var(--res);border-radius:4px}
+.meter.f2 .fill{background:var(--env)} .meter.f3 .fill{background:var(--obj)}
+.slider{display:flex;align-items:center;gap:10px;flex:1 1 280px;min-width:0}
+.slider label{font-size:14px;min-width:0}
+.slider input[type=range]{flex:1;min-width:60px;accent-color:var(--res)}
+.slider small{color:var(--muted);font-size:12px;white-space:nowrap}
+.slider output{font-family:var(--mono);font-size:12.5px;color:var(--muted);min-width:46px;text-align:right}
+.readout{font-size:14px;color:var(--muted)}
+.readout b{color:var(--ink)}
+.tag{font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);border:1px solid var(--line);border-radius:4px;padding:2px 6px}
+.note{font-size:13px;color:var(--muted);max-width:70ch}
+.balance{background:var(--tint);border-radius:10px;padding:16px 18px;display:flex;flex-direction:column;gap:8px;max-width:78ch}
+footer{font-size:13px;color:var(--muted);max-width:76ch;border-top:1px solid var(--line);padding-top:12px}
+@media (max-width:640px){.panel{padding:12px}.wrap{gap:26px}}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
+
+[hidden]{display:none!important}
+:root{--c-h:var(--res);--c-ref:var(--obj);--c-over:var(--env);--c-settle:var(--att);--c-rip:var(--obj)}
+nav.parts{display:flex;flex-wrap:wrap;gap:8px 20px;margin-top:4px}
+nav.parts a{color:var(--ink);text-decoration:none;border-bottom:1px solid var(--line);padding-bottom:2px;font-size:15px}
+nav.parts a:hover,nav.parts a:focus-visible{border-color:var(--res);color:var(--res)}
+.msg{min-height:1.5em;font-size:15px}
+.fbbox{border-top:1px solid var(--line);padding-top:12px;display:flex;flex-direction:column;gap:8px;min-height:6.5em}
+.fbbox .verdict{font-family:var(--display);font-size:19px}
+.fbbox .ref{font-family:var(--mono);font-size:11px;color:var(--muted)}
+.fbbox q{font-style:italic;quotes:"“" "”"}
+.strikebar{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center}
+.chip:focus-visible,.pick:focus-visible,summary:focus-visible{outline:2px solid var(--res);outline-offset:2px}
+.scene{border-left:3px solid var(--line);padding:2px 0 2px 12px;font-family:var(--display);font-size:18.5px;line-height:1.45;min-height:5.6em}
+.picks{gap:10px}
+.pick{font:inherit;font-size:15px;color:var(--ink);background:var(--bg);border:1.5px solid var(--line);border-top-width:4px;border-radius:10px;padding:9px 14px;cursor:pointer;min-width:0}
+.pick[data-p="settle"]{border-top-color:var(--c-settle)}
+.pick[data-p="over"]{border-top-color:var(--c-over)}
+.pick[data-p="ripple"]{border-top-color:var(--c-rip)}
+.pick.wrong{opacity:.55}
+.pick.right{background:var(--surface);box-shadow:0 0 0 2px var(--ink)}
+.pick:disabled{cursor:default}
+.dots{display:flex;gap:6px}
+.dots i{width:10px;height:10px;border-radius:50%;border:1.5px solid var(--muted)}
+.dots i.done{background:var(--ink);border-color:var(--ink)}
+.dots i.cur{border-color:var(--ink);box-shadow:0 0 0 2px var(--line)}
+.brandhdr{background:#12285A;color:#FBF5EA;text-align:center;padding:18px 18px 20px;border-radius:14px;display:flex;flex-direction:column;align-items:center;gap:6px}
+.brandhdr .logos{display:flex;align-items:center;justify-content:center;gap:18px}
+.brandhdr .logos img{width:56px;height:66px;object-fit:contain;display:block}
+.brandhdr .logos img.rit{width:86px;height:65px}
+.brandhdr .eyebrow{color:#E6C36A;font-weight:700;letter-spacing:3px}
+.brandhdr h1{color:#FBF5EA;font-weight:700}
+.brandhdr .course{color:#E6C36A;font-weight:600;font-size:14px}
+.brandhdr .lede{color:#F1ECDF;font-size:15.5px;max-width:62ch}
+.brandhdr .scorenote{color:#F1ECDF;font-size:14.5px}
+nav.parts a{color:var(--ink)}
+.brandhdr nav.parts a{color:#FBF5EA;border-bottom:1px solid #E6C36A;background:none;padding-bottom:2px}
+.brandhdr nav.parts a:hover,.brandhdr nav.parts a:focus-visible{color:#E6C36A;border-color:#E6C36A}
+.tag.scored{color:var(--goldt);border-color:var(--gold)}
+.scorebox{border-left:5px solid var(--gold);background:var(--tint);border-radius:10px;padding:12px 14px;margin-bottom:14px}
+.scorebox .big{font-family:var(--display);font-size:30px;line-height:1.1;color:var(--ink)}
+.scorebox .band{font-family:var(--display);font-size:18px;margin:4px 0}
+.scorebox .band.good{color:var(--ok)}
+.scorebox .saved{font-size:13.5px;color:var(--muted)}
+.scorebox ul{margin:6px 0 0;padding-left:20px}
+
+/* PRACTICE TEMPLATE: one coloured "part" per section (part-1 .. part-4) */
+.part{--pc:#0E7A8A;--pcon:#FFFFFF;--pcbg:#E6F2F3;border:2px solid var(--pc);border-radius:14px;overflow:hidden;background:var(--pcbg)}
+.part-1{--pc:#0E7A8A;--pcbg:#E6F2F3}
+.part-2{--pc:#12285A;--pcbg:#EEF0F8}
+.part-3{--pc:#2F6B3A;--pcbg:#E6F0E3}
+.part-4{--pc:#7A2A5E;--pcbg:#F5E6F0}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .part{--pcbg:#0F2250;border-color:var(--pcl,var(--pc))}
+ :root:not([data-theme="light"]) .part-1{--pcl:#46CFC6} :root:not([data-theme="light"]) .part-2{--pcl:#E6C36A} :root:not([data-theme="light"]) .part-3{--pcl:#7FD08C} :root:not([data-theme="light"]) .part-4{--pcl:#F08CC8}}
+:root[data-theme="dark"] .part{--pcbg:#0F2250;border-color:var(--pcl,var(--pc))}
+:root[data-theme="dark"] .part-1{--pcl:#46CFC6} :root[data-theme="dark"] .part-2{--pcl:#E6C36A} :root[data-theme="dark"] .part-3{--pcl:#7FD08C} :root[data-theme="dark"] .part-4{--pcl:#F08CC8}
+.part-band{background:var(--pc);color:var(--pcon);padding:12px 16px;display:flex;align-items:center;flex-wrap:wrap;gap:6px 14px}
+.part-band h2{color:inherit;font-size:clamp(20px,3.4vw,26px);font-weight:600;flex:1 1 220px}
+.part-num{font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;font-weight:500;background:rgba(255,255,255,.18);border-radius:4px;padding:3px 9px}
+.part-band .tag{color:inherit;border-color:currentColor;background:rgba(255,255,255,.12)}
+.part-2 .part-band .tag,.part-2 .part-num{color:#E6C36A}
+.part-body{padding:16px;display:flex;flex-direction:column;gap:14px}
+.part .panel{background:var(--surface)}
+@media (max-width:640px){.part-body{padding:12px}}
+
+
+/* page-specific */
+q{font-style:italic;quotes:"“" "”"}
+.btn:disabled{opacity:.45;cursor:default}
+.btn[aria-pressed="true"]{background:var(--ink);color:var(--surface)}
+.pick{font:inherit;font-size:15px;color:var(--ink);background:var(--bg);border:1.5px solid var(--line);border-radius:10px;padding:9px 14px;cursor:pointer;min-width:0;text-align:left}
+.pick.wrong{opacity:.55}
+.pick.right{background:var(--ok);border-color:var(--ok);color:#fff}
+.pick:disabled{cursor:default}
+.pick:focus-visible,.node:focus-visible{outline:2px solid var(--res);outline-offset:2px}
+.part-5{--pc:#B5651D;--pcbg:#FBEEDD}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .part-5{--pcl:#F5B060}}
+:root[data-theme="dark"] .part-5{--pcl:#F5B060}
+.made{font-size:12.5px;color:var(--muted);font-style:italic}
+/* part 1 */
+.mapgrid{position:relative;display:grid;grid-template-columns:1.5fr 1fr 1fr;gap:18px;align-items:stretch}
+.fam{border:1.5px solid var(--line);border-radius:12px;background:var(--bg);padding:12px;display:flex;flex-direction:column;gap:8px;align-items:flex-start;min-width:0}
+.fam h3{font-size:17px}.fam h3 small{font-family:var(--body);font-size:12.5px;color:var(--muted);font-weight:400}
+.fam-loop{border-top:5px solid var(--obj)}.fam-rhythm{border-top:5px solid var(--att)}.fam-axis{border-top:5px solid var(--res)}
+.nodes{display:flex;flex-wrap:wrap;gap:8px}
+.node{font-family:var(--mono);font-size:20px;min-width:52px;height:46px;border-radius:10px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer;display:inline-flex;align-items:center;justify-content:center;transition:box-shadow .3s,background .3s,border-color .3s}
+.node.seen{border-color:var(--ink)}
+.node.land{box-shadow:0 0 0 4px var(--gold);background:var(--tint)}
+.node.from{background:var(--ink);color:var(--surface)}
+#mapsvg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible}
+#mapsvg path{fill:none;stroke:var(--env);stroke-width:2.5;stroke-linecap:round}
+.trace{font-family:var(--mono);font-size:15px;min-height:3.2em}
+.sym-big{font-family:var(--mono)}
+@media (max-width:640px){.mapgrid{grid-template-columns:1fr;gap:26px}}
+/* part 2 */
+.pacewrap{display:grid;grid-template-columns:170px 1fr;gap:14px;align-items:center}
+.pacewrap canvas.pc{width:170px;height:170px}
+.pacewrap canvas.gr{width:100%;height:190px;border:1px solid var(--line);border-radius:8px;background:var(--bg)}
+.cohbar{height:10px;border-radius:5px;background:var(--line);overflow:hidden}
+.cohbar i{display:block;height:100%;width:0;background:var(--ok);border-radius:5px;transition:width .25s}
+.cohrow{display:flex;flex-direction:column;gap:4px;font-size:14px}
+@media (max-width:640px){.pacewrap{grid-template-columns:1fr}.pacewrap canvas.pc{margin:0 auto}}
+/* part 3 */
+canvas.kc{width:100%;height:170px;border:1px solid var(--line);border-radius:8px;background:var(--bg)}
+.slider{display:flex;align-items:center;gap:10px;flex-wrap:wrap;flex:0 0 auto}
+.slider label{font-weight:600;min-width:200px}
+.slider input[type=range]{flex:1;min-width:120px;accent-color:var(--res)}
+/* part 4 */
+.rungs{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.rungs .arrow{color:var(--muted)}
+.rung{font:inherit;font-size:15px;border:1.5px solid var(--line);border-bottom-width:4px;border-radius:10px;background:var(--bg);color:var(--ink);padding:8px 14px;cursor:pointer}
+.rung[aria-pressed="true"]{background:var(--ink);color:var(--surface)}
+.rung.seen:not([aria-pressed="true"]){border-color:var(--ink)}
+.rungtxt{border:1px solid var(--line);border-radius:10px;background:var(--bg);padding:12px 14px;min-height:5.5em}
+/* part 5 */
+canvas.cd{width:100%;max-width:420px;height:260px;margin:0 auto;border:1px solid var(--line);border-radius:10px;background:var(--bg)}
+.balance{background:var(--tint);border-radius:10px;padding:16px 18px;display:flex;flex-direction:column;gap:8px;max-width:78ch}
+.btn.primary{background:var(--ink);color:var(--surface)}
+</style></head><body>
+<div class="wrap">
+<header class="brandhdr">
+  <div class="logos"><img src="vedantanz-logo.png" alt="Ramakrishna Vedanta NZ emblem" width="56" height="66"><img class="rit" src="ritam-wordmark.png" alt="Ritam" width="86" height="65"></div>
+  <div class="eyebrow">Practice · Lesson 5.2</div>
+  <h1>Rhythm and Sound</h1>
+  <p class="course">The Mind in the Light of Modern and Spiritual Sciences · Advanced</p>
+  <p class="lede">Lesson 5.2 says rhythm is the first and most direct practice, and that it works best when the rhythm is matched to the state of the mind. Here you will walk the map that shows why, breathe with a pacer, match a rhythm to two people, climb the ladder of sound, and sit with Holy Mother’s image of a candle in a still room.</p>
+  <p class="scorenote"><b>Parts III and IV</b> are scored: your first pick counts. <b>Parts I, II and V</b> are practice and are not scored.</p>
+  <nav class="parts" aria-label="Parts of this page"><a href="#s1">I. Every road crosses the rhythm</a><a href="#s2">II. Breathe with the pacer</a><a href="#s3">III. Match the rhythm</a><a href="#s4">IV. The ladder of vāk</a><a href="#s5">V. The candle</a></nav>
+</header>
+
+<section id="s1" class="part part-1">
+  <div class="part-band"><span class="part-num">Part I</span><h2>Every road crosses the rhythm</h2><span class="tag">Practice: not scored</span></div>
+  <div class="part-body">
+  <p class="intro">The lesson draws the mind’s patterns as three families: a loop of form (1, 2, 4, 8, 7, 5), a rhythm pair (3 and 6), and an axis of equilibrium (9). Its one move is to multiply by 3 and add the digits until one is left (15 becomes 1 + 5 = 6). Tap any number and see where one step takes it.</p>
+  <div class="panel">
+    <div class="mapgrid" id="mapgrid">
+      <div class="fam fam-loop"><h3>Form <small>(tamas)</small></h3><p class="note">The loop of form</p><div class="nodes" id="loopNodes"></div></div>
+      <div class="fam fam-rhythm"><h3>Rhythm <small>(rajas)</small></h3><p class="note">The rhythm pair</p><div class="nodes" id="rhNodes"></div></div>
+      <div class="fam fam-axis"><h3>Equilibrium <small>(sattva)</small></h3><p class="note">The integrating axis</p><div class="nodes" id="axNodes"></div></div>
+      <svg id="mapsvg" aria-hidden="true"><defs><marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="currentColor" style="fill:var(--env);stroke:none"/></marker></defs></svg>
+    </div>
+    <div class="trace" id="mapMsg" role="status" aria-live="polite"><p class="note">Tap a number in the loop of form.</p></div>
+    <div class="bar"><span class="readout" id="mapCount">Loop numbers tried: 0 of 6</span><button class="btn ghost" id="mapReset">Start again</button></div>
+    <div class="sum" id="mapSum" hidden>
+      <p><b>Every first step from the loop lands on 3 or 6.</b> With this one move, the loop does not reach 9 in a single step. It goes through the rhythm pair first. That is the lesson’s picture of why <q>rhythm is the fastest path to coherence.</q> (§2)</p>
+    </div>
+  </div>
+  </div>
+</section>
+
+<section id="s2" class="part part-2">
+  <div class="part-band"><span class="part-num">Part II</span><h2>Breathe with the pacer</h2><span class="tag">Practice: not scored</span></div>
+  <div class="part-body">
+  <p class="intro">The Breath Shortcut is slow breathing at five to six breaths a minute. Choose how the breath goes, press Start, and breathe with the circle if you like. Watch the two waves: your breath, and a model heart rate.</p>
+  <div class="panel">
+    <div class="bar"><div class="seg" role="group" aria-label="How the breath goes"><button type="button" data-m="irr" aria-pressed="true">Uneven</button><button type="button" data-m="p55" aria-pressed="false">Paced, 5 in and 5 out</button><button type="button" data-m="p46" aria-pressed="false">Paced, 4 in and 6 out</button></div><button class="btn primary" id="paceGo">Start</button></div>
+    <div class="pacewrap"><canvas class="pc" id="cvPace" role="img" aria-label="A circle that grows as the breath comes in and shrinks as it goes out"></canvas><canvas class="gr" id="cvWave" role="img" aria-label="Two scrolling waves: the breath and a model heart rate"></canvas></div>
+    <div class="cohrow"><div class="bar"><span>Breath and heart in step <span class="tag">illustration</span></span><b id="cohVal">0%</b></div><div class="cohbar"><i id="cohFill"></i></div><span class="readout" id="rateTxt"></span></div>
+    <div class="msg fbbox" id="paceMsg" role="status" aria-live="polite"></div>
+    <p class="note">The waves are a simple model of the lesson’s idea, not a recording of anyone’s heart. If you feel light-headed, return to your ordinary breath.</p>
+  </div>
+  </div>
+</section>
+
+<section id="s3" class="part part-3">
+  <div class="part-band"><span class="part-num">Part III</span><h2>Match the rhythm to the drift</h2><span class="tag scored">Scored: first pick counts</span></div>
+  <div class="part-body">
+  <p class="intro">The lesson says <q>the most common reason rhythmic practice fails is that the wrong rhythm was offered to the wrong system.</q> (§1) Two made-up people, two kinds of drift. Pick what the lesson would offer first. Your first pick counts. Then watch what a shared beat does.</p>
+  <div class="panel" id="sc">
+    <div class="bar"><span class="tag" id="scPro">Person 1 of 2</span><div class="dots" id="scDots" aria-hidden="true"></div></div>
+    <div class="scene"><p id="scText"></p></div>
+    <div class="chips picks" id="scPicks" role="group" aria-label="Your answer"></div>
+    <div id="scMsg" class="msg fbbox" role="status" aria-live="polite"><p class="note">Pick one.</p></div>
+    <div class="bar"><div class="chips"><button class="btn primary" id="scNext" hidden>Next person</button><button class="btn ghost" id="scShow">Show me</button><button class="btn ghost" id="scReset">Start again</button></div></div>
+    <p class="made">Sam and Leila are made-up examples. If you feel light-headed with any breathing, return to your ordinary breath.</p>
+  </div>
+  <div class="panel">
+    <h3>Five voices and a shared beat</h3>
+    <p>Five singers each begin on their own rhythm. Turn up how much they listen to one another, as in kīrtana.</p>
+    <canvas class="kc" id="cvKirt" role="img" aria-label="Five clock hands that drift apart when the voices do not listen to one another, and swing together when they do"></canvas>
+    <div class="slider"><label for="kK">How much the voices listen to one another</label><input type="range" id="kK" min="0" max="100" value="0" aria-valuetext="not at all"></div>
+    <div class="cohrow"><div class="bar"><span>Together</span><b id="kVal">0%</b></div><div class="cohbar"><i id="kFill"></i></div></div>
+    <div class="msg fbbox" id="kMsg" role="status" aria-live="polite"><p class="note">Slide to the right.</p></div>
+  </div>
+  </div>
+</section>
+
+<section id="s4" class="part part-4">
+  <div class="part-band"><span class="part-num">Part IV</span><h2>The ladder of vāk</h2><span class="tag scored">Scored: first pick counts</span></div>
+  <div class="part-body">
+  <p class="intro">The lesson describes four levels at which sound exists, <q>from the grossest manifestation to the unmanifest source.</q> (§3) Each description below is taken from the lesson. Pick the level it describes. Your first pick counts.</p>
+  <div class="panel" id="vk">
+    <div class="bar"><span class="tag" id="vkPro">Description 1 of 5</span><div class="dots" id="vkDots" aria-hidden="true"></div></div>
+    <div class="scene"><p id="vkText"></p></div>
+    <div class="chips picks" id="vkPicks" role="group" aria-label="Your answer"></div>
+    <div id="vkMsg" class="msg fbbox" role="status" aria-live="polite"><p class="note">Pick one.</p></div>
+    <div class="bar"><div class="chips"><button class="btn primary" id="vkNext" hidden>Next description</button><button class="btn ghost" id="vkShow">Show me</button><button class="btn ghost" id="vkReset">Start again</button></div></div>
+  </div>
+  <div class="panel">
+    <h3>A mantra as a ladder</h3>
+    <p>The lesson calls the whole mantra <q>a graduated frequency ladder.</q> Tap each rung.</p>
+    <div class="rungs" id="rungs" role="group" aria-label="The mantra ladder"><button class="rung" data-r="0" aria-pressed="false">The name</button><span class="arrow" aria-hidden="true">→</span><button class="rung" data-r="1" aria-pressed="false">The bīja</button><span class="arrow" aria-hidden="true">→</span><button class="rung" data-r="2" aria-pressed="false">AUM</button><span class="arrow" aria-hidden="true">→</span><button class="rung" data-r="3" aria-pressed="false">Silence</button></div>
+    <div class="rungtxt" id="rungTxt" aria-live="polite"><p class="note">Tap a rung.</p></div>
+  </div>
+  <div class="panel" id="vkDone" hidden>
+    <div class="scorebox" id="scBox" aria-live="polite"></div>
+    <p>The score only shows where to look again in §3. It says nothing about you.</p>
+  </div>
+  </div>
+</section>
+
+<section id="s5" class="part part-5">
+  <div class="part-band"><span class="part-num">Part V</span><h2>The candle in the still room</h2><span class="tag">Practice: not scored</span></div>
+  <div class="part-body">
+  <p class="intro">Holy Mother gave this image of what happens to a restless mind that keeps the Name. Here is the flame, and the wind. Each press of the button is one repetition of the Name. There is no target and no count to reach.</p>
+  <div class="panel">
+    <canvas class="cd" id="cvCandle" role="img" aria-label="A candle flame that leans and flickers in the wind and grows steady as the wind drops"></canvas>
+    <div class="slider"><label for="kW">The wind of fancies and desires</label><input type="range" id="kW" min="0" max="100" value="75" aria-valuetext="strong"></div>
+    <div class="bar"><button class="btn primary" id="bName">Repeat the Name</button><span class="readout" id="nameCount">Repetitions: 0</span><button class="btn ghost" id="bWind">Wind up again</button></div>
+    <div class="msg fbbox" id="cMsg" role="status" aria-live="polite"></div>
+  </div>
+  <div class="balance">
+    <h3>Two things Holy Mother adds</h3>
+    <p>On not waiting for the mind to be calm: <q>Repeat the Name of God, whether your mind is concentrated or not.</q> (§3)</p>
+    <p>On sincerity over quantity: <q>Repeating the Name of God once, with the mind controlled, is equivalent to a million repetitions with the mind away from God.</q> (§3)</p>
+    <p class="note">The lesson’s point is that the practice does not wait for a calm mind, and that presence, not the count, carries it.</p>
+  </div>
+  </div>
+</section>
+
+<footer>Parts III and IV are scored, and only to show you where to look again. Parts I, II and V are practice and are not scored. Based on Lesson 5.2. This page illustrates the lesson’s ideas and does not measure, diagnose or advise on anyone’s mind, body or situation. The breathing shown is the slow, even Breath Shortcut only. If anything here touches something difficult for you, please be gentle with yourself, and consider speaking with someone you trust or a qualified professional.<br>Ritam · Ramakrishna Vedanta Centre NZ · <a href="https://www.vedanta.nz">www.vedanta.nz</a> Privacy: when you are signed in, your name, email, answers and score are saved to your member record. Only you and the course instructors can see them. They are not shared or ranked.</footer>
+</div>
+<script>
+(function(){
+"use strict";
+var $=function(id){return document.getElementById(id)};
+try{var q=new URLSearchParams(location.search).get("theme");if(q==="light"||q==="dark")document.documentElement.setAttribute("data-theme",q)}catch(e){}
+try{var pt=new URLSearchParams(location.search).get("part");if(pt==="1"||pt==="2"||pt==="3")document.body.setAttribute("data-part",pt)}catch(e){}
+var EMBED=/[?&]embed=1/.test(location.search);
+function send(m){if(EMBED){try{parent.postMessage(m,"*")}catch(e){}}}
+var RM=false;try{RM=window.matchMedia("(prefers-reduced-motion: reduce)").matches}catch(e){}
+var C={};
+function readColors(){var cs=getComputedStyle(document.documentElement);["--bg","--surface","--ink","--muted","--line","--obj","--att","--res","--env","--ok","--tint"].forEach(function(k){C[k]=cs.getPropertyValue(k).trim()})}
+readColors();
+var dpr=Math.max(1,Math.min(2,window.devicePixelRatio||1));
+function fit(c){var w=c.clientWidth,h=c.clientHeight;if(!w||!h)return null;var bw=Math.round(w*dpr),bh=Math.round(h*dpr);if(c.width!==bw||c.height!==bh){c.width=bw;c.height=bh}var g=c.getContext("2d");g.setTransform(dpr,0,0,dpr,0,0);return {g:g,w:w,h:h}}
+function label(g,t,x,y,color){g.font="500 11.5px 'Noto Sans',system-ui,sans-serif";g.textAlign="left";g.textBaseline="alphabetic";var w=g.measureText(t).width;g.save();g.globalAlpha=.85;g.fillStyle=C["--bg"];g.fillRect(x-4,y-12,w+8,16);g.restore();g.fillStyle=color;g.fillText(t,x,y)}
+
+/* ===== Part I: every road crosses the rhythm (not scored) ===== */
+var LOOP=[1,2,4,8,7,5];
+function root(n){while(n>9){n=String(n).split("").reduce(function(a,d){return a+(+d)},0)}return n}
+var seenLoop={},fromN=null,landN=null;
+function mk(host,arr){arr.forEach(function(n){var b=document.createElement("button");b.type="button";b.className="node";b.dataset.n=n;b.textContent=n;b.setAttribute("aria-label","Number "+n+": multiply by 3");host.appendChild(b)})}
+mk($("loopNodes"),LOOP);mk($("rhNodes"),[3,6]);mk($("axNodes"),[9]);
+var svg=$("mapsvg"),grid=$("mapgrid");
+function nodeEl(n){return grid.querySelector('.node[data-n="'+n+'"]')}
+function clearArrow(){svg.querySelectorAll("path.ar").forEach(function(p){p.remove()})}
+function arrow(a,b){
+  clearArrow();var g=grid.getBoundingClientRect(),r1=nodeEl(a).getBoundingClientRect(),r2=nodeEl(b).getBoundingClientRect();
+  var x1=r1.left+r1.width/2-g.left,y1=r1.top+r1.height/2-g.top,x2=r2.left+r2.width/2-g.left,y2=r2.top+r2.height/2-g.top;
+  var dx=x2-x1,dy=y2-y1,len=Math.sqrt(dx*dx+dy*dy)||1,ux=dx/len,uy=dy/len;
+  var sx=x1+ux*26,sy=y1+uy*22,ex=x2-ux*30,ey=y2-uy*26;
+  var mx=(sx+ex)/2-uy*Math.min(46,len/4),my=(sy+ey)/2+ux*Math.min(46,len/4);
+  var p=document.createElementNS("http://www.w3.org/2000/svg","path");p.setAttribute("class","ar");p.setAttribute("d","M"+sx+","+sy+" Q"+mx+","+my+" "+ex+","+ey);p.setAttribute("marker-end","url(#ah)");svg.appendChild(p);
+  if(!RM){var L=p.getTotalLength();p.style.strokeDasharray=L;p.style.strokeDashoffset=L;p.getBoundingClientRect();p.style.transition="stroke-dashoffset .6s ease";p.style.strokeDashoffset=0}
+}
+function step(n){
+  var prod=n*3,r=root(prod),fam=(r===9)?"the integrating axis":"the rhythm pair";
+  grid.querySelectorAll(".node").forEach(function(b){b.classList.remove("from","land")});
+  nodeEl(n).classList.add("from","seen");nodeEl(r).classList.add("land");
+  fromN=n;landN=r;
+  if(LOOP.indexOf(n)>=0){seenLoop[n]=true}
+  var sum=String(prod).length>1?(String(prod).split("").join(" + ")+" = "+r):String(r);
+  var h;
+  if(n===9){h='<p>9 × 3 = 27, and 2 + 7 = 9. The axis stays where it is: <b>9 maps to 9</b>.</p>'}
+  else h='<p>'+n+' × 3 = '+prod+(String(prod).length>1?', and '+sum:'')+'. It lands on <b>'+r+'</b>, in '+fam+'.</p>'+(LOOP.indexOf(n)>=0?'<p class="note">One step from the loop of form reaches the rhythm pair, not 9.</p>':'<p class="note">From the rhythm pair, the next step reaches 9.</p>');
+  $("mapMsg").innerHTML=h;
+  var c=Object.keys(seenLoop).length;$("mapCount").textContent="Loop numbers tried: "+c+" of 6";
+  $("mapSum").hidden=c<6;
+  arrow(n,r);
+}
+grid.addEventListener("click",function(e){var b=e.target.closest(".node");if(b)step(+b.dataset.n)});
+$("mapReset").addEventListener("click",function(){seenLoop={};clearArrow();grid.querySelectorAll(".node").forEach(function(b){b.classList.remove("from","land","seen")});$("mapMsg").innerHTML='<p class="note">Tap a number in the loop of form.</p>';$("mapCount").textContent="Loop numbers tried: 0 of 6";$("mapSum").hidden=true;fromN=null});
+window.addEventListener("resize",function(){if(fromN!==null){arrow(fromN,landN);var p=svg.querySelector("path.ar");if(p){p.style.transition="none";p.style.strokeDashoffset=0}}});
+
+/* ===== Part II: breathe with the pacer (not scored) ===== */
+var P={mode:"irr",t:0,ph:0,run:false,B:[],R:[],H:[],last:0,acc:0,coh:0};
+var DT=.1,WIN=400;
+function shape(p,frac){return p<frac?.5-.5*Math.cos(Math.PI*p/frac):.5+.5*Math.cos(Math.PI*(p-frac)/(1-frac))}
+function simStep(){
+  var t=P.t,b;
+  if(P.mode==="irr"){var f=.22+.08*Math.sin(.37*t)+.05*Math.sin(.91*t+1);P.ph+=f*DT;b=shape(P.ph-Math.floor(P.ph),.5)}
+  else{var p=(.1*t)-Math.floor(.1*t);b=shape(p,P.mode==="p46"?.4:.5)}
+  var r=.5-.5*Math.cos(2*Math.PI*.1*t);
+  var hh=(b-.5)*.55+(r-.5)*.9;
+  P.B.push(b);P.R.push(r);P.H.push(68+16*hh);
+  if(P.B.length>WIN){P.B.shift();P.R.shift();P.H.shift()}
+  P.t+=DT;
+}
+function corr(){
+  var n=Math.min(P.B.length,300);if(n<20)return 0;var a=P.B.slice(-n),c=P.R.slice(-n),ma=0,mc=0,i;
+  for(i=0;i<n;i++){ma+=a[i];mc+=c[i]}ma/=n;mc/=n;var sab=0,saa=0,sbb=0;
+  for(i=0;i<n;i++){var x=a[i]-ma,y=c[i]-mc;sab+=x*y;saa+=x*x;sbb+=y*y}
+  return saa&&sbb?Math.max(0,sab/Math.sqrt(saa*sbb)):0;
+}
+function setMode(m){
+  P.mode=m;P.t=0;P.ph=0;P.B=[];P.R=[];P.H=[];
+  document.querySelectorAll("[data-m]").forEach(function(b){b.setAttribute("aria-pressed",b.dataset.m===m?"true":"false")});
+  for(var i=0;i<400;i++)simStep();
+  var msg={irr:'<p>Uneven breathing: the breath wanders, so the model heart rate has no steady rhythm to follow. The two waves drift in and out of step.</p>',
+   p55:'<p>Five seconds in, five out is about six breaths a minute, around 0.1 Hz. The lesson says that here <q>the breath, the baroreflex (the blood-pressure feedback loop), and the cardiac rhythm phase-lock into a single coherent oscillation.</q> Watch the two waves lock together and grow smooth. (§2)</p>',
+   p46:'<p>Four seconds in and six out gives the same slow rate with a longer exhale, which the lesson mentions for <q>deeper parasympathetic activation.</q> The waves lock together in the same way. (§2)</p>'}[m];
+  $("paceMsg").innerHTML=msg+'<p class="note">The lesson’s point for the practitioner: <q>They have only to slow the breath. The body does the rest.</q> (§2)</p>';
+  P.coh=corr();drawPace();
+}
+function drawPace(){
+  var f=fit($("cvPace"));if(f){var g=f.g,W=f.w,H=f.h,b=P.B[P.B.length-1]||0,pb=P.B[P.B.length-2]||0,rise=b>=pb;
+    g.clearRect(0,0,W,H);var R0=W*.2,R1=W*.44,rr=R0+(R1-R0)*b;
+    g.beginPath();g.arc(W/2,H/2,R1,0,7);g.strokeStyle=C["--line"];g.lineWidth=1.5;g.setLineDash([4,5]);g.stroke();g.setLineDash([]);
+    g.beginPath();g.arc(W/2,H/2,rr,0,7);g.fillStyle=C["--obj"];g.globalAlpha=.28;g.fill();g.globalAlpha=1;g.strokeStyle=C["--obj"];g.lineWidth=3;g.stroke();
+    g.fillStyle=C["--ink"];g.font="500 15px 'Noto Sans',sans-serif";g.textAlign="center";g.textBaseline="middle";g.fillText(rise?"in":"out",W/2,H/2)}
+  var f2=fit($("cvWave"));if(f2){var g2=f2.g,W2=f2.w,H2=f2.h;g2.clearRect(0,0,W2,H2);
+    var n=P.B.length;function X(i){return 10+(W2-20)*i/(WIN-1)}
+    function lane(arr,cy,sc,off,color){g2.beginPath();for(var i=0;i<arr.length;i++){var y=cy-sc*(arr[i]-off);if(i)g2.lineTo(X(i),y);else g2.moveTo(X(i),y)}g2.strokeStyle=color;g2.lineWidth=2.2;g2.lineJoin="round";g2.stroke()}
+    var h1=H2/2;g2.strokeStyle=C["--line"];g2.lineWidth=1;g2.beginPath();g2.moveTo(0,h1);g2.lineTo(W2,h1);g2.stroke();
+    lane(P.B,h1-16,h1*.62,.5,C["--obj"]);label(g2,"your breath",14,16,C["--obj"]);
+    lane(P.H,h1+h1*.5,h1*.4/12,68,C["--att"]);label(g2,"heart rate (model)",14,h1+16,C["--att"]);}
+  var cv=P.coh;var pct=Math.round(cv*100);$("cohVal").textContent=pct+"%";$("cohFill").style.width=pct+"%";
+  $("rateTxt").textContent=P.mode==="irr"?"Breathing: uneven, from about 5 to 20 breaths a minute.":"Breathing: six a minute (10 seconds for each breath).";
+}
+function pLoop(ts){
+  if(P.run){if(ts-P.last>=100){P.last=ts;simStep();P.coh+=(corr()-P.coh)*.2;drawPace()}}
+  requestAnimationFrame(pLoop);
+}
+$("paceGo").addEventListener("click",function(){P.run=!P.run;this.textContent=P.run?"Pause":"Start"});
+document.querySelectorAll("[data-m]").forEach(function(b){b.addEventListener("click",function(){setMode(b.dataset.m)})});
+
+/* ===== quiz engine for Parts III and IV (scored together) ===== */
+var META={code:"ADV-P-5-2",title:"Practice: Lesson 5.2, Rhythm and Sound (Parts III and IV)",programme:"The Mind in the Light of Modern and Spiritual Sciences (Advanced)",cut:75};
+var quizzes=[],sent=false;
+function shuffle(a){a=a.slice();for(var z=a.length-1;z>0;z--){var y=Math.floor(Math.random()*(z+1)),t=a[z];a[z]=a[y];a[y]=t}return a}
+function Quiz(c){
+  var Q={i:0,done:{},miss:{},fin:false},el=function(s){return $(c.p+s)};
+  function dots(){var d=el("Dots");d.innerHTML="";c.items.forEach(function(_,k){var e=document.createElement("i");if(Q.done[k])e.className="done";else if(k===Q.i)e.className="cur";d.appendChild(e)})}
+  function showItem(){
+    var s=c.items[Q.i];el("Text").innerHTML=s.t;el("Pro").textContent=c.noun+" "+(Q.i+1)+" of "+c.items.length;
+    el("Picks").innerHTML=shuffle(s.o).map(function(k){return '<button class="pick" data-p="'+k+'" aria-pressed="false">'+c.L[k]+'</button>'}).join("");
+    el("Picks").querySelectorAll(".pick").forEach(function(p){p.addEventListener("click",function(){onPick(p)})});
+    el("Msg").innerHTML='<p class="note">Pick one.</p>';el("Next").hidden=true;el("Show").hidden=false;dots();
+  }
+  function reveal(){
+    var s=c.items[Q.i];Q.done[Q.i]=true;
+    el("Picks").querySelectorAll(".pick").forEach(function(p){p.disabled=true;if(p.dataset.p===s.a){p.classList.add("right");p.setAttribute("aria-pressed","true")}});
+    el("Msg").innerHTML='<p class="verdict">'+c.V[s.a]+'</p><p>'+s.why+'</p><p class="ref">'+s.ref+'</p>';
+    el("Show").hidden=true;
+    if(Q.i<c.items.length-1){el("Next").hidden=false}else{Q.fin=true;check()}
+    dots();
+  }
+  function onPick(p){
+    var s=c.items[Q.i],k=p.dataset.p;
+    if(k===s.a){reveal()}else{Q.miss[Q.i]=true;p.classList.add("wrong");p.disabled=true;
+      el("Msg").innerHTML='<p class="verdict">Not this one.</p><p>'+((s.hint&&s.hint[k])||c.H[k])+'</p>'}
+  }
+  el("Next").addEventListener("click",function(){Q.i++;showItem();try{el("Picks").querySelector(".pick").focus({preventScroll:true})}catch(e){}});
+  el("Show").addEventListener("click",function(){Q.miss[Q.i]=true;reveal()});
+  el("Reset").addEventListener("click",function(){Q.i=0;Q.done={};Q.miss={};Q.fin=false;showItem()});
+  Q.items=c.items;Q.cfg=c;Q.show=showItem;quizzes.push(Q);return Q;
+}
+function plain(s){return String(s).replace(/<[^>]*>/g,"")}
+function check(){
+  var allDone=quizzes.every(function(q){return q.fin});
+  $("vkDone").hidden=false;
+  if(!allDone){$("scBox").innerHTML='<p>Finish Parts III and IV to see your combined result.</p>';return}
+  var right=0,n=0,ans=[],wrong=[];
+  quizzes.forEach(function(q){q.items.forEach(function(it,k){n++;var ok=!q.miss[k];if(ok)right++;else wrong.push(q.cfg.name+": "+plain(it.t).slice(0,60)+"…");ans.push({q:n,ok:ok,given:plain(q.cfg.L[it.a])+(ok?" (first pick)":" (not on first pick)")})})});
+  var pct=Math.round(100*right/n),good=pct>=META.cut;
+  var h='<div class="big">'+right+' of '+n+' on the first pick</div><p class="band '+(good?'good':'')+'">'+(good?'Well grasped':'Revisit these ideas')+'</p>';
+  if(wrong.length){h+='<p>Look again at the lesson for:</p><ul>'+wrong.map(function(w){return '<li>'+w+'</li>'}).join('')+'</ul>'}else{h+='<p>Nothing to revisit here.</p>'}
+  h+='<p class="saved" id="scSaved">'+(EMBED?'Saving your result…':'Sign in on the course page to have your result saved.')+'</p>';
+  $("scBox").innerHTML=h;
+  if(!sent){sent=true;send({type:"quizResult",code:META.code,title:META.title,programme:META.programme,score:right,maxScore:n,percent:pct,questionsCorrect:right,questionCount:n,answers:ans})}
+}
+window.addEventListener("message",function(e){var d=e.data||{};if(!d||typeof d!=="object")return;var el=$("scSaved");if(!el)return;
+  if(d.type==="saved")el.textContent="Your result has been saved to your member record.";
+  else if(d.type==="saveError")el.textContent="Your result could not be saved this time.";
+  else if(d.type==="notMember")el.textContent="Sign in as a member to have your result saved."});
+
+/* ===== Part III items ===== */
+var SCL={move:"Gentle movement first (stretching, a walk), then kīrtana with others or mālā-japa",still:"More stillness: a longer silent sit with the mantra, alone",lie:"Slow coherent breathing with eyes closed, straight away, lying down",
+ slow:"A rhythm slower and steadier than her own: coherent breathing at about five to six breaths a minute, then slow japa with a longer exhale",vig:"Vigorous breathing and high-energy chanting, to wear the energy out",lively:"A long, lively group kīrtana, to give the energy somewhere to go"};
+var SCV={move:"Movement first.",slow:"A slower, steadier rhythm.",still:"",lie:"",vig:"",lively:""};
+Quiz({p:"sc",name:"Part III",noun:"Person",L:SCL,V:SCV,H:{},items:[
+ {t:"Sam wakes feeling heavy. Even starting the day seems like too much. Last time Sam sat quietly with the mantra, alone, and drifted into a doze. What would the lesson offer first?",o:["move","still","lie"],a:"move",
+  hint:{still:"The lesson says <q>Applying quietness to a tamasic mind deepens the heaviness; silent solo japa on a tamasic morning typically dissolves into drowsy semi-sleep.</q>",lie:"Slow breathing comes later. The lesson says <q>The tamasic system needs the body to move before the breath can usefully be slowed.</q>"},
+  why:"<q>The tamasic system needs the body to move before the breath can usefully be slowed.</q> Kīrtana in a group gives <q>the external rhythmic energy the isolated tamasic practitioner cannot generate alone.</q> Mālā-japa joins the body, the repetition and the mantra. Once woken, solo breathing and inward japa become available.",ref:"§5"},
+ {t:"Leila’s mind races from the moment she sits down, and her thoughts keep intruding. She wonders whether a bigger, livelier practice would burn the energy off. What would the lesson offer?",o:["slow","vig","lively"],a:"slow",
+  hint:{vig:"The lesson says <q>Adding vigorous prāṇāyāma or high-energy kīrtana to a rajasic system amplifies the oscillation rather than channelling it.</q>",lively:"The lesson says <q>Adding vigorous prāṇāyāma or high-energy kīrtana to a rajasic system amplifies the oscillation rather than channelling it.</q>"},
+  why:"The return needs <q>a rhythm more regular than the current one, a slower, steadier pulse that the dysregulated G(t) can entrain to and gradually settle into.</q> <q>Only once G(t) is settled can ψₘ training begin productively.</q>",ref:"§5"}
+]}).show();
+
+/* ===== Part IV items ===== */
+var VKL={vai:"Vaikharī",mad:"Madhyamā",pas:"Paśyantī",par:"Parā-vāk"};
+var VKV={vai:"Vaikharī.",mad:"Madhyamā.",pas:"Paśyantī.",par:"Parā-vāk."};
+var VKH={vai:"That is vaikharī: <q>Audible, spoken, physically vibrating in air.</q> Look at the description again.",mad:"That is madhyamā: <q>Inner speech, prāṇic vibration, thought-sound before it becomes audible.</q> Look at the description again.",pas:"That is paśyantī: sound and meaning no longer separated. Look at the description again.",par:"That is parā-vāk: <q>the silence from which all sound arises.</q> Look at the description again."};
+var ALL4=["vai","mad","pas","par"];
+Quiz({p:"vk",name:"Part IV",noun:"Description",L:VKL,V:VKV,H:VKH,items:[
+ {t:"Audible and spoken: it vibrates in the air and is received by the ears.",o:ALL4,a:"vai",why:"<q>Sound at the level of the gross body. Audible, spoken, physically vibrating in air.</q> The lesson honours it: <q>It is the necessary foundation.</q> In the lesson’s table it sits with the loop of form.",ref:"§3"},
+ {t:"Inner speech: no longer a physical vibration, but a living movement in the subtle, prāṇic-mental instrument. It is felt more than heard.",o:ALL4,a:"mad",why:"<q>Inner speech, prāṇic vibration, thought-sound before it becomes audible.</q> In the lesson’s table it sits with the rhythm pair, 3 and 6.",ref:"§3"},
+ {t:"Sound and meaning are no longer separate. There is one vibrating awareness-intention, more seen than heard.",o:ALL4,a:"pas",why:"<q>There is simply a unified vibrating awareness-intention.</q> The word comes from the root for “to see”. In the lesson’s table it sits with the integrating axis, 9.",ref:"§3"},
+ {t:"The mantra repeats itself spontaneously, with no effort to begin each repetition. The lesson calls this ajapā-japa.",o:ALL4,a:"pas",why:"<q>The phenomenological signature of this level is ajapā-japa: the mantra repeating itself spontaneously, without the practitioner initiating each repetition.</q>",ref:"§3"},
+ {t:"It is not a level of sound at all, but the silence from which every sound arises.",o:ALL4,a:"par",why:"<q>Not a level of sound but the silence from which all sound arises.</q> In the lesson’s table it is {0}, the source.",ref:"§3"}
+]}).show();
+var RUNG=[
+ '<p><b>The name.</b> The deity’s name is <q>the gross, semantic, meaning-carrying form of the same Reality the bīja encodes at the subtle level.</q> <q>The practitioner enters at the gross name (their attention can reach it readily).</q></p>',
+ '<p><b>The bīja.</b> <q>The bīja pulls attention toward a higher frequency.</q> It is a seed-syllable, such as Hrīṁ or Klīṁ, that carries one quality of the Divine.</p>',
+ '<p><b>AUM.</b> <q>AUM holds the whole spectrum.</q></p>',
+ '<p><b>Silence.</b> <q>The silence after AUM is the source itself.</q></p>'];
+var rseen={};
+$("rungs").addEventListener("click",function(e){var b=e.target.closest(".rung");if(!b)return;var r=+b.dataset.r;rseen[r]=true;
+  $("rungs").querySelectorAll(".rung").forEach(function(x){x.setAttribute("aria-pressed",x===b?"true":"false");if(rseen[+x.dataset.r])x.classList.add("seen")});
+  $("rungTxt").innerHTML=RUNG[r]+'<p class="ref">§3</p>'});
+
+/* ===== kirtana: five voices (not scored) ===== */
+var K={th:[0,1,2,3,4].map(function(i){return i*1.3}),om:[1.0,1.18,.86,1.31,.95],r:0,last:0};
+function kuramoto(dt,Kc){
+  var n=5,d=[],i,j;for(i=0;i<n;i++){var s=0;for(j=0;j<n;j++)s+=Math.sin(K.th[j]-K.th[i]);d[i]=K.om[i]*2.2+Kc*s/n}
+  for(i=0;i<n;i++)K.th[i]+=d[i]*dt;
+  var cx=0,cy=0;for(i=0;i<n;i++){cx+=Math.cos(K.th[i]);cy+=Math.sin(K.th[i])}K.r=Math.sqrt(cx*cx+cy*cy)/n;
+}
+function drawK(){
+  var f=fit($("cvKirt"));if(!f)return;var g=f.g,W=f.w,H=f.h;g.clearRect(0,0,W,H);
+  var n=5,cell=W/n,rad=Math.min(cell*.36,H*.36),cols=[C["--obj"],C["--att"],C["--res"],C["--env"],C["--ok"]];
+  for(var i=0;i<n;i++){var cx=cell*(i+.5),cy=H/2;g.beginPath();g.arc(cx,cy,rad,0,7);g.strokeStyle=C["--line"];g.lineWidth=2;g.stroke();
+    var a=K.th[i]-Math.PI/2;g.beginPath();g.moveTo(cx,cy);g.lineTo(cx+rad*Math.cos(a),cy+rad*Math.sin(a));g.strokeStyle=cols[i];g.lineWidth=3.5;g.lineCap="round";g.stroke();
+    g.beginPath();g.arc(cx+rad*Math.cos(a),cy+rad*Math.sin(a),5,0,7);g.fillStyle=cols[i];g.fill()}
+  var pct=Math.round(K.r*100);$("kVal").textContent=pct+"%";$("kFill").style.width=pct+"%";
+}
+function kMsg(){
+  var v=+$("kK").value,t=v===0?"not at all":v<40?"a little":v<75?"quite a lot":"fully";$("kK").setAttribute("aria-valuetext",t);
+  var m;
+  if(v===0)m='<p class="note">Each voice keeps its own rhythm, so the hands drift apart.</p>';
+  else if(K.r>.9)m='<p><b>One beat.</b> The lesson cites choir research showing that <q>rhythmic group vocalisation phase-locks heart rhythms across multiple practitioners.</q> <q>Kīrtana provides external rhythmic energy (the group’s collective engagement) that the isolated practitioner cannot generate alone.</q> (§3)</p>';
+  else m='<p class="note">The voices are starting to pull one another into step. Keep listening.</p>';
+  $("kMsg").innerHTML=m;
+}
+$("kK").addEventListener("input",function(){kMsg()});
+function kLoop(ts){var dt=Math.min(.05,(ts-K.last)/1000||0);K.last=ts;kuramoto(dt,+$("kK").value*.09);drawK();if(Math.floor(ts/300)!==K.m){K.m=Math.floor(ts/300);kMsg()}requestAnimationFrame(kLoop)}
+
+/* ===== Part V: the candle (not scored) ===== */
+var Cn={t:0,reps:0,last:0};
+function drawCandle(ts){
+  var f=fit($("cvCandle"));if(!f){requestAnimationFrame(drawCandle);return}var g=f.g,W=f.w,H=f.h,w=(+$("kW").value)/100;
+  Cn.t+=Math.min(.05,(ts-Cn.last)/1000||0);Cn.last=ts;var t=RM?0:Cn.t;
+  g.clearRect(0,0,W,H);
+  var cx=W/2,base=H*.62,wh=H*.34;
+  g.fillStyle=C["--tint"];g.fillRect(cx-22,base,44,H*.34);g.strokeStyle=C["--line"];g.lineWidth=1.5;g.strokeRect(cx-22,base,44,H*.34);
+  g.beginPath();g.moveTo(cx,base);g.lineTo(cx+(RM?w*4:Math.sin(t*6)*w*3),base-14);g.strokeStyle=C["--ink"];g.lineWidth=2;g.stroke();
+  var sway=(RM?1:(Math.sin(t*7.3)*.6+Math.sin(t*11.1+1)*.4))*w*34+w*10,hgt=wh*(1-.22*w*(RM?.6:(.5+.5*Math.sin(t*9.7))));
+  var top=base-14-hgt,wd=15-3*w;
+  var grd=g.createLinearGradient(0,top,0,base-14);grd.addColorStop(0,"rgba(255,196,60,.0)");grd.addColorStop(.35,"rgba(255,176,40,.95)");grd.addColorStop(1,"rgba(255,246,200,1)");
+  g.beginPath();g.moveTo(cx,base-14);g.bezierCurveTo(cx-wd*1.6,base-14-hgt*.35,cx-wd+sway*.2,top+hgt*.35,cx+sway,top);g.bezierCurveTo(cx+wd+sway*.2,top+hgt*.35,cx+wd*1.6,base-14-hgt*.35,cx,base-14);g.fillStyle=grd;g.fill();
+  g.beginPath();g.ellipse(cx+sway*.12,base-14-hgt*.22,wd*.38,hgt*.2,0,0,7);g.fillStyle="rgba(120,160,255,.45)";g.fill();
+  // wind streaks
+  g.strokeStyle=C["--muted"];g.globalAlpha=.25+.5*w;g.lineWidth=1.5;g.lineCap="round";
+  for(var i=0;i<5;i++){var y=H*.14+i*H*.1,x0=((t*90*(.4+w)+i*70)%(W+80))-60;g.beginPath();g.moveTo(x0,y);g.lineTo(x0+30*w+6,y);g.stroke()}
+  g.globalAlpha=1;requestAnimationFrame(drawCandle);
+}
+function cMsg(){
+  var w=+$("kW").value,s=w>66?"strong":w>33?"moderate":w>8?"light":"still";$("kW").setAttribute("aria-valuetext",s);
+  var m;
+  if(w>66)m='<p class="note">The flame leans and flickers. Holy Mother’s words: <q>It is the wind alone that makes the flame flicker. In the same way, our fancies and desires make our mind restless.</q> (§3)</p>';
+  else if(w>8)m='<p>The flame steadies as the wind drops. <q>While repeating the Name, the mind will get fixed of itself on the ideal, like a candle flame in a place protected from the wind.</q> (§3)</p>';
+  else m='<p><b>Still.</b> The lesson’s reading: the practitioner is not forcing the flame to be still. The flame steadies as the wind is taken away. (§3)</p>';
+  $("cMsg").innerHTML=m;
+}
+$("kW").addEventListener("input",cMsg);
+$("bName").addEventListener("click",function(){var v=+$("kW").value;$("kW").value=Math.max(0,v-6);Cn.reps++;$("nameCount").textContent="Repetitions: "+Cn.reps;cMsg()});
+$("bWind").addEventListener("click",function(){$("kW").value=75;Cn.reps=0;$("nameCount").textContent="Repetitions: 0";cMsg()});
+
+send({type:"ready"});
+(function(){
+  var last=0;
+  function h(){var d=document.documentElement,b=document.body;var v=Math.ceil(Math.max(d.scrollHeight,b.scrollHeight,b.offsetHeight));if(v&&Math.abs(v-last)>1){last=v;send({type:"height",height:v})}}
+  window.addEventListener("load",h);window.addEventListener("resize",h);
+  if(window.ResizeObserver)new ResizeObserver(h).observe(document.body);
+  setInterval(h,700);h();
+})();
+var rt=0;
+window.addEventListener("resize",function(){clearTimeout(rt);rt=setTimeout(function(){drawPace();drawK()},80)});
+function retheme(){readColors();drawPace();drawK()}
+try{window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change",retheme)}catch(e){}
+new MutationObserver(retheme).observe(document.documentElement,{attributes:true,attributeFilter:["data-theme"]});
+setMode("irr");cMsg();kMsg();
+requestAnimationFrame(pLoop);requestAnimationFrame(kLoop);requestAnimationFrame(drawCandle);
+if(RM){kuramoto(0,0)}
+
+})();
+</script>
+</body></html>
