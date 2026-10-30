@@ -1,0 +1,478 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Practice: Lesson 5.1, The Recipe and the Direction</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans:wght@400..700&family=Noto+Serif:ital,wght@0,400..700;1,400..700&display=swap">
+<style>
+:root{
+  --bg:#FBF5EA; --surface:#FFFDF8; --ink:#1E1E1E; --muted:#5A5A5A; --line:#E6DAC3; --tint:#F3EAD3; --navy:#12285A; --gold:#C9A24A; --goldt:#6B4E0E;
+  --obj:#0B8686; --att:#C95F06; --res:#2E3192; --env:#C0245B; --ok:#1B7A52;
+  --display:"Noto Serif",Georgia,"Times New Roman",serif;
+  --body:"Noto Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0B1A3D; --surface:#12285A; --ink:#FBF5EA; --muted:#C9C3B3; --line:#2B4686; --tint:#1D3770; --gold:#E6C36A; --goldt:#E6C36A;
+    --obj:#46CFC6; --att:#F5A04D; --res:#A3AAFF; --env:#FF7BA9; --ok:#5BD59B; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0B1A3D; --surface:#12285A; --ink:#FBF5EA; --muted:#C9C3B3; --line:#2B4686; --tint:#1D3770; --gold:#E6C36A; --goldt:#E6C36A;
+  --obj:#46CFC6; --att:#F5A04D; --res:#A3AAFF; --env:#FF7BA9; --ok:#5BD59B; color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;
+  padding-left:max(14px,env(safe-area-inset-left,0px));padding-right:max(14px,env(safe-area-inset-right,0px));padding-block:22px 40px}
+.wrap{max-width:900px;margin:0 auto;display:flex;flex-direction:column;gap:32px}
+h1,h2,h3{font-family:var(--display);font-weight:500;text-wrap:balance;margin:0;letter-spacing:-.01em}
+h1{font-size:clamp(30px,5.4vw,44px);line-height:1.06}
+h2{font-size:clamp(23px,3.4vw,29px);line-height:1.15}
+h3{font-size:19px;line-height:1.25}
+p{margin:0}
+sub{font-size:.72em;line-height:0}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.lede{font-size:17.5px;max-width:64ch}
+.intro{max-width:66ch;color:var(--muted)}
+header{display:flex;flex-direction:column;gap:12px}
+section{display:flex;flex-direction:column;gap:18px;min-width:0}
+.sym{font-family:var(--mono);font-size:.92em;white-space:nowrap}
+.k-obj{color:var(--obj)} .k-att{color:var(--att)} .k-res{color:var(--res)} .k-env{color:var(--env)}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px;display:flex;flex-direction:column;gap:14px;min-width:0}
+.bar{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;justify-content:space-between}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--bg)}
+.seg button{font:inherit;font-size:14px;color:var(--muted);background:transparent;border:0;padding:8px 13px;cursor:pointer}
+.seg button+button{border-left:1px solid var(--line)}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--surface)}
+button:focus-visible,input:focus-visible{outline:2px solid var(--res);outline-offset:2px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{font:inherit;font-size:14px;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:7px 13px;cursor:pointer;display:inline-flex;gap:8px;align-items:center}
+.chip i{font-style:normal;font-family:var(--mono);font-size:11px;color:var(--muted)}
+.chip[aria-pressed="true"]{background:var(--res);border-color:var(--res);color:#fff}
+.chip[aria-pressed="true"] i{color:#fff;opacity:.8}
+.chip:disabled{cursor:default}
+.chip.reached:not([aria-pressed="true"]){border-color:var(--res)}
+.btn{font:inherit;font-size:14px;color:var(--ink);background:var(--surface);border:1px solid var(--ink);border-radius:8px;padding:8px 16px;cursor:pointer}
+.btn.primary{background:var(--ink);color:var(--surface)}
+.btn.ghost{border-color:var(--line);color:var(--muted)}
+.scope-wrap{position:relative;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--bg)}
+canvas{display:block;width:100%}
+.playbtn{position:absolute;right:8px;bottom:8px;font:inherit;font-size:12px;background:var(--surface);color:var(--muted);border:1px solid var(--line);border-radius:6px;padding:4px 10px;cursor:pointer}
+.box{border:1px solid var(--line);border-radius:8px;background:var(--bg);padding:10px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.box .cap{font-size:12px;color:var(--muted)}
+.meters{display:flex;flex-direction:column;gap:9px}
+.meter{display:grid;grid-template-columns:1fr auto;gap:2px 8px;font-size:13px;align-items:baseline}
+.meter b{font-weight:600}
+.meter output{font-family:var(--mono);font-size:12px;color:var(--muted)}
+.meter .track{grid-column:1/-1;height:7px;background:var(--line);border-radius:4px;overflow:hidden}
+.meter .fill{height:100%;width:0;background:var(--res);border-radius:4px}
+.meter.f2 .fill{background:var(--env)} .meter.f3 .fill{background:var(--obj)}
+.slider{display:flex;align-items:center;gap:10px;flex:1 1 280px;min-width:0}
+.slider label{font-size:14px;min-width:0}
+.slider input[type=range]{flex:1;min-width:60px;accent-color:var(--res)}
+.slider small{color:var(--muted);font-size:12px;white-space:nowrap}
+.slider output{font-family:var(--mono);font-size:12.5px;color:var(--muted);min-width:46px;text-align:right}
+.readout{font-size:14px;color:var(--muted)}
+.readout b{color:var(--ink)}
+.tag{font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);border:1px solid var(--line);border-radius:4px;padding:2px 6px}
+.note{font-size:13px;color:var(--muted);max-width:70ch}
+.balance{background:var(--tint);border-radius:10px;padding:16px 18px;display:flex;flex-direction:column;gap:8px;max-width:78ch}
+footer{font-size:13px;color:var(--muted);max-width:76ch;border-top:1px solid var(--line);padding-top:12px}
+@media (max-width:640px){.panel{padding:12px}.wrap{gap:26px}}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
+
+[hidden]{display:none!important}
+:root{--c-h:var(--res);--c-ref:var(--obj);--c-over:var(--env);--c-settle:var(--att);--c-rip:var(--obj)}
+nav.parts{display:flex;flex-wrap:wrap;gap:8px 20px;margin-top:4px}
+nav.parts a{color:var(--ink);text-decoration:none;border-bottom:1px solid var(--line);padding-bottom:2px;font-size:15px}
+nav.parts a:hover,nav.parts a:focus-visible{border-color:var(--res);color:var(--res)}
+.msg{min-height:1.5em;font-size:15px}
+.fbbox{border-top:1px solid var(--line);padding-top:12px;display:flex;flex-direction:column;gap:8px;min-height:6.5em}
+.fbbox .verdict{font-family:var(--display);font-size:19px}
+.fbbox .ref{font-family:var(--mono);font-size:11px;color:var(--muted)}
+.fbbox q{font-style:italic;quotes:"“" "”"}
+.strikebar{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center}
+.chip:focus-visible,.pick:focus-visible,summary:focus-visible{outline:2px solid var(--res);outline-offset:2px}
+.scene{border-left:3px solid var(--line);padding:2px 0 2px 12px;font-family:var(--display);font-size:18.5px;line-height:1.45;min-height:5.6em}
+.picks{gap:10px}
+.pick{font:inherit;font-size:15px;color:var(--ink);background:var(--bg);border:1.5px solid var(--line);border-top-width:4px;border-radius:10px;padding:9px 14px;cursor:pointer;min-width:0}
+.pick[data-p="settle"]{border-top-color:var(--c-settle)}
+.pick[data-p="over"]{border-top-color:var(--c-over)}
+.pick[data-p="ripple"]{border-top-color:var(--c-rip)}
+.pick.wrong{opacity:.55}
+.pick.right{background:var(--surface);box-shadow:0 0 0 2px var(--ink)}
+.pick:disabled{cursor:default}
+.dots{display:flex;gap:6px}
+.dots i{width:10px;height:10px;border-radius:50%;border:1.5px solid var(--muted)}
+.dots i.done{background:var(--ink);border-color:var(--ink)}
+.dots i.cur{border-color:var(--ink);box-shadow:0 0 0 2px var(--line)}
+.brandhdr{background:#12285A;color:#FBF5EA;text-align:center;padding:18px 18px 20px;border-radius:14px;display:flex;flex-direction:column;align-items:center;gap:6px}
+.brandhdr .logos{display:flex;align-items:center;justify-content:center;gap:18px}
+.brandhdr .logos img{width:56px;height:66px;object-fit:contain;display:block}
+.brandhdr .logos img.rit{width:86px;height:65px}
+.brandhdr .eyebrow{color:#E6C36A;font-weight:700;letter-spacing:3px}
+.brandhdr h1{color:#FBF5EA;font-weight:700}
+.brandhdr .course{color:#E6C36A;font-weight:600;font-size:14px}
+.brandhdr .lede{color:#F1ECDF;font-size:15.5px;max-width:62ch}
+.brandhdr .scorenote{color:#F1ECDF;font-size:14.5px}
+nav.parts a{color:var(--ink)}
+.brandhdr nav.parts a{color:#FBF5EA;border-bottom:1px solid #E6C36A;background:none;padding-bottom:2px}
+.brandhdr nav.parts a:hover,.brandhdr nav.parts a:focus-visible{color:#E6C36A;border-color:#E6C36A}
+.tag.scored{color:var(--goldt);border-color:var(--gold)}
+.scorebox{border-left:5px solid var(--gold);background:var(--tint);border-radius:10px;padding:12px 14px;margin-bottom:14px}
+.scorebox .big{font-family:var(--display);font-size:30px;line-height:1.1;color:var(--ink)}
+.scorebox .band{font-family:var(--display);font-size:18px;margin:4px 0}
+.scorebox .band.good{color:var(--ok)}
+.scorebox .saved{font-size:13.5px;color:var(--muted)}
+.scorebox ul{margin:6px 0 0;padding-left:20px}
+
+/* PRACTICE TEMPLATE: one coloured "part" per section (part-1 .. part-4) */
+.part{--pc:#0E7A8A;--pcon:#FFFFFF;--pcbg:#E6F2F3;border:2px solid var(--pc);border-radius:14px;overflow:hidden;background:var(--pcbg)}
+.part-1{--pc:#0E7A8A;--pcbg:#E6F2F3}
+.part-2{--pc:#12285A;--pcbg:#EEF0F8}
+.part-3{--pc:#2F6B3A;--pcbg:#E6F0E3}
+.part-4{--pc:#7A2A5E;--pcbg:#F5E6F0}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .part{--pcbg:#0F2250;border-color:var(--pcl,var(--pc))}
+ :root:not([data-theme="light"]) .part-1{--pcl:#46CFC6} :root:not([data-theme="light"]) .part-2{--pcl:#E6C36A} :root:not([data-theme="light"]) .part-3{--pcl:#7FD08C} :root:not([data-theme="light"]) .part-4{--pcl:#F08CC8}}
+:root[data-theme="dark"] .part{--pcbg:#0F2250;border-color:var(--pcl,var(--pc))}
+:root[data-theme="dark"] .part-1{--pcl:#46CFC6} :root[data-theme="dark"] .part-2{--pcl:#E6C36A} :root[data-theme="dark"] .part-3{--pcl:#7FD08C} :root[data-theme="dark"] .part-4{--pcl:#F08CC8}
+.part-band{background:var(--pc);color:var(--pcon);padding:12px 16px;display:flex;align-items:center;flex-wrap:wrap;gap:6px 14px}
+.part-band h2{color:inherit;font-size:clamp(20px,3.4vw,26px);font-weight:600;flex:1 1 220px}
+.part-num{font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;font-weight:500;background:rgba(255,255,255,.18);border-radius:4px;padding:3px 9px}
+.part-band .tag{color:inherit;border-color:currentColor;background:rgba(255,255,255,.12)}
+.part-2 .part-band .tag,.part-2 .part-num{color:#E6C36A}
+.part-body{padding:16px;display:flex;flex-direction:column;gap:14px}
+.part .panel{background:var(--surface)}
+@media (max-width:640px){.part-body{padding:12px}}
+
+
+/* page-specific */
+q{font-style:italic;quotes:"“" "”"}
+.btn:disabled{opacity:.45;cursor:default}
+.btn[aria-pressed="true"]{background:var(--ink);color:var(--surface)}
+.pick{font:inherit;font-size:15px;color:var(--ink);background:var(--bg);border:1.5px solid var(--line);border-radius:10px;padding:9px 14px;cursor:pointer;min-width:0;text-align:left}
+.pick.wrong{opacity:.55}
+.pick.right{background:var(--ok);border-color:var(--ok);color:#fff}
+.pick:disabled{cursor:default}
+.pick:focus-visible,.node:focus-visible{outline:2px solid var(--res);outline-offset:2px}
+.part-5{--pc:#B5651D;--pcbg:#FBEEDD}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .part-5{--pcl:#F5B060}}
+:root[data-theme="dark"] .part-5{--pcl:#F5B060}
+.made{font-size:12.5px;color:var(--muted);font-style:italic}
+.slider{display:flex;align-items:center;gap:10px;flex-wrap:wrap;flex:0 0 auto}
+.slider label{font-weight:600;min-width:200px}
+.slider input[type=range]{flex:1;min-width:120px;accent-color:var(--res)}
+.cohbar{height:10px;border-radius:5px;background:var(--line);overflow:hidden}
+.cohbar i{display:block;height:100%;width:0;background:var(--ok);border-radius:5px;transition:width .25s}
+.cohrow{display:flex;flex-direction:column;gap:4px;font-size:14px}
+canvas.gr{width:100%;height:230px;border:1px solid var(--line);border-radius:8px;background:var(--bg)}
+canvas.lp{width:100%;max-width:520px;height:230px;margin:0 auto;border:1px solid var(--line);border-radius:10px;background:var(--bg)}
+canvas.ch{width:100%;height:210px;border:1px solid var(--line);border-radius:8px;background:var(--bg)}
+canvas.nz{width:100%;height:170px;border:1px solid var(--line);border-radius:8px;background:var(--bg)}
+.flow{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.flow .arrow{color:var(--muted)}
+.rung{font:inherit;font-size:15px;border:1.5px solid var(--line);border-bottom-width:4px;border-radius:10px;background:var(--bg);color:var(--ink);padding:8px 14px;cursor:pointer}
+.rung[aria-pressed="true"]{background:var(--ink);color:var(--surface)}
+.rung.seen:not([aria-pressed="true"]){border-color:var(--ink)}
+.act2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.act2 .box2{border:1px solid var(--line);border-radius:10px;background:var(--bg);padding:12px 14px;display:flex;flex-direction:column;gap:6px}
+@media (max-width:640px){.act2{grid-template-columns:1fr}}
+.bars2{display:flex;flex-direction:column;gap:8px;font-size:14px}
+.bar2{display:grid;grid-template-columns:150px 1fr;gap:10px;align-items:center}
+.bar2 .tr{height:10px;background:var(--line);border-radius:5px;overflow:hidden}
+.bar2 .tr i{display:block;height:100%;width:0;border-radius:5px;transition:width .4s}
+.part-1{--pc:#0E7A8A;--pcbg:#E6F2F3}
+.balance{background:var(--tint);border-radius:10px;padding:16px 18px;display:flex;flex-direction:column;gap:8px;max-width:78ch}
+.btn.primary{background:var(--ink);color:var(--surface)}
+canvas.sk{width:100%;height:210px;border:1px solid var(--line);border-radius:10px;background:var(--bg)}
+canvas.st{width:100%;height:150px;border:1px solid var(--line);border-radius:10px;background:var(--bg)}
+canvas.rm{width:100%;height:200px;border:1px solid var(--line);border-radius:10px;background:var(--bg)}
+canvas.bm{width:100%;height:160px;border:1px solid var(--line);border-radius:10px;background:var(--bg)}
+.sw{display:flex;flex-wrap:wrap;gap:14px 24px}
+.sw .grp{display:flex;flex-direction:column;gap:6px}
+.sw .grp b{font-size:14px}
+canvas.ts{width:100%;height:220px;border:1px solid var(--line);border-radius:10px;background:var(--bg)}
+canvas.sp{width:100%;height:330px;border:1px solid var(--line);border-radius:10px;background:var(--bg)}
+canvas.gl{width:100%;height:150px;border:1px solid var(--line);border-radius:10px;background:var(--bg)}
+canvas.sr{width:100%;height:210px;border:1px solid var(--line);border-radius:10px;background:var(--bg)}
+.stn{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+.stn button.sbtn{width:100%;text-align:left;display:flex;justify-content:space-between;gap:10px;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--ink);font:inherit;font-weight:600;cursor:pointer}
+.stn button.sbtn span{font-weight:400;color:var(--muted);font-size:13px}
+.stn button.sbtn[aria-expanded="true"]{border-color:var(--res);background:var(--bg)}
+.stn .srow{padding:8px 12px 12px;font-size:14.5px;line-height:1.5;border-left:3px solid var(--res);margin:2px 0 6px 6px}
+.stn .srow dt{font-weight:700;margin-top:6px;font-size:13px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.stn .srow dd{margin:2px 0 0}
+details.open2{border:1px solid var(--line);border-radius:10px;padding:8px 12px;margin-top:10px;background:var(--surface)}
+details.open2 summary{cursor:pointer;font-weight:600}
+.g22{display:flex;flex-wrap:wrap;gap:14px 28px}
+canvas.dr{width:100%;height:230px;border:1px solid var(--line);border-radius:10px;background:var(--bg)}
+.steps{display:flex;flex-wrap:wrap;align-items:center;gap:8px;justify-content:center;margin:6px 0}.stp{flex:1 1 130px;border:1px solid var(--res);border-radius:10px;padding:14px 10px;text-align:center;background:var(--bg);font-weight:600}.arw{font-size:22px;color:var(--muted)}canvas.sn{width:100%;height:170px;border:1px solid var(--line);border-radius:10px;background:var(--bg)}
+.dg{display:flex;flex-direction:column;gap:10px;margin:10px 0}
+.dg .row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.dg .row b{min-width:150px;font-size:14px}
+.dg .track{flex:1;min-width:140px;height:12px;background:var(--line);border-radius:6px;overflow:hidden}
+.dg .track i{display:block;height:100%;width:50%;border-radius:6px;background:var(--att);transition:width .5s}
+.tgl{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}
+.tgl button{padding:8px 12px;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--ink);font:inherit;font-size:14px;cursor:pointer}
+.tgl button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.mapg{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px}
+.mapg button{text-align:left;padding:10px;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--ink);font:inherit;cursor:pointer}
+.mapg button[aria-expanded="true"]{border-color:var(--res);background:var(--bg)}
+.mapg button b{display:block}
+</style></head><body>
+<div class="wrap">
+<header class="brandhdr">
+  <div class="logos"><img src="vedantanz-logo.png" alt="Ramakrishna Vedanta NZ emblem" width="56" height="66"><img class="rit" src="ritam-wordmark.png" alt="Ritam" width="86" height="65"></div>
+  <div class="eyebrow">Practice · Lesson 5.1</div>
+  <h1>The Recipe and the Direction</h1>
+  <p class="course">The Mind in the Light of Modern and Spiritual Sciences · Advanced</p>
+  <p class="lede">Lesson 5.1 says what Module 5 is for, why now, and which way the practices point. Here you will match the four ingredients of Swami Vivekananda’s recipe, look at the two letters behind it, tell the four drifts of modern life apart, see which way attention can point, and look at the stepping-stone and the map.</p>
+  <p class="scorenote"><b>Parts I and III</b> are scored: your first pick counts. <b>Parts II, IV and V</b> are practice and are not scored.</p>
+  <nav class="parts" aria-label="Parts of this page"><a href="#s1">I. The recipe</a><a href="#s2">II. Two letters</a><a href="#s3">III. Why now</a><a href="#s4">IV. Direction</a><a href="#s5">V. Stepping-stone and map</a></nav>
+</header>
+
+<section id="s1" class="part part-1">
+  <div class="part-band"><span class="part-num">Part I</span><h2>Four ingredients, one dish</h2><span class="tag scored">Scored: first pick counts</span></div>
+  <div class="part-body">
+  <p class="intro">In his letter to Mr Sturdy, Swami Vivekananda says he wants to give <q>dry, hard reason, softened in the sweetest syrup of love and made spicy with intense work, and cooked in the kitchen of Yoga</q>. The lesson says <q>the four ingredients are exact.</q> For each ingredient, pick the Yoga and lesson the lesson pairs it with. Your first pick counts.</p>
+  <div class="panel" id="rp">
+    <div class="bar"><span class="tag" id="rpPro">Ingredient 1 of 4</span><div class="dots" id="rpDots" aria-hidden="true"></div></div>
+    <div class="scene"><p id="rpText"></p></div>
+    <div class="chips picks" id="rpPicks" role="group" aria-label="Your answer"></div>
+    <div id="rpMsg" class="msg fbbox" role="status" aria-live="polite"><p class="note">Pick one.</p></div>
+    <div class="bar"><div class="chips"><button class="btn primary" id="rpNext" hidden>Next ingredient</button><button class="btn ghost" id="rpShow">Show me</button><button class="btn ghost" id="rpReset">Start again</button></div></div>
+    <p class="note">The page does not rank the four. <q>The four ingredients are the four practice-families of Module 5.</q> (§2)</p>
+  </div>
+  </div>
+</section>
+
+<section id="s2" class="part part-2">
+  <div class="part-band"><span class="part-num">Part II</span><h2>Two letters, one vision</h2><span class="tag">Practice: not scored</span></div>
+  <div class="part-body">
+  <p class="intro">Swami Vivekananda wrote two letters in four days, in February 1896. The lesson reads them together as <q>one vision with three structural facets</q>. Tap a facet.</p>
+  <div class="panel">
+    <div class="tgl" id="fac" role="group" aria-label="Facet"><button type="button" data-f="cos" aria-pressed="true">Cosmology</button><button type="button" data-f="amb" aria-pressed="false">Ambition</button><button type="button" data-f="met" aria-pressed="false">Method</button></div>
+    <div class="msg fbbox" id="facMsg" role="status" aria-live="polite"></div>
+  </div>
+  <div class="panel">
+    <h3>Four transformations</h3>
+    <p class="note">In the second letter, the lesson finds four transformations. Tap one to see which commitment of the course the lesson pairs it with.</p>
+    <div class="tgl" id="trn" role="group" aria-label="Transformation"><button type="button" data-t="0" aria-pressed="true">Advaita made living</button><button type="button" data-t="1" aria-pressed="false">Mythology to moral forms</button><button type="button" data-t="2" aria-pressed="false">Yogi-ism to psychology</button><button type="button" data-t="3" aria-pressed="false">A form a child can grasp</button></div>
+    <div class="msg fbbox" id="trnMsg" role="status" aria-live="polite"></div>
+  </div>
+  </div>
+</section>
+
+<section id="s3" class="part part-3">
+  <div class="part-band"><span class="part-num">Part III</span><h2>The world the nervous system was built for</h2><span class="tag scored">Scored: first pick counts</span></div>
+  <div class="part-body">
+  <p class="intro">The lesson reads the mind-wave equation against contemporary life and names four drifts: ψₓ, G(t), ψₘ(t) and n(t). Four made-up moments. Say which term each shows. Your first pick counts.</p>
+  <div class="panel" id="dr">
+    <div class="bar"><span class="tag" id="drPro">Moment 1 of 4</span><div class="dots" id="drDots" aria-hidden="true"></div></div>
+    <div class="scene"><p id="drText"></p></div>
+    <div class="chips picks" id="drPicks" role="group" aria-label="Your answer"></div>
+    <div id="drMsg" class="msg fbbox" role="status" aria-live="polite"><p class="note">Pick one.</p></div>
+    <div class="bar"><div class="chips"><button class="btn primary" id="drNext" hidden>Next moment</button><button class="btn ghost" id="drShow">Show me</button><button class="btn ghost" id="drReset">Start again</button></div></div>
+    <p class="made">The people in these moments are made up.</p>
+  </div>
+  <div class="panel" id="dnDone" hidden>
+    <div class="scorebox" id="scBox" aria-live="polite"></div>
+    <p>The score only shows where to look again in the lesson. It says nothing about you.</p>
+  </div>
+  <div class="panel">
+    <h3>The counter-programme</h3>
+    <p class="note">The lesson says the practices are <q>Not a rejection of modernity. Not a demand to retreat to an earlier era.</q> Tap each line to ease the matching bar. Teaching picture, not a measurement.</p>
+    <div class="dg" id="dg"></div>
+    <div class="tgl" id="cp" role="group" aria-label="Practices"><button type="button" data-k="0" aria-pressed="false">Slow ψₓ at points you control</button><button type="button" data-k="1" aria-pressed="false">Restore G(t) through breath</button><button type="button" data-k="2" aria-pressed="false">Re-stabilise ψₘ(t) through trained attention</button></div>
+    <div class="msg fbbox" id="cpMsg" role="status" aria-live="polite"></div>
+  </div>
+  </div>
+</section>
+
+<section id="s4" class="part part-4">
+  <div class="part-band"><span class="part-num">Part IV</span><h2>Which way is the attention pointing?</h2><span class="tag">Practice: not scored</span></div>
+  <div class="part-body">
+  <p class="intro">The Gītā says <q>let a man lift the self by the Self; let him not lower the self</q> (BG 6.5). The lesson says every practice-family is a form of nivṛtti. Toggle the two directions.</p>
+  <div class="panel">
+    <div class="seg" role="group" aria-label="Direction"><button type="button" data-d="pr" aria-pressed="true">Directed downward (pravṛtti)</button><button type="button" data-d="ni" aria-pressed="false">Directed upward (nivṛtti)</button></div>
+    <canvas class="dr" id="cvD" role="img" aria-label="Attention directed downward is one arrow from the person to the object; directed upward is one arrow up and another coming down from the source"></canvas>
+    <div class="msg fbbox" id="dMsg" role="status" aria-live="polite"></div>
+    <p class="note">Teaching picture. This describes what the lesson says. It is not a way of summoning anything.</p>
+  </div>
+  </div>
+</section>
+
+<section id="s5" class="part part-5">
+  <div class="part-band"><span class="part-num">Part V</span><h2>The stepping-stone and the map</h2><span class="tag">Practice: not scored</span></div>
+  <div class="part-body">
+  <p class="intro">The lesson says <q>Ritam first; freedom from there.</q> (§3) Flourishing is the foundation and the stepping-stone, and the same practices serve both reaches.</p>
+  <div class="panel">
+    <div class="steps" role="img" aria-label="Three boxes in a row: Ritam, the foundation; the stepping-stone; freedom, the higher reach"><div class="stp">Ritam: flourishing, the foundation</div><div class="arw" aria-hidden="true">→</div><div class="stp">the stepping-stone</div><div class="arw" aria-hidden="true">→</div><div class="stp">freedom, the higher reach</div></div>
+    <div class="tgl" id="two" role="group" aria-label="Two made-up people"><button type="button" data-p="e" aria-pressed="true">Eli</button><button type="button" data-p="f" aria-pressed="false">Fay</button></div>
+    <div class="msg fbbox" id="twoMsg" role="status" aria-live="polite"></div>
+    <p class="made">Eli and Fay are made up. Neither stands higher than the other.</p>
+  </div>
+  <div class="panel">
+    <h3>The map of Module 5</h3>
+    <p class="note">A reference, in any order. There are no progress marks. <q>The walking begins in 5.2.</q></p>
+    <div class="mapg" id="mapg"></div>
+    <div class="msg fbbox" id="mapMsg" role="status" aria-live="polite"></div>
+  </div>
+  </div>
+</section>
+
+<footer>Parts I and III are scored, and only to show you where to look again. Parts II, IV and V are practice and are not scored. Based on Lesson 5.1. This page illustrates the lesson’s ideas and does not measure, diagnose or advise on anyone’s mind or situation. If anything here touches something difficult for you, please be gentle with yourself, and consider speaking with someone you trust or a qualified professional.<br>Ritam · Ramakrishna Vedanta Centre NZ · <a href="https://www.vedanta.nz">www.vedanta.nz</a><br>Privacy: when you are signed in, your name, email, answers and score are saved to your member record. Only you and the course instructors can see them. They are not shared or ranked.</footer>
+</div>
+<script>
+(function(){
+"use strict";
+var $=function(id){return document.getElementById(id)};
+try{var q=new URLSearchParams(location.search).get("theme");if(q==="light"||q==="dark")document.documentElement.setAttribute("data-theme",q)}catch(e){}
+try{var pt=new URLSearchParams(location.search).get("part");if(pt==="1"||pt==="2"||pt==="3")document.body.setAttribute("data-part",pt)}catch(e){}
+var EMBED=/[?&]embed=1/.test(location.search);
+function send(m){if(EMBED){try{parent.postMessage(m,"*")}catch(e){}}}
+var RM=false;try{RM=window.matchMedia("(prefers-reduced-motion: reduce)").matches}catch(e){}
+var C={};
+function readColors(){var cs=getComputedStyle(document.documentElement);["--bg","--surface","--ink","--muted","--line","--obj","--att","--res","--env","--ok"].forEach(function(k){C[k]=cs.getPropertyValue(k).trim()})}
+readColors();
+var dpr=Math.max(1,Math.min(2,window.devicePixelRatio||1));
+function fit(c){var w=c.clientWidth,h=c.clientHeight;if(!w||!h)return null;var bw=Math.round(w*dpr),bh=Math.round(h*dpr);if(c.width!==bw||c.height!==bh){c.width=bw;c.height=bh}var g=c.getContext("2d");g.setTransform(dpr,0,0,dpr,0,0);return {g:g,w:w,h:h}}
+function label(g,t,x,y,color){g.font="500 11.5px 'Noto Sans',system-ui,sans-serif";g.textAlign="left";g.textBaseline="alphabetic";var w=g.measureText(t).width;g.save();g.globalAlpha=.85;g.fillStyle=C["--bg"];g.fillRect(x-4,y-12,w+8,16);g.restore();g.fillStyle=color;g.fillText(t,x,y)}
+
+/* ===== quiz engine (Part IV) ===== */
+var META={code:"ADV-P-5-1",title:"Practice: Lesson 5.1, The Recipe and the Direction (Parts I and III)",programme:"The Mind in the Light of Modern and Spiritual Sciences (Advanced)",cut:75};
+var quizzes=[],sent=false;
+function shuffle(a){a=a.slice();for(var z=a.length-1;z>0;z--){var y=Math.floor(Math.random()*(z+1)),t=a[z];a[z]=a[y];a[y]=t}return a}
+function Quiz(c){
+  var Q={i:0,done:{},miss:{},fin:false},el=function(s){return $(c.p+s)};
+  function dots(){var d=el("Dots");d.innerHTML="";c.items.forEach(function(_,k){var e=document.createElement("i");if(Q.done[k])e.className="done";else if(k===Q.i)e.className="cur";d.appendChild(e)})}
+  function showItem(){
+    var s=c.items[Q.i];el("Text").innerHTML=s.t;el("Pro").textContent=c.noun+" "+(Q.i+1)+" of "+c.items.length;
+    el("Picks").innerHTML=shuffle(s.o).map(function(k){return '<button class="pick" data-p="'+k+'" aria-pressed="false">'+c.L[k]+'</button>'}).join("");
+    el("Picks").querySelectorAll(".pick").forEach(function(p){p.addEventListener("click",function(){onPick(p)})});
+    el("Msg").innerHTML='<p class="note">Pick one.</p>';el("Next").hidden=true;el("Show").hidden=false;dots();
+  }
+  function reveal(){
+    var s=c.items[Q.i];Q.done[Q.i]=true;
+    el("Picks").querySelectorAll(".pick").forEach(function(p){p.disabled=true;if(p.dataset.p===s.a){p.classList.add("right");p.setAttribute("aria-pressed","true")}});
+    el("Msg").innerHTML='<p class="verdict">'+c.V[s.a]+'</p><p>'+s.why+'</p><p class="ref">'+s.ref+'</p>';
+    el("Show").hidden=true;
+    if(Q.i<c.items.length-1){el("Next").hidden=false}else{Q.fin=true;check()}
+    dots();if(c.onReveal)c.onReveal(Q);
+  }
+  function onPick(p){
+    var s=c.items[Q.i],k=p.dataset.p;
+    if(k===s.a){reveal()}else{Q.miss[Q.i]=true;p.classList.add("wrong");p.disabled=true;
+      el("Msg").innerHTML='<p class="verdict">Not this one.</p><p>'+((s.hint&&s.hint[k])||c.H[k])+'</p>'}
+  }
+  el("Next").addEventListener("click",function(){Q.i++;showItem();try{el("Picks").querySelector(".pick").focus({preventScroll:true})}catch(e){}});
+  el("Show").addEventListener("click",function(){Q.miss[Q.i]=true;reveal()});
+  el("Reset").addEventListener("click",function(){Q.i=0;Q.done={};Q.miss={};Q.fin=false;showItem();if(c.onReveal)c.onReveal(Q)});
+  Q.items=c.items;Q.cfg=c;Q.show=showItem;quizzes.push(Q);return Q;
+}
+function plain(s){return String(s).replace(/<[^>]*>/g,"")}
+function check(){
+  var allDone=quizzes.every(function(q){return q.fin});
+  $("dnDone").hidden=false;
+  if(!allDone){$("scBox").innerHTML='<p>Finish Parts I and III to see your combined result.</p>';return}
+  var right=0,n=0,ans=[],wrong=[];
+  quizzes.forEach(function(q){q.items.forEach(function(it,k){n++;var ok=!q.miss[k];if(ok)right++;else wrong.push(q.cfg.name+": "+plain(it.t).slice(0,60)+"…");ans.push({q:n,ok:ok,given:plain(q.cfg.L[it.a])+(ok?" (first pick)":" (not on first pick)")})})});
+  var pct=Math.round(100*right/n),good=pct>=META.cut;
+  var h='<div class="big">'+right+' of '+n+' on the first pick</div><p class="band '+(good?'good':'')+'">'+(good?'Well grasped':'Revisit these ideas')+'</p>';
+  if(wrong.length){h+='<p>Look again at the lesson for:</p><ul>'+wrong.map(function(w){return '<li>'+w+'</li>'}).join('')+'</ul>'}else{h+='<p>Nothing to revisit here.</p>'}
+  h+='<p class="saved" id="scSaved">'+(EMBED?'Saving your result…':'Sign in on the course page to have your result saved.')+'</p>';
+  $("scBox").innerHTML=h;
+  if(!sent){sent=true;send({type:"quizResult",code:META.code,title:META.title,programme:META.programme,score:right,maxScore:n,percent:pct,questionsCorrect:right,questionCount:n,answers:ans})}
+}
+window.addEventListener("message",function(e){var d=e.data||{};if(!d||typeof d!=="object")return;var el=$("scSaved");if(!el)return;
+  if(d.type==="saved")el.textContent="Your result has been saved to your member record.";
+  else if(d.type==="saveError")el.textContent="Your result could not be saved this time.";
+  else if(d.type==="notMember")el.textContent="Sign in as a member to have your result saved."});
+
+/* ===== Part I (scored) ===== */
+var YL={jn:"Jñāna, the Yoga of discriminative knowledge (Lesson 5.5)",bh:"Bhakti, the Yoga of devotion (Lesson 5.2)",ka:"Karma, the Yoga of action (Lesson 5.4)",ra:"Rāja, the Yoga of attentional discipline (Lesson 5.3)"};
+var YV={jn:"Jñāna.",bh:"Bhakti.",ka:"Karma.",ra:"Rāja."};
+var YH={jn:"Jñāna is paired with a different ingredient. Look at §2 again.",bh:"Bhakti is paired with a different ingredient. Look at §2 again.",ka:"Karma is paired with a different ingredient. Look at §2 again.",ra:"Rāja is paired with a different ingredient. Look at §2 again."};
+var YO=["jn","bh","ka","ra"];
+Quiz({p:"rp",name:"Part I",noun:"Ingredient",L:YL,V:YV,H:YH,items:[
+ {t:"<q>dry, hard reason</q>",o:YO,a:"jn",why:"Reason is jñāna, <q>the Yoga of discriminative knowledge</q>, taken up in Lesson 5.5.",ref:"§2"},
+ {t:"<q>the sweetest syrup of love</q>",o:YO,a:"bh",why:"Love is bhakti, <q>the Yoga of devotion</q>, met in Lesson 5.2.",ref:"§2"},
+ {t:"<q>intense work</q>",o:YO,a:"ka",why:"Work is karma, <q>the Yoga of action</q>, taken up in Lesson 5.4.",ref:"§2"},
+ {t:"<q>the kitchen of Yoga</q>",o:YO,a:"ra",why:"The kitchen is rāja, <q>the Yoga of attentional discipline</q>, taken up in Lesson 5.3.",ref:"§2"}
+]}).show();
+
+/* ===== Part II ===== */
+var FAC={
+ cos:'<p>A cosmology: <q>the answer Vedanta gives to the question of what underlies the manifest world, capable of being placed on the foundations modern science is building.</q></p><p class="note">In the first letter: <q>I clearly see their perfect unison with modern science</q>.</p>',
+ amb:'<p>An ambition: <q>a teaching that meets both the simplest learner and the most rigorous mind.</q></p><p class="note">In the second letter: <q>a religion which shall be easy, simple, popular and at the same time meet the requirements of the highest minds</q>.</p>',
+ met:'<p>A method: <q>the four classical Yogas, plain-named so a child can swallow them.</q></p><p class="note">In the first letter: <q>dry, hard reason, softened in the sweetest syrup of love and made spicy with intense work, and cooked in the kitchen of Yoga</q>.</p>'};
+function facShow(k){$("facMsg").innerHTML=FAC[k]}
+document.querySelectorAll("[data-f]").forEach(function(b){b.addEventListener("click",function(){document.querySelectorAll("[data-f]").forEach(function(x){x.setAttribute("aria-pressed",x===b?"true":"false")});facShow(b.dataset.f)})});
+var TRN=[
+ '<p><q>The dry, abstract Advaita must become living and poetic in everyday life</q> is <q>the commitment of Modules 1 and 4: the philosophy of the Self rendered as the lived architecture of mental experience.</q></p>',
+ '<p><q>out of hopelessly intricate mythology must come concrete moral forms</q> is <q>the commitment of Lesson 5.4: karma yoga and yama-niyama translated from cultural inheritance into precise structural ethics.</q></p>',
+ '<p><q>out of bewildering Yogi-ism must come the most scientific and practical psychology</q> is <q>the commitment of the wave-mechanics language itself</q>: <q>inherited contemplative technologies shown in their mechanism</q>.</p>',
+ '<p><q>all this must be put in a form so that a child may grasp it</q> is <q>the commitment of the entire pedagogy: experience first, plain English first, Sanskrit for precision rather than gatekeeping.</q></p>'];
+document.querySelectorAll("[data-t]").forEach(function(b){b.addEventListener("click",function(){document.querySelectorAll("[data-t]").forEach(function(x){x.setAttribute("aria-pressed",x===b?"true":"false")});$("trnMsg").innerHTML=TRN[+b.dataset.t]})});
+
+/* ===== Part III (scored) ===== */
+var DL={px:"ψₓ(t): the signal arriving",g:"G(t): the autonomic gain",pm:"ψₘ(t): attention",n:"n(t): the noise floor"};
+var DV={px:"The object-signal, ψₓ.",g:"The gain, G(t).",pm:"Attention, ψₘ(t).",n:"The noise floor, n(t)."};
+var DH={px:"That one is about what arrives. Look at §2 again.",g:"That one is about the body’s regulation. Look at §2 again.",pm:"That one is about holding attention steady. Look at §2 again.",n:"That one is about the background hum. Look at §2 again."};
+var DO=["px","g","pm","n"];
+Quiz({p:"dr",name:"Part III",noun:"Moment",L:DL,V:DV,H:DH,items:[
+ {t:"Ana’s phone buzzes again and again, and what she scrolls is tuned to hold her eyes.",o:DO,a:"px",why:"<q>The receiving channel is being hosed down with input.</q>",ref:"§2"},
+ {t:"Ben’s body stays braced all day against threats he cannot resolve, and the recovery state is rarely reached.",o:DO,a:"g",why:"<q>the body bracing against perceived threats it cannot resolve</q>, <q>the recovery state rarely reached</q>.",ref:"§2"},
+ {t:"Chen is interrupted every few minutes, and each switch of task leaves a trace behind.",o:DO,a:"pm",why:"<q>Every interruption costs. Every context-switch leaves a residue.</q>",ref:"§2"},
+ {t:"Dara feels a hum of background anxiety and a low-grade sense that none of it means anything.",o:DO,a:"n",why:"<q>the hum of background anxiety, the low-grade meaninglessness</q>. <q>This is not a moral indictment of those populations.</q>",ref:"§2"}
+]}).show();
+var DGN=[["ψₓ(t) load",95,55],["G(t) arousal",85,40],["ψₘ(t) fragmentation",90,50],["n(t) noise",85,0]],CPon=[0,0,0];
+(function(){var d=$("dg");DGN.forEach(function(r,i){d.insertAdjacentHTML("beforeend",'<div class="row"><b>'+r[0]+'</b><div class="track"><i id="dgb'+i+'"></i></div></div>')})})();
+function cpDraw(){var c=CPon[0]+CPon[1]+CPon[2];
+  for(var i=0;i<3;i++)$("dgb"+i).style.width=(CPon[i]?DGN[i][2]:DGN[i][1])+"%";
+  $("dgb3").style.width=(85-18*c-(c===3?8:0))+"%";
+  $("cpMsg").innerHTML=c===0?'<p class="note">The bars show the drift as the lesson describes it.</p>':c<3?'<p class="note">The lesson’s fourth line works through the others: <q>Lowering n(t) through the cumulative effect of the whole.</q></p>':'<p><q>The restoration of the system’s own regulatory capacity, using tools the species has refined over millennia for exactly this purpose.</q></p>'}
+document.querySelectorAll("[data-k]").forEach(function(b){b.addEventListener("click",function(){var k=+b.dataset.k;CPon[k]=CPon[k]?0:1;b.setAttribute("aria-pressed",CPon[k]?"true":"false");cpDraw()})});
+
+/* ===== Part IV ===== */
+var DIR="pr";
+function arrow(g,x1,y1,x2,y2,col){g.strokeStyle=col;g.fillStyle=col;g.lineWidth=3;g.lineCap="round";g.beginPath();g.moveTo(x1,y1);g.lineTo(x2,y2);g.stroke();var a=Math.atan2(y2-y1,x2-x1);g.beginPath();g.moveTo(x2,y2);g.lineTo(x2-12*Math.cos(a-.4),y2-12*Math.sin(a-.4));g.lineTo(x2-12*Math.cos(a+.4),y2-12*Math.sin(a+.4));g.closePath();g.fill()}
+function dDraw(){var f=fit($("cvD"));if(!f)return;var g=f.g,w=f.w,h=f.h;g.clearRect(0,0,w,h);var cx=w/2;
+  function node(x,y,t,col){g.fillStyle=col;g.globalAlpha=.16;g.fillRect(x-62,y-16,124,32);g.globalAlpha=1;g.strokeStyle=col;g.lineWidth=1.5;g.strokeRect(x-62,y-16,124,32);g.textAlign="center";g.fillStyle=C["--ink"];g.font="500 13px 'Noto Sans',sans-serif";g.fillText(t,x,y+5)}
+  if(DIR==="pr"){node(cx,34,"the jīva",C["--res"]);node(cx,h-34,"a lower object",C["--att"]);arrow(g,cx,54,cx,h-58,C["--att"]);
+    g.strokeStyle=C["--muted"];g.lineWidth=2;g.beginPath();for(var x=0;x<=80;x++){var xx=cx+70+x,yy=h/2+Math.sin(x*.5)*10*(x/80)*2;if(x)g.lineTo(xx,yy);else g.moveTo(xx,yy)}g.stroke();label(g,"fₘ loses its steadiness",cx+70,h/2+34,C["--muted"]);label(g,"no reach back",8,h/2,C["--muted"])}
+  else{node(cx,34,"the higher source",C["--obj"]);node(cx,h-34,"the jīva",C["--res"]);arrow(g,cx-24,h-58,cx-24,58,C["--res"]);arrow(g,cx+24,58,cx+24,h-58,C["--obj"]);
+    g.strokeStyle=C["--ok"];g.lineWidth=2;g.beginPath();for(var x2=0;x2<=80;x2++){var xx2=cx+70+x2,yy2=h/2+Math.sin(x2*.2)*8;if(x2)g.lineTo(xx2,yy2);else g.moveTo(xx2,yy2)}g.stroke();label(g,"fₘ steady",cx+70,h/2+34,C["--muted"]);label(g,"direction: the jīva",8,h/2,C["--res"]);label(g,"energy from above",cx+34,h/2-30,C["--obj"])}}
+function dMsg(){$("dMsg").innerHTML=DIR==="pr"?'<p>When attention is directed downward, <q>the jīva’s effort is one-directional: the lower object does not reach back, the attention rhythm drifts down, and fₘ loses its steadiness.</q></p>':'<p>When attention is directed upward, <q>the movement is bidirectional: the jīva supplies the direction, and the higher source actively entrains the attention wave upward, energy descending into the system from above.</q> <q>That descent is kṛpā.</q></p>'}
+document.querySelectorAll("[data-d]").forEach(function(b){b.addEventListener("click",function(){DIR=b.dataset.d;document.querySelectorAll("[data-d]").forEach(function(x){x.setAttribute("aria-pressed",x===b?"true":"false")});dDraw();dMsg()})});
+
+/* ===== Part V ===== */
+function nDraw(){return;var g=f.g,w=f.w,h=f.h;g.clearRect(0,0,w,h);var y=h-44;
+  g.fillStyle="#B5651D";g.fillRect(16,y,w*.42,24);label(g,"Ritam: flourishing, the foundation",16,y+42>h-4?h-4:y+42,C["--muted"]);
+  g.fillRect(16+w*.42+14,y-18,64,42);g.fillStyle=C["--bg"];label(g,"stepping-stone",16+w*.42+6,y-26,C["--muted"]);
+  g.fillStyle=C["--obj"];g.globalAlpha=.85;g.fillRect(w-16-w*.3,y-62,w*.3,86);g.globalAlpha=1;label(g,"freedom, the higher reach",w-16-w*.3-10,y-72<14?14:y-72,C["--muted"]);
+  g.strokeStyle=C["--muted"];g.lineWidth=1.5;g.setLineDash([4,5]);g.beginPath();g.moveTo(24,y-8);g.lineTo(w-24,y-8);g.stroke();g.setLineDash([])}
+function twoMsg(p){$("twoMsg").innerHTML=p==="e"?'<p>Eli’s interest is held by the foundation: mental wellbeing, the integrity of daily life, service to others. The lesson says <q>the practices will serve them fully.</q> (§3)</p>':'<p>Fay, having established the foundation, finds a pull toward the higher purpose. The lesson says <q>the same practices, taken further, open onto exactly that.</q> (§3)</p>'}
+document.querySelectorAll("[data-p]").forEach(function(b){if(b.closest("#two"))b.addEventListener("click",function(){document.querySelectorAll("#two [data-p]").forEach(function(x){x.setAttribute("aria-pressed",x===b?"true":"false")});twoMsg(b.dataset.p)})});
+var LES=[["5.1","The purpose of the module and the map ahead."],["5.2","Prāṇāyāma, japa, kīrtana, mantra."],["5.3","Pratyāhāra, dhāraṇā, dhyāna, samādhi. What meditation actually does to the equation."],["5.4","Niṣkāma karma, sevā, yama-niyama. How the way you act changes who you are becoming."],["5.5","Viveka, vairāgya, śravaṇa-manana-nididhyāsana. How understanding itself becomes a practice."],["5.6","How the four practice-families form a single graduated chain."],["5.7","What the practices ultimately point toward when followed all the way through."],["5.8","A first-person account of the architecture in action; the closing invitation."]];
+(function(){var m=$("mapg");LES.forEach(function(l,i){var b=document.createElement("button");b.type="button";b.setAttribute("aria-expanded","false");b.innerHTML="<b>Lesson "+l[0]+"</b>";b.addEventListener("click",function(){[].forEach.call(m.children,function(x){x.setAttribute("aria-expanded",x===b?"true":"false")});$("mapMsg").innerHTML="<p>"+l[1]+"</p>"});m.appendChild(b)})})();
+
+send({type:"ready"});
+(function(){
+  var last=0;
+  function h(){var d=document.documentElement,b=document.body;var v=Math.ceil(Math.max(d.scrollHeight,b.scrollHeight,b.offsetHeight));if(v&&Math.abs(v-last)>1){last=v;send({type:"height",height:v})}}
+  window.addEventListener("load",h);window.addEventListener("resize",h);
+  if(window.ResizeObserver)new ResizeObserver(h).observe(document.body);
+  setInterval(h,700);h();
+})();
+var rt=0;
+window.addEventListener("resize",function(){clearTimeout(rt);rt=setTimeout(function(){dDraw();nDraw()},80)});
+function retheme(){readColors();dDraw();nDraw()}
+try{window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change",retheme)}catch(e){}
+new MutationObserver(retheme).observe(document.documentElement,{attributes:true,attributeFilter:["data-theme"]});
+facShow("cos");$("trnMsg").innerHTML=TRN[0];cpDraw();dDraw();dMsg();nDraw();twoMsg("e");$("mapMsg").innerHTML='<p class="note">Tap a lesson.</p>';
+
+})();
+</script>
+</body></html>
