@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Understanding Check: Lesson 5.6</title>
+<title>Understanding Quiz: Lesson 5.6</title>
 <meta name="description" content="Eight questions on Lesson 5.6, The Chain of Ascent: The Four Means and the Four Yogas, from The Mind in the Light of Modern and Spiritual Sciences.">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400..700;1,400..700&family=Noto+Sans:wght@400..700&display=swap">
 <style>
@@ -92,7 +92,7 @@ input.fill:focus{border-color:var(--gold)!important}
 <div class="wrap">
  <header>
   <div class="logos"><img src="vedantanz-logo.png" alt="Ramakrishna Vedanta NZ emblem" width="56" height="66"><img class="rit" src="ritam-wordmark.png" alt="Ritam" width="86" height="65"></div>
-  <p class="eyebrow">Understanding check · Lesson 5.6</p>
+  <p class="eyebrow">Understanding quiz · Lesson 5.6</p>
   <h1>The Chain of Ascent: The Four Means and the Four Yogas</h1>
   <p class="course">The Mind in the Light of Modern and Spiritual Sciences · Advanced</p>
   <p class="sub">Eight questions on the lesson. Take them as often as you like; each answer comes with its explanation.</p>
@@ -100,12 +100,12 @@ input.fill:focus{border-color:var(--gold)!important}
  <div class="bar"><i id="prog"></i></div>
  <div class="meta"><span id="pos"></span><span id="sc"></span></div>
  <div id="app"></div>
- <footer>Understanding check · <a href="https://www.vedanta.nz">www.vedanta.nz</a>. Privacy: when you are signed in, your name, email, answers and score are saved to your member record. Only you and the course instructors can see them. They are not shared or ranked.</footer>
+ <footer>Understanding quiz · <a href="https://www.vedanta.nz">www.vedanta.nz</a>. Privacy: when you are signed in, your name, email, answers and score are saved to your member record. Only you and the course instructors can see them. They are not shared or ranked.</footer>
 </div>
 <script>
 /* Question bank. Types: mc (options o, correct index a; options are shuffled on display), judge (statement q; a: 0 holds, 1 does not hold, 2 holds only in part), fill (accepted answers a[], show).
    e = explanation, c = idea to revisit, s = lesson section reference (null = lesson as a whole). All content from the text of Lesson 5.6, its key ideas and misconceptions. */
-var META={code:'ADV-5-6',lesson:'5.6',quizTitle:"Understanding check: Lesson 5.6, The Chain of Ascent: The Four Means and the Four Yogas",programme:'The Mind in the Light of Modern and Spiritual Sciences (Advanced)',cut:75};
+var META={code:'ADV-5-6',lesson:'5.6',quizTitle:"Understanding quiz: Lesson 5.6, The Chain of Ascent: The Four Means and the Four Yogas",programme:'The Mind in the Light of Modern and Spiritual Sciences (Advanced)',cut:75};
 var Q=[
 {"t": "mc", "q": "Lesson 5.6 calls the ordinary world a kind of prison. Why does it say ordinary effort cannot escape it?", "o": ["Every move made on its terms is one more turn of the same loop of subject and object", "The walls are simply too high, so only a stronger and more sustained effort can work", "The prison is imaginary, so there is no real structure there for effort to work against", "Effort is useful only after belief, so faith must come first and effort only afterwards"], "a": 0, "e": "The prisoner who pushes harder against the walls of subject-and-object only reinforces them, because the pushing is itself another act of a subject straining against an object. More thinking about the problem is more grāhya-grāhaka; more effort to “get out” is more lateral oscillation. The structure cannot be defeated on its own terms.", "c": "Ordinary effort is one more turn of the same loop", "s": "1"},
 {"t": "judge", "q": "“According to sūtra 3 of the Pratyabhijñā Hṛdayam, the world becomes many because there are in fact many separate things in it, and the split into subject and object follows from them.”", "a": 1, "e": "The lesson reads it the other way round. The world does not become many because there are many separate things in it; it becomes many because of a single prior split of one Consciousness into a perceiving subject (grāhaka) and a perceived object (grāhya). The subject-object split is the seed; the world of separate things is the tree.", "c": "Sūtra 3: the subject-object split comes first", "s": "1"},
@@ -169,7 +169,7 @@ function result(){
   '<p>'+right+' of '+n+' questions right.</p>';
  var miss=[];Q.forEach(function(qq,k){if(!ans[k]||!ans[k].ok)miss.push(qq)});
  if(miss.length){h+='<div class="revisit"><h2>Ideas to revisit</h2><ul>';miss.forEach(function(qq){h+='<li>'+esc(qq.c)+' <i>('+ref(qq.s)+')</i></li>'});h+='</ul></div>'}
- else{h+='<div class="revisit"><h2>Nothing to revisit</h2><p>Every idea in this check was answered correctly.</p></div>'}
+ else{h+='<div class="revisit"><h2>Nothing to revisit</h2><p>Every idea in this quiz was answered correctly.</p></div>'}
  h+='<div class="review"><h2>Every question, with its answer</h2>';
  Q.forEach(function(qq,k){var ok=ans[k]&&ans[k].ok;var a=qq.t==='mc'?qq.o[qq.a]:qq.t==='judge'?JL[qq.a]:qq.show;
   h+='<div class="item '+(ok?'r':'w')+'">'+(ok?'Right. ':'Not quite. ')+'<b>Q'+(k+1)+'</b> '+esc(qq.q)+'<br>Answer: '+esc(a)+'<small>'+esc(qq.e)+' ('+ref(qq.s)+')</small></div>'});
@@ -183,7 +183,7 @@ window.addEventListener('message',function(ev){
  var d=ev.data;if(!d||!d.type)return;
  var m=document.getElementById('savedmsg');
  if(d.type==='saved'&&m){m.textContent='Your result has been saved to your member record.'}
- if(d.type==='saveError'&&m){m.textContent='Your result could not be saved this time. You can take the check again.'}
+ if(d.type==='saveError'&&m){m.textContent='Your result could not be saved this time. You can take the quiz again.'}
  if(d.type==='notMember'&&m){m.textContent='Sign in as a member to have your result saved.'}
  if(d.type==='resume'&&d.state&&d.state.i>0&&d.state.i<Q.length&&!started){offerResume(d.state)}
 });

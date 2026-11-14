@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Understanding Check: Module 1</title>
+<title>Understanding Quiz: Module 1</title>
 <meta name="description" content="Fifteen optional questions across Lessons 1.1 to 1.6, Module 1, The Ground of Being, from The Mind in the Light of Modern and Spiritual Sciences.">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400..700;1,400..700&family=Noto+Sans:wght@400..700&display=swap">
 <style>
@@ -92,20 +92,20 @@ input.fill:focus{border-color:var(--gold)!important}
 <div class="wrap">
  <header>
   <div class="logos"><img src="vedantanz-logo.png" alt="Ramakrishna Vedanta NZ emblem" width="56" height="66"><img class="rit" src="ritam-wordmark.png" alt="Ritam" width="86" height="65"></div>
-  <p class="eyebrow">Understanding check · Module 1</p>
+  <p class="eyebrow">Understanding quiz · Module 1</p>
   <h1>Mind Literacy: What Is the Mind?</h1>
   <p class="course">The Mind in the Light of Modern and Spiritual Sciences · Advanced</p>
-  <p class="sub">Fifteen questions across Lessons 1.1 to 1.6. This check is optional. Take it as often as you like; each answer comes with its explanation and the lesson and section to revisit.</p>
+  <p class="sub">Fifteen questions across Lessons 1.1 to 1.6. This quiz is optional. Take it as often as you like; each answer comes with its explanation and the lesson and section to revisit.</p>
  </header>
  <div class="bar"><i id="prog"></i></div>
  <div class="meta"><span id="pos"></span><span id="sc"></span></div>
  <div id="app"></div>
- <footer>Understanding check · <a href="https://www.vedanta.nz">www.vedanta.nz</a>. Privacy: when you are signed in, your name, email, answers and score are saved to your member record. Only you and the course instructors can see them. They are not shared or ranked.</footer>
+ <footer>Understanding quiz · <a href="https://www.vedanta.nz">www.vedanta.nz</a>. Privacy: when you are signed in, your name, email, answers and score are saved to your member record. Only you and the course instructors can see them. They are not shared or ranked.</footer>
 </div>
 <script>
 /* Question bank. Types: mc (options o, correct index a; options are shuffled on display), judge (statement q; a: 0 holds, 1 does not hold, 2 holds only in part), fill (accepted answers a[], show).
    e = explanation, c = idea to revisit, s = [lesson, section] reference (null = the module as a whole). Content from the key ideas and corrected misconceptions of Lessons 1.1 to 1.6. */
-var META={code:'ADV-M1',lesson:'M1',quizTitle:'Understanding check: Module 1, The Ground of Being',programme:'The Mind in the Light of Modern and Spiritual Sciences (Advanced)',cut:75};
+var META={code:'ADV-M1',lesson:'M1',quizTitle:'Understanding quiz: Module 1, The Ground of Being',programme:'The Mind in the Light of Modern and Spiritual Sciences (Advanced)',cut:75};
 var Q=[
 {t:'mc',q:'According to Lesson 1.1, how should thought be understood?',o:['As false, so it should be set aside','As valuable but partial, like a map that is not the land','As the deepest knower','As the same thing as direct experience'],a:1,
  e:'“This does not mean thought is false. It means thought is partial.” It is like a map: useful and sometimes indispensable, but not the land itself.',c:'Thought is valuable but partial, a map and not the land',s:['1.1','6']},
@@ -191,7 +191,7 @@ function result(){
   '<p>'+right+' of '+n+' questions right.</p>';
  var miss=[];Q.forEach(function(qq,k){if(!ans[k]||!ans[k].ok)miss.push(qq)});
  if(miss.length){h+='<div class="revisit"><h2>Ideas to revisit</h2><ul>';miss.forEach(function(qq){h+='<li>'+esc(qq.c)+' <i>('+ref(qq.s)+')</i></li>'});h+='</ul></div>'}
- else{h+='<div class="revisit"><h2>Nothing to revisit</h2><p>Every idea in this check was answered correctly.</p></div>'}
+ else{h+='<div class="revisit"><h2>Nothing to revisit</h2><p>Every idea in this quiz was answered correctly.</p></div>'}
  h+='<div class="review"><h2>Every question, with its answer</h2>';
  Q.forEach(function(qq,k){var ok=ans[k]&&ans[k].ok;var a=qq.t==='mc'?qq.o[qq.a]:qq.t==='judge'?JL[qq.a]:qq.show;
   h+='<div class="item '+(ok?'r':'w')+'">'+(ok?'Right. ':'Not quite. ')+'<b>Q'+(k+1)+'</b> '+esc(qq.q)+'<br>Answer: '+esc(a)+'<small>'+esc(qq.e)+' ('+ref(qq.s)+')</small></div>'});
@@ -205,7 +205,7 @@ window.addEventListener('message',function(ev){
  var d=ev.data;if(!d||!d.type)return;
  var m=document.getElementById('savedmsg');
  if(d.type==='saved'&&m){m.textContent='Your result has been saved to your member record.'}
- if(d.type==='saveError'&&m){m.textContent='Your result could not be saved this time. You can take the check again.'}
+ if(d.type==='saveError'&&m){m.textContent='Your result could not be saved this time. You can take the quiz again.'}
  if(d.type==='notMember'&&m){m.textContent='Sign in as a member to have your result saved.'}
  if(d.type==='resume'&&d.state&&d.state.i>0&&d.state.i<Q.length&&!started){offerResume(d.state)}
 });

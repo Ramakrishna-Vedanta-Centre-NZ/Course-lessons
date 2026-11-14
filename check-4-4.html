@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Understanding Check: Lesson 4.4</title>
+<title>Understanding Quiz: Lesson 4.4</title>
 <meta name="description" content="Eight questions on Lesson 4.4, Mind through the Lens of RWF II: The Inner Instrument, from The Mind in the Light of Modern and Spiritual Sciences.">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400..700;1,400..700&family=Noto+Sans:wght@400..700&display=swap">
 <style>
@@ -92,7 +92,7 @@ input.fill:focus{border-color:var(--gold)!important}
 <div class="wrap">
  <header>
   <div class="logos"><img src="vedantanz-logo.png" alt="Ramakrishna Vedanta NZ emblem" width="56" height="66"><img class="rit" src="ritam-wordmark.png" alt="Ritam" width="86" height="65"></div>
-  <p class="eyebrow">Understanding check · Lesson 4.4</p>
+  <p class="eyebrow">Understanding quiz · Lesson 4.4</p>
   <h1>Mind through the Lens of RWF II: The Inner Instrument</h1>
   <p class="course">The Mind in the Light of Modern and Spiritual Sciences · Advanced</p>
   <p class="sub">Eight questions on the lesson. Take them as often as you like; each answer comes with its explanation.</p>
@@ -100,12 +100,12 @@ input.fill:focus{border-color:var(--gold)!important}
  <div class="bar"><i id="prog"></i></div>
  <div class="meta"><span id="pos"></span><span id="sc"></span></div>
  <div id="app"></div>
- <footer>Understanding check · <a href="https://www.vedanta.nz">www.vedanta.nz</a>. Privacy: when you are signed in, your name, email, answers and score are saved to your member record. Only you and the course instructors can see them. They are not shared or ranked.</footer>
+ <footer>Understanding quiz · <a href="https://www.vedanta.nz">www.vedanta.nz</a>. Privacy: when you are signed in, your name, email, answers and score are saved to your member record. Only you and the course instructors can see them. They are not shared or ranked.</footer>
 </div>
 <script>
 /* Question bank. Types: mc (options o, correct index a; options are shuffled on display), judge (statement q; a: 0 holds, 1 does not hold, 2 holds only in part), fill (accepted answers a[], show).
    e = explanation, c = idea to revisit, s = lesson section reference (null = lesson as a whole). All content from the live text of Lesson 4.4, its key ideas and misconceptions. */
-var META={code:'ADV-4-4',lesson:'4.4',quizTitle:'Understanding check: Lesson 4.4, Mind through the Lens of RWF II: The Inner Instrument',programme:'The Mind in the Light of Modern and Spiritual Sciences (Advanced)',cut:75};
+var META={code:'ADV-4-4',lesson:'4.4',quizTitle:'Understanding quiz: Lesson 4.4, Mind through the Lens of RWF II: The Inner Instrument',programme:'The Mind in the Light of Modern and Spiritual Sciences (Advanced)',cut:75};
 var Q=[
 {t:'mc',q:'In the Kaṭha Upaniṣad’s chariot, as the lesson gives it, which assignment is correct?',o:['Buddhi is the charioteer, manas the reins, the senses the horses, the body the chariot','Manas is the charioteer, buddhi the reins, the senses the horses, the body the chariot','Buddhi is the charioteer, manas the horses, the senses the reins, the body the chariot','Ahaṁkāra is the charioteer, manas the reins, the senses the chariot, the body the horses'],a:0,
  e:'The body is the chariot, the senses are the horses, the reins are the manas, and the charioteer who holds the reins is the buddhi. The Self is the master of the chariot, the one for whom the journey is undertaken and who simply rides. In the architecturally correct state, governance flows top-down: Self, buddhi, manas, senses, body, world.',c:'The chariot: buddhi the charioteer, manas the reins, senses the horses, body the chariot',s:'3'},
@@ -177,7 +177,7 @@ function result(){
   '<p>'+right+' of '+n+' questions right.</p>';
  var miss=[];Q.forEach(function(qq,k){if(!ans[k]||!ans[k].ok)miss.push(qq)});
  if(miss.length){h+='<div class="revisit"><h2>Ideas to revisit</h2><ul>';miss.forEach(function(qq){h+='<li>'+esc(qq.c)+' <i>('+ref(qq.s)+')</i></li>'});h+='</ul></div>'}
- else{h+='<div class="revisit"><h2>Nothing to revisit</h2><p>Every idea in this check was answered correctly.</p></div>'}
+ else{h+='<div class="revisit"><h2>Nothing to revisit</h2><p>Every idea in this quiz was answered correctly.</p></div>'}
  h+='<div class="review"><h2>Every question, with its answer</h2>';
  Q.forEach(function(qq,k){var ok=ans[k]&&ans[k].ok;var a=qq.t==='mc'?qq.o[qq.a]:qq.t==='judge'?JL[qq.a]:qq.show;
   h+='<div class="item '+(ok?'r':'w')+'">'+(ok?'Right. ':'Not quite. ')+'<b>Q'+(k+1)+'</b> '+esc(qq.q)+'<br>Answer: '+esc(a)+'<small>'+esc(qq.e)+' ('+ref(qq.s)+')</small></div>'});
@@ -191,7 +191,7 @@ window.addEventListener('message',function(ev){
  var d=ev.data;if(!d||!d.type)return;
  var m=document.getElementById('savedmsg');
  if(d.type==='saved'&&m){m.textContent='Your result has been saved to your member record.'}
- if(d.type==='saveError'&&m){m.textContent='Your result could not be saved this time. You can take the check again.'}
+ if(d.type==='saveError'&&m){m.textContent='Your result could not be saved this time. You can take the quiz again.'}
  if(d.type==='notMember'&&m){m.textContent='Sign in as a member to have your result saved.'}
  if(d.type==='resume'&&d.state&&d.state.i>0&&d.state.i<Q.length&&!started){offerResume(d.state)}
 });

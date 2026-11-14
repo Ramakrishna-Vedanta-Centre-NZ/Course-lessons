@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Understanding Check: Lesson 5.1</title>
+<title>Understanding Quiz: Lesson 5.1</title>
 <meta name="description" content="Eight questions on Lesson 5.1, Human Flourishing and Beyond, from The Mind in the Light of Modern and Spiritual Sciences.">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400..700;1,400..700&family=Noto+Sans:wght@400..700&display=swap">
 <style>
@@ -92,7 +92,7 @@ input.fill:focus{border-color:var(--gold)!important}
 <div class="wrap">
  <header>
   <div class="logos"><img src="vedantanz-logo.png" alt="Ramakrishna Vedanta NZ emblem" width="56" height="66"><img class="rit" src="ritam-wordmark.png" alt="Ritam" width="86" height="65"></div>
-  <p class="eyebrow">Understanding check · Lesson 5.1</p>
+  <p class="eyebrow">Understanding quiz · Lesson 5.1</p>
   <h1>Human Flourishing and Beyond</h1>
   <p class="course">The Mind in the Light of Modern and Spiritual Sciences · Advanced</p>
   <p class="sub">Eight questions on the lesson. Take them as often as you like; each answer comes with its explanation.</p>
@@ -100,12 +100,12 @@ input.fill:focus{border-color:var(--gold)!important}
  <div class="bar"><i id="prog"></i></div>
  <div class="meta"><span id="pos"></span><span id="sc"></span></div>
  <div id="app"></div>
- <footer>Understanding check · <a href="https://www.vedanta.nz">www.vedanta.nz</a>. Privacy: when you are signed in, your name, email, answers and score are saved to your member record. Only you and the course instructors can see them. They are not shared or ranked.</footer>
+ <footer>Understanding quiz · <a href="https://www.vedanta.nz">www.vedanta.nz</a>. Privacy: when you are signed in, your name, email, answers and score are saved to your member record. Only you and the course instructors can see them. They are not shared or ranked.</footer>
 </div>
 <script>
 /* Question bank. Types: mc (options o, correct index a; options are shuffled on display), judge (statement q; a: 0 holds, 1 does not hold, 2 holds only in part), fill (accepted answers a[], show).
    e = explanation, c = idea to revisit, s = lesson section reference (null = lesson as a whole). All content from the text of Lesson 5.1, its key ideas and misconceptions. */
-var META={code:'ADV-5-1',lesson:'5.1',quizTitle:"Understanding check: Lesson 5.1, Human Flourishing and Beyond",programme:'The Mind in the Light of Modern and Spiritual Sciences (Advanced)',cut:75};
+var META={code:'ADV-5-1',lesson:'5.1',quizTitle:"Understanding quiz: Lesson 5.1, Human Flourishing and Beyond",programme:'The Mind in the Light of Modern and Spiritual Sciences (Advanced)',cut:75};
 var Q=[
 {"t": "mc", "q": "What does Lesson 5.1 name as the primary purpose of Module 5?", "o": ["Human flourishing: coherence, meaning and mental health, the natural condition of a system in Ritam", "Enlightenment as an exotic spiritual achievement, with wellbeing as a welcome side effect on the way", "Self-improvement, correcting what is wrong with the student before any deeper work can begin", "Spiritual freedom alone, with flourishing set aside as a lesser goal for the less committed"], "a": 0, "e": "The primary purpose of the module is human flourishing. Not enlightenment as an exotic spiritual achievement, and not a programme of self-improvement built on the suspicion that something is wrong with you, but a life of coherence, purpose and genuine wellbeing, the natural expression of a system in Ritam. The lesson calls it the baseline deliverable: not aspiration, but what a system in Ritam is built to produce.", "c": "The purpose of Module 5: human flourishing as a baseline, not an exotic achievement", "s": "2"},
 {"t": "judge", "q": "“The practices of Module 5 work only for those who hold the beliefs of the tradition the practices come from.”", "a": 1, "e": "The lesson calls the practices universal human technologies: their mechanism is intelligible, their effect is measurable, and their application is independent of the user’s belief system. The breath, slowed to five or six cycles per minute, regulates the autonomic nervous system whether the breather is Hindu, Christian, Buddhist, agnostic or atheist. The traditional and devotional forms add depth and meaning for those who resonate with them; the underlying mechanism is universal.", "c": "The practices are universal human technologies, independent of belief", "s": "2"},
@@ -169,7 +169,7 @@ function result(){
   '<p>'+right+' of '+n+' questions right.</p>';
  var miss=[];Q.forEach(function(qq,k){if(!ans[k]||!ans[k].ok)miss.push(qq)});
  if(miss.length){h+='<div class="revisit"><h2>Ideas to revisit</h2><ul>';miss.forEach(function(qq){h+='<li>'+esc(qq.c)+' <i>('+ref(qq.s)+')</i></li>'});h+='</ul></div>'}
- else{h+='<div class="revisit"><h2>Nothing to revisit</h2><p>Every idea in this check was answered correctly.</p></div>'}
+ else{h+='<div class="revisit"><h2>Nothing to revisit</h2><p>Every idea in this quiz was answered correctly.</p></div>'}
  h+='<div class="review"><h2>Every question, with its answer</h2>';
  Q.forEach(function(qq,k){var ok=ans[k]&&ans[k].ok;var a=qq.t==='mc'?qq.o[qq.a]:qq.t==='judge'?JL[qq.a]:qq.show;
   h+='<div class="item '+(ok?'r':'w')+'">'+(ok?'Right. ':'Not quite. ')+'<b>Q'+(k+1)+'</b> '+esc(qq.q)+'<br>Answer: '+esc(a)+'<small>'+esc(qq.e)+' ('+ref(qq.s)+')</small></div>'});
@@ -183,7 +183,7 @@ window.addEventListener('message',function(ev){
  var d=ev.data;if(!d||!d.type)return;
  var m=document.getElementById('savedmsg');
  if(d.type==='saved'&&m){m.textContent='Your result has been saved to your member record.'}
- if(d.type==='saveError'&&m){m.textContent='Your result could not be saved this time. You can take the check again.'}
+ if(d.type==='saveError'&&m){m.textContent='Your result could not be saved this time. You can take the quiz again.'}
  if(d.type==='notMember'&&m){m.textContent='Sign in as a member to have your result saved.'}
  if(d.type==='resume'&&d.state&&d.state.i>0&&d.state.i<Q.length&&!started){offerResume(d.state)}
 });

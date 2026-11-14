@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Understanding Check: Module 5</title>
+<title>Understanding Quiz: Module 5</title>
 <meta name="description" content="Fifteen optional questions across Lessons 5.1 to 5.8, Module 5, Transformation and Return, from The Mind in the Light of Modern and Spiritual Sciences.">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400..700;1,400..700&family=Noto+Sans:wght@400..700&display=swap">
 <style>
@@ -92,20 +92,20 @@ input.fill:focus{border-color:var(--gold)!important}
 <div class="wrap">
  <header>
   <div class="logos"><img src="vedantanz-logo.png" alt="Ramakrishna Vedanta NZ emblem" width="56" height="66"><img class="rit" src="ritam-wordmark.png" alt="Ritam" width="86" height="65"></div>
-  <p class="eyebrow">Understanding check · Module 5</p>
+  <p class="eyebrow">Understanding quiz · Module 5</p>
   <h1>Transformation and Return</h1>
   <p class="course">The Mind in the Light of Modern and Spiritual Sciences · Advanced</p>
-  <p class="sub">Fifteen questions across Lessons 5.1 to 5.8. This check is optional. Take it as often as you like; each answer comes with its explanation and the lesson and section to revisit.</p>
+  <p class="sub">Fifteen questions across Lessons 5.1 to 5.8. This quiz is optional. Take it as often as you like; each answer comes with its explanation and the lesson and section to revisit.</p>
  </header>
  <div class="bar"><i id="prog"></i></div>
  <div class="meta"><span id="pos"></span><span id="sc"></span></div>
  <div id="app"></div>
- <footer>Understanding check · <a href="https://www.vedanta.nz">www.vedanta.nz</a>. Privacy: when you are signed in, your name, email, answers and score are saved to your member record. Only you and the course instructors can see them. They are not shared or ranked.</footer>
+ <footer>Understanding quiz · <a href="https://www.vedanta.nz">www.vedanta.nz</a>. Privacy: when you are signed in, your name, email, answers and score are saved to your member record. Only you and the course instructors can see them. They are not shared or ranked.</footer>
 </div>
 <script>
 /* Question bank. Types: mc (options o, correct index a; options are shuffled on display), judge (statement q; a: 0 holds, 1 does not hold, 2 holds only in part), fill (accepted answers a[], show).
    e = explanation, c = idea to revisit, s = [lesson, section] reference (null = the module as a whole). Content from the key ideas and corrected misconceptions of Lessons 5.1 to 5.8, verified against the lesson texts. */
-var META={code:'ADV-M5',lesson:'M5',quizTitle:"Understanding check: Module 5, Transformation and Return",programme:'The Mind in the Light of Modern and Spiritual Sciences (Advanced)',cut:75};
+var META={code:'ADV-M5',lesson:'M5',quizTitle:"Understanding quiz: Module 5, Transformation and Return",programme:'The Mind in the Light of Modern and Spiritual Sciences (Advanced)',cut:75};
 var Q=[
 {"t": "mc", "q": "Lessons 5.1 and 5.7 both relate human flourishing, temporal Ritam, to spiritual freedom. Which statement matches what they say?", "o": ["Ritam first; freedom from there: temporal coherence is the stepping-stone, and the same practices serve both reaches", "Freedom is the real goal, and flourishing is a detour that the serious practitioner can leave behind as soon as possible", "Flourishing and freedom are rival aims, so the practitioner must decide which of the two the practices will serve", "Freedom must come first, and flourishing then follows of itself as a by-product of the higher recognition"], "a": 0, "e": "Lesson 5.1 says spiritual freedom is not available to a system locked in anṛta: “Ritam first; freedom from there.” Temporal coherence is the stepping-stone, the only stepping-stone, onto the higher path, and the same practices serve both reaches. Lesson 5.7 adds that temporal Ritam is real, primary and sufficient for human flourishing, and that it is not a detour from spectral recognition but the preparation of the ground.", "c": "Flourishing first, then freedom: the stepping-stone, not a rival", "s": ["5.1", "3"]},
 {"t": "judge", "q": "“Lesson 5.1 reads the four ingredients of Swami Vivekananda’s recipe (dry, hard reason; the sweetest syrup of love; intense work; the kitchen of Yoga) as the four classical Yogas, which are the four practice-families; so each practitioner may pick the ingredient that suits their taste and leave the others aside.”", "a": 2, "e": "The first half holds: the four ingredients are jñāna, bhakti, karma and rāja, and Lesson 5.1 says they are the four practice-families of Module 5. The second half does not: they are ingredients of one recipe. Lesson 5.6 says of the four Yogas that they are not “four alternatives among which one chooses. They are one whole,” and Lesson 5.7 that no single family is the path; only the four together activate the deeper movement.", "c": "One recipe, four ingredients: the families are one whole, not alternatives (see also Lesson 5.6, section 6)", "s": ["5.1", "2"]},
@@ -176,7 +176,7 @@ function result(){
   '<p>'+right+' of '+n+' questions right.</p>';
  var miss=[];Q.forEach(function(qq,k){if(!ans[k]||!ans[k].ok)miss.push(qq)});
  if(miss.length){h+='<div class="revisit"><h2>Ideas to revisit</h2><ul>';miss.forEach(function(qq){h+='<li>'+esc(qq.c)+' <i>('+ref(qq.s)+')</i></li>'});h+='</ul></div>'}
- else{h+='<div class="revisit"><h2>Nothing to revisit</h2><p>Every idea in this check was answered correctly.</p></div>'}
+ else{h+='<div class="revisit"><h2>Nothing to revisit</h2><p>Every idea in this quiz was answered correctly.</p></div>'}
  h+='<div class="review"><h2>Every question, with its answer</h2>';
  Q.forEach(function(qq,k){var ok=ans[k]&&ans[k].ok;var a=qq.t==='mc'?qq.o[qq.a]:qq.t==='judge'?JL[qq.a]:qq.show;
   h+='<div class="item '+(ok?'r':'w')+'">'+(ok?'Right. ':'Not quite. ')+'<b>Q'+(k+1)+'</b> '+esc(qq.q)+'<br>Answer: '+esc(a)+'<small>'+esc(qq.e)+' ('+ref(qq.s)+')</small></div>'});
@@ -190,7 +190,7 @@ window.addEventListener('message',function(ev){
  var d=ev.data;if(!d||!d.type)return;
  var m=document.getElementById('savedmsg');
  if(d.type==='saved'&&m){m.textContent='Your result has been saved to your member record.'}
- if(d.type==='saveError'&&m){m.textContent='Your result could not be saved this time. You can take the check again.'}
+ if(d.type==='saveError'&&m){m.textContent='Your result could not be saved this time. You can take the quiz again.'}
  if(d.type==='notMember'&&m){m.textContent='Sign in as a member to have your result saved.'}
  if(d.type==='resume'&&d.state&&d.state.i>0&&d.state.i<Q.length&&!started){offerResume(d.state)}
 });
