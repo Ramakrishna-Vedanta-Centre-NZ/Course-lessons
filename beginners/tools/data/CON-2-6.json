@@ -1,146 +1,146 @@
 {
  "code": "CON-2-6",
  "lesson": "2.6",
- "title": "Chitta: Memory, Saṁskāra and Pattern Continuity",
- "reflection": "Tend the field this week: let one old channel go unfed, and carve one clearer channel by repeating one small, kind practice.",
+ "title": "Chitta: The Riverbed Where Patterns Live",
+ "reflection": "When an old reaction floods in bigger than the moment deserves, name it: this is an old channel, not today’s water. Then repeat one tiny luminous practice daily, however briefly.",
  "questions": [
   {
    "t": "mc",
-   "kind": "U",
-   "q": "What is chitta, according to Conversation 2.6?",
+   "kind": "A",
+   "q": "James disproves a verdict at 4 p.m., yet it is back at 9 a.m., fully formed. What does Swamiji say this is a clue to?",
    "o": [
-    "The memory-field, the riverbed: the channel that decides where today’s water goes.",
-    "The radar of the mind: the worker that scans, compares and flags what is new.",
-    "The decider of the mind: the worker that settles what a thing is and what it means.",
-    "The I-maker of the mind: the worker that stamps each experience as mine."
+    "The pattern lives deeper than surface knowing: in chitta, the worker that stores and re-runs.",
+    "The pattern has not been properly disproved, so James needs a stronger argument against the verdict.",
+    "The pattern is a fault of memory, so James needs to practise forgetting the verdict at the end of a day.",
+    "The pattern is caused by the students, so it will stop when the students change what they do in class."
    ],
    "a": 0,
-   "e": "Present experience is the water flowing now; chitta is the channel it flows through. Every past experience carved that channel. The carved channels are saṁskāras, stored tendencies that shape what happens next.",
-   "c": "Chitta is the riverbed: the field of stored tendencies",
+   "e": "Swamiji says that is not a failure on their part. Kai argues perfectly that one bad seminar does not make him worthless and it changes nothing: the feeling does not care what he knows. Why knowing better rarely changes the pattern is the puzzle the lesson answers.",
+   "c": "The pattern lives deeper than knowing",
+   "s": "Opening"
+  },
+  {
+   "t": "mc",
+   "kind": "U",
+   "q": "In the image of the riverbed, what are the water, the bed, and the saṁskāras?",
+   "o": [
+    "Water is present experience, the bed is chitta, the memory of past water, channels are saṁskāras.",
+    "The water is chitta, the bed is present experience, and the channels are the thoughts that cross the surface.",
+    "The water is the Self, the bed is the body, and the channels are the senses that carry the water along.",
+    "The water is memory, the bed is the future, and the channels are the choices that a person makes in time."
+   ],
+   "a": 0,
+   "e": "Present experience runs along channels cut by past experience. A saṁskāra is more than a memory of what happened: it is a stored tendency that shapes what happens next.",
+   "c": "The riverbed image",
    "s": "Part 1"
+  },
+  {
+   "t": "mc",
+   "kind": "A",
+   "q": "A child is scolded for every small mistake. Forty years later, as an adult, she feels dread over a tiny error nobody noticed. What does Swamiji say this shows?",
+   "o": [
+    "A groove was cut, shame around imperfection: the events are long gone but the groove is still live.",
+    "A memory was kept, so that she can now recall each scolding in detail and is troubled by those events.",
+    "A habit was learned on purpose, so she can unlearn the dread whenever she decides that she will.",
+    "A fault was found in her character, so she must correct it by being firmer with herself in future."
+   ],
+   "a": 0,
+   "e": "Sarah says this is almost exactly her own story and the thing she most fears repeating with her children. It cuts both ways: the same mechanism stores skill, as in a musician at the piano, and calm, as in a meditator’s years of quiet. The question is never whether it grooves but what gets grooved.",
+   "c": "The scoldings end; the groove stays live",
+   "s": "Part 1"
+  },
+  {
+   "t": "mc",
+   "kind": "A",
+   "q": "Kai can prove a thought is wrong, but it keeps winning. How does Swamiji explain the gap?",
+   "o": [
+    "Knowing is a surface ripple and the saṁskāra is carved beneath: a ripple cannot re-carve a bed.",
+    "Knowing is weaker than feeling, so a person must learn to feel less strongly in order to be changed.",
+    "Knowing is correct but the argument is not, so Kai needs a better argument that fits his own case.",
+    "Knowing is of no value, so a person should drop reasoning and rely on practice and habit alone."
+   ],
+   "a": 0,
+   "e": "The argument wins on points and loses in fact. James puts it: insight is real, it is just operating at the wrong depth. Swamiji says insight is necessary but works one layer up from where the pattern lives.",
+   "c": "A ripple cannot re-carve a riverbed",
+   "s": "Part 2"
   },
   {
    "t": "judge",
    "kind": "J",
-   "q": "“Chitta grooves only the painful experiences, and leaves the good ones to fade.”",
-   "a": 1,
-   "e": "Chitta grooves the good and the painful alike. A childhood of scolding cuts a groove of shame, and years of practice cut grooves of effortless skill or calm. The question is never whether it grooves but what gets grooved.",
-   "c": "Chitta grooves the good and the painful alike",
-   "s": "Part 1"
-  },
-  {
-   "t": "mc",
-   "kind": "A",
-   "q": "A man can disprove a worrying thought and still have it return unchanged. Why, in Conversation 2.6?",
-   "o": [
-    "His knowing is a ripple on the surface; the saṁskāra is carved into the bed beneath.",
-    "His arguments are weak, so that a better argument would put the thought to rest.",
-    "His memory is poor, so that he forgets the proof each time the thought returns.",
-    "His thought is true, so that it comes back because no proof could ever remove it."
-   ],
+   "q": "“Left alone, the default direction of a groove is reinforcement: acting on it deepens it, so the patterns you run most become the ones you run most easily.”",
    "a": 0,
-   "e": "A ripple cannot re-carve a channel. Insight is real, but it works one layer above where the pattern lives.",
-   "c": "Insight works one layer above where the pattern lives",
-   "s": "Part 2"
-  },
-  {
-   "t": "mc",
-   "kind": "U",
-   "q": "What is the reinforcement loop, in Conversation 2.6?",
-   "o": [
-    "Experience, impression, reactivation, action, a deeper groove, and a faster firing next time.",
-    "Memory, attention, judgement and action, which together make up one thoughtful choice.",
-    "Sleep, waking, work and rest, which together make up the rhythm of an ordinary day.",
-    "Thought, word and deed, which together make up what a person is seen to be by others."
-   ],
-   "a": 0,
-   "e": "Left alone, the default is always reinforcement. But the same law runs in reverse: what you stop feeding silts up, and what you deliberately practise carves a new channel. This is slow, since you cannot carve a canyon in a day.",
-   "c": "Left alone, the default is reinforcement",
+   "e": "An experience leaves an impression; later something stirs it; it rises as a feeling you act on; the acting deepens the groove. Sarah sees that each leap to I’ve failed him deepens the channel. The same law is the way out: what you do not feed slowly silts up, and what you deliberately practise carves a new channel alongside.",
+   "c": "Activation deepens the groove",
    "s": "Part 2"
   },
   {
    "t": "mc",
    "kind": "A",
-   "q": "A woman wants to change an old pattern of fear. What does Conversation 2.6 say about how change works?",
+   "q": "Kai says he is not broken for being unable to think his way out. What does Swamiji add about the therapies that help with stuck patterns?",
    "o": [
-    "Stop feeding the old channel and deliberately practise a new one: slow, since no canyon is carved in a day.",
-    "Think about the fear until it is understood, since understanding is what clears the channel.",
-    "Wait for the fear to fade, since a groove that is left alone always grows shallower.",
-    "Fight the fear each time, since a strong enough effort will erase the groove at once."
+    "They stop arguing and work on the stored impression, through body, repetition and safe re-experiencing.",
+    "They argue with the pattern more cleverly, so that the best thinking wins the exchange in the end.",
+    "They remove the stored impression altogether, so that the memory is deleted along with the pain.",
+    "They avoid the pattern altogether, so that nothing is done about the stored impression at the root."
    ],
    "a": 0,
-   "e": "Left alone, the default is reinforcement. What you deliberately practise carves a new channel. This is the basis of all real change.",
-   "c": "Silt up the old channel; carve a new one slowly",
+   "e": "They rework the riverbed instead of shouting at the water. Swamiji says that sentence, you are not broken, is worth the whole lesson: Kai carries grooves cut under real conditions, doing exactly what grooves do.",
+   "c": "Rework the riverbed, not the water",
    "s": "Part 2"
   },
   {
    "t": "mc",
    "kind": "U",
-   "q": "What does the hologram show in Conversation 2.6?",
+   "q": "What does Pribram’s hologram picture say about memory, as the lesson uses it?",
    "o": [
-    "Each piece still holds the whole image, so each impression carries the quality of the whole field.",
-    "Each piece is a separate image, so that impressions do not affect one another at all.",
-    "Each piece is dimmer than the whole, so that small impressions can be ignored.",
-    "Each piece is lost when cut, so that memory fades as soon as it is divided up."
+    "Memory is spread through the brain, and as in a hologram the whole is in every fragment, dimmer.",
+    "Memory is filed in one place, and as in a drawer a missing page leaves a permanent gap in the whole.",
+    "Memory is a recording, and as on a tape each moment is kept exactly as it first happened and for good.",
+    "Memory is a copy of the world, and as in a mirror it can show only what is in front of it at the time."
    ],
    "a": 0,
-   "e": "Pribram’s holographic memory, the tree in the seed and the Gītā’s whole at every point converge here. So one deep wound can tint an entire personality, and one luminous impression of peace can begin to transform the whole field.",
-   "c": "The whole is in every part of the field",
+   "e": "That is why one deep impression can tint everything: a single trauma can reorganise a person’s whole way of being, not by magic but because in a holographic field the part carries the whole. Swamiji links it to the seed and tree of the Pratyabhijñā Hṛdayam and to the Gītā: three roads pointing at one strange truth.",
+   "c": "The part carries the whole",
+   "s": "Part 3"
+  },
+  {
+   "t": "mc",
+   "kind": "A",
+   "q": "Sarah asks whether one luminous impression can work the other way. What does Swamiji answer?",
+   "o": [
+    "Fully yes: one genuine moment of peace or clarity does not stay in its corner but seeds the field.",
+    "No: only dark impressions spread, and a luminous one stays small and is lost among the darker ones.",
+    "Yes, but only after the dark impressions have all been removed from the field by a long practice.",
+    "Yes, but only when the luminous impression is a very large one, such as a great vision or a rare insight."
+   ],
+   "a": 0,
+   "e": "This is why the traditions are so particular about what you expose yourself to, practise and repeat: not moralising, engineering. Every impression becomes part of the living pattern of the whole field.",
+   "c": "One luminous saṁskāra seeds the whole",
    "s": "Part 3"
   },
   {
    "t": "judge",
    "kind": "J",
-   "q": "“Clearing the field, chitta-śuddhi, means erasing memory so that nothing from the past remains.”",
+   "q": "“Chitta-śuddhi, the purifying of the mind-field, means erasing your memory so that wounds are deleted.”",
    "a": 1,
-   "e": "Erasing memory would wipe out skill and love too. Chitta-śuddhi is re-landscaping: letting fear-cut channels silt up while carving clearer ones, through steady practice.",
-   "c": "Clearing the field is re-landscaping, not erasing",
+   "e": "Erasing memory would wipe out skills and love along with wounds. It is re-landscaping the riverbed: letting reactive, fear-cut channels silt up while carving new, clearer ones, through a repeated word or breath, meditation, good company, service and time with what is true and beautiful.",
+   "c": "Re-landscaping, not erasing",
    "s": "Part 3"
   },
   {
    "t": "mc",
    "kind": "A",
-   "q": "In practice a man finds old patterns flooding up, and fears that he is failing. What does Conversation 2.6 say?",
+   "q": "When Kai’s “I am worthless” floods in after a stumble, what does the practical experiment ask of him?",
    "o": [
-    "It is the stored material surfacing to be reworked: the patience is the path.",
-    "It is a sign of failure, so that he should stop the practice until it settles down.",
-    "It is a sign of illness, so that he should avoid practice for the rest of his life.",
-    "It is a sign that the practice is wrong, so that he should try a different one."
+    "Name it, not argue: “old groove, not today’s water,” then carve: thirty seconds of breath daily.",
+    "Argue it down, so that the thought has no ground left, and then give his attention to something else.",
+    "Wait until it passes, so that no new groove is cut, and then do nothing more about it until next time.",
+    "Push it away, so that it cannot deepen, and think of something cheerful until it has gone from sight."
    ],
    "a": 0,
-   "e": "When old patterns flood up in practice, that is not failure but the stored material surfacing to be reworked. The patience is the path.",
-   "c": "Old patterns surfacing is material to be reworked",
-   "s": "Part 3"
-  },
-  {
-   "t": "mc",
-   "kind": "A",
-   "q": "A woman blames herself for her persistent anxiety. How does Conversation 2.6 reframe it?",
-   "o": [
-    "Retained patterns doing what patterns do, not a weakness: work at the level of the impression.",
-    "A weakness of character, which a stronger will could overcome if she tried a little harder.",
-    "A punishment for the past, which she must accept and carry as best she is able.",
-    "A mistake of thinking, which she can correct by simply deciding to think another way."
-   ],
-   "a": 0,
-   "e": "Modern trauma-aware therapies, such as somatic work, EMDR, Internal Family Systems and trauma-informed mindfulness, converge with the ancient view: work at the level of the stored impression and not just the surface thought.",
-   "c": "Compassion, not blame: patterns doing what patterns do",
-   "s": "Part 3"
-  },
-  {
-   "t": "mc",
-   "kind": "A",
-   "q": "A teacher wants to tend her field this week. Which step fits Conversation 2.6?",
-   "o": [
-    "Let one old channel go unfed, and carve a clearer one with a repeated word or breath.",
-    "Try to forget the whole of the past, so that no old channel is left to run in her mind.",
-    "Think over every old wound in turn, so that each is understood before she goes on.",
-    "Wait for a good mood to carve the new channel, since force has no part in change."
-   ],
-   "a": 0,
-   "e": "Steady practice, a repeated word or breath, meditation, good company, service, and time with the true and beautiful, carves clearer channels while fear-cut ones silt up.",
-   "c": "Silt up one channel; carve one clearer channel",
-   "s": "Part 3"
+   "e": "Kai is not going to win the argument; he is going to re-landscape, one repetition at a time. Sarah is to name her shame-groove, my riverbed and not a fact about my son, and give each child one warm unhurried moment a day. James is to begin one lesson with thirty seconds of calm.",
+   "c": "Name the groove, carve a new one",
+   "s": "Practical situation"
   }
  ]
 }
