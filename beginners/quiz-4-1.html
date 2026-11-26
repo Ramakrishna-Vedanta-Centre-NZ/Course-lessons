@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Quiz: Conversation 4.1, From Source to Spectrum to Ritam</title>
+<meta name="description" content="Ten questions on Conversation 4.1, From Source to Spectrum to Ritam, from The Mind: Conversations (Beginners).">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400..700;1,400..700&family=Noto+Sans:wght@400..700&display=swap">
+<style>
+:root{
+ --bg:#FBF5EA; --surface:#FFFDF8; --ink:#1E1E1E; --muted:#5A5A5A; --line:#E6DAC3; --tint:#F3EAD3;
+ --navy:#12285A; --gold:#C9A24A; --goldt:#6B4E0E; --qink:#13295B;
+ --res:#12285A; --ok:#2F5A2E; --okbg:#E3EDDF; --no:#C2557A; --nobg:#F6E3EA;
+ --display:"Noto Serif",Georgia,serif; --body:"Noto Sans",system-ui,-apple-system,"Segoe UI",sans-serif; --mono:"Noto Sans",system-ui,sans-serif;
+}
+@media (prefers-color-scheme: dark){
+ :root:not([data-theme="light"]){
+  --bg:#0B1A3D; --surface:#12285A; --ink:#FBF5EA; --muted:#C9C3B3; --line:#2B4686; --tint:#1D3770;
+  --goldt:#E6C36A; --qink:#FBF5EA; --res:#E6C36A; --ok:#8FD79A; --okbg:#1E3A2A; --no:#F08FB0; --nobg:#4A2236; color-scheme:dark;
+ }
+}
+:root[data-theme="dark"]{
+ --bg:#0B1A3D; --surface:#12285A; --ink:#FBF5EA; --muted:#C9C3B3; --line:#2B4686; --tint:#1D3770;
+ --goldt:#E6C36A; --qink:#FBF5EA; --res:#E6C36A; --ok:#8FD79A; --okbg:#1E3A2A; --no:#F08FB0; --nobg:#4A2236; color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;
+ padding:18px max(14px,env(safe-area-inset-right,0px)) 30px max(14px,env(safe-area-inset-left,0px))}
+.wrap{max-width:720px;margin:0 auto;display:flex;flex-direction:column;gap:16px}
+h1{font-family:var(--display);font-weight:500;font-size:clamp(24px,5vw,32px);line-height:1.15;margin:0}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.sub{color:var(--muted);margin:0}
+.bar{height:6px;background:var(--line);border-radius:3px;overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--res);transition:width .25s}
+.meta{display:flex;justify-content:space-between;font-size:13px;color:var(--muted)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:20px 18px;display:flex;flex-direction:column;gap:14px}
+.qn{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:0}
+.q{font-family:var(--display);font-size:clamp(19px,3.4vw,22px);line-height:1.35;margin:0}
+.opts{display:flex;flex-direction:column;gap:10px}
+.opt{font:inherit;text-align:left;color:var(--ink);background:var(--surface);border:2px solid var(--line);border-radius:10px;padding:12px 14px;cursor:pointer;width:100%}
+.opt:hover:not(:disabled){border-color:var(--res)}
+.opt.right{border-color:var(--ok);background:var(--okbg)}
+.opt.wrong{border-color:var(--no);background:var(--nobg)}
+.opt:disabled{cursor:default}
+input.fill{font:inherit;width:100%;padding:12px 14px;border:2px solid var(--line);border-radius:10px;background:var(--surface);color:var(--ink)}
+input.fill:focus{outline:none;border-color:var(--res)}
+.btn{font:inherit;font-weight:600;font-size:15px;color:var(--surface);background:var(--ink);border:0;border-radius:8px;padding:11px 20px;cursor:pointer;text-decoration:none;display:inline-block}
+.btn.alt{background:var(--surface);color:var(--ink);border:1px solid var(--ink)}
+button:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(--res);outline-offset:2px}
+.fb{display:none;padding:12px 14px;border-radius:10px;font-size:15.5px;line-height:1.5}
+.fb.ok{display:block;background:var(--okbg);border-left:5px solid var(--ok)}
+.fb.no{display:block;background:var(--nobg);border-left:5px solid var(--no)}
+.fb b{display:block;margin-bottom:2px}
+.nav{display:flex;justify-content:flex-end}
+.res{text-align:center}
+.score{font-family:var(--display);margin:4px 0}
+.score .big{font-size:60px;line-height:1}
+.score .of{font-size:26px;color:var(--muted)}
+.band{font-family:var(--display);font-size:22px;margin:0}
+.band.good{color:var(--ok)} .band.rev{color:var(--res)}
+.res p{margin:0}
+.revisit{text-align:left;background:var(--tint);border-radius:10px;padding:12px 14px}
+.revisit h2,.review h2{font-family:var(--display);font-size:18px;margin:0 0 6px}
+.revisit ul{margin:0;padding-left:20px}
+.review{text-align:left;display:flex;flex-direction:column;gap:8px}
+.review .item{padding:10px 12px;border-radius:8px;font-size:15px;line-height:1.45}
+.review .r{background:var(--okbg)} .review .w{background:var(--nobg)}
+.review .item small{display:block;color:var(--muted);margin-top:4px}
+.acts{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+.saved{font-size:14px;color:var(--muted)}
+footer{text-align:center;font-size:13px;color:var(--muted)}
+footer a{color:var(--res)}
+.wrap header{background:#12285A;color:#FBF5EA;text-align:center;padding:18px 16px 20px;border-radius:14px}
+.wrap header img{width:56px;height:66px;object-fit:contain;display:block}
+.wrap header .logos{display:flex;align-items:center;justify-content:center;gap:18px}
+.wrap header img.rit{width:86px;height:65px}
+.wrap header .eyebrow{color:#E6C36A;font-weight:700;letter-spacing:3px;margin:8px 0 0}
+.wrap header h1{color:#FBF5EA;font-weight:700;margin:6px 0 4px}
+.wrap header .course{font-size:14px;color:#E6C36A;margin:0 0 8px;font-weight:600}
+.wrap header .sub{color:#F1ECDF;font-size:15px}
+.bar i{background:var(--gold)!important}
+.opt:hover:not(:disabled){border-color:var(--gold)!important}
+input.fill:focus{border-color:var(--gold)!important}
+.q{color:var(--qink)}
+.qn{color:var(--goldt);font-weight:700}
+.btn{background:var(--navy)!important;color:#FBF5EA!important}
+.btn.alt{background:transparent!important;color:var(--ink)!important;border:1px solid var(--navy)!important}
+.card{box-shadow:0 2px 8px rgba(19,41,91,.08)}
+.reflect{text-align:left;background:var(--tint);border-radius:10px;padding:12px 14px}
+.reflect h2{font-family:var(--display);font-size:18px;margin:0 0 6px}.reflect p{margin:0 0 6px}.note{font-size:14px;color:var(--muted);margin:0}
+</style>
+</head>
+<body>
+<div class="wrap">
+ <header>
+  <div class="logos"><img src="../vedantanz-logo.png" alt="Ramakrishna Vedanta NZ emblem" width="56" height="66"><img class="rit" src="../ritam-wordmark.png" alt="Ritam" width="86" height="65"></div>
+  <p class="eyebrow">Quiz · Conversation 4.1</p>
+  <h1>From Source to Spectrum to Ritam</h1>
+  <p class="course">The Mind: Conversations (Beginners)</p>
+  <p class="sub">Ten questions on the ideas in the lesson. Take them as often as you like; each answer comes with its explanation.</p>
+ </header>
+ <div class="bar"><i id="prog"></i></div>
+ <div class="meta"><span id="pos"></span><span id="sc"></span></div>
+ <div id="app"></div>
+ <footer>Quiz · <a href="https://www.vedanta.nz">www.vedanta.nz</a>. Privacy: when you are signed in, your name, email, answers and score are saved to your member record. Only you and the course instructors can see them. They are not shared or ranked.</footer>
+</div>
+<script>
+/* Types: mc (options o, correct index a; shuffled on display), judge (statement q; a: 0 True, 1 False, 2 True only in part).
+   e = explanation, c = idea to revisit, s = lesson section. Generated by tools/con_quiz/build_con.py from tools/con_quiz/data/CON-4-1.json. */
+var META={"code": "CON-4-1", "lesson": "4.1", "quizTitle": "Quiz: Conversation 4.1, From Source to Spectrum to Ritam", "programme": "The Mind: Conversations (Beginners)", "cut": 70};
+var REFLECT="Notice one moment at home or at work with good rhythm, and one that has lost it. How do the two feel different, before you try to fix either?";
+var Q=[{"t": "mc", "q": "How does Conversation 4.1 describe what a person is?", "o": ["A single fixed point, which is the thinking self behind all the thoughts.", "A smooth spectrum from source awareness to specific manifest things.", "A body with a mind attached, and awareness as a late and rare product of the two.", "Two separate things, a changing world outside and a changeless watcher inside."], "a": 1, "e": "What you are runs along a band: at one end awareness itself, the source pole called zero, and at the other the specific manifest things, a thought, a sensation, a word. It is a smooth gradient and not a fence, and the same pattern repeats at every scale. The awareness at the zero pole is the most truly you.", "c": "A person is a spectrum from source awareness to manifest things", "s": "Part 1"}, {"t": "mc", "q": "A student sees white light split by a prism and says the prism has painted the colours on. How does Conversation 4.1 reply?", "o": ["The rainbow is a separate thing that the prism adds to the white light.", "The white light is a fault, which the prism corrects by sorting the colours.", "The colours were in the white light: source and world are one reality seen two ways.", "The colours replace the white light, which is lost when the rainbow appears."], "a": 2, "e": "The prism reveals and does not paint: the colours were in the white light, and the white light is the rainbow gathered up. So the undivided source, Being, and the manifest world, Becoming, are not two things but one reality seen two ways.", "c": "Source and world are one reality seen two ways, like light and rainbow", "s": "Part 2"}, {"t": "mc", "q": "A man is exhausted by constant pushing outward and cannot rest, while his brother has withdrawn and cannot get going. Which reading fits Conversation 4.1?", "o": ["The first has too little will and the second too much, so they should swap their habits.", "Each has lost one half of the breathing rhythm: only outward burns out, only inward never lives.", "Both are in the wrong place on the spectrum, and each should simply move to the middle.", "Both are suffering for the same reason, which is too little rest, so more sleep would mend them."], "a": 1, "e": "Health is the breathing rhythm of outward unfolding and inward return, as in heartbeat, breath, sleep and waking. Neither alone is healthy. The key is not which point you are at, but whether the movement between points still works.", "c": "Health is the rhythm of outward and inward; losing either half hurts", "s": "Part 3"}, {"t": "judge", "q": "“Suffering is mainly a matter of which point on the spectrum a person is at, so the aim is always to get to the right point.”", "a": 1, "e": "Swamiji’s diagnostic key for the module is that suffering is rarely about which point you are at, but about whether the movement between points still works. Much of what a doctor sees, burnout, insomnia and rumination, is a failure of the return.", "c": "The question is whether the movement between points works, not the point", "s": "Part 3"}, {"t": "mc", "q": "What does Ritam mean, according to Conversation 4.1?", "o": ["Right-fittedness: things fitting into proper relationship.", "Rigid order: everything fixed in place, so that nothing can ever change.", "Cosmic punishment: a law that returns to each person what they have done.", "Ritual: the correct performance of acts handed down from the past."], "a": 0, "e": "Ritam comes from a root meaning to flow or move properly, and is best translated as right-fittedness. The same ancient root gives English harmony and art. It works as physical Ritam, timing Ritam and relationship Ritam.", "c": "Ritam is right-fittedness: things fitting into proper relationship", "s": "Part 3"}, {"t": "mc", "q": "A woman watches her family at dinner: one evening they listen to each other, another evening they all talk over one another. What is she training her eye to see, in the language of Conversation 4.1?", "o": ["Which child is at fault, so that the right person can be spoken to at once.", "How far the family is from a perfect home, and what it will take to reach one.", "The difference in how Ritam feels when it is working and when it has been lost.", "How loud each person is, since volume is the surest sign of a loss of rhythm."], "a": 2, "e": "Sarah’s exercise is to find one moment with good Ritam and one that has lost it, and to notice how the two feel without trying to fix either. Noticing first, rather than skipping to repair, trains the eye.", "c": "Notice how working and lost Ritam feel, before repairing anything", "s": "Part 3"}, {"t": "mc", "q": "A teacher watches a class and feels the moment it needs a pause and the moment it is ready to engage again. Which idea from Conversation 4.1 is she using?", "o": ["Health in a room is rhythm and not relentlessness: attention swings between focus and rest.", "Health in a room is silence, and a class that makes any noise has lost its rhythm.", "Health in a room is speed, and the faster a class works the better it is doing.", "Health in a room is obedience, and a class that follows the plan is in good rhythm."], "a": 0, "e": "James’s practice is to feel the breathing of the room: the natural swing between focus and rest. Health in a classroom is rhythm, not relentlessness, just as in a heartbeat or a breath.", "c": "Health in a room is rhythm: the swing between focus and rest", "s": "Part 3"}, {"t": "judge", "q": "“The same source-to-manifest pattern repeats at every scale, from a galaxy to a heartbeat to a thought.”", "a": 0, "e": "Swamiji says the pattern is self-similar: the same source to manifest pattern repeats in a galaxy, a heartbeat, a breath and a thought. Science calls this self-similarity or scale invariance.", "c": "The same pattern repeats at every scale", "s": "Part 1"}, {"t": "mc", "q": "A doctor wants to read a patient’s symptom as more than a broken part. Which question does Conversation 4.1 suggest she add?", "o": ["Where has the rhythm broken: can this person go out but not return, or the reverse?", "Which organ is weakest, so that treatment can be aimed at the right place?", "How soon will the symptom pass, so that the patient can be told what to expect?", "What has the patient done to bring this on, so that it can be avoided next time?"], "a": 0, "e": "Dr Watson’s practice is to add one lens, outward and inward, fittedness and its loss: can this person go outward but not return, or have they withdrawn and lost the way back out? A symptom is read as a broken rhythm and not only a broken part.", "c": "Ask where the rhythm of going out and returning has broken", "s": "Part 3"}, {"t": "judge", "q": "“Anṛta, the loss of Ritam, is the structural description of what medicine calls dysregulation and the contemplative traditions call suffering, so the framework both diagnoses and heals.”", "a": 2, "e": "The first half is right: anṛta is mis-fittedness, which matches what medicine calls dysregulation, psychology fragmentation and the contemplative traditions suffering. But the lesson only opens the point here and develops drift fully later, in Lesson 4.7. The framework is meant to be diagnostic and therapeutic from the start.", "c": "Anṛta names the loss of fit; the lesson opens it and Lesson 4.7 develops it", "s": "Part 3"}];
+(function(){
+ var q=new URLSearchParams(location.search);
+ if(q.get('theme')==='light')document.documentElement.setAttribute('data-theme','light');
+ if(q.get('theme')==='dark')document.documentElement.setAttribute('data-theme','dark');
+})();
+var i=0,right=0,ans=[],started=false;
+var app=document.getElementById('app');
+var JL=['True','False','True only in part'];
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;')}
+function hdr(){
+ document.getElementById('pos').textContent=i<Q.length?'Question '+(i+1)+' of '+Q.length:'Finished';
+ document.getElementById('sc').textContent=i<Q.length?right+' right so far':'';
+ document.getElementById('prog').style.width=(100*Math.min(i,Q.length)/Q.length)+'%';
+}
+function send(m){try{window.parent.postMessage(m,'*')}catch(e){}}
+function ref(s){return s?'Conversation '+META.lesson+', '+s:'Conversation '+META.lesson}
+function show(){
+ hdr();
+ if(i>=Q.length){return result()}
+ var qq=Q[i];
+ var h='<div class="card"><p class="qn">Question '+(i+1)+'</p><p class="q">'+esc(qq.q)+'</p><div class="opts">';
+ if(qq.t==='mc'){var ord=qq.o.map(function(o,k){return k});for(var r=ord.length-1;r>0;r--){var s2=Math.floor(Math.random()*(r+1)),t2=ord[r];ord[r]=ord[s2];ord[s2]=t2}ord.forEach(function(k,pos){h+='<button class="opt" data-k="'+k+'">'+String.fromCharCode(65+pos)+'. '+esc(qq.o[k])+'</button>'})}
+ else{JL.forEach(function(o,k){h+='<button class="opt" data-k="'+k+'">'+o+'</button>'})}
+ h+='</div><div class="fb" id="fb" role="status"></div><div class="nav"><button class="btn" id="nx" style="display:none">'+(i===Q.length-1?'See my result':'Next question')+'</button></div></div>';
+ app.innerHTML=h;
+ app.querySelectorAll('.opt').forEach(function(b){b.onclick=function(){mark(+b.dataset.k===qq.a,b)}});
+ document.getElementById('nx').onclick=function(){i++;show();window.scrollTo(0,0)};
+}
+function mark(ok,btn){
+ started=true;
+ var qq=Q[i];if(ok)right++;ans.push({q:i+1,ok:ok,given:btn?btn.textContent:''});
+ app.querySelectorAll('.opt').forEach(function(b){b.disabled=true;if(+b.dataset.k===qq.a)b.classList.add('right')});
+ if(!ok&&btn)btn.classList.add('wrong');
+ var ra=qq.t==='mc'?qq.o[qq.a]:JL[qq.a];
+ var fb=document.getElementById('fb');fb.className='fb '+(ok?'ok':'no');
+ fb.innerHTML='<b>'+(ok?'Right.':'Not quite. The answer is: '+esc(ra))+'</b>'+esc(qq.e)+' <i>('+ref(qq.s)+'.)</i>';
+ document.getElementById('nx').style.display='inline-block';hdr();
+ send({type:'progress',code:META.code,state:{i:i+1,right:right,ans:ans}});
+}
+function result(){
+ var n=Q.length,p=Math.round(100*right/n),good=p>=META.cut;
+ var h='<div class="card res"><p class="qn">Your result</p><p class="score"><span class="big">'+p+'%</span></p>'+
+  '<p class="band '+(good?'good':'rev')+'">'+(good?'Well grasped':'Revisit these ideas')+'</p>'+
+  '<p>'+right+' of '+n+' questions right.</p><p class="note">This quiz is about the ideas in the conversation, not about you.</p>';
+ var miss=[];Q.forEach(function(qq,k){if(!ans[k]||!ans[k].ok)miss.push(qq)});
+ if(miss.length){h+='<div class="revisit"><h2>Ideas to revisit</h2><ul>';miss.forEach(function(qq){h+='<li>'+esc(qq.c)+' <i>('+ref(qq.s)+')</i></li>'});h+='</ul></div>'}
+ else{h+='<div class="revisit"><h2>Nothing to revisit</h2><p>Every idea in this quiz was answered correctly.</p></div>'}
+ if(REFLECT){h+='<div class="reflect"><h2>A question to take home</h2><p>'+esc(REFLECT)+'</p><p class="note">Not scored. There is no right answer. Your own home is the best place to find out what works.</p></div>'}
+ h+='<div class="review"><h2>Every question, with its answer</h2>';
+ Q.forEach(function(qq,k){var ok=ans[k]&&ans[k].ok;var a=qq.t==='mc'?qq.o[qq.a]:JL[qq.a];
+  h+='<div class="item '+(ok?'r':'w')+'">'+(ok?'Right. ':'Not quite. ')+'<b>Q'+(k+1)+'</b> '+esc(qq.q)+'<br>Answer: '+esc(a)+'<small>'+esc(qq.e)+' ('+ref(qq.s)+')</small></div>'});
+ h+='</div><p class="saved" id="savedmsg"></p><div class="acts"><button class="btn" id="again">Take it again</button></div></div>';
+ app.innerHTML=h;
+ document.getElementById('again').onclick=function(){i=0;right=0;ans=[];show();window.scrollTo(0,0)};
+ send({type:'quizResult',code:META.code,title:META.quizTitle,programme:META.programme,score:right,maxScore:n,percent:p,questionsCorrect:right,questionCount:n,answers:ans});
+ send({type:'progress',code:META.code,state:null});
+}
+window.addEventListener('message',function(ev){
+ var d=ev.data;if(!d||!d.type)return;
+ var m=document.getElementById('savedmsg');
+ if(d.type==='saved'&&m){m.textContent='Your result has been saved to your member record.'}
+ if(d.type==='saveError'&&m){m.textContent='Your result could not be saved this time. You can take the quiz again.'}
+ if(d.type==='notMember'&&m){m.textContent='Sign in as a member to have your result saved.'}
+ if(d.type==='resume'&&d.state&&d.state.i>0&&d.state.i<Q.length&&!started){offerResume(d.state)}
+});
+function offerResume(st){
+ var h='<div class="card"><p class="qn">Welcome back</p><p class="q">You have answered '+st.i+' of '+Q.length+' questions so far.</p><p>Would you like to continue where you left off, or start again from the beginning?</p><div class="acts"><button class="btn" id="cont">Continue from question '+(st.i+1)+'</button><button class="btn alt" id="rest">Start again</button></div></div>';
+ app.innerHTML=h;
+ document.getElementById('cont').onclick=function(){i=st.i;right=st.right||0;ans=st.ans||[];started=true;show()};
+ document.getElementById('rest').onclick=function(){i=0;right=0;ans=[];started=true;show()};
+}
+show();
+send({type:'ready'});
+</script>
+</body>
+</html>

@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Quiz: Conversation 4.4, The Mind through the Lens of the Framework, Part Two: Who Is Driving?</title>
+<meta name="description" content="Ten questions on Conversation 4.4, The Mind through the Lens of the Framework, Part Two: Who Is Driving?, from The Mind: Conversations (Beginners).">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400..700;1,400..700&family=Noto+Sans:wght@400..700&display=swap">
+<style>
+:root{
+ --bg:#FBF5EA; --surface:#FFFDF8; --ink:#1E1E1E; --muted:#5A5A5A; --line:#E6DAC3; --tint:#F3EAD3;
+ --navy:#12285A; --gold:#C9A24A; --goldt:#6B4E0E; --qink:#13295B;
+ --res:#12285A; --ok:#2F5A2E; --okbg:#E3EDDF; --no:#C2557A; --nobg:#F6E3EA;
+ --display:"Noto Serif",Georgia,serif; --body:"Noto Sans",system-ui,-apple-system,"Segoe UI",sans-serif; --mono:"Noto Sans",system-ui,sans-serif;
+}
+@media (prefers-color-scheme: dark){
+ :root:not([data-theme="light"]){
+  --bg:#0B1A3D; --surface:#12285A; --ink:#FBF5EA; --muted:#C9C3B3; --line:#2B4686; --tint:#1D3770;
+  --goldt:#E6C36A; --qink:#FBF5EA; --res:#E6C36A; --ok:#8FD79A; --okbg:#1E3A2A; --no:#F08FB0; --nobg:#4A2236; color-scheme:dark;
+ }
+}
+:root[data-theme="dark"]{
+ --bg:#0B1A3D; --surface:#12285A; --ink:#FBF5EA; --muted:#C9C3B3; --line:#2B4686; --tint:#1D3770;
+ --goldt:#E6C36A; --qink:#FBF5EA; --res:#E6C36A; --ok:#8FD79A; --okbg:#1E3A2A; --no:#F08FB0; --nobg:#4A2236; color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;
+ padding:18px max(14px,env(safe-area-inset-right,0px)) 30px max(14px,env(safe-area-inset-left,0px))}
+.wrap{max-width:720px;margin:0 auto;display:flex;flex-direction:column;gap:16px}
+h1{font-family:var(--display);font-weight:500;font-size:clamp(24px,5vw,32px);line-height:1.15;margin:0}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.sub{color:var(--muted);margin:0}
+.bar{height:6px;background:var(--line);border-radius:3px;overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--res);transition:width .25s}
+.meta{display:flex;justify-content:space-between;font-size:13px;color:var(--muted)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:20px 18px;display:flex;flex-direction:column;gap:14px}
+.qn{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:0}
+.q{font-family:var(--display);font-size:clamp(19px,3.4vw,22px);line-height:1.35;margin:0}
+.opts{display:flex;flex-direction:column;gap:10px}
+.opt{font:inherit;text-align:left;color:var(--ink);background:var(--surface);border:2px solid var(--line);border-radius:10px;padding:12px 14px;cursor:pointer;width:100%}
+.opt:hover:not(:disabled){border-color:var(--res)}
+.opt.right{border-color:var(--ok);background:var(--okbg)}
+.opt.wrong{border-color:var(--no);background:var(--nobg)}
+.opt:disabled{cursor:default}
+input.fill{font:inherit;width:100%;padding:12px 14px;border:2px solid var(--line);border-radius:10px;background:var(--surface);color:var(--ink)}
+input.fill:focus{outline:none;border-color:var(--res)}
+.btn{font:inherit;font-weight:600;font-size:15px;color:var(--surface);background:var(--ink);border:0;border-radius:8px;padding:11px 20px;cursor:pointer;text-decoration:none;display:inline-block}
+.btn.alt{background:var(--surface);color:var(--ink);border:1px solid var(--ink)}
+button:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(--res);outline-offset:2px}
+.fb{display:none;padding:12px 14px;border-radius:10px;font-size:15.5px;line-height:1.5}
+.fb.ok{display:block;background:var(--okbg);border-left:5px solid var(--ok)}
+.fb.no{display:block;background:var(--nobg);border-left:5px solid var(--no)}
+.fb b{display:block;margin-bottom:2px}
+.nav{display:flex;justify-content:flex-end}
+.res{text-align:center}
+.score{font-family:var(--display);margin:4px 0}
+.score .big{font-size:60px;line-height:1}
+.score .of{font-size:26px;color:var(--muted)}
+.band{font-family:var(--display);font-size:22px;margin:0}
+.band.good{color:var(--ok)} .band.rev{color:var(--res)}
+.res p{margin:0}
+.revisit{text-align:left;background:var(--tint);border-radius:10px;padding:12px 14px}
+.revisit h2,.review h2{font-family:var(--display);font-size:18px;margin:0 0 6px}
+.revisit ul{margin:0;padding-left:20px}
+.review{text-align:left;display:flex;flex-direction:column;gap:8px}
+.review .item{padding:10px 12px;border-radius:8px;font-size:15px;line-height:1.45}
+.review .r{background:var(--okbg)} .review .w{background:var(--nobg)}
+.review .item small{display:block;color:var(--muted);margin-top:4px}
+.acts{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+.saved{font-size:14px;color:var(--muted)}
+footer{text-align:center;font-size:13px;color:var(--muted)}
+footer a{color:var(--res)}
+.wrap header{background:#12285A;color:#FBF5EA;text-align:center;padding:18px 16px 20px;border-radius:14px}
+.wrap header img{width:56px;height:66px;object-fit:contain;display:block}
+.wrap header .logos{display:flex;align-items:center;justify-content:center;gap:18px}
+.wrap header img.rit{width:86px;height:65px}
+.wrap header .eyebrow{color:#E6C36A;font-weight:700;letter-spacing:3px;margin:8px 0 0}
+.wrap header h1{color:#FBF5EA;font-weight:700;margin:6px 0 4px}
+.wrap header .course{font-size:14px;color:#E6C36A;margin:0 0 8px;font-weight:600}
+.wrap header .sub{color:#F1ECDF;font-size:15px}
+.bar i{background:var(--gold)!important}
+.opt:hover:not(:disabled){border-color:var(--gold)!important}
+input.fill:focus{border-color:var(--gold)!important}
+.q{color:var(--qink)}
+.qn{color:var(--goldt);font-weight:700}
+.btn{background:var(--navy)!important;color:#FBF5EA!important}
+.btn.alt{background:transparent!important;color:var(--ink)!important;border:1px solid var(--navy)!important}
+.card{box-shadow:0 2px 8px rgba(19,41,91,.08)}
+.reflect{text-align:left;background:var(--tint);border-radius:10px;padding:12px 14px}
+.reflect h2{font-family:var(--display);font-size:18px;margin:0 0 6px}.reflect p{margin:0 0 6px}.note{font-size:14px;color:var(--muted);margin:0}
+</style>
+</head>
+<body>
+<div class="wrap">
+ <header>
+  <div class="logos"><img src="../vedantanz-logo.png" alt="Ramakrishna Vedanta NZ emblem" width="56" height="66"><img class="rit" src="../ritam-wordmark.png" alt="Ritam" width="86" height="65"></div>
+  <p class="eyebrow">Quiz · Conversation 4.4</p>
+  <h1>The Mind through the Lens of the Framework, Part Two: Who Is Driving?</h1>
+  <p class="course">The Mind: Conversations (Beginners)</p>
+  <p class="sub">Ten questions on the ideas in the lesson. Take them as often as you like; each answer comes with its explanation.</p>
+ </header>
+ <div class="bar"><i id="prog"></i></div>
+ <div class="meta"><span id="pos"></span><span id="sc"></span></div>
+ <div id="app"></div>
+ <footer>Quiz · <a href="https://www.vedanta.nz">www.vedanta.nz</a>. Privacy: when you are signed in, your name, email, answers and score are saved to your member record. Only you and the course instructors can see them. They are not shared or ranked.</footer>
+</div>
+<script>
+/* Types: mc (options o, correct index a; shuffled on display), judge (statement q; a: 0 True, 1 False, 2 True only in part).
+   e = explanation, c = idea to revisit, s = lesson section. Generated by tools/con_quiz/build_con.py from tools/con_quiz/data/CON-4-4.json. */
+var META={"code": "CON-4-4", "lesson": "4.4", "quizTitle": "Quiz: Conversation 4.4, The Mind through the Lens of the Framework, Part Two: Who Is Driving?", "programme": "The Mind: Conversations (Beginners)", "cut": 70};
+var REFLECT="In a hard moment this week, ask one question before anything else: who is holding the reins right now?";
+var Q=[{"t": "mc", "q": "In the chariot of the Kaṭha Upaniṣad, as used in Conversation 4.4, what is the charioteer?", "o": ["The senses, which pull the chariot along the roads of the world.", "Manas, attention, which holds the reins and turns toward this and then that.", "The Self, which does the driving and guides every turn of the road.", "Buddhi, discernment, which decides what matters and what is true."], "a": 3, "e": "The body is the chariot, the senses the horses, the roads the objects of the world, the reins manas (attention), the charioteer buddhi (discernment) and the rider the Self. When the charioteer holds the reins, command flows top-down and life is navigated.", "c": "Buddhi, discernment, is the charioteer; attention is the reins", "s": "Part 1"}, {"t": "mc", "q": "A man says his mind feels driven by his body, and he is tired of being told to try harder. Which reading fits Conversation 4.4?", "o": ["The mind rules the body too strictly, and the body has no say in anything.", "Command runs bottom-up: the body and senses drive the mind, in one of two shapes.", "The Self has left the chariot, and nobody is riding in it any longer.", "The roads have become too steep, and any charioteer would lose control."], "a": 1, "e": "In the state most of us live in much of the time, the body drives the mind. The horses can bolt (too much energy, no control, anxiety or panic) or lie down (too little energy to move, depression). Neither is a character flaw: both are one inversion in opposite directions.", "c": "Inversion means the body drives the mind, bolting or lying down", "s": "Part 2"}, {"t": "mc", "q": "A woman feels flooded, her attention dragged from one fear to the next. What does Conversation 4.4 call this, and what is the first move?", "o": ["Horses bolting; slow the breath to settle them, then wake the charioteer.", "Horses lying down; quicken the breath to lift them, then wake the charioteer.", "The Self in trouble; seek a teacher, who alone can set the matter right.", "A fault of will; resolve to try harder, since force is what the horses respond to."], "a": 0, "e": "Anxiety or panic is the horses bolting: the system floods and the reins are torn loose. The breath is the sensible first move, slowed to settle bolting horses and gently quickened to raise fallen ones. It only calms the horses; the lasting work is waking and steadying the charioteer.", "c": "Bolting horses: slow the breath, then wake the charioteer", "s": "Part 2"}, {"t": "mc", "q": "A man cannot get out of bed, and nothing pulls at him. Which reading fits Conversation 4.4?", "o": ["The horses have lain down: a misfit, not a flaw, and trying harder fails.", "His will is weak, and he needs stricter habits to build it back up again.", "The charioteer is asleep because the man is lazy, and sleep is the whole problem.", "The Self is absent for him, and the matter lies beyond what practice can touch."], "a": 0, "e": "The horses lying down means energy drains and nothing pulls, which we call depression. It is the same inversion as bolting but in the opposite direction, which is why just try harder fails in both. A gentle quickening of the breath is the first move, not a lecture on will.", "c": "Lying-down horses are a misfit, not a flaw; effort alone fails", "s": "Part 2"}, {"t": "judge", "q": "“A suffering mind is a broken machine, and the task is to repair it.”", "a": 1, "e": "Swamiji’s stance is that a suffering mind is a misfitted instrument and not a broken one. Misfit can be re-fitted, because the very instrument that produces the suffering contains the path back. It is a structural reading and not a moral one, and a far kinder stance toward any suffering person.", "c": "A suffering mind is misfitted, not broken, and can be re-fitted", "s": "Part 3"}, {"t": "mc", "q": "A teacher reads her class as horses: some bolting, some lying down, some running well. What does Conversation 4.4 suggest?", "o": ["Treat them all alike with firm instruction, so that each pupil is on the same footing.", "Match the repair to each: settle the bolters, lift the fallen and leave the others to run.", "Let the class run on its own, and expect it to correct itself by the end of term.", "Single out the bolters for correction, since they are the ones who spoil the rest."], "a": 1, "e": "James’s practice is to read the room as horses and then give the matching repair: settle the bolters, lift the fallen and stay out of the way of the ones running well. The same room needs different things on different days.", "c": "Read the horses first, then match the repair to each", "s": "Part 3"}, {"t": "mc", "q": "A man asks himself, in a hard moment, “who is holding the reins right now?” What does Conversation 4.4 say naming the answer often does?", "o": ["It brings the charioteer half-awake, even when nothing else is fixed.", "It ends the hard moment at once, because the question has an answer.", "It proves that someone else was holding the reins, and so was to blame.", "It shows him that nobody can hold the reins in a hard moment."], "a": 0, "e": "Sarah’s question is simple: is there a steady you choosing, or have the horses taken the bit? She does not need to fix it. Naming that the horses have it is often enough to bring the charioteer half-awake.", "c": "Naming who has the reins brings the charioteer half-awake", "s": "Part 3"}, {"t": "judge", "q": "“A musician in flow is the horses galloping in perfect coordination under an awake charioteer, with no sense of me playing, just the music.”", "a": 0, "e": "In the lesson’s four minds, the musician in flow is good order in motion: the charioteer awake, the reins firm, the horses galloping in coordination, and no me playing, only the music. Meditative clarity is good order that is still.", "c": "Flow is good order in motion, with no sense of me playing", "s": "Part 3"}, {"t": "mc", "q": "Which pair describes the I-maker, ahaṁkāra, in the cast of Conversation 4.4?", "o": ["It turns attention toward this and then that, and so it takes the place of manas.", "It stores the impressions of the past, and so it takes the place of chitta.", "It carries the tilt of me and mine, and stitches moments into a story called me.", "It decides what is true and what matters, and so it takes the place of buddhi."], "a": 2, "e": "Manas is attention, buddhi discernment and chitta the memory-field. Ahaṁkāra is the I-maker: the tilt of me and mine carried into each moment and the stitching of moments into a story called me. Behind all of them is the Self.", "c": "Ahaṁkāra is the I-maker: me and mine, and the story called me", "s": "Part 1"}, {"t": "judge", "q": "“The breath calms the horses and that is all that is needed: the charioteer will take the reins of his own accord.”", "a": 2, "e": "The breath is the right first move, because it calms the horses. But it only calms them. The lasting work is waking and steadying the charioteer, buddhi, to one-pointedness in tune with the Self, which is the craft of Module 5.", "c": "The breath calms the horses; the charioteer still has to wake", "s": "Part 3"}];
+(function(){
+ var q=new URLSearchParams(location.search);
+ if(q.get('theme')==='light')document.documentElement.setAttribute('data-theme','light');
+ if(q.get('theme')==='dark')document.documentElement.setAttribute('data-theme','dark');
+})();
+var i=0,right=0,ans=[],started=false;
+var app=document.getElementById('app');
+var JL=['True','False','True only in part'];
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;')}
+function hdr(){
+ document.getElementById('pos').textContent=i<Q.length?'Question '+(i+1)+' of '+Q.length:'Finished';
+ document.getElementById('sc').textContent=i<Q.length?right+' right so far':'';
+ document.getElementById('prog').style.width=(100*Math.min(i,Q.length)/Q.length)+'%';
+}
+function send(m){try{window.parent.postMessage(m,'*')}catch(e){}}
+function ref(s){return s?'Conversation '+META.lesson+', '+s:'Conversation '+META.lesson}
+function show(){
+ hdr();
+ if(i>=Q.length){return result()}
+ var qq=Q[i];
+ var h='<div class="card"><p class="qn">Question '+(i+1)+'</p><p class="q">'+esc(qq.q)+'</p><div class="opts">';
+ if(qq.t==='mc'){var ord=qq.o.map(function(o,k){return k});for(var r=ord.length-1;r>0;r--){var s2=Math.floor(Math.random()*(r+1)),t2=ord[r];ord[r]=ord[s2];ord[s2]=t2}ord.forEach(function(k,pos){h+='<button class="opt" data-k="'+k+'">'+String.fromCharCode(65+pos)+'. '+esc(qq.o[k])+'</button>'})}
+ else{JL.forEach(function(o,k){h+='<button class="opt" data-k="'+k+'">'+o+'</button>'})}
+ h+='</div><div class="fb" id="fb" role="status"></div><div class="nav"><button class="btn" id="nx" style="display:none">'+(i===Q.length-1?'See my result':'Next question')+'</button></div></div>';
+ app.innerHTML=h;
+ app.querySelectorAll('.opt').forEach(function(b){b.onclick=function(){mark(+b.dataset.k===qq.a,b)}});
+ document.getElementById('nx').onclick=function(){i++;show();window.scrollTo(0,0)};
+}
+function mark(ok,btn){
+ started=true;
+ var qq=Q[i];if(ok)right++;ans.push({q:i+1,ok:ok,given:btn?btn.textContent:''});
+ app.querySelectorAll('.opt').forEach(function(b){b.disabled=true;if(+b.dataset.k===qq.a)b.classList.add('right')});
+ if(!ok&&btn)btn.classList.add('wrong');
+ var ra=qq.t==='mc'?qq.o[qq.a]:JL[qq.a];
+ var fb=document.getElementById('fb');fb.className='fb '+(ok?'ok':'no');
+ fb.innerHTML='<b>'+(ok?'Right.':'Not quite. The answer is: '+esc(ra))+'</b>'+esc(qq.e)+' <i>('+ref(qq.s)+'.)</i>';
+ document.getElementById('nx').style.display='inline-block';hdr();
+ send({type:'progress',code:META.code,state:{i:i+1,right:right,ans:ans}});
+}
+function result(){
+ var n=Q.length,p=Math.round(100*right/n),good=p>=META.cut;
+ var h='<div class="card res"><p class="qn">Your result</p><p class="score"><span class="big">'+p+'%</span></p>'+
+  '<p class="band '+(good?'good':'rev')+'">'+(good?'Well grasped':'Revisit these ideas')+'</p>'+
+  '<p>'+right+' of '+n+' questions right.</p><p class="note">This quiz is about the ideas in the conversation, not about you.</p>';
+ var miss=[];Q.forEach(function(qq,k){if(!ans[k]||!ans[k].ok)miss.push(qq)});
+ if(miss.length){h+='<div class="revisit"><h2>Ideas to revisit</h2><ul>';miss.forEach(function(qq){h+='<li>'+esc(qq.c)+' <i>('+ref(qq.s)+')</i></li>'});h+='</ul></div>'}
+ else{h+='<div class="revisit"><h2>Nothing to revisit</h2><p>Every idea in this quiz was answered correctly.</p></div>'}
+ if(REFLECT){h+='<div class="reflect"><h2>A question to take home</h2><p>'+esc(REFLECT)+'</p><p class="note">Not scored. There is no right answer. Your own home is the best place to find out what works.</p></div>'}
+ h+='<div class="review"><h2>Every question, with its answer</h2>';
+ Q.forEach(function(qq,k){var ok=ans[k]&&ans[k].ok;var a=qq.t==='mc'?qq.o[qq.a]:JL[qq.a];
+  h+='<div class="item '+(ok?'r':'w')+'">'+(ok?'Right. ':'Not quite. ')+'<b>Q'+(k+1)+'</b> '+esc(qq.q)+'<br>Answer: '+esc(a)+'<small>'+esc(qq.e)+' ('+ref(qq.s)+')</small></div>'});
+ h+='</div><p class="saved" id="savedmsg"></p><div class="acts"><button class="btn" id="again">Take it again</button></div></div>';
+ app.innerHTML=h;
+ document.getElementById('again').onclick=function(){i=0;right=0;ans=[];show();window.scrollTo(0,0)};
+ send({type:'quizResult',code:META.code,title:META.quizTitle,programme:META.programme,score:right,maxScore:n,percent:p,questionsCorrect:right,questionCount:n,answers:ans});
+ send({type:'progress',code:META.code,state:null});
+}
+window.addEventListener('message',function(ev){
+ var d=ev.data;if(!d||!d.type)return;
+ var m=document.getElementById('savedmsg');
+ if(d.type==='saved'&&m){m.textContent='Your result has been saved to your member record.'}
+ if(d.type==='saveError'&&m){m.textContent='Your result could not be saved this time. You can take the quiz again.'}
+ if(d.type==='notMember'&&m){m.textContent='Sign in as a member to have your result saved.'}
+ if(d.type==='resume'&&d.state&&d.state.i>0&&d.state.i<Q.length&&!started){offerResume(d.state)}
+});
+function offerResume(st){
+ var h='<div class="card"><p class="qn">Welcome back</p><p class="q">You have answered '+st.i+' of '+Q.length+' questions so far.</p><p>Would you like to continue where you left off, or start again from the beginning?</p><div class="acts"><button class="btn" id="cont">Continue from question '+(st.i+1)+'</button><button class="btn alt" id="rest">Start again</button></div></div>';
+ app.innerHTML=h;
+ document.getElementById('cont').onclick=function(){i=st.i;right=st.right||0;ans=st.ans||[];started=true;show()};
+ document.getElementById('rest').onclick=function(){i=0;right=0;ans=[];started=true;show()};
+}
+show();
+send({type:'ready'});
+</script>
+</body>
+</html>

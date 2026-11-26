@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Quiz: Conversation 4.7, When We Drift: One Name for Suffering</title>
+<meta name="description" content="Ten questions on Conversation 4.7, When We Drift: One Name for Suffering, from The Mind: Conversations (Beginners).">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400..700;1,400..700&family=Noto+Sans:wght@400..700&display=swap">
+<style>
+:root{
+ --bg:#FBF5EA; --surface:#FFFDF8; --ink:#1E1E1E; --muted:#5A5A5A; --line:#E6DAC3; --tint:#F3EAD3;
+ --navy:#12285A; --gold:#C9A24A; --goldt:#6B4E0E; --qink:#13295B;
+ --res:#12285A; --ok:#2F5A2E; --okbg:#E3EDDF; --no:#C2557A; --nobg:#F6E3EA;
+ --display:"Noto Serif",Georgia,serif; --body:"Noto Sans",system-ui,-apple-system,"Segoe UI",sans-serif; --mono:"Noto Sans",system-ui,sans-serif;
+}
+@media (prefers-color-scheme: dark){
+ :root:not([data-theme="light"]){
+  --bg:#0B1A3D; --surface:#12285A; --ink:#FBF5EA; --muted:#C9C3B3; --line:#2B4686; --tint:#1D3770;
+  --goldt:#E6C36A; --qink:#FBF5EA; --res:#E6C36A; --ok:#8FD79A; --okbg:#1E3A2A; --no:#F08FB0; --nobg:#4A2236; color-scheme:dark;
+ }
+}
+:root[data-theme="dark"]{
+ --bg:#0B1A3D; --surface:#12285A; --ink:#FBF5EA; --muted:#C9C3B3; --line:#2B4686; --tint:#1D3770;
+ --goldt:#E6C36A; --qink:#FBF5EA; --res:#E6C36A; --ok:#8FD79A; --okbg:#1E3A2A; --no:#F08FB0; --nobg:#4A2236; color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;
+ padding:18px max(14px,env(safe-area-inset-right,0px)) 30px max(14px,env(safe-area-inset-left,0px))}
+.wrap{max-width:720px;margin:0 auto;display:flex;flex-direction:column;gap:16px}
+h1{font-family:var(--display);font-weight:500;font-size:clamp(24px,5vw,32px);line-height:1.15;margin:0}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.sub{color:var(--muted);margin:0}
+.bar{height:6px;background:var(--line);border-radius:3px;overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--res);transition:width .25s}
+.meta{display:flex;justify-content:space-between;font-size:13px;color:var(--muted)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:20px 18px;display:flex;flex-direction:column;gap:14px}
+.qn{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:0}
+.q{font-family:var(--display);font-size:clamp(19px,3.4vw,22px);line-height:1.35;margin:0}
+.opts{display:flex;flex-direction:column;gap:10px}
+.opt{font:inherit;text-align:left;color:var(--ink);background:var(--surface);border:2px solid var(--line);border-radius:10px;padding:12px 14px;cursor:pointer;width:100%}
+.opt:hover:not(:disabled){border-color:var(--res)}
+.opt.right{border-color:var(--ok);background:var(--okbg)}
+.opt.wrong{border-color:var(--no);background:var(--nobg)}
+.opt:disabled{cursor:default}
+input.fill{font:inherit;width:100%;padding:12px 14px;border:2px solid var(--line);border-radius:10px;background:var(--surface);color:var(--ink)}
+input.fill:focus{outline:none;border-color:var(--res)}
+.btn{font:inherit;font-weight:600;font-size:15px;color:var(--surface);background:var(--ink);border:0;border-radius:8px;padding:11px 20px;cursor:pointer;text-decoration:none;display:inline-block}
+.btn.alt{background:var(--surface);color:var(--ink);border:1px solid var(--ink)}
+button:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(--res);outline-offset:2px}
+.fb{display:none;padding:12px 14px;border-radius:10px;font-size:15.5px;line-height:1.5}
+.fb.ok{display:block;background:var(--okbg);border-left:5px solid var(--ok)}
+.fb.no{display:block;background:var(--nobg);border-left:5px solid var(--no)}
+.fb b{display:block;margin-bottom:2px}
+.nav{display:flex;justify-content:flex-end}
+.res{text-align:center}
+.score{font-family:var(--display);margin:4px 0}
+.score .big{font-size:60px;line-height:1}
+.score .of{font-size:26px;color:var(--muted)}
+.band{font-family:var(--display);font-size:22px;margin:0}
+.band.good{color:var(--ok)} .band.rev{color:var(--res)}
+.res p{margin:0}
+.revisit{text-align:left;background:var(--tint);border-radius:10px;padding:12px 14px}
+.revisit h2,.review h2{font-family:var(--display);font-size:18px;margin:0 0 6px}
+.revisit ul{margin:0;padding-left:20px}
+.review{text-align:left;display:flex;flex-direction:column;gap:8px}
+.review .item{padding:10px 12px;border-radius:8px;font-size:15px;line-height:1.45}
+.review .r{background:var(--okbg)} .review .w{background:var(--nobg)}
+.review .item small{display:block;color:var(--muted);margin-top:4px}
+.acts{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+.saved{font-size:14px;color:var(--muted)}
+footer{text-align:center;font-size:13px;color:var(--muted)}
+footer a{color:var(--res)}
+.wrap header{background:#12285A;color:#FBF5EA;text-align:center;padding:18px 16px 20px;border-radius:14px}
+.wrap header img{width:56px;height:66px;object-fit:contain;display:block}
+.wrap header .logos{display:flex;align-items:center;justify-content:center;gap:18px}
+.wrap header img.rit{width:86px;height:65px}
+.wrap header .eyebrow{color:#E6C36A;font-weight:700;letter-spacing:3px;margin:8px 0 0}
+.wrap header h1{color:#FBF5EA;font-weight:700;margin:6px 0 4px}
+.wrap header .course{font-size:14px;color:#E6C36A;margin:0 0 8px;font-weight:600}
+.wrap header .sub{color:#F1ECDF;font-size:15px}
+.bar i{background:var(--gold)!important}
+.opt:hover:not(:disabled){border-color:var(--gold)!important}
+input.fill:focus{border-color:var(--gold)!important}
+.q{color:var(--qink)}
+.qn{color:var(--goldt);font-weight:700}
+.btn{background:var(--navy)!important;color:#FBF5EA!important}
+.btn.alt{background:transparent!important;color:var(--ink)!important;border:1px solid var(--navy)!important}
+.card{box-shadow:0 2px 8px rgba(19,41,91,.08)}
+.reflect{text-align:left;background:var(--tint);border-radius:10px;padding:12px 14px}
+.reflect h2{font-family:var(--display);font-size:18px;margin:0 0 6px}.reflect p{margin:0 0 6px}.note{font-size:14px;color:var(--muted);margin:0}
+</style>
+</head>
+<body>
+<div class="wrap">
+ <header>
+  <div class="logos"><img src="../vedantanz-logo.png" alt="Ramakrishna Vedanta NZ emblem" width="56" height="66"><img class="rit" src="../ritam-wordmark.png" alt="Ritam" width="86" height="65"></div>
+  <p class="eyebrow">Quiz · Conversation 4.7</p>
+  <h1>When We Drift: One Name for Suffering</h1>
+  <p class="course">The Mind: Conversations (Beginners)</p>
+  <p class="sub">Ten questions on the ideas in the lesson. Take them as often as you like; each answer comes with its explanation.</p>
+ </header>
+ <div class="bar"><i id="prog"></i></div>
+ <div class="meta"><span id="pos"></span><span id="sc"></span></div>
+ <div id="app"></div>
+ <footer>Quiz · <a href="https://www.vedanta.nz">www.vedanta.nz</a>. Privacy: when you are signed in, your name, email, answers and score are saved to your member record. Only you and the course instructors can see them. They are not shared or ranked.</footer>
+</div>
+<script>
+/* Types: mc (options o, correct index a; shuffled on display), judge (statement q; a: 0 True, 1 False, 2 True only in part).
+   e = explanation, c = idea to revisit, s = lesson section. Generated by tools/con_quiz/build_con.py from tools/con_quiz/data/CON-4-7.json. */
+var META={"code": "CON-4-7", "lesson": "4.7", "quizTitle": "Quiz: Conversation 4.7, When We Drift: One Name for Suffering", "programme": "The Mind: Conversations (Beginners)", "cut": 70};
+var REFLECT="Name your own drift this week, kindly, as weather and not verdict. Is it the heavy shape or the fast shape? What one small step matches it?";
+var Q=[{"t": "mc", "q": "What does Conversation 4.7 mean by anṛta?", "o": ["A system drifted out of step with the rhythms it lives in: one shared name for many symptoms.", "A kind of wrongdoing, for which a person is held to account by others and by himself.", "A rare illness, which a doctor can diagnose with a particular test and then treat.", "A habit of speaking falsely, which a person can give up at once by deciding to do so."], "a": 0, "e": "Anṛta means not-Ṛta, not in fit. The many names for suffering, anxiety, depression, burnout, insomnia and the low hum of dissatisfaction, are faces of one underlying drift. It does not flatten the real clinical differences, but adds a shared understanding of what has happened and a shared direction of return.", "c": "Anṛta is drift from fit, one name under many symptoms", "s": "Part 1"}, {"t": "judge", "q": "“Drift is a sign of a weak or broken person, and it shows that the person has not practised hard enough.”", "a": 1, "e": "Drift is structural and not a personal failing. A system can drift through no fault of its own, especially in a modern world that manufactures drift: light at night, shattered attention, constant food and a pace beyond any nervous system. A symptom is most often a healthy, responsive system accurately registering an ill-fitting world.", "c": "Drift is structural, not a failing of the person", "s": "Part 1"}, {"t": "mc", "q": "A woman is tired in a way that sleep does not cure, and feels a low hum of unease about nothing in particular. How does Conversation 4.7 read this?", "o": ["As everyday faces of one drift, a system out of fit, held as weather and not as a verdict.", "As a sign of poor character, which she can mend by taking up a much firmer resolve.", "As an illness, which she must keep from other people until the whole of it has passed.", "As nothing of note, since all adults feel this way and none of them should mention it."], "a": 0, "e": "The lesson names eight everyday signatures, including tiredness that sleep does not cure and a low objectless hum of anxiety, and holds each as weather and not as verdict. Each is one window onto a single state, a system out of fit, not a personal failing.", "c": "These are everyday faces of one drift, held as weather", "s": "Part 1"}, {"t": "mc", "q": "A man feels heavy and stalled, and cannot get himself moving even for things he cares about. Which reading and first step fit Conversation 4.7?", "o": ["Too much movement and too little centre, so he should grab a still axis such as a slowed breath.", "Heavy drift, too much form and too little movement, so gentle movement, light and rhythm.", "Too much thought and too little feeling, so he should keep still for a long period of quiet.", "Too much rest and too little work, so he should take up a heavier schedule of duties."], "a": 1, "e": "Tamasic drift is too much form and not enough movement: the system stalls into heaviness, as in depression’s heavy form, chronic fatigue and burnout collapse. The return is to gently reintroduce movement, light and rhythm. Rajasic drift is the opposite shape and needs a still axis.", "c": "Heavy drift needs movement, light and rhythm reintroduced", "s": "Part 2"}, {"t": "mc", "q": "A man’s midnight-phone loop keeps him awake, each step feeding the next. Which view and step fit Conversation 4.7?", "o": ["Fast drift: map the loop, then cut it at one easy point, which loosens it with less blame.", "Heavy drift, so he should push himself harder and harder until at last the loop is broken.", "A flaw of character, so he should resolve to be a good deal stronger from tomorrow night.", "A rare problem, so he should find a specialist before he tries anything for himself at all."], "a": 0, "e": "Kai’s practice is to map the loop as the fast drift, each step feeding the next, and to break it at exactly one point, the easiest, and watch the loop loosen. Naming the structure lets him interrupt it with less self-blame and more precision: it is a system and not a character lesson.", "c": "Map the fast-drift loop and cut it at one easy point", "s": "Part 2"}, {"t": "mc", "q": "A class has gone flat and heavy after lunch, and another is wired and scattered before an exam. What does Conversation 4.7 suggest?", "o": ["Settle both with the same slow breathing, since a settling breath suits every class alike.", "A little movement and energy for the flat class, and a settling breath for the scattered one.", "Raise the energy of both classes, so that the pupils in each are alert enough to learn.", "Wait until each class corrects itself, since drift soon passes of its own accord anyway."], "a": 1, "e": "James reads the shape and matches the repair: movement and energy for the flat room, a settling breath for the scattered one. He already does this by instinct; now he can name it. It makes for a kinder classroom and a kinder staffroom.", "c": "Match the repair to the shape: wake the flat, settle the wired", "s": "Part 2"}, {"t": "judge", "q": "“The rising disengagement of genuine practice, which leaves a person more available to life, is the opposite of the falling withdrawal of tamasic drift.”", "a": 0, "e": "This is the careful distinction of the lesson. Genuine practice leaves a person more available to life; the falling withdrawal of tamasic drift leaves them less available. From outside the two can look alike, which is why the question to ask is what the person can do and engage with.", "c": "Rising disengagement frees; falling withdrawal shuts a person in", "s": "Part 2"}, {"t": "mc", "q": "How does Conversation 4.7 read the opening of the Bhagavad Gītā?", "o": ["As a battle story, which has nothing at all to do with the state of the human mind.", "Mixed drift: Arjuna collapses, and Krishna prescribes four paths back to the steady centre.", "As a call to arms, in which Krishna urges Arjuna to fight without any further doubt at all.", "As a legend of a god, which shows only what a person cannot hope to do for themselves."], "a": 1, "e": "Arjuna collapses in what we would now recognise as acute autonomic dysregulation: trembling, a parched mouth, the bow slipping. Krishna does not say leave the field or calm down; he diagnoses drift from the deepest Self and prescribes four paths: knowledge, devotion, non-attached action and meditation. It reads as a course of treatment.", "c": "The Gītā opens with mixed drift and prescribes four paths back", "s": "Part 3"}, {"t": "mc", "q": "A doctor wants to speak to a frightened patient in a way that gives hope. Which framing fits Conversation 4.7?", "o": ["Not broken but drifted, and drift is recoverable, since the architecture is intact.", "A named disorder with a fixed course, so that the patient knows exactly what to expect.", "A weakness that can be corrected, with a plan to get a good deal stronger in some months.", "A mystery that no one can explain, so the patient should simply wait and see what comes."], "a": 0, "e": "Dr Watson’s framing is drifted, not broken. Modern measures show loss of resonant coherence, heart variability flattened, the stress-hormone curve flattened, the body clock desynchronised, but every one is recoverable. Drift bends back toward home, and being in fit is the floor on which deeper practice can stand.", "c": "Drifted, not broken: and drift is recoverable", "s": "Part 3"}, {"t": "judge", "q": "“The turn from pravṛtti to nivṛtti is one single movement beneath the four Yogas, and the breath and first aid only settle the system enough to begin it.”", "a": 0, "e": "Usually the mind runs outward and down, scattered across many objects, which is pravṛtti. The turn is to gather the current and let it run upward toward the one steady source, nivṛtti, through one-pointed attention and discernment. The breath only settles the system enough to begin: the turn itself is the slow work of attention and discernment.", "c": "The turn is one movement, and the breath only begins it", "s": "Part 3"}];
+(function(){
+ var q=new URLSearchParams(location.search);
+ if(q.get('theme')==='light')document.documentElement.setAttribute('data-theme','light');
+ if(q.get('theme')==='dark')document.documentElement.setAttribute('data-theme','dark');
+})();
+var i=0,right=0,ans=[],started=false;
+var app=document.getElementById('app');
+var JL=['True','False','True only in part'];
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;')}
+function hdr(){
+ document.getElementById('pos').textContent=i<Q.length?'Question '+(i+1)+' of '+Q.length:'Finished';
+ document.getElementById('sc').textContent=i<Q.length?right+' right so far':'';
+ document.getElementById('prog').style.width=(100*Math.min(i,Q.length)/Q.length)+'%';
+}
+function send(m){try{window.parent.postMessage(m,'*')}catch(e){}}
+function ref(s){return s?'Conversation '+META.lesson+', '+s:'Conversation '+META.lesson}
+function show(){
+ hdr();
+ if(i>=Q.length){return result()}
+ var qq=Q[i];
+ var h='<div class="card"><p class="qn">Question '+(i+1)+'</p><p class="q">'+esc(qq.q)+'</p><div class="opts">';
+ if(qq.t==='mc'){var ord=qq.o.map(function(o,k){return k});for(var r=ord.length-1;r>0;r--){var s2=Math.floor(Math.random()*(r+1)),t2=ord[r];ord[r]=ord[s2];ord[s2]=t2}ord.forEach(function(k,pos){h+='<button class="opt" data-k="'+k+'">'+String.fromCharCode(65+pos)+'. '+esc(qq.o[k])+'</button>'})}
+ else{JL.forEach(function(o,k){h+='<button class="opt" data-k="'+k+'">'+o+'</button>'})}
+ h+='</div><div class="fb" id="fb" role="status"></div><div class="nav"><button class="btn" id="nx" style="display:none">'+(i===Q.length-1?'See my result':'Next question')+'</button></div></div>';
+ app.innerHTML=h;
+ app.querySelectorAll('.opt').forEach(function(b){b.onclick=function(){mark(+b.dataset.k===qq.a,b)}});
+ document.getElementById('nx').onclick=function(){i++;show();window.scrollTo(0,0)};
+}
+function mark(ok,btn){
+ started=true;
+ var qq=Q[i];if(ok)right++;ans.push({q:i+1,ok:ok,given:btn?btn.textContent:''});
+ app.querySelectorAll('.opt').forEach(function(b){b.disabled=true;if(+b.dataset.k===qq.a)b.classList.add('right')});
+ if(!ok&&btn)btn.classList.add('wrong');
+ var ra=qq.t==='mc'?qq.o[qq.a]:JL[qq.a];
+ var fb=document.getElementById('fb');fb.className='fb '+(ok?'ok':'no');
+ fb.innerHTML='<b>'+(ok?'Right.':'Not quite. The answer is: '+esc(ra))+'</b>'+esc(qq.e)+' <i>('+ref(qq.s)+'.)</i>';
+ document.getElementById('nx').style.display='inline-block';hdr();
+ send({type:'progress',code:META.code,state:{i:i+1,right:right,ans:ans}});
+}
+function result(){
+ var n=Q.length,p=Math.round(100*right/n),good=p>=META.cut;
+ var h='<div class="card res"><p class="qn">Your result</p><p class="score"><span class="big">'+p+'%</span></p>'+
+  '<p class="band '+(good?'good':'rev')+'">'+(good?'Well grasped':'Revisit these ideas')+'</p>'+
+  '<p>'+right+' of '+n+' questions right.</p><p class="note">This quiz is about the ideas in the conversation, not about you.</p>';
+ var miss=[];Q.forEach(function(qq,k){if(!ans[k]||!ans[k].ok)miss.push(qq)});
+ if(miss.length){h+='<div class="revisit"><h2>Ideas to revisit</h2><ul>';miss.forEach(function(qq){h+='<li>'+esc(qq.c)+' <i>('+ref(qq.s)+')</i></li>'});h+='</ul></div>'}
+ else{h+='<div class="revisit"><h2>Nothing to revisit</h2><p>Every idea in this quiz was answered correctly.</p></div>'}
+ if(REFLECT){h+='<div class="reflect"><h2>A question to take home</h2><p>'+esc(REFLECT)+'</p><p class="note">Not scored. There is no right answer. Your own home is the best place to find out what works.</p></div>'}
+ h+='<div class="review"><h2>Every question, with its answer</h2>';
+ Q.forEach(function(qq,k){var ok=ans[k]&&ans[k].ok;var a=qq.t==='mc'?qq.o[qq.a]:JL[qq.a];
+  h+='<div class="item '+(ok?'r':'w')+'">'+(ok?'Right. ':'Not quite. ')+'<b>Q'+(k+1)+'</b> '+esc(qq.q)+'<br>Answer: '+esc(a)+'<small>'+esc(qq.e)+' ('+ref(qq.s)+')</small></div>'});
+ h+='</div><p class="saved" id="savedmsg"></p><div class="acts"><button class="btn" id="again">Take it again</button></div></div>';
+ app.innerHTML=h;
+ document.getElementById('again').onclick=function(){i=0;right=0;ans=[];show();window.scrollTo(0,0)};
+ send({type:'quizResult',code:META.code,title:META.quizTitle,programme:META.programme,score:right,maxScore:n,percent:p,questionsCorrect:right,questionCount:n,answers:ans});
+ send({type:'progress',code:META.code,state:null});
+}
+window.addEventListener('message',function(ev){
+ var d=ev.data;if(!d||!d.type)return;
+ var m=document.getElementById('savedmsg');
+ if(d.type==='saved'&&m){m.textContent='Your result has been saved to your member record.'}
+ if(d.type==='saveError'&&m){m.textContent='Your result could not be saved this time. You can take the quiz again.'}
+ if(d.type==='notMember'&&m){m.textContent='Sign in as a member to have your result saved.'}
+ if(d.type==='resume'&&d.state&&d.state.i>0&&d.state.i<Q.length&&!started){offerResume(d.state)}
+});
+function offerResume(st){
+ var h='<div class="card"><p class="qn">Welcome back</p><p class="q">You have answered '+st.i+' of '+Q.length+' questions so far.</p><p>Would you like to continue where you left off, or start again from the beginning?</p><div class="acts"><button class="btn" id="cont">Continue from question '+(st.i+1)+'</button><button class="btn alt" id="rest">Start again</button></div></div>';
+ app.innerHTML=h;
+ document.getElementById('cont').onclick=function(){i=st.i;right=st.right||0;ans=st.ans||[];started=true;show()};
+ document.getElementById('rest').onclick=function(){i=0;right=0;ans=[];started=true;show()};
+}
+show();
+send({type:'ready'});
+</script>
+</body>
+</html>
