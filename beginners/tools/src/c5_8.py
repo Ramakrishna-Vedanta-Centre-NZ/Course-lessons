@@ -35,6 +35,6 @@ mc("A","A doctor asks what the whole course means for how she treats her patient
  ["Treat each patient as already whole beneath what hides it, and offer the stairs honestly.","Treat each patient as broken, and use the four doorways in turn until they are mended.","Treat the framework as the roof, and give it to each patient as the final answer.","Treat the patient’s belief as the key, and begin by asking what each of them believes."],0,
  "Dr Watson’s summary is the course in one sentence: we were never fixing what was broken, but clearing what hid what was never broken. Hold both lenses, measure what can be measured, and offer the stairs without pretending they are the roof.",
  "Patients are already whole beneath what hides it; offer the stairs honestly","Part 3"),
-judge("“The cave of withdrawal is a real and honourable path for those it suits, though it is not the only way, and it is not the one the course teaches.”",T,
- "Swami Vivekananda names the cave honestly as a genuine alternative, and does not argue against it. Himself, he chose freedom in the world: pouring himself fully into the work and holding it lightly. The path is real at every level at which it is walked.",
- "The cave is a real path for those it suits; this course walks another","Part 2")])
+judge("“The cave of withdrawal is a real and honourable path for those it suits, though it is not the only way.”",T,
+ "Swami Vivekananda names the cave honestly as a genuine alternative, and does not argue against it. Himself, he chose freedom in the world: pouring himself fully into the work and holding it lightly. Both ways are open, and each person walks where their own nature takes them.",
+ "The cave is a real path for those it suits, and not the only one","Part 2")])
