@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Quiz: Conversation 5.1, Human Flourishing, and Beyond</title>
+<meta name="description" content="Ten questions on Conversation 5.1, Human Flourishing, and Beyond, from The Mind: Conversations (Beginners).">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400..700;1,400..700&family=Noto+Sans:wght@400..700&display=swap">
+<style>
+:root{
+ --bg:#FBF5EA; --surface:#FFFDF8; --ink:#1E1E1E; --muted:#5A5A5A; --line:#E6DAC3; --tint:#F3EAD3;
+ --navy:#12285A; --gold:#C9A24A; --goldt:#6B4E0E; --qink:#13295B;
+ --res:#12285A; --ok:#2F5A2E; --okbg:#E3EDDF; --no:#C2557A; --nobg:#F6E3EA;
+ --display:"Noto Serif",Georgia,serif; --body:"Noto Sans",system-ui,-apple-system,"Segoe UI",sans-serif; --mono:"Noto Sans",system-ui,sans-serif;
+}
+@media (prefers-color-scheme: dark){
+ :root:not([data-theme="light"]){
+  --bg:#0B1A3D; --surface:#12285A; --ink:#FBF5EA; --muted:#C9C3B3; --line:#2B4686; --tint:#1D3770;
+  --goldt:#E6C36A; --qink:#FBF5EA; --res:#E6C36A; --ok:#8FD79A; --okbg:#1E3A2A; --no:#F08FB0; --nobg:#4A2236; color-scheme:dark;
+ }
+}
+:root[data-theme="dark"]{
+ --bg:#0B1A3D; --surface:#12285A; --ink:#FBF5EA; --muted:#C9C3B3; --line:#2B4686; --tint:#1D3770;
+ --goldt:#E6C36A; --qink:#FBF5EA; --res:#E6C36A; --ok:#8FD79A; --okbg:#1E3A2A; --no:#F08FB0; --nobg:#4A2236; color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;
+ padding:18px max(14px,env(safe-area-inset-right,0px)) 30px max(14px,env(safe-area-inset-left,0px))}
+.wrap{max-width:720px;margin:0 auto;display:flex;flex-direction:column;gap:16px}
+h1{font-family:var(--display);font-weight:500;font-size:clamp(24px,5vw,32px);line-height:1.15;margin:0}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.sub{color:var(--muted);margin:0}
+.bar{height:6px;background:var(--line);border-radius:3px;overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--res);transition:width .25s}
+.meta{display:flex;justify-content:space-between;font-size:13px;color:var(--muted)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:20px 18px;display:flex;flex-direction:column;gap:14px}
+.qn{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:0}
+.q{font-family:var(--display);font-size:clamp(19px,3.4vw,22px);line-height:1.35;margin:0}
+.opts{display:flex;flex-direction:column;gap:10px}
+.opt{font:inherit;text-align:left;color:var(--ink);background:var(--surface);border:2px solid var(--line);border-radius:10px;padding:12px 14px;cursor:pointer;width:100%}
+.opt:hover:not(:disabled){border-color:var(--res)}
+.opt.right{border-color:var(--ok);background:var(--okbg)}
+.opt.wrong{border-color:var(--no);background:var(--nobg)}
+.opt:disabled{cursor:default}
+input.fill{font:inherit;width:100%;padding:12px 14px;border:2px solid var(--line);border-radius:10px;background:var(--surface);color:var(--ink)}
+input.fill:focus{outline:none;border-color:var(--res)}
+.btn{font:inherit;font-weight:600;font-size:15px;color:var(--surface);background:var(--ink);border:0;border-radius:8px;padding:11px 20px;cursor:pointer;text-decoration:none;display:inline-block}
+.btn.alt{background:var(--surface);color:var(--ink);border:1px solid var(--ink)}
+button:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(--res);outline-offset:2px}
+.fb{display:none;padding:12px 14px;border-radius:10px;font-size:15.5px;line-height:1.5}
+.fb.ok{display:block;background:var(--okbg);border-left:5px solid var(--ok)}
+.fb.no{display:block;background:var(--nobg);border-left:5px solid var(--no)}
+.fb b{display:block;margin-bottom:2px}
+.nav{display:flex;justify-content:flex-end}
+.res{text-align:center}
+.score{font-family:var(--display);margin:4px 0}
+.score .big{font-size:60px;line-height:1}
+.score .of{font-size:26px;color:var(--muted)}
+.band{font-family:var(--display);font-size:22px;margin:0}
+.band.good{color:var(--ok)} .band.rev{color:var(--res)}
+.res p{margin:0}
+.revisit{text-align:left;background:var(--tint);border-radius:10px;padding:12px 14px}
+.revisit h2,.review h2{font-family:var(--display);font-size:18px;margin:0 0 6px}
+.revisit ul{margin:0;padding-left:20px}
+.review{text-align:left;display:flex;flex-direction:column;gap:8px}
+.review .item{padding:10px 12px;border-radius:8px;font-size:15px;line-height:1.45}
+.review .r{background:var(--okbg)} .review .w{background:var(--nobg)}
+.review .item small{display:block;color:var(--muted);margin-top:4px}
+.acts{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+.saved{font-size:14px;color:var(--muted)}
+footer{text-align:center;font-size:13px;color:var(--muted)}
+footer a{color:var(--res)}
+.wrap header{background:#12285A;color:#FBF5EA;text-align:center;padding:18px 16px 20px;border-radius:14px}
+.wrap header img{width:56px;height:66px;object-fit:contain;display:block}
+.wrap header .logos{display:flex;align-items:center;justify-content:center;gap:18px}
+.wrap header img.rit{width:86px;height:65px}
+.wrap header .eyebrow{color:#E6C36A;font-weight:700;letter-spacing:3px;margin:8px 0 0}
+.wrap header h1{color:#FBF5EA;font-weight:700;margin:6px 0 4px}
+.wrap header .course{font-size:14px;color:#E6C36A;margin:0 0 8px;font-weight:600}
+.wrap header .sub{color:#F1ECDF;font-size:15px}
+.bar i{background:var(--gold)!important}
+.opt:hover:not(:disabled){border-color:var(--gold)!important}
+input.fill:focus{border-color:var(--gold)!important}
+.q{color:var(--qink)}
+.qn{color:var(--goldt);font-weight:700}
+.btn{background:var(--navy)!important;color:#FBF5EA!important}
+.btn.alt{background:transparent!important;color:var(--ink)!important;border:1px solid var(--navy)!important}
+.card{box-shadow:0 2px 8px rgba(19,41,91,.08)}
+.reflect{text-align:left;background:var(--tint);border-radius:10px;padding:12px 14px}
+.reflect h2{font-family:var(--display);font-size:18px;margin:0 0 6px}.reflect p{margin:0 0 6px}.note{font-size:14px;color:var(--muted);margin:0}
+</style>
+</head>
+<body>
+<div class="wrap">
+ <header>
+  <div class="logos"><img src="../vedantanz-logo.png" alt="Ramakrishna Vedanta NZ emblem" width="56" height="66"><img class="rit" src="../ritam-wordmark.png" alt="Ritam" width="86" height="65"></div>
+  <p class="eyebrow">Quiz · Conversation 5.1</p>
+  <h1>Human Flourishing, and Beyond</h1>
+  <p class="course">The Mind: Conversations (Beginners)</p>
+  <p class="sub">Ten questions on the ideas in the lesson. Take them as often as you like; each answer comes with its explanation.</p>
+ </header>
+ <div class="bar"><i id="prog"></i></div>
+ <div class="meta"><span id="pos"></span><span id="sc"></span></div>
+ <div id="app"></div>
+ <footer>Quiz · <a href="https://www.vedanta.nz">www.vedanta.nz</a>. Privacy: when you are signed in, your name, email, answers and score are saved to your member record. Only you and the course instructors can see them. They are not shared or ranked.</footer>
+</div>
+<script>
+/* Types: mc (options o, correct index a; shuffled on display), judge (statement q; a: 0 True, 1 False, 2 True only in part).
+   e = explanation, c = idea to revisit, s = lesson section. Generated by tools/con_quiz/build_con.py from tools/con_quiz/data/CON-5-1.json. */
+var META={"code": "CON-5-1", "lesson": "5.1", "quizTitle": "Quiz: Conversation 5.1, Human Flourishing, and Beyond", "programme": "The Mind: Conversations (Beginners)", "cut": 70};
+var REFLECT="Think of one moment this week when you were, briefly, in fit: settled, clear, nothing pulling at you. What was it like, and what made it possible?";
+var Q=[{"t": "mc", "q": "According to Conversation 5.1, what is the main purpose of the practices in Module 5?", "o": ["A coherent, meaningful, well life, which is the natural condition of a mind back in tune.", "A special state of consciousness, reached after years of retreat and strict discipline.", "The repair of a damaged mind, so that a person at last becomes fit for ordinary life.", "A self-improvement plan, so that a person can overcome their weaknesses one by one."], "a": 0, "e": "Swamiji says the aim is human flourishing: coherence, meaning and wellbeing. It is not an exotic achievement for monks, and not a scheme built on the suspicion that something is wrong with you. It is what a system produces when it is back in fit.", "c": "The aim is flourishing, the natural condition of a mind back in tune", "s": "Part 1"}, {"t": "mc", "q": "A student says, “My generation is told we are fragile, yet I feel flooded all the time.” Which view fits Conversation 5.1?", "o": ["A healthy mind meeting an abnormal load: far more signal, constant alarm and fractured attention.", "A weaker generation, which should simply be taught to toughen up and cope with the load.", "A mind that is broken at the root and needs expert repair before it can function well.", "A passing mood, which will clear on its own once the student stops paying it attention."], "a": 0, "e": "The inputs have changed: signal at a volume no nervous system was built for, a body kept half on alarm, attention interrupted for profit, and a rising hum of worry. Swamiji calls it a healthy instrument registering an ill-fitting world. It is drift, and no verdict on anyone.", "c": "A normal system under an abnormal load, which is no moral verdict", "s": "Part 1"}, {"t": "mc", "q": "A mother feels wound tight and snappish and wants the fastest way to settle. Which doorway does Conversation 5.1 point to first?", "o": ["Rhythm and sound: slow breathing, because wound tight means the body’s gain is jammed on.", "Knowledge and solitude: a long quiet retreat, to ask who it is that feels wound tight.", "Action as offering: a round of service, to change what her habits deposit in her.", "Attention: a long sitting, so that the wandering mind-wave is slowly steadied again."], "a": 0, "e": "Wound tight is the body’s gain dial jammed on, so the fastest door is rhythm: the slow breath, longer out than in. The skill of the module is matching the doorway to the shape of the drift.", "c": "Wound tight points to the rhythm door: the slow breath", "s": "Part 2"}, {"t": "judge", "q": "“Slow breathing at five or six cycles a minute settles the nervous system only for people who believe in the practice it comes from.”", "a": 1, "e": "The effect does not depend on belief. Breath slowed to five or six cycles a minute settles the nervous system whether the breather is Hindu, Christian, Buddhist, atheist or wholly indifferent. The mechanism is structural, not devotional, which is why the same practice appears in every contemplative tradition.", "c": "The slow breath works without belief, because the mechanism is structural", "s": "Part 2"}, {"t": "mc", "q": "A teacher in a state school wants to use a breathing technique with a wired class on Monday and is wary of bringing in religion. Which view fits Conversation 5.1?", "o": ["She can use it plainly as a technique, since its mechanism and effect do not rest on belief.", "She should first explain its religious background to the class, so that it works as intended.", "She should wait until the class shares a belief, because the effect depends on faith in it.", "She should avoid it, since breathing practices cannot be separated from their religion."], "a": 0, "e": "Swamiji calls these practices universal human technologies: the mechanism is intelligible, the effect is measurable and it does not depend on what you believe. Devotional forms add depth for those who want it, but the teacher does not need them.", "c": "A universal technology can be used without bringing in a religion", "s": "Part 2"}, {"t": "mc", "q": "A man’s day is cut into scraps by pings and he cannot hold one thought through. Which doorway fits best, using the four of Conversation 5.1?", "o": ["Rhythm and sound, since scattered attention is a problem of the body’s breathing alone.", "Action as offering, since scattered attention means his habits need a new meaning.", "Knowledge and community, since scattered attention comes from not knowing oneself.", "Attention: trained meditation re-steadies the wandering mind-wave itself."], "a": 3, "e": "Each doorway repairs a different part of the machine. Attention, the training of meditation, steadies the mind-wave itself, which is what an interrupted, fractured attention needs. Matching doorway to drift is the skill the module builds.", "c": "Fractured attention points to the attention door: trained meditation", "s": "Part 2"}, {"t": "mc", "q": "In the spiral picture of Conversation 5.1, what marks nivṛtti, the mind spiralling anti-clockwise toward the Self?", "o": ["It is one-way effort: the mind spends energy, but nothing in the centre answers.", "It is two-way: you supply the turning, and the centre draws attention home, so energy gathers.", "It is a withdrawal from the world, in which all ordinary action and duty are left behind.", "It is the same as drift, since both turn the attention away from the objects of the day."], "a": 1, "e": "Spiralling away from the centre (pravṛtti) is one-directional: you reach for things that do not reach back, and energy disperses. Spiralling home (nivṛtti) is met halfway, and energy gathers. The contemplative traditions call that meeting grace, though the structural fact can be noticed without the word.", "c": "Nivṛtti is two-way: you turn, and the centre meets you", "s": "Part 2"}, {"t": "mc", "q": "A doctor’s patient fears that being offered a breathing practice means something is wrong with them. Which framing fits Conversation 5.1?", "o": ["Say the breath is a repair, and that it will correct the fault the tests have found.", "Say the breath restores a capacity the patient already has, helping a working system back into tune.", "Say the breath is mainly a spiritual discipline, which only works if the patient takes it seriously.", "Say nothing about the purpose, and simply ask the patient to follow the instructions."], "a": 1, "e": "The module refuses to start by saying you are broken. You are a system that has drifted in a world that pulls everything out of tune, and the breath helps a working system get back in tune. Swamiji notes that consent and engagement land differently when the story is restoration, not repair.", "c": "Offer the breath as tuning a working system, not as fixing a fault", "s": "Part 4"}, {"t": "judge", "q": "“Flourishing is the floor on which spiritual freedom can be pursued, and the same practices serve both the floor and the higher reach.”", "a": 0, "e": "Freedom is not available to a mind in drift: a jammed nervous system and fragmented attention lack the steadiness the deeper work needs. So flourishing is not a lesser goal but the stepping-stone, and the very same practices, taken deeper, open onto the further reach. Fit first, freedom from there.", "c": "Flourishing is the floor, and the same practices serve both reaches", "s": "Part 3"}, {"t": "judge", "q": "“The Gītā’s compass, lift yourself by your own Self, means that the whole effort is a person’s own, and nothing meets them from the centre.”", "a": 2, "e": "The first half is right: you supply the turning. But Swamiji’s point is that the turn is not unanswered. When the mind spirals home, the centre draws attention into step with it, and the contemplative traditions call that grace. Spiralling away is the one-way case, not spiralling home.", "c": "You supply the turning, but the turn toward the centre is met halfway", "s": "Part 2"}];
+(function(){
+ var q=new URLSearchParams(location.search);
+ if(q.get('theme')==='light')document.documentElement.setAttribute('data-theme','light');
+ if(q.get('theme')==='dark')document.documentElement.setAttribute('data-theme','dark');
+})();
+var i=0,right=0,ans=[],started=false;
+var app=document.getElementById('app');
+var JL=['True','False','True only in part'];
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;')}
+function hdr(){
+ document.getElementById('pos').textContent=i<Q.length?'Question '+(i+1)+' of '+Q.length:'Finished';
+ document.getElementById('sc').textContent=i<Q.length?right+' right so far':'';
+ document.getElementById('prog').style.width=(100*Math.min(i,Q.length)/Q.length)+'%';
+}
+function send(m){try{window.parent.postMessage(m,'*')}catch(e){}}
+function ref(s){return s?'Conversation '+META.lesson+', '+s:'Conversation '+META.lesson}
+function show(){
+ hdr();
+ if(i>=Q.length){return result()}
+ var qq=Q[i];
+ var h='<div class="card"><p class="qn">Question '+(i+1)+'</p><p class="q">'+esc(qq.q)+'</p><div class="opts">';
+ if(qq.t==='mc'){var ord=qq.o.map(function(o,k){return k});for(var r=ord.length-1;r>0;r--){var s2=Math.floor(Math.random()*(r+1)),t2=ord[r];ord[r]=ord[s2];ord[s2]=t2}ord.forEach(function(k,pos){h+='<button class="opt" data-k="'+k+'">'+String.fromCharCode(65+pos)+'. '+esc(qq.o[k])+'</button>'})}
+ else{JL.forEach(function(o,k){h+='<button class="opt" data-k="'+k+'">'+o+'</button>'})}
+ h+='</div><div class="fb" id="fb" role="status"></div><div class="nav"><button class="btn" id="nx" style="display:none">'+(i===Q.length-1?'See my result':'Next question')+'</button></div></div>';
+ app.innerHTML=h;
+ app.querySelectorAll('.opt').forEach(function(b){b.onclick=function(){mark(+b.dataset.k===qq.a,b)}});
+ document.getElementById('nx').onclick=function(){i++;show();window.scrollTo(0,0)};
+}
+function mark(ok,btn){
+ started=true;
+ var qq=Q[i];if(ok)right++;ans.push({q:i+1,ok:ok,given:btn?btn.textContent:''});
+ app.querySelectorAll('.opt').forEach(function(b){b.disabled=true;if(+b.dataset.k===qq.a)b.classList.add('right')});
+ if(!ok&&btn)btn.classList.add('wrong');
+ var ra=qq.t==='mc'?qq.o[qq.a]:JL[qq.a];
+ var fb=document.getElementById('fb');fb.className='fb '+(ok?'ok':'no');
+ fb.innerHTML='<b>'+(ok?'Right.':'Not quite. The answer is: '+esc(ra))+'</b>'+esc(qq.e)+' <i>('+ref(qq.s)+'.)</i>';
+ document.getElementById('nx').style.display='inline-block';hdr();
+ send({type:'progress',code:META.code,state:{i:i+1,right:right,ans:ans}});
+}
+function result(){
+ var n=Q.length,p=Math.round(100*right/n),good=p>=META.cut;
+ var h='<div class="card res"><p class="qn">Your result</p><p class="score"><span class="big">'+p+'%</span></p>'+
+  '<p class="band '+(good?'good':'rev')+'">'+(good?'Well grasped':'Revisit these ideas')+'</p>'+
+  '<p>'+right+' of '+n+' questions right.</p><p class="note">This quiz is about the ideas in the conversation, not about you.</p>';
+ var miss=[];Q.forEach(function(qq,k){if(!ans[k]||!ans[k].ok)miss.push(qq)});
+ if(miss.length){h+='<div class="revisit"><h2>Ideas to revisit</h2><ul>';miss.forEach(function(qq){h+='<li>'+esc(qq.c)+' <i>('+ref(qq.s)+')</i></li>'});h+='</ul></div>'}
+ else{h+='<div class="revisit"><h2>Nothing to revisit</h2><p>Every idea in this quiz was answered correctly.</p></div>'}
+ if(REFLECT){h+='<div class="reflect"><h2>A question to take home</h2><p>'+esc(REFLECT)+'</p><p class="note">Not scored. There is no right answer. Your own home is the best place to find out what works.</p></div>'}
+ h+='<div class="review"><h2>Every question, with its answer</h2>';
+ Q.forEach(function(qq,k){var ok=ans[k]&&ans[k].ok;var a=qq.t==='mc'?qq.o[qq.a]:JL[qq.a];
+  h+='<div class="item '+(ok?'r':'w')+'">'+(ok?'Right. ':'Not quite. ')+'<b>Q'+(k+1)+'</b> '+esc(qq.q)+'<br>Answer: '+esc(a)+'<small>'+esc(qq.e)+' ('+ref(qq.s)+')</small></div>'});
+ h+='</div><p class="saved" id="savedmsg"></p><div class="acts"><button class="btn" id="again">Take it again</button></div></div>';
+ app.innerHTML=h;
+ document.getElementById('again').onclick=function(){i=0;right=0;ans=[];show();window.scrollTo(0,0)};
+ send({type:'quizResult',code:META.code,title:META.quizTitle,programme:META.programme,score:right,maxScore:n,percent:p,questionsCorrect:right,questionCount:n,answers:ans});
+ send({type:'progress',code:META.code,state:null});
+}
+window.addEventListener('message',function(ev){
+ var d=ev.data;if(!d||!d.type)return;
+ var m=document.getElementById('savedmsg');
+ if(d.type==='saved'&&m){m.textContent='Your result has been saved to your member record.'}
+ if(d.type==='saveError'&&m){m.textContent='Your result could not be saved this time. You can take the quiz again.'}
+ if(d.type==='notMember'&&m){m.textContent='Sign in as a member to have your result saved.'}
+ if(d.type==='resume'&&d.state&&d.state.i>0&&d.state.i<Q.length&&!started){offerResume(d.state)}
+});
+function offerResume(st){
+ var h='<div class="card"><p class="qn">Welcome back</p><p class="q">You have answered '+st.i+' of '+Q.length+' questions so far.</p><p>Would you like to continue where you left off, or start again from the beginning?</p><div class="acts"><button class="btn" id="cont">Continue from question '+(st.i+1)+'</button><button class="btn alt" id="rest">Start again</button></div></div>';
+ app.innerHTML=h;
+ document.getElementById('cont').onclick=function(){i=st.i;right=st.right||0;ans=st.ans||[];started=true;show()};
+ document.getElementById('rest').onclick=function(){i=0;right=0;ans=[];started=true;show()};
+}
+show();
+send({type:'ready'});
+</script>
+</body>
+</html>
