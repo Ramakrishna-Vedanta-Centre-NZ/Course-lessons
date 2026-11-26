@@ -1,140 +1,146 @@
 {
  "code": "CON-4-3",
  "lesson": "4.3",
- "title": "The Mind through the Lens of the Framework, Part One: Every Moment Is a Meeting",
- "reflection": "Next time a moment lands hard, separate what actually arrived from what you brought to it. How much was the second?",
+ "title": "The Equation of the Mind: The Meeting and Two Kinds of Effort",
+ "reflection": "Once a day, when a moment lands hard, separate what actually arrived from what you brought to it. When the mind churns, notice whether you are pushing the wheel harder, and try stepping off it instead.",
  "questions": [
   {
    "t": "mc",
-   "kind": "U",
-   "q": "What does Conversation 4.3 mean by saying that every moment is a meeting?",
-   "o": [
-    "The mind meets other minds, and each moment is a conversation between two.",
-    "What you live is built from what is there and what you bring to it.",
-    "The senses meet the world raw, and the mind adds its comments afterwards.",
-    "Past and future meet in the present, and the mind lives where they cross."
-   ],
-   "a": 1,
-   "e": "You never perceive the world raw. Each moment meets the real signal with your filter (the grooves of your past), your attention (where it is tuned and how hard it grips) and a standing tilt of me and mine. What you live is the meeting, which is why the same event lands in two worlds for two people.",
-   "c": "A moment is the meeting of what is there and what you bring",
-   "s": "Part 1"
-  },
-  {
-   "t": "mc",
    "kind": "A",
-   "q": "After a hard moment, a woman splits it into what actually happened and what she brought to it. What does Conversation 4.3 say this often does?",
+   "q": "Sarah’s teenager says a flat ‘fine’. What does Swamiji say she actually lives?",
    "o": [
-    "It proves that the other person was in the wrong, which settles the matter.",
-    "It loosens the grip by half, when she sees how much of it was her own filter.",
-    "It removes her feelings, so that she can go on without any reaction.",
-    "It shows that her feelings were false, and that she should ignore them in future."
+    "The meeting of that one real word with her own filter, attention and tilt: one syllable, a whole world.",
+    "The word as it was meant by her daughter, which she then hears accurately if she is calm enough.",
+    "Her own mood alone, since the word itself has no part in what she feels when she hears it.",
+    "Her daughter’s inner state, which comes through the word if she listens with enough care."
    ],
-   "a": 1,
-   "e": "Seeing the seam between the two halves is the practice. Naming that this is mostly what I brought is often enough to loosen the grip by half. It changes the morning rush without needing to change the world.",
-   "c": "Naming what you brought often loosens the grip by half",
-   "s": "Part 1"
-  },
-  {
-   "t": "mc",
-   "kind": "A",
-   "q": "A man wants to change how a hard moment lands, and asks which part of the meeting he can move right now. What does Conversation 4.3 say?",
-   "o": [
-    "The filter, which can be rebuilt by one good decision.",
-    "The noise floor, which can be switched off when a person chooses.",
-    "Attention, both where it is tuned and how hard it grips.",
-    "The real signal, which a person can change by looking at it differently."
-   ],
-   "a": 2,
-   "e": "The filter is slow work, the noise floor is the static of an unsettled system, and the signal is what is there. Of all the parts, attention is the one you can move in the moment: where it is tuned, and how hard it grips (the gain, set largely through the body and breath).",
-   "c": "Attention is the part that can be moved in the moment",
-   "s": "Part 1"
-  },
-  {
-   "t": "judge",
-   "kind": "J",
-   "q": "“Each part of the meeting, the signal, the filter, the attention, the gain and the noise, comes in one texture only, and reading a moment means finding which label fits.”",
-   "a": 1,
-   "e": "Every part carries all three textures at once, heavy and stuck, restless, or clear and settled, in a shifting mix. So reading a moment is never one label such as I am tamasic. It is reading which texture dominates the filter, the gain and the noise right now.",
-   "c": "Every part holds all three textures in a mix; read the mix",
-   "s": "Part 1"
-  },
-  {
-   "t": "mc",
-   "kind": "A",
-   "q": "A teacher is half-present in a lesson, managing and monitoring. What does Conversation 4.3 suggest she do?",
-   "o": [
-    "Monitor more closely, so that nothing in the room escapes her.",
-    "Drop the monitoring and come into time with the actual room, tuning in on purpose.",
-    "Ignore the room altogether and carry on with the plan, as if she were alone.",
-    "Wait until the lesson ends, and then think over what went wrong."
-   ],
-   "a": 1,
-   "e": "The flicker is what the clarity layer feels like when your rhythm and the world’s do not match. As attention tunes in and the tilt of me softens, the flicker settles into flow. Catch the wobble, and then tune in on purpose.",
-   "c": "Catch the flicker, then tune in to the room on purpose",
-   "s": "Part 2"
-  },
-  {
-   "t": "mc",
-   "kind": "U",
-   "q": "What happens at the limit of tuning, when the tilt of me is gone, according to Conversation 4.3?",
-   "o": [
-    "The mind goes blank, and nothing at all is known by the person.",
-    "Knower and known fuse: the object alone shining, called samādhi.",
-    "The person loses all feeling, and ordinary life becomes impossible to lead.",
-    "The person gains an answer to every question, and no more thought is ever needed."
-   ],
-   "a": 1,
-   "e": "At the limit, tuning is perfect and the tilt is gone, and the two fuse into one: no knower here and known there, just the thing itself. The contemplative traditions call that complete meeting samādhi, not a blank trance but the clearest possible knowing.",
-   "c": "At the limit knower and known fuse: samādhi, the clearest knowing",
-   "s": "Part 2"
-  },
-  {
-   "t": "mc",
-   "kind": "A",
-   "q": "A man keeps churning over an argument, and the harder he grips it the tighter it gets. Which step fits Conversation 4.3?",
-   "o": [
-    "Push harder at the thought, since a firmer grip will end it sooner.",
-    "See that he is pushing the wheel, then step off: slow breaths and what is in front of him.",
-    "Distract himself with something exciting until the argument has been forgotten.",
-    "Argue the other side in his head until he is sure of who is right."
-   ],
-   "a": 1,
-   "e": "Trying to control the mind by force is doubling: pushing an already spinning wheel harder, which churns the duality you want to escape. The other kind, trebling, changes the level. The breath is the accessible first step.",
-   "c": "Pushing the wheel tightens it; stepping off changes the level",
-   "s": "Part 3"
-  },
-  {
-   "t": "judge",
-   "kind": "J",
-   "q": "“The breath alone carries a person across: once the churn is calm, nothing more is needed.”",
-   "a": 2,
-   "e": "The breath is real and is the accessible first step, which is why clinics use it for anxiety and the contemplative traditions begin with it. But it calms the water and no more. The lasting lift is steadying attention to a single point, ekāgratā, and through that waking the discerning mind, buddhi, to resonate with the Self.",
-   "c": "The breath is the first step; one-pointed attention carries across",
-   "s": "Part 3"
-  },
-  {
-   "t": "mc",
-   "kind": "A",
-   "q": "A patient says, “The harder I try to stop the loop, the worse it gets.” What does Conversation 4.3 suggest a doctor show her?",
-   "o": [
-    "That she needs to try harder, since the loop will yield to enough effort.",
-    "That she is pushing the wheel, which has an off: one slow breath, then something present.",
-    "That the loop is only in her mind, and so it is not worth taking seriously at all.",
-    "That the loop is her nature, and she should learn to live beside it for good."
-   ],
-   "a": 1,
-   "e": "Dr Watson’s practice is to show the patient that the harder she pushes, the tighter it gets, and then offer the smallest step off: one slow breath, attention to something actually present. It is not solving the loop; it is showing that the wheel has an off.",
-   "c": "Show that the wheel has an off: one breath and something present",
-   "s": "Part 3"
-  },
-  {
-   "t": "judge",
-   "kind": "J",
-   "q": "“The instrument that makes the storm is the same instrument that can step out of it.”",
    "a": 0,
-   "e": "Swamiji asks Dr Watson to keep holding this thought: it is the same mind that pushes the wheel and that can step off it. The reading is meant to be hopeful and practical, not a verdict.",
-   "c": "The mind that makes the storm can also step out of it",
+   "e": "You never meet the world raw. What is out there is just the word; what you bring is the grooves of the past, how strongly your attention is engaged, and a standing tilt of me and mine. A different parent, or Sarah on a rested morning, meets the same syllable and lives a different world.",
+   "c": "You live the meeting, not the raw word",
+   "s": "Part 1"
+  },
+  {
+   "t": "mc",
+   "kind": "U",
+   "q": "Of all the parts of a meeting, which can you change within a single breath?",
+   "o": [
+    "Your attention: where you point it and how you hold it, with the breath that steadies it.",
+    "The signal, since what is out there changes as soon as you decide to see it in a better light.",
+    "Your deep filter, since the grooves of years can be undone by a firm decision taken in a moment.",
+    "The noise, since it stops as soon as you have made up your mind that you will no longer listen to it."
+   ],
+   "a": 0,
+   "e": "The signal is what it is, and the deep filter is slow to shift. Attention is the one part of the meeting you can take hold of right now. That is why every contemplative tradition and every good therapy works on the inside: not because the world does not matter.",
+   "c": "Attention is the part you can move now",
+   "s": "Part 1"
+  },
+  {
+   "t": "judge",
+   "kind": "J",
+   "q": "“Each part of a meeting, such as the filter or the attention, is wholly one texture: heavy, restless or clear.”",
+   "a": 1,
+   "e": "Every part carries all three at once, in some proportion, and what changes from moment to moment is the mix. To read a moment of your mind is never to slap one label on it, but to read which texture dominates the filter, the attention, the gain and the noise right now.",
+   "c": "Every part is a mix of all three textures",
+   "s": "Part 1"
+  },
+  {
+   "t": "mc",
+   "kind": "A",
+   "q": "Sarah describes her morning dread. Which reading of it does Swamiji call a beautiful one?",
+   "o": [
+    "A heavy filter reading all as threat, a jammed gain, high noise and little clear texture to balance it.",
+    "A mind that is tamasic throughout, so that there is nothing to do but wait for it to pass of itself.",
+    "A single strong thought that she can be rid of if she argues with it long enough in the morning.",
+    "A failure of her character, which shows she has not yet learned to meet the day with courage."
+   ],
+   "a": 0,
+   "e": "Name the mix and you already know which way to lean it back. The gain is the intensity of attention, set largely through the body: crank it and a small worry blares like a siren; let it settle and the same thought is just a thought.",
+   "c": "Name the mix in each part",
+   "s": "Part 1"
+  },
+  {
+   "t": "mc",
+   "kind": "U",
+   "q": "What does the wobble of two notes slightly out of tune stand for in the meeting?",
+   "o": [
+    "The flicker felt when your inner rhythm and the world’s do not match; it vanishes when they do.",
+    "A fault in the ear, which is put right by listening harder to one note while ignoring the other.",
+    "The pleasing rise and fall of a good piece of music, which is what makes it worth listening to.",
+    "The sound of two minds in agreement, which gets louder as they come to hold the same view."
+   ],
+   "a": 0,
+   "e": "The bigger the mismatch, the faster and harsher the flicker. Tune the notes together and the wobble slows and vanishes into one clear tone. In listening, it means you stop half-listening while rehearsing your reply, and come into time with the person in front of you.",
+   "c": "The flicker is the felt gap",
+   "s": "Part 2"
+  },
+  {
+   "t": "judge",
+   "kind": "J",
+   "q": "“Samādhi is a blank trance in which the mind has switched itself off.”",
+   "a": 1,
+   "e": "It is the very opposite: the clearest possible knowing, the object alone shining, with the static gone and the self-tilt released. It is the far end of the same dial you touch every time you genuinely listen.",
+   "c": "Samādhi is clear, not blank",
+   "s": "Part 2"
+  },
+  {
+   "t": "mc",
+   "kind": "A",
+   "q": "James’s instinct, when the mind is churning, is to grip down and force it quiet. How does Swamiji describe this?",
+   "o": [
+    "Pushing the wheel harder in the direction it already turns: doubling, which makes the churn tighter.",
+    "Stepping off the wheel, which is the right effort, since it uses the force of the will on the mind.",
+    "A harmless habit, since the mind quiets in time whichever kind of effort a person happens to use.",
+    "Lifting to a new level, which is what the force of the will is for, and which works if it is used long enough."
+   ],
+   "a": 0,
+   "e": "A wheel already spinning pushed harder just churns faster, as in a 3 a.m. worry-spiral that tightens the more you struggle. The other kind of effort changes the level, lifting the whole system out of the back-and-forth. Almost all our suffering comes from using the wrong kind.",
+   "c": "Pushing the wheel harder only churns it",
    "s": "Part 3"
+  },
+  {
+   "t": "mc",
+   "kind": "A",
+   "q": "Dr Watson tells an anxious patient to take a slow breath. What place does Swamiji give the breath?",
+   "o": [
+    "The accessible first step that calms the water, with one-pointed attention and an awakened buddhi as the lift.",
+    "The whole of the path, since the breath is the one thing that can settle the mind and also change it for good.",
+    "A distraction of no real value, since breath work has nothing to do with the deeper practice of the mind.",
+    "The last step of the path, to be taken only after the deeper work of attention and discernment is done."
+   ],
+   "a": 0,
+   "e": "Breath calms the water; one-pointed attention (ekāgratā) and an awakened buddhi carry you across. The breath buys a steadier moment but does not re-carve the deep grooves. Prāṇāyāma is the doorway; ekāgratā is the road. Breath is where you begin, not where you arrive.",
+   "c": "Breath is where you begin, not arrive",
+   "s": "Part 3"
+  },
+  {
+   "t": "mc",
+   "kind": "A",
+   "q": "Sarah is asked to separate, when a moment lands hard, what arrived from what she brought. Why?",
+   "o": [
+    "Naming that this is mostly what she brought often loosens the grip by half, as she sees the seam.",
+    "So that she can find out who was to blame, whether it was herself or the person who spoke to her.",
+    "So that she can decide whether the moment was real, and forget it at once if it proves not to be.",
+    "So that she can write a full account of it afterwards for her family to read at the weekend."
+   ],
+   "a": 0,
+   "e": "Say it in plain words: what actually arrived out there, then your mood, history and tilt. She is not fixing or blaming, just seeing the seam between them.",
+   "c": "See the seam between what arrived and what you brought",
+   "s": "Practical situation"
+  },
+  {
+   "t": "mc",
+   "kind": "A",
+   "q": "Kai is asked to catch his mind churning, notice he is pushing the wheel, and then try stepping off. What is the test?",
+   "o": [
+    "Whether the churn loosens after three slow breaths and a return to what is in front of him.",
+    "Whether he can make the churn stop for good, which would show that he has the right method.",
+    "Whether he can keep up the effort for longer than the others, which would show how strong he is.",
+    "Whether he can decide on the right answer to the worry, which would let him put it away at last."
+   ],
+   "a": 0,
+   "e": "He is testing whether step off really beats push harder, and will trust the result either way. Three slow breaths, attention back to what is actually in front of him.",
+   "c": "Test push versus step off as data",
+   "s": "Practical situation"
   }
  ]
 }

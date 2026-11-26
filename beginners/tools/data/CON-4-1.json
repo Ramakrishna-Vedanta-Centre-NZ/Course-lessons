@@ -1,140 +1,146 @@
 {
  "code": "CON-4-1",
  "lesson": "4.1",
- "title": "From Source to Spectrum to Ritam",
- "reflection": "Notice one moment at home or at work with good rhythm, and one that has lost it. How do the two feel different, before you try to fix either?",
+ "title": "Three Old Questions: Who Am I, Where From, What Holds It Together",
+ "reflection": "Notice, without fixing, one moment with good rhythm and one that has lost it. Once a day, step back and ask what is observing the body, the breath and a thought. You are training the eye for Ritam.",
  "questions": [
   {
    "t": "mc",
    "kind": "U",
-   "q": "How does Conversation 4.1 describe what a person is?",
+   "q": "In the spectrum of Conversation 4.1, what does the ‘zero’ end stand for?",
    "o": [
-    "A single fixed point, which is the thinking self behind all the thoughts.",
-    "A smooth spectrum from source awareness to specific manifest things.",
-    "A body with a mind attached, and awareness as a late and rare product of the two.",
-    "Two separate things, a changing world outside and a changeless watcher inside."
+    "Nothing at all: an empty state in which no experience is possible, such as that of a dreamless sleep.",
+    "The source, the unmanifest still point that everything arises from, and the awareness you rested in.",
+    "The weakest kind of thought, which is so faint that it can hardly be told from a state of no thought.",
+    "The first of a long series of numbers that must be counted in order, one after the other, to be reached."
    ],
    "a": 1,
-   "e": "What you are runs along a band: at one end awareness itself, the source pole called zero, and at the other the specific manifest things, a thought, a sensation, a word. It is a smooth gradient and not a fence, and the same pattern repeats at every scale. The awareness at the zero pole is the most truly you.",
-   "c": "A person is a spectrum from source awareness to manifest things",
+   "e": "Zero here does not mean nothing but the source. At the other end, one through nine, is the most specific thing you can point to. It is a spectrum and not a fence: deep sleep is nearer zero than waking, and the pause between two breaths is nearer zero than the breath.",
+   "c": "Zero is the source, not nothing",
    "s": "Part 1"
   },
   {
    "t": "mc",
    "kind": "A",
-   "q": "A student sees white light split by a prism and says the prism has painted the colours on. How does Conversation 4.1 reply?",
+   "q": "Sarah is completely lost in worry and fears that the awareness Swamiji pointed to has gone. What does he say?",
    "o": [
-    "The rainbow is a separate thing that the prism adds to the white light.",
-    "The white light is a fault, which the prism corrects by sorting the colours.",
-    "The colours were in the white light: source and world are one reality seen two ways.",
-    "The colours replace the white light, which is lost when the rainbow appears."
+    "It can go for a time, and only returns when the worry has passed and the mind has become still again.",
+    "It cannot go anywhere, for it is what the worry is happening in; she was remembering, not making calm.",
+    "It was never there to begin with, so what she felt in the practice was only a pleasant kind of relief.",
+    "It is always there, but she can reach it only in a long and quiet sitting at the start of the day."
+   ],
+   "a": 1,
+   "e": "The most truly you, the awareness at the zero pole, is available wherever on the band your attention happens to be sitting. That is why the one-breath doorway worked: you were not manufacturing calm but remembering where you stood.",
+   "c": "Awareness is what the worry appears in",
+   "s": "Part 1"
+  },
+  {
+   "t": "mc",
+   "kind": "U",
+   "q": "What does the prism and white light show about the unmanifest and the manifest?",
+   "o": [
+    "White light is plain and the rainbow is an addition, so the manifest is something laid over the source.",
+    "The rainbow is the real thing and white light is a name for the sum of its colours, once they are added.",
+    "White light and the rainbow are one reality in two views: Being, undivided, and Becoming, spread out.",
+    "White light and the rainbow are two separate realities, one standing above the other in the order of things."
    ],
    "a": 2,
-   "e": "The prism reveals and does not paint: the colours were in the white light, and the white light is the rainbow gathered up. So the undivided source, Being, and the manifest world, Becoming, are not two things but one reality seen two ways.",
-   "c": "Source and world are one reality seen two ways, like light and rainbow",
+   "e": "The colours were in the white light before the prism; it only reveals what was there. The unmanifest source is reality undivided, and the manifest world is the same reality spread into its colours. The Īśa Upaniṣad says it directly: from the whole, the whole arises, and the whole remains.",
+   "c": "Being and Becoming: one reality, two views",
+   "s": "Part 2"
+  },
+  {
+   "t": "judge",
+   "kind": "J",
+   "q": "“The number zero carries no value of its own, yet it makes every other position possible, and the source plays the same role in nature.”",
+   "a": 0,
+   "e": "Try writing ten, a hundred or a thousand without it. The source is not a thing but the field of availability every thing arises from, like the physicist’s vacuum, which is not nothing but the quietest condition of an underlying field.",
+   "c": "Zero makes every position possible",
    "s": "Part 2"
   },
   {
    "t": "mc",
    "kind": "A",
-   "q": "A man is exhausted by constant pushing outward and cannot rest, while his brother has withdrawn and cannot get going. Which reading fits Conversation 4.1?",
+   "q": "Dr Watson sees patients with burnout, insomnia and rumination. Which reading of them fits Conversation 4.1?",
    "o": [
-    "The first has too little will and the second too much, so they should swap their habits.",
-    "Each has lost one half of the breathing rhythm: only outward burns out, only inward never lives.",
-    "Both are in the wrong place on the spectrum, and each should simply move to the middle.",
-    "Both are suffering for the same reason, which is too little rest, so more sleep would mend them."
+    "Each can go outward but has lost the way back in: the return has failed, though the unfolding still works.",
+    "Each is stuck at the wrong place on the spectrum, and needs moving to a better place by an effort.",
+    "Each has too much rest and too little activity, and needs a more demanding schedule of daily duties.",
+    "Each has a different cause that cannot be set beside the others, so no common map would be of use."
    ],
-   "a": 1,
-   "e": "Health is the breathing rhythm of outward unfolding and inward return, as in heartbeat, breath, sleep and waking. Neither alone is healthy. The key is not which point you are at, but whether the movement between points still works.",
-   "c": "Health is the rhythm of outward and inward; losing either half hurts",
-   "s": "Part 3"
-  },
-  {
-   "t": "judge",
-   "kind": "J",
-   "q": "“Suffering is mainly a matter of which point on the spectrum a person is at, so the aim is always to get to the right point.”",
-   "a": 1,
-   "e": "Swamiji’s diagnostic key for the module is that suffering is rarely about which point you are at, but about whether the movement between points still works. Much of what a doctor sees, burnout, insomnia and rumination, is a failure of the return.",
-   "c": "The question is whether the movement between points works, not the point",
-   "s": "Part 3"
+   "a": 0,
+   "e": "Neither unfolding nor withdrawing alone is health; health is the rhythm of the two. A system that only unfolds burns out. Suffering is rarely about which point a person is stuck at; it is almost always about whether the breathing movement between the points still works.",
+   "c": "Health is the rhythm of outward and inward",
+   "s": "Part 2"
   },
   {
    "t": "mc",
    "kind": "U",
-   "q": "What does Ritam mean, according to Conversation 4.1?",
+   "q": "What does the word Ritam mean, and what does Swamiji say about its roots?",
    "o": [
-    "Right-fittedness: things fitting into proper relationship.",
-    "Rigid order: everything fixed in place, so that nothing can ever change.",
-    "Cosmic punishment: a law that returns to each person what they have done.",
-    "Ritual: the correct performance of acts handed down from the past."
+    "Right-fittedness, from a root meaning to fit or join properly, which also gave harmony and art.",
+    "Divine command, from a root meaning to order or to rule, which also gave law and obedience.",
+    "Silent knowledge, from a root meaning to keep quiet, which also gave secret and mystery.",
+    "Cosmic fire, from a root meaning to burn, which also gave energy and the work of the sun."
    ],
    "a": 0,
-   "e": "Ritam comes from a root meaning to flow or move properly, and is best translated as right-fittedness. The same ancient root gives English harmony and art. It works as physical Ritam, timing Ritam and relationship Ritam.",
-   "c": "Ritam is right-fittedness: things fitting into proper relationship",
-   "s": "Part 3"
-  },
-  {
-   "t": "mc",
-   "kind": "A",
-   "q": "A woman watches her family at dinner: one evening they listen to each other, another evening they all talk over one another. What is she training her eye to see, in the language of Conversation 4.1?",
-   "o": [
-    "Which child is at fault, so that the right person can be spoken to at once.",
-    "How far the family is from a perfect home, and what it will take to reach one.",
-    "The difference in how Ritam feels when it is working and when it has been lost.",
-    "How loud each person is, since volume is the surest sign of a loss of rhythm."
-   ],
-   "a": 2,
-   "e": "Sarah’s exercise is to find one moment with good Ritam and one that has lost it, and to notice how the two feel without trying to fix either. Noticing first, rather than skipping to repair, trains the eye.",
-   "c": "Notice how working and lost Ritam feel, before repairing anything",
-   "s": "Part 3"
-  },
-  {
-   "t": "mc",
-   "kind": "A",
-   "q": "A teacher watches a class and feels the moment it needs a pause and the moment it is ready to engage again. Which idea from Conversation 4.1 is she using?",
-   "o": [
-    "Health in a room is rhythm and not relentlessness: attention swings between focus and rest.",
-    "Health in a room is silence, and a class that makes any noise has lost its rhythm.",
-    "Health in a room is speed, and the faster a class works the better it is doing.",
-    "Health in a room is obedience, and a class that follows the plan is in good rhythm."
-   ],
-   "a": 0,
-   "e": "James’s practice is to feel the breathing of the room: the natural swing between focus and rest. Health in a classroom is rhythm, not relentlessness, just as in a heartbeat or a breath.",
-   "c": "Health in a room is rhythm: the swing between focus and rest",
+   "e": "The ancient root meaning to fit scattered into many languages: Greek harmonia, Latin ars, Persian aṣ̌a and Sanskrit Ṛtam. It is not a foreign idea but one recognition preserved across languages. Swamiji maps it across physical, timing and relationship Ritam.",
+   "c": "Ritam is right-fittedness",
    "s": "Part 3"
   },
   {
    "t": "judge",
    "kind": "J",
-   "q": "“The same source-to-manifest pattern repeats at every scale, from a galaxy to a heartbeat to a thought.”",
-   "a": 0,
-   "e": "Swamiji says the pattern is self-similar: the same source to manifest pattern repeats in a galaxy, a heartbeat, a breath and a thought. Science calls this self-similarity or scale invariance.",
-   "c": "The same pattern repeats at every scale",
-   "s": "Part 1"
+   "q": "“A healthy heart beats like a perfect metronome, and the less it varies from beat to beat the healthier it is.”",
+   "a": 1,
+   "e": "A healthy heart varies beat to beat around a steady centre, and a good amount of heart-rate variability is a sign of health. That is Ritam: lawful, but alive, not rigid. Healthy attention is likewise a rhythm of focus and rest.",
+   "c": "Health is living variability, not rigidity",
+   "s": "Part 3"
   },
   {
    "t": "mc",
    "kind": "A",
-   "q": "A doctor wants to read a patient’s symptom as more than a broken part. Which question does Conversation 4.1 suggest she add?",
+   "q": "Dr Watson is asked to carry one lens into a consultation without changing his treatment. What is it?",
    "o": [
-    "Where has the rhythm broken: can this person go out but not return, or the reverse?",
-    "Which organ is weakest, so that treatment can be aimed at the right place?",
-    "How soon will the symptom pass, so that the patient can be told what to expect?",
-    "What has the patient done to bring this on, so that it can be avoided next time?"
+    "Ask where the rhythm has broken: can this person go outward but not return, or withdraw and not come out?",
+    "Ask which diagnosis in the books fits the patient best, and treat the patient strictly by that name.",
+    "Ask whether the patient is telling the truth, since a broken rhythm is often a sign of deception.",
+    "Ask how long the patient has had the trouble, since the length of time shows the cause of it."
    ],
    "a": 0,
-   "e": "Dr Watson’s practice is to add one lens, outward and inward, fittedness and its loss: can this person go outward but not return, or have they withdrawn and lost the way back out? A symptom is read as a broken rhythm and not only a broken part.",
-   "c": "Ask where the rhythm of going out and returning has broken",
-   "s": "Part 3"
+   "e": "He reads the symptom as a broken rhythm rather than only a broken part. Anṛta, the negation of Ritam, is the structural description of what medicine calls dysregulation: the same eye that recognises health is the eye that diagnoses illness.",
+   "c": "Read the symptom as a broken rhythm",
+   "s": "Practical situation"
   },
   {
-   "t": "judge",
-   "kind": "J",
-   "q": "“Anṛta, the loss of Ritam, is the structural description of what medicine calls dysregulation and the contemplative traditions call suffering, so the framework both diagnoses and heals.”",
-   "a": 2,
-   "e": "The first half is right: anṛta is mis-fittedness, which matches what medicine calls dysregulation, psychology fragmentation and the contemplative traditions suffering. But the lesson only opens the point here and develops drift fully later, in Lesson 4.7. The framework is meant to be diagnostic and therapeutic from the start.",
-   "c": "Anṛta names the loss of fit; the lesson opens it and Lesson 4.7 develops it",
-   "s": "Part 3"
+   "t": "mc",
+   "kind": "A",
+   "q": "Sarah is told to notice one moment of good Ritam and one that has lost it, and not fix either. Why does Swamiji ask this?",
+   "o": [
+    "She is training the eye, and she usually skips straight to repairing, so noticing first will change things.",
+    "She should leave all troubles alone, since a rhythm that has been broken will right itself in time.",
+    "She should learn which of her children is at fault, so that she can speak to that child alone.",
+    "She should keep a record to show others, so that her home may be compared with other households."
+   ],
+   "a": 0,
+   "e": "Sarah admits she usually skips straight to repairing. The practice is just to grow the eye for Ritam: the family listening at dinner against everyone talking over each other. Noticing the difference in how the two feel comes first.",
+   "c": "Notice the rhythm before you repair it",
+   "s": "Practical situation"
+  },
+  {
+   "t": "mc",
+   "kind": "A",
+   "q": "Kai is asked to take sixty seconds each day and find what is observing the body, the breath and a thought. How should he treat the result?",
+   "o": [
+    "As data: he is just checking whether that awareness is reliably there, and need not feel anything special.",
+    "As a test he must pass, so that if he fails on any day he should begin the whole practice again.",
+    "As a feeling to be made strong, so that he must try to keep it for the rest of each day that follows.",
+    "As a secret to keep, since talking about what he finds would spoil it for the rest of the group."
+   ],
+   "a": 0,
+   "e": "He is the sceptic, so the practice is an experiment. Body, breath, thought, and then: what is observing all three? It is the first thing the group did, the step back into the awareness that observes.",
+   "c": "Treat the observer as data",
+   "s": "Practical situation"
   }
  ]
 }
