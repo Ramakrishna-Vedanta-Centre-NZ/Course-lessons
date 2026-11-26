@@ -41,3 +41,11 @@ Notes
 - Module 3 handbook rebuilt with all 8 lessons (31 pages: cover 1, terms 2 to 7, then 3 pages each: 3.1 pp. 8-10 ... 3.8 pp. 29-31; 3.3 on pp. 14-16). Wix media ID af2af0_0fbee8be35684465a93cbf115a9fc83e.pdf. Specs in hbkit/lessons/m3_specs.py (3.3 spec is C3_3.py). Cover palette is the module 3 one used by the builder; the review items on the 3.3 pilot (byline, fictional scene, palette) still stand and now apply to every handbook.
 - Lessons 3.1 to 3.8 wired (4 buttons each, read back). 3.3 kept its quiz box and gained the handbook button and paragraph.
 - Figures on Wix: 3.1 has 4 images, 3.2 3, 3.3 3, 3.4 3, 3.5 4, 3.6 4, 3.7 3, 3.8 3.
+
+## Layout change to the handbooks (27 Nov 2026, after Swamiji's phone check)
+- Terms pages were half empty and split a conversation across pages. Now each conversation's terms stay together and two conversations fill a page: 4 terms pages (pp. 2 to 5), lessons start on p. 6, three pages each.
+- Rebuilt and re-uploaded Modules 2 to 5; lesson page ranges and download links updated in all 30 lessons (M2 2.1 pp. 6-8 ... 2.7 pp. 24-26; M3 3.1 pp. 6-8 ... 3.8 pp. 27-29; M4 4.1 pp. 6-8 ... 4.7 pp. 24-26; M5 5.1 pp. 6-8 ... 5.8 pp. 27-29).
+- Current Wix media IDs: M2 af2af0_fe374364bd8447b4808a340db30c9e06.pdf, M3 af2af0_8003eae9e05a4c4f9c0213c7b8e12a46.pdf, M4 af2af0_53b12e844b404c31939f58c714eda2c2.pdf, M5 af2af0_db71e64e0eb3404098c527da837e3efe.pdf. Older uploads of the same handbooks remain in the Media Manager and can be deleted by hand.
+- Box display fixes on the phone: handbook button label shortened to "Download the handbook (PDF)" (it was cut off), and box text set to black like the rest of the lesson.
+- Modules 1 and 2 lessons have no "For the curious" section: the end block is appended after the Key ideas list; the top box goes before the first non-empty heading.
+- Figures: 2.1 3, 2.2 2, 2.3 3, 2.4 3, 2.5 3, 2.6 0, 2.7 0 images on Wix (check masters).
