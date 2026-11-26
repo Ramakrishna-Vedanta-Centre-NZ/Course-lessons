@@ -1,146 +1,146 @@
 {
  "code": "CON-3-4",
  "lesson": "3.4",
- "title": "Signal and Noise",
- "reflection": "Notice one kind of static in your day, chatter, mood, loop or spike, and lower the floor a little, without fighting it.",
+ "title": "Static on the Line: The Noise in the Mind",
+ "reflection": "When your head is loudest, name which kind of noise it is, then do one small thing that quiets the room instead of wrestling the thought. You are lowering the floor, not defeating the noise.",
  "questions": [
   {
    "t": "mc",
    "kind": "U",
-   "q": "What is mental noise, according to Conversation 3.4?",
+   "q": "In the radio picture of Conversation 3.4, what is the relation between noise and the signal you long for?",
    "o": [
-    "Unwanted activity that hides a signal that is always there, like static on a radio.",
-    "A sign that the mind is failing to receive anything, so that the signal itself has been lost.",
-    "A fault of character, which a person is able to remove by simply trying a little harder.",
-    "A particular kind of thought, which only a few people ever have and most people never meet."
+    "The signal fades whenever the mind is busy, and it only returns after a long spell of silence.",
+    "The signal is always broadcasting; noise is unwanted activity that masks it, not a failure to receive.",
+    "The signal is made by the mind, so a noisy mind is one that has failed to produce enough of it.",
+    "The signal and the noise are the same thing, and the only difference is the mood you are in."
    ],
-   "a": 0,
-   "e": "The signal, whether the world, a quiet intuition or the simple sense of presence, is always there. Mental noise masks it. You are not failing to receive: the signal is buried.",
-   "c": "Noise hides a signal that is always there",
-   "s": "Part 1"
-  },
-  {
-   "t": "mc",
-   "kind": "A",
-   "q": "Two people hear the same quiet piece of music. One is rested, the other sleepless and overstimulated. What does Conversation 3.4 say?",
-   "o": [
-    "The same signal, more noise: neither mind is better, one is simply in a quieter room.",
-    "The sleepless person hears a different piece, since the signal itself has changed.",
-    "The rested person is the better listener, since clarity is a matter of character.",
-    "Neither can hear it, since a quiet signal is always lost beneath any noise floor."
-   ],
-   "a": 0,
-   "e": "Clarity is the ratio of signal to noise. A rested, quiet mind is a clear radio; a sleepless, overstimulated mind is a staticky one. The same signal, more noise.",
-   "c": "Same signal, more noise",
-   "s": "Part 1"
-  },
-  {
-   "t": "mc",
-   "kind": "U",
-   "q": "What is a noise floor, in Conversation 3.4?",
-   "o": [
-    "The level of hiss below which quiet signals cannot be heard, as a whisper is lost in traffic.",
-    "The lowest point that a mood can reach, below which a person cannot sink any further.",
-    "The quietest hour of the night, when most people are asleep and the mind is at rest.",
-    "The surface of the body, through which every outside signal has to pass on its way in."
-   ],
-   "a": 0,
-   "e": "Every system has a noise floor. When the floor is high, the subtlest goods, stillness and a calm steadiness, fall below it and cannot be heard.",
-   "c": "A high noise floor buries the subtlest goods",
-   "s": "Part 1"
-  },
-  {
-   "t": "mc",
-   "kind": "A",
-   "q": "A woman has a low, persistent unease that has no clear cause. Which kind of static is this, in Conversation 3.4?",
-   "o": [
-    "A background mood: low persistent unease or sadness running under everything else.",
-    "Random chatter: scattered pointless thoughts that come and go in no order.",
-    "A stuck loop: an obsessive thought that repeats itself again and again.",
-    "A sudden spike: an intrusive memory or a jolt that arrives without warning."
-   ],
-   "a": 0,
-   "e": "The four kinds of static are random chatter, a background mood, a stuck loop and sudden spikes. All are normal by-products of a busy mind; the trouble is only that, untrained, they run nonstop and keep the floor high.",
-   "c": "Persistent low unease is a background mood",
-   "s": "Part 2"
-  },
-  {
-   "t": "judge",
-   "kind": "J",
-   "q": "“Patañjali’s list of the obstacles of a scattered mind treats them as sins to be confessed.”",
    "a": 1,
-   "e": "Patañjali listed them as obstacles to understand, not sins: a scattered mind, pain, low spirits, a restless body and ragged breathing. The list closely matches today’s picture of anxiety and depression, and gives a reason for compassion and not for shame.",
-   "c": "The obstacles are to be understood, not confessed",
+   "e": "Under the music there is hiss, but the station has not stopped broadcasting. Likewise a quiet intuition, or the simple sense of presence, is always there; random thoughts, leftover moods and old reactions are static over the top. Clarity is the ratio of signal to noise.",
+   "c": "The signal is always there; noise masks it",
+   "s": "Part 1"
+  },
+  {
+   "t": "mc",
+   "kind": "A",
+   "q": "Dr Watson’s patient with depression says she cannot feel any small good things, such as a kind word or a sunny morning. What reading does the lesson give?",
+   "o": [
+    "Those signals are real but sit below her noise floor, so the task is to lower the floor, not argue.",
+    "She has chosen to dismiss them, so the kindest course is to persuade her of what she is missing.",
+    "The good things are not really there for her, so she needs to look for bigger ones elsewhere.",
+    "Her taste for good things has gone for good, and no change of conditions will bring it back."
+   ],
+   "a": 0,
+   "e": "Like a whisper across a roaring street, the quietest signals fall under the floor. It is not an attitude problem. You do not argue someone into feeling the good; you help lower the floor and it surfaces on its own. Dr Watson can say: you are not broken, the room is just very noisy right now.",
+   "c": "Small goods fall below a high noise floor",
+   "s": "Part 1"
+  },
+  {
+   "t": "judge",
+   "kind": "J",
+   "q": "“A calm mind is morally better than a noisy one, and its calm shows that its owner has done the right things.”",
+   "a": 1,
+   "e": "Neither radio is a better radio. The calm mind is simply running in a quieter room, after rest, silence or a quiet week. Swamiji says this single idea dissolves a great deal of shame: noise is not a verdict on the person.",
+   "c": "Calm is a quieter room, not a moral rank",
+   "s": "Part 1"
+  },
+  {
+   "t": "mc",
+   "kind": "A",
+   "q": "Sarah describes busy chatter in her head and also a low background dread that never quite leaves. Which kinds of static are these?",
+   "o": [
+    "Both are random chatter, since all the noise in a mind is of one kind and differs only in strength.",
+    "Chatter and a background mood: a hiss of scattered thoughts and a deeper, steadier noise of unease.",
+    "A stuck loop and a sudden spike: a repeating worry and a jolt that comes from out of nowhere.",
+    "Two sudden spikes, which come close together and are brought on by tiredness at the end of a day."
+   ],
+   "a": 1,
+   "e": "The four kinds are random chatter, a persistent background mood, the stuck loop and the sudden spike. A lively mind that scans, compares, reacts and remembers throws off noise as an engine throws off heat. The trouble is only that, untrained, it runs nonstop and the floor stays high.",
+   "c": "Chatter and background mood are two kinds of static",
+   "s": "Part 2"
+  },
+  {
+   "t": "judge",
+   "kind": "J",
+   "q": "“Patañjali treated the companions of a scattered mind, such as pain, low spirits and ragged breathing, as obstacles to understand and ease, not as sins or weaknesses.”",
+   "a": 0,
+   "e": "Dr Watson finds this moving: the picture closely matches what he was trained to recognise in anxiety and depression, and it tells a patient that this is an old, well-understood human condition and not a personal disgrace.",
+   "c": "Obstacles to understand, not sins",
    "s": "Part 2"
   },
   {
    "t": "mc",
    "kind": "U",
-   "q": "What are the three deep tilts of Conversation 3.4?",
+   "q": "Which three steady tilts does Swamiji say run beneath the random chatter?",
    "o": [
-    "A sense of not enough, a sense of separation and a pull to repeat, in the instrument and not in you.",
-    "A habit of anger, a habit of fear and a habit of pride, which every person carries from birth.",
-    "A tilt of the body, a tilt of the breath and a tilt of the mind, which set the noise floor.",
-    "A pull toward the past, a pull toward the future and a pull toward other people."
+    "Too much thinking, too much feeling and too much doing, which tire the mind over a long day.",
+    "A sense of not enough, a sense of separation, and a pull to repeat the old patterns.",
+    "Fear of the past, anger at the present and worry about the future, which colour what we see.",
+    "A weak body, a weak will and a weak memory, which are inherited and cannot well be changed."
    ],
-   "a": 0,
-   "e": "These are the three malas. Like a faint blue tint on every photo, the bias is in the instrument and not in you, and can be recalibrated.",
-   "c": "Not enough, separation, pull to repeat: biases in the instrument",
-   "s": "Part 3"
-  },
-  {
-   "t": "judge",
-   "kind": "J",
-   "q": "“Each ache is the faint signal of what it hides: you feel not enough only against a dim sense of fullness.”",
-   "a": 0,
-   "e": "You feel not enough only against a dim sense of fullness, separate only against a dim unity, and trapped only against a dim freedom. The ache points to what it hides.",
-   "c": "Each ache is the faint signal of what it hides",
+   "a": 1,
+   "e": "Not enough, separate, and stuck on repeat. They are like a camera with a slight blue tint: the bias is in the instrument, not in the scenes and not in the one holding the camera. So, like any miscalibration, they can be gently corrected.",
+   "c": "Not enough, separate, stuck on repeat",
    "s": "Part 3"
   },
   {
    "t": "mc",
    "kind": "A",
-   "q": "A man tries to fight his racing thoughts by forcing them quiet, and they grow louder. What does Conversation 3.4 suggest?",
+   "q": "Kai feels the old sense of ‘not enough’ and takes it as proof that he is broken. How does Swamiji turn this round?",
    "o": [
-    "Lower the floor: simpler input, a settled body and one steady wholesome thing to rest on.",
-    "Try still harder, since the noise is certain to give way before enough effort.",
-    "Turn up the volume of the signal, so that it can be heard above the noise.",
-    "Ignore the noise completely and carry on, since nothing at all can lower it."
+    "He agrees it is proof, but says it can be fixed once Kai achieves enough in his work and life.",
+    "He tells Kai to ignore the feeling, since feelings of this kind carry no meaning of any sort.",
+    "The ache is the faint rumour of a fullness underneath; you feel lack only against a dim sense of it.",
+    "He says the feeling shows Kai is too proud, and that humility is what will make it go away."
    ],
-   "a": 0,
-   "e": "Fighting static by trying harder is like turning up the volume: louder static. Lower the floor instead, with simpler input, a settled body, clean living and one steady wholesome thing such as the breath, a sacred word or a loved image.",
-   "c": "Lower the floor, do not fight the noise",
+   "a": 2,
+   "e": "A thing that was simply small, and knew nothing else, would not ache about it. The pain of the tilt is the rumour of what the tilt is covering: fullness, unity and freedom pressing up through the noise. The very thing that feels like evidence of being broken points to something underneath that is not.",
+   "c": "The ache is a faint signal of the fullness beneath",
+   "s": "Part 3"
+  },
+  {
+   "t": "mc",
+   "kind": "A",
+   "q": "Kai wants less noise and says ‘just stop thinking’ has never worked. What approach does Swamiji give him?",
+   "o": [
+    "Push harder against each thought, because a strong will is what finally brings the noise down.",
+    "Lower the floor: fewer inputs, a settled body, clean living, and one steady good thing to rest on.",
+    "Accept the noise as it is and do nothing about it, since any step only adds to the static.",
+    "Fill the mind with as many good thoughts as it will hold, so that no room remains for the rest."
+   ],
+   "a": 1,
+   "e": "Fighting noise is like turning the volume up on static: you get louder static. You lower the floor. A steady thing such as the breath, a sacred word or a loved image stops the mind beating against scattered objects, and a finer thing lifts it too. Nothing is manufactured; the calm was always broadcasting.",
+   "c": "Do not fight the noise; lower the floor",
    "s": "Part 4"
   },
   {
    "t": "mc",
    "kind": "A",
-   "q": "A teacher wants to quiet a noisy classroom without raising her voice. Which idea from Conversation 3.4 fits?",
+   "q": "James tries a calm, unhurried first two minutes in class and fewer competing inputs. What is he testing?",
    "o": [
-    "Lower the floor: less input, a settled rhythm and one steady thing to rest on.",
-    "Speak above the noise, since a louder signal is the only way to be heard by all of them.",
-    "Wait for the noise to pass by itself, since a noise floor cannot be changed by anyone at all.",
-    "Single out the loudest pupils, since they alone are the cause of the whole of the high floor."
+    "Whether quieter surroundings make the class easier to control, which is a matter of discipline.",
+    "Whether the pupils have been taught enough, since a calm start gives time to check the lesson.",
+    "Whether attention that seemed absent was simply under a noisy floor, and comes back as it drops.",
+    "Whether a slower pace makes the pupils like him more, which would in turn make them work harder."
    ],
-   "a": 0,
-   "e": "Practice does not manufacture peace: it lowers the floor so that what was always broadcasting can be heard. The same applies to a room, with simpler input and a steady rhythm.",
-   "c": "Quiet a room by lowering the floor, not raising the volume",
-   "s": "Part 4"
+   "a": 2,
+   "e": "James looks at his classroom as a noise floor. The experiment is to lower the room’s floor and see what attention was hiding beneath it. Attention that seems missing may only be masked.",
+   "c": "Test whether attention was hiding under the floor",
+   "s": "Practical situation"
   },
   {
    "t": "mc",
    "kind": "A",
-   "q": "A man says, “I only feel peace when I get rid of every thought.” How does Conversation 3.4 reply?",
+   "q": "Dr Watson has a patient carrying shame about her state. What two things does Swamiji suggest he offers?",
    "o": [
-    "Peace is heard and not made: the calm watcher and the gaps between thoughts were always there.",
-    "Peace comes only from silencing every single thought, so he should keep up the effort.",
-    "Peace is a mood, which comes and goes at random and cannot be influenced by him at all.",
-    "Peace is for a few people only, so he should not expect it in an ordinary and busy life."
+    "The reframe of a high noise floor, not a flaw, with one concrete step he would recommend anyway.",
+    "A firm reminder that her state is her own to put right, with a list of what she must change.",
+    "A promise that the noise will clear within a week, so that she can stop worrying at once.",
+    "A diagnosis of the exact kind of static she has, with no mention of what might be done about it."
    ],
    "a": 0,
-   "e": "Practice lowers the floor so that what was always broadcasting, the gaps between thoughts and the calm watcher underneath, can be heard. Peace is uncovered, not produced.",
-   "c": "Peace is uncovered, not produced",
-   "s": "Part 4"
+   "e": "A true thing to tell someone who is suffering: not become someone else, but let us quiet the room and let what is already in you come through. Pair the reframe with sleep, less input or slow breathing. It carries no shame and real hope.",
+   "c": "Offer the reframe plus one floor-lowering step",
+   "s": "Practical situation"
   }
  ]
 }
