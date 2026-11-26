@@ -28,3 +28,10 @@ Notes
 - The Module handbooks have figure frames that refer to these figures, so the lessons and handbooks should match.
 - Method: upload each figure to Wix Media, then insert an IMAGE node at the right place in the lesson (Ricos), with alt text and caption as done for 3.3. Check each lesson afterwards. Republishing a lesson from Markdown wipes the quiz and handbook boxes, so insert images by PATCH and not by republishing.
 - Advanced and Parents courses: also check for missing figures.
+
+## Module 4 (27 Nov 2026): DONE on Wix
+- Quizzes CON-4-1 to CON-4-7 pushed, registry rows added, click-tested (900 and 390 px).
+- Module 4 handbook: 28 pages (cover 1, terms 2 to 7, then 3 pages per conversation: 4.1 pp. 8-10, 4.2 11-13, 4.3 14-16, 4.4 17-19, 4.5 20-22, 4.6 23-25, 4.7 26-28). Wix media ID af2af0_0d7128cbdba843ddb569d024a664017e.pdf. Palette bm4 (rust) is a proposal awaiting review. Specs in hbkit/lessons/m4_specs.py.
+- Lessons 4.1 to 4.7 wired (4 buttons each, read back). Beginners step IDs: 4.2 is f94eaec1-8304-41bd-a08f-f8cdfddbcddf (an earlier note had a typo). Always GET before PATCH.
+- Quizzes for Modules 1 to 4 were written from key ideas, practical situations and part headings, not the full lesson text: the reviewer must check against the full text.
+- Figures: 4.1, 4.6 and 4.7 have no images on Wix (4.2 to 4.5 have 3 each); check against the Drive masters (see the figures to-do).
