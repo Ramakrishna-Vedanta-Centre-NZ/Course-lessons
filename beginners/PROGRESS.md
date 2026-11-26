@@ -35,3 +35,9 @@ Notes
 - Lessons 4.1 to 4.7 wired (4 buttons each, read back). Beginners step IDs: 4.2 is f94eaec1-8304-41bd-a08f-f8cdfddbcddf (an earlier note had a typo). Always GET before PATCH.
 - Quizzes for Modules 1 to 4 were written from key ideas, practical situations and part headings, not the full lesson text: the reviewer must check against the full text.
 - Figures: 4.1, 4.6 and 4.7 have no images on Wix (4.2 to 4.5 have 3 each); check against the Drive masters (see the figures to-do).
+
+## Module 3 (27 Nov 2026): DONE on Wix
+- Quizzes CON-3-1, 3-2, 3-4 to 3-8 added (3.3 was the pilot); pushed, click-tested, registry rows added.
+- Module 3 handbook rebuilt with all 8 lessons (31 pages: cover 1, terms 2 to 7, then 3 pages each: 3.1 pp. 8-10 ... 3.8 pp. 29-31; 3.3 on pp. 14-16). Wix media ID af2af0_0fbee8be35684465a93cbf115a9fc83e.pdf. Specs in hbkit/lessons/m3_specs.py (3.3 spec is C3_3.py). Cover palette is the module 3 one used by the builder; the review items on the 3.3 pilot (byline, fictional scene, palette) still stand and now apply to every handbook.
+- Lessons 3.1 to 3.8 wired (4 buttons each, read back). 3.3 kept its quiz box and gained the handbook button and paragraph.
+- Figures on Wix: 3.1 has 4 images, 3.2 3, 3.3 3, 3.4 3, 3.5 4, 3.6 4, 3.7 3, 3.8 3.
