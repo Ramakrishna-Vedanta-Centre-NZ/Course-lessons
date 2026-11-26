@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Quiz: Conversation 3.2, Interference: How the Knower Meets the Known</title>
+<meta name="description" content="Ten questions on Conversation 3.2, Interference: How the Knower Meets the Known, from The Mind: Conversations (Beginners).">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400..700;1,400..700&family=Noto+Sans:wght@400..700&display=swap">
+<style>
+:root{
+ --bg:#FBF5EA; --surface:#FFFDF8; --ink:#1E1E1E; --muted:#5A5A5A; --line:#E6DAC3; --tint:#F3EAD3;
+ --navy:#12285A; --gold:#C9A24A; --goldt:#6B4E0E; --qink:#13295B;
+ --res:#12285A; --ok:#2F5A2E; --okbg:#E3EDDF; --no:#C2557A; --nobg:#F6E3EA;
+ --display:"Noto Serif",Georgia,serif; --body:"Noto Sans",system-ui,-apple-system,"Segoe UI",sans-serif; --mono:"Noto Sans",system-ui,sans-serif;
+}
+@media (prefers-color-scheme: dark){
+ :root:not([data-theme="light"]){
+  --bg:#0B1A3D; --surface:#12285A; --ink:#FBF5EA; --muted:#C9C3B3; --line:#2B4686; --tint:#1D3770;
+  --goldt:#E6C36A; --qink:#FBF5EA; --res:#E6C36A; --ok:#8FD79A; --okbg:#1E3A2A; --no:#F08FB0; --nobg:#4A2236; color-scheme:dark;
+ }
+}
+:root[data-theme="dark"]{
+ --bg:#0B1A3D; --surface:#12285A; --ink:#FBF5EA; --muted:#C9C3B3; --line:#2B4686; --tint:#1D3770;
+ --goldt:#E6C36A; --qink:#FBF5EA; --res:#E6C36A; --ok:#8FD79A; --okbg:#1E3A2A; --no:#F08FB0; --nobg:#4A2236; color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;
+ padding:18px max(14px,env(safe-area-inset-right,0px)) 30px max(14px,env(safe-area-inset-left,0px))}
+.wrap{max-width:720px;margin:0 auto;display:flex;flex-direction:column;gap:16px}
+h1{font-family:var(--display);font-weight:500;font-size:clamp(24px,5vw,32px);line-height:1.15;margin:0}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.sub{color:var(--muted);margin:0}
+.bar{height:6px;background:var(--line);border-radius:3px;overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--res);transition:width .25s}
+.meta{display:flex;justify-content:space-between;font-size:13px;color:var(--muted)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:20px 18px;display:flex;flex-direction:column;gap:14px}
+.qn{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:0}
+.q{font-family:var(--display);font-size:clamp(19px,3.4vw,22px);line-height:1.35;margin:0}
+.opts{display:flex;flex-direction:column;gap:10px}
+.opt{font:inherit;text-align:left;color:var(--ink);background:var(--surface);border:2px solid var(--line);border-radius:10px;padding:12px 14px;cursor:pointer;width:100%}
+.opt:hover:not(:disabled){border-color:var(--res)}
+.opt.right{border-color:var(--ok);background:var(--okbg)}
+.opt.wrong{border-color:var(--no);background:var(--nobg)}
+.opt:disabled{cursor:default}
+input.fill{font:inherit;width:100%;padding:12px 14px;border:2px solid var(--line);border-radius:10px;background:var(--surface);color:var(--ink)}
+input.fill:focus{outline:none;border-color:var(--res)}
+.btn{font:inherit;font-weight:600;font-size:15px;color:var(--surface);background:var(--ink);border:0;border-radius:8px;padding:11px 20px;cursor:pointer;text-decoration:none;display:inline-block}
+.btn.alt{background:var(--surface);color:var(--ink);border:1px solid var(--ink)}
+button:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(--res);outline-offset:2px}
+.fb{display:none;padding:12px 14px;border-radius:10px;font-size:15.5px;line-height:1.5}
+.fb.ok{display:block;background:var(--okbg);border-left:5px solid var(--ok)}
+.fb.no{display:block;background:var(--nobg);border-left:5px solid var(--no)}
+.fb b{display:block;margin-bottom:2px}
+.nav{display:flex;justify-content:flex-end}
+.res{text-align:center}
+.score{font-family:var(--display);margin:4px 0}
+.score .big{font-size:60px;line-height:1}
+.score .of{font-size:26px;color:var(--muted)}
+.band{font-family:var(--display);font-size:22px;margin:0}
+.band.good{color:var(--ok)} .band.rev{color:var(--res)}
+.res p{margin:0}
+.revisit{text-align:left;background:var(--tint);border-radius:10px;padding:12px 14px}
+.revisit h2,.review h2{font-family:var(--display);font-size:18px;margin:0 0 6px}
+.revisit ul{margin:0;padding-left:20px}
+.review{text-align:left;display:flex;flex-direction:column;gap:8px}
+.review .item{padding:10px 12px;border-radius:8px;font-size:15px;line-height:1.45}
+.review .r{background:var(--okbg)} .review .w{background:var(--nobg)}
+.review .item small{display:block;color:var(--muted);margin-top:4px}
+.acts{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+.saved{font-size:14px;color:var(--muted)}
+footer{text-align:center;font-size:13px;color:var(--muted)}
+footer a{color:var(--res)}
+.wrap header{background:#12285A;color:#FBF5EA;text-align:center;padding:18px 16px 20px;border-radius:14px}
+.wrap header img{width:56px;height:66px;object-fit:contain;display:block}
+.wrap header .logos{display:flex;align-items:center;justify-content:center;gap:18px}
+.wrap header img.rit{width:86px;height:65px}
+.wrap header .eyebrow{color:#E6C36A;font-weight:700;letter-spacing:3px;margin:8px 0 0}
+.wrap header h1{color:#FBF5EA;font-weight:700;margin:6px 0 4px}
+.wrap header .course{font-size:14px;color:#E6C36A;margin:0 0 8px;font-weight:600}
+.wrap header .sub{color:#F1ECDF;font-size:15px}
+.bar i{background:var(--gold)!important}
+.opt:hover:not(:disabled){border-color:var(--gold)!important}
+input.fill:focus{border-color:var(--gold)!important}
+.q{color:var(--qink)}
+.qn{color:var(--goldt);font-weight:700}
+.btn{background:var(--navy)!important;color:#FBF5EA!important}
+.btn.alt{background:transparent!important;color:var(--ink)!important;border:1px solid var(--navy)!important}
+.card{box-shadow:0 2px 8px rgba(19,41,91,.08)}
+.reflect{text-align:left;background:var(--tint);border-radius:10px;padding:12px 14px}
+.reflect h2{font-family:var(--display);font-size:18px;margin:0 0 6px}.reflect p{margin:0 0 6px}.note{font-size:14px;color:var(--muted);margin:0}
+</style>
+</head>
+<body>
+<div class="wrap">
+ <header>
+  <div class="logos"><img src="../vedantanz-logo.png" alt="Ramakrishna Vedanta NZ emblem" width="56" height="66"><img class="rit" src="../ritam-wordmark.png" alt="Ritam" width="86" height="65"></div>
+  <p class="eyebrow">Quiz · Conversation 3.2</p>
+  <h1>Interference: How the Knower Meets the Known</h1>
+  <p class="course">The Mind: Conversations (Beginners)</p>
+  <p class="sub">Ten questions on the ideas in the lesson. Take them as often as you like; each answer comes with its explanation.</p>
+ </header>
+ <div class="bar"><i id="prog"></i></div>
+ <div class="meta"><span id="pos"></span><span id="sc"></span></div>
+ <div id="app"></div>
+ <footer>Quiz · <a href="https://www.vedanta.nz">www.vedanta.nz</a>. Privacy: when you are signed in, your name, email, answers and score are saved to your member record. Only you and the course instructors can see them. They are not shared or ranked.</footer>
+</div>
+<script>
+/* Types: mc (options o, correct index a; shuffled on display), judge (statement q; a: 0 True, 1 False, 2 True only in part).
+   e = explanation, c = idea to revisit, s = lesson section. Generated by tools/con_quiz/build_con.py from tools/con_quiz/data/CON-3-2.json. */
+var META={"code": "CON-3-2", "lesson": "3.2", "quizTitle": "Quiz: Conversation 3.2, Interference: How the Knower Meets the Known", "programme": "The Mind: Conversations (Beginners)", "cut": 70};
+var REFLECT="Choose one meeting this week, and before it settle your own wave with three slow breaths. What changes in the meeting?";
+var Q=[{"t": "mc", "q": "What does Conversation 3.2 mean by saying that a perception is a meeting and not a delivery?", "o": ["Every experience adds the world’s wave to your own, so you live the meeting and never the bare world.", "The world sends its message complete, and the mind receives it exactly as it was sent.", "Two people meet in every perception, and each one reports to the other what was seen.", "The senses deliver raw facts, and the mind adds its comments some time afterwards."], "a": 0, "e": "Every experience is two waves added together: the world’s wave and your own, your attention, mood and state of mind. Each stays fully itself, and the pattern you live belongs to neither alone.", "c": "You never live the bare world, only the meeting", "s": "Part 1"}, {"t": "mc", "q": "A man cannot change the date of his exam or what his friend said. What does Conversation 3.2 say he can do?", "o": ["Settle and straighten the wave he brings, so the meeting changes even if the world does not.", "Wait for the world to change itself, since the meeting depends on that alone and not on him.", "Argue with the world’s wave, until it has been made to match everything that he expected.", "Block out the world’s wave entirely, so that nothing is left for him to meet at all."], "a": 0, "e": "You usually cannot change what arrives, but the wave you bring can be settled and straightened, so the meeting changes. This is the seed of every practice in the contemplative traditions.", "c": "Train your wave, not the world’s", "s": "Part 1"}, {"t": "mc", "q": "What does the beat show, in Conversation 3.2?", "o": ["The gap between your rhythm and the world’s, felt as a rough pulse that slows as you near.", "The speed of the heart, which a person can count to find out just how calm the mind is.", "The sound of a thought, which grows louder whenever a person is thinking very hard indeed.", "The rhythm of the day, which is set by the sun and which no single person can ever alter."], "a": 0, "e": "When your rhythm is far from the world’s, the meeting produces a fast, rough pulse and you feel separate, behind glass. As your rhythm comes close, the beat slows. When it matches, the beat vanishes into one steady presence: flow, or samādhi.", "c": "The beat is the gap between the two rhythms, made felt", "s": "Part 2"}, {"t": "mc", "q": "A defensive teenager is chopping a lesson into fragments. What is the first move Conversation 3.2 suggests?", "o": ["Meet the teenager’s rhythm before adding information, since the gap is the difficulty.", "Add more content at once, since more material is the surest way to fill up any gap.", "Ask the teenager to try a good deal harder, since a lack of effort is the usual cause.", "Leave the teenager alone entirely, since a wave of this kind is beyond anyone’s reach."], "a": 0, "e": "The wave they bring may be far from the material’s, chopping it into fragments. Closing the gap beats adding content, and getting it is the beat going quiet.", "c": "Close the gap before adding content", "s": "Part 2"}, {"t": "judge", "q": "“A well-tuned wave always meets the world fully, whatever tilt the person carries.”", "a": 1, "e": "Even a perfectly tuned wave, if heavily tilted toward what does this mean about me, does not fully meet the world. At the extreme it cancels, and someone present in body is absent in the meeting.", "c": "A heavy self-tilt keeps even a tuned wave from meeting the world", "s": "Part 3"}, {"t": "mc", "q": "A teacher notices that she turns every encounter toward what it says about her. What does Conversation 3.2 suggest?", "o": ["Release the tilt gently with a breath and a choice to listen rather than defend.", "Pretend that she has no tilt, so that nobody is able to see how she feels.", "Blame the people she meets, since they are the ones who set the pattern off.", "Accept the tilt as her nature, since a posture of this kind is bound to stay."], "a": 0, "e": "The tilt is ahaṁkāra, a posture often built by fear or hurt, and it can be gently released with a breath and a choice to listen rather than defend.", "c": "The tilt is a posture, and it can be released gently", "s": "Part 3"}, {"t": "mc", "q": "Why does Conversation 3.2 say that two waves can meet at all?", "o": ["They are two motions of one shared medium, Consciousness, moving as knower and as known.", "They are sent by two separate sources, which happen to meet at a single point.", "They are made by the senses, which stand between the mind and the world outside.", "They are made by chance, so that no two people ever meet the same wave twice."], "a": 0, "e": "Two waves can only meet in one shared medium, like a pond. The contemplative traditions say knower and known are two motions of Consciousness, and nothing new is created in the meeting: the sense of separation is a real appearance, not a new substance.", "c": "Knower and known are two motions of one Consciousness", "s": "Part 3"}, {"t": "judge", "q": "“A flooded mind can manufacture false signals, such as phantom danger, that match nothing actually present.”", "a": 0, "e": "When a system is overdriven by stress it stops adding waves cleanly and makes its own weather: phantom danger in anxiety, self-feeding loops in rumination, flatness in shutdown. Willpower cannot out-argue this; lowering the drive can.", "c": "An overdriven mind makes its own weather", "s": "Part 4"}, {"t": "mc", "q": "A woman is flooded by worry and cannot reason her way out. What does Conversation 3.2 suggest?", "o": ["Lower the drive: slow breathing, less stimulation, steady rhythm and calm company.", "Reason harder, since a flooded mind is best answered by a stronger argument.", "Add more to her day, since a busy mind has less time left over for worry.", "Wait until she is calm to begin, since nothing can be done while she is flooded."], "a": 0, "e": "Settling the water so that a clean meeting is possible again is often the healing itself, and not a preliminary to it.", "c": "Settle the water first: lower the drive", "s": "Part 4"}, {"t": "mc", "q": "A man is rarely present in conversation, though his body is in the room. Which idea from Conversation 3.2 does this fit?", "o": ["A heavy tilt can cancel the meeting, so he is present in body but absent in the meeting.", "A perfect beat, since he feels no gap between his rhythm and the world’s at all.", "A flooded mind, since all of his attention is given to the people around him.", "A shared pond, since he and the others have already merged into one wave."], "a": 0, "e": "At the extreme the tilt cancels the meeting: someone present in body is absent in the meeting. The remedy is not to try harder but to release the tilt with a breath and a choice to listen.", "c": "A heavy tilt can leave a person absent in the meeting", "s": "Part 3"}];
+(function(){
+ var q=new URLSearchParams(location.search);
+ if(q.get('theme')==='light')document.documentElement.setAttribute('data-theme','light');
+ if(q.get('theme')==='dark')document.documentElement.setAttribute('data-theme','dark');
+})();
+var i=0,right=0,ans=[],started=false;
+var app=document.getElementById('app');
+var JL=['True','False','True only in part'];
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;')}
+function hdr(){
+ document.getElementById('pos').textContent=i<Q.length?'Question '+(i+1)+' of '+Q.length:'Finished';
+ document.getElementById('sc').textContent=i<Q.length?right+' right so far':'';
+ document.getElementById('prog').style.width=(100*Math.min(i,Q.length)/Q.length)+'%';
+}
+function send(m){try{window.parent.postMessage(m,'*')}catch(e){}}
+function ref(s){return s?'Conversation '+META.lesson+', '+s:'Conversation '+META.lesson}
+function show(){
+ hdr();
+ if(i>=Q.length){return result()}
+ var qq=Q[i];
+ var h='<div class="card"><p class="qn">Question '+(i+1)+'</p><p class="q">'+esc(qq.q)+'</p><div class="opts">';
+ if(qq.t==='mc'){var ord=qq.o.map(function(o,k){return k});for(var r=ord.length-1;r>0;r--){var s2=Math.floor(Math.random()*(r+1)),t2=ord[r];ord[r]=ord[s2];ord[s2]=t2}ord.forEach(function(k,pos){h+='<button class="opt" data-k="'+k+'">'+String.fromCharCode(65+pos)+'. '+esc(qq.o[k])+'</button>'})}
+ else{JL.forEach(function(o,k){h+='<button class="opt" data-k="'+k+'">'+o+'</button>'})}
+ h+='</div><div class="fb" id="fb" role="status"></div><div class="nav"><button class="btn" id="nx" style="display:none">'+(i===Q.length-1?'See my result':'Next question')+'</button></div></div>';
+ app.innerHTML=h;
+ app.querySelectorAll('.opt').forEach(function(b){b.onclick=function(){mark(+b.dataset.k===qq.a,b)}});
+ document.getElementById('nx').onclick=function(){i++;show();window.scrollTo(0,0)};
+}
+function mark(ok,btn){
+ started=true;
+ var qq=Q[i];if(ok)right++;ans.push({q:i+1,ok:ok,given:btn?btn.textContent:''});
+ app.querySelectorAll('.opt').forEach(function(b){b.disabled=true;if(+b.dataset.k===qq.a)b.classList.add('right')});
+ if(!ok&&btn)btn.classList.add('wrong');
+ var ra=qq.t==='mc'?qq.o[qq.a]:JL[qq.a];
+ var fb=document.getElementById('fb');fb.className='fb '+(ok?'ok':'no');
+ fb.innerHTML='<b>'+(ok?'Right.':'Not quite. The answer is: '+esc(ra))+'</b>'+esc(qq.e)+' <i>('+ref(qq.s)+'.)</i>';
+ document.getElementById('nx').style.display='inline-block';hdr();
+ send({type:'progress',code:META.code,state:{i:i+1,right:right,ans:ans}});
+}
+function result(){
+ var n=Q.length,p=Math.round(100*right/n),good=p>=META.cut;
+ var h='<div class="card res"><p class="qn">Your result</p><p class="score"><span class="big">'+p+'%</span></p>'+
+  '<p class="band '+(good?'good':'rev')+'">'+(good?'Well grasped':'Revisit these ideas')+'</p>'+
+  '<p>'+right+' of '+n+' questions right.</p><p class="note">This quiz is about the ideas in the conversation, not about you.</p>';
+ var miss=[];Q.forEach(function(qq,k){if(!ans[k]||!ans[k].ok)miss.push(qq)});
+ if(miss.length){h+='<div class="revisit"><h2>Ideas to revisit</h2><ul>';miss.forEach(function(qq){h+='<li>'+esc(qq.c)+' <i>('+ref(qq.s)+')</i></li>'});h+='</ul></div>'}
+ else{h+='<div class="revisit"><h2>Nothing to revisit</h2><p>Every idea in this quiz was answered correctly.</p></div>'}
+ if(REFLECT){h+='<div class="reflect"><h2>A question to take home</h2><p>'+esc(REFLECT)+'</p><p class="note">Not scored. There is no right answer. Your own home is the best place to find out what works.</p></div>'}
+ h+='<div class="review"><h2>Every question, with its answer</h2>';
+ Q.forEach(function(qq,k){var ok=ans[k]&&ans[k].ok;var a=qq.t==='mc'?qq.o[qq.a]:JL[qq.a];
+  h+='<div class="item '+(ok?'r':'w')+'">'+(ok?'Right. ':'Not quite. ')+'<b>Q'+(k+1)+'</b> '+esc(qq.q)+'<br>Answer: '+esc(a)+'<small>'+esc(qq.e)+' ('+ref(qq.s)+')</small></div>'});
+ h+='</div><p class="saved" id="savedmsg"></p><div class="acts"><button class="btn" id="again">Take it again</button></div></div>';
+ app.innerHTML=h;
+ document.getElementById('again').onclick=function(){i=0;right=0;ans=[];show();window.scrollTo(0,0)};
+ send({type:'quizResult',code:META.code,title:META.quizTitle,programme:META.programme,score:right,maxScore:n,percent:p,questionsCorrect:right,questionCount:n,answers:ans});
+ send({type:'progress',code:META.code,state:null});
+}
+window.addEventListener('message',function(ev){
+ var d=ev.data;if(!d||!d.type)return;
+ var m=document.getElementById('savedmsg');
+ if(d.type==='saved'&&m){m.textContent='Your result has been saved to your member record.'}
+ if(d.type==='saveError'&&m){m.textContent='Your result could not be saved this time. You can take the quiz again.'}
+ if(d.type==='notMember'&&m){m.textContent='Sign in as a member to have your result saved.'}
+ if(d.type==='resume'&&d.state&&d.state.i>0&&d.state.i<Q.length&&!started){offerResume(d.state)}
+});
+function offerResume(st){
+ var h='<div class="card"><p class="qn">Welcome back</p><p class="q">You have answered '+st.i+' of '+Q.length+' questions so far.</p><p>Would you like to continue where you left off, or start again from the beginning?</p><div class="acts"><button class="btn" id="cont">Continue from question '+(st.i+1)+'</button><button class="btn alt" id="rest">Start again</button></div></div>';
+ app.innerHTML=h;
+ document.getElementById('cont').onclick=function(){i=st.i;right=st.right||0;ans=st.ans||[];started=true;show()};
+ document.getElementById('rest').onclick=function(){i=0;right=0;ans=[];started=true;show()};
+}
+show();
+send({type:'ready'});
+</script>
+</body>
+</html>
