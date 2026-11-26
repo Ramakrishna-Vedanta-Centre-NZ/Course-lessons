@@ -15,3 +15,9 @@ Notes
 - Module colours bm1, bm2, bm4, bm5 added to hb.css as proposals (bm3 violet from the pilot). Awaiting review.
 - Do not put an apostrophe or curly quote in ExecuteWixAPI code text without checking: one curly apostrophe was corrupted to "w" in 3.3 (fixed, rev 7).
 - Staging a PDF for Wix import: push to Course-lessons under a folder not starting with underscore, import by URL with UploadImageToWixSite, then remove the folder.
+
+## TO DO: upload the figures (added 27 Nov 2026 at Swamiji's request)
+- Module 5 lessons (5.1 to 5.8) on Wix have NO figures, although the Drive masters contain them. The handbook figure frames refer to those figures.
+- Audit every Beginners lesson on Wix (1.1 to 5.8) against its Drive master: list figures in the master, list IMAGE nodes on Wix, upload and place any that are missing (with alt text and captions as done for 3.3).
+- Cause not yet established: the Module 5 Wix lessons appear to have been published from text only. To be checked, not assumed.
+- Only 3.3 has had a figure audit so far. Inserting images must not disturb the "Along with this lesson" box or the end quiz block.
