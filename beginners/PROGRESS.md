@@ -20,14 +20,15 @@ Trashed: af2af0_bf88, 8003, fe37, db71, 53b1, fcb5, 0fbe, 0d71, 3520, old M1 2ab
 One purpose only: modern education makes us literate about the physical body, but not about the mind that we use from birth to death; that is the reason for the course. Not extended to illness, prevention or a health model. Revised in lessons 1.1, 1.6, 2.1, 2.7, quizzes c1_1 and c1_6, and the M1 handbook. Dr Watson's clinical wording in Modules 3 and 4 left unchanged (flag to Swamiji).
 
 ## Module 5 quiz full-text check (27 Nov)
-Compared against the live Beginners lessons (program e40d25ac). 5.1, 5.3, 5.4 read in full against the quiz questions: scenes, pictures and terms match (e.g. 5.4 spoonful and bucket, riverbed, reins, sole doer; 5.3 seedling, two notes, screen, mauna, obstacles). 5.5 and 5.8 checked by vocabulary: no quiz term missing from the lesson except common English words. 5.2, 5.6, 5.7 checked at the level of stories and terms (minister and threads, beetle, swan emblem, surgeon and anatomy, staircase, mantra, forceful breathing); not read line by line. No quiz rewritten. Lesson 3.3 quiz written from full text earlier; no rework.
+Compared against the live Beginners lessons (program e40d25ac). 5.1, 5.3, 5.4 read in full against the quiz questions: scenes, pictures and terms match (e.g. 5.4 spoonful and bucket, riverbed, reins, sole doer; 5.3 seedling, two notes, screen, mauna, obstacles). 5.5 and 5.8 checked by vocabulary: no quiz term missing from the lesson except common English words. 5.2, 5.5, 5.6, 5.7, 5.8 then checked line by line against the live lessons the same afternoon: every scene, picture and claim in the quiz questions and explanations is in the lesson. One change: CON-5-8 judge item on the cave softened to what the lesson says (commit 6a5e169). Other quizzes unchanged. Lesson 3.3 quiz written from full text earlier; no rework.
 
 ## My Journey (Wix editor)
 Backend quizResults.web.js, page code (o93cs) and embed changes PUBLISHED LIVE by Swamiji's instruction on 27 Nov 2026 (about 12:10 NZ). Still needs a member test (Test Site, with a CON result), a second-member privacy check, and Swamiji's decision to publish. Files: wix-code/my-journey-quiz-results/. Drive backups: folder "Wix code - My Journey".
 
 ## Open items
-- Mobile lesson title spacing (wrapped titles show a large gap between the two lines, screenshot 07:53): not yet investigated.
-- Flag to Swamiji: 4.3 and 4.4 "RWF" title wording; 4.2 "Guṇas" wording; handbook scenes are fictional; module palettes bm1 to bm5 and the 3.3 handbook review items apply to all handbooks; module quizzes and capstone deferred; Desktop file m1to4_digest.txt can be removed; propose_skills card awaiting him.
+- Mobile lesson title spacing: CAUSE FOUND 27 Nov. The Wix participant page styles the lesson title (H3, mobile, type-7-article) at 18px with a fixed 40px line height (about 2.2x), so wrapped titles show a big gap. Titles in Wix are clean. Fix is a Participant Page design change affecting all programmes; awaiting Swamiji's decision.
+- Confirmed by Swamiji 27 Nov: the 4.2 to 4.4 title wording and Dr Watson's clinical wording stand as they are.
+- Flag to Swamiji (earlier): 4.3 and 4.4 "RWF" title wording; 4.2 "Guṇas" wording; handbook scenes are fictional; module palettes bm1 to bm5 and the 3.3 handbook review items apply to all handbooks; module quizzes and capstone deferred; Desktop file m1to4_digest.txt moved to Desktop/_to_delete (Swamiji can delete the folder); propose_skills card awaiting him.
 - Optional later: audit Advanced and Parents lessons' figures; check the Drive master and Advanced 1.1 for the same body-comparison stretch.
 
 ## Method notes
