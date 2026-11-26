@@ -1,0 +1,146 @@
+{
+ "code": "CON-1-5",
+ "lesson": "1.5",
+ "title": "How the One Becomes the Many",
+ "reflection": "Notice one label today that has hardened into a wall, such as a mood that became my whole life. Which working label could soften again?",
+ "questions": [
+  {
+   "t": "mc",
+   "kind": "U",
+   "q": "How does Conversation 1.5 describe māyā?",
+   "o": [
+    "Not mere illusion: the world is real but not what it first appears, and distinctions are not ultimate.",
+    "Pure illusion: the world is a dream, and a wise person simply stops taking any of it seriously.",
+    "A kind of magic: the world is made by tricks, and a clever person can see how they are done.",
+    "A kind of sin: the world is a trap, and a good person should turn away from it in disgust."
+   ],
+   "a": 0,
+   "e": "Māyā is not illusion. The world is real; distinctions are real; but they are not ultimate. Difference is not separation.",
+   "c": "Māyā: real but not ultimate",
+   "s": "Part 1"
+  },
+  {
+   "t": "mc",
+   "kind": "U",
+   "q": "What picture does Conversation 1.5 use for many appearing from one?",
+   "o": [
+    "One light and a prism: a single light shows as many colours, so difference is not separation.",
+    "One seed and a tree: the seed is used up, and only the tree is left to be seen afterwards.",
+    "One river and the sea: the river ends in the sea, and the two are no longer to be told apart.",
+    "One coin and its two sides: each side is quite separate, and the two can never be seen at once."
+   ],
+   "a": 0,
+   "e": "The prism shows many colours from one light. The colours are real and different, but they are not separate from the light.",
+   "c": "One light, many colours",
+   "s": "Part 1"
+  },
+  {
+   "t": "judge",
+   "kind": "J",
+   "q": "“Telling food from poison, or your own child from another’s, is a useful kind of differentiation.”",
+   "a": 0,
+   "e": "Differentiation is useful when it serves life. It binds only when a working label hardens into a wall, such as I am only this body, or a diagnosis that becomes who I am.",
+   "c": "Differentiation is useful until it hardens",
+   "s": "Part 1"
+  },
+  {
+   "t": "mc",
+   "kind": "A",
+   "q": "A man has been given a diagnosis and now says, “That is who I am.” Which point of Conversation 1.5 applies?",
+   "o": [
+    "A working label has hardened into a wall: the diagnosis describes something, not all of him.",
+    "The label is wrong, so he should reject the diagnosis and refuse to talk about it again.",
+    "The label is the whole truth, so he should arrange his life around it from this day onward.",
+    "The label does not matter, so he should never mention it to those who are caring for him."
+   ],
+   "a": 0,
+   "e": "A distinction that is useful becomes binding when it hardens: a mood becomes my whole life, a diagnosis becomes who I am. The lesson asks us to hold it as a working label.",
+   "c": "Hold a diagnosis as a working label, not as who you are",
+   "s": "Part 1"
+  },
+  {
+   "t": "mc",
+   "kind": "A",
+   "q": "A student says that space, time and causation must simply be an illusion. What does Conversation 1.5 say?",
+   "o": [
+    "The scaffolding of a livable world: real, indispensable, conditioned, and relational.",
+    "An illusion, which a wise person sees through and then has no more use for at all.",
+    "Absolute, fixed and unchanging, as physics shows once it has described them fully.",
+    "Of no practical use, since everyday life is lived in the present moment alone."
+   ],
+   "a": 0,
+   "e": "Without them there would be no livable world. But they are conditioned, and Einstein’s relativity shows them as relational, not absolute.",
+   "c": "Space, time and causation are the scaffolding",
+   "s": "Part 2"
+  },
+  {
+   "t": "mc",
+   "kind": "A",
+   "q": "A woman is troubled by a past that keeps coming back and a future that frightens her. What does Conversation 1.5 say about both?",
+   "o": [
+    "The mind builds time: memory is rebuilt and the future simulated, both made now, so workable.",
+    "The past is fixed and the future is certain, so she should just prepare herself to accept both of them.",
+    "The past is gone and the future is unreal, so she should stop thinking about either one of them.",
+    "The past is real and the future is real, so she must try to fix the one and avoid the other."
+   ],
+   "a": 0,
+   "e": "Memory is reconstruction and the future is simulation, both built in the present. This makes the haunting past and the frightening future workable, since they are constructions of this moment.",
+   "c": "The haunting past and frightening future are built now",
+   "s": "Part 3"
+  },
+  {
+   "t": "mc",
+   "kind": "A",
+   "q": "A man with low mood says that his past was always dark. What does Conversation 1.5 add?",
+   "o": [
+    "Depression suffers a past rebuilt by low mood: memory is rebuilt, so the colouring is workable.",
+    "Depression gives the most accurate view of the past, so he should trust what he sees.",
+    "Depression has no effect on memory, so the past was dark exactly as he now remembers it.",
+    "Depression is caused by the past alone, so he should look for the first thing that went wrong."
+   ],
+   "a": 0,
+   "e": "Depression suffers a past rebuilt by low mood, and anxiety a simulated future. Neither is fixed, which is why both are workable. This is gentle hope, not denial.",
+   "c": "Low mood rebuilds the past, so it is workable",
+   "s": "Part 3"
+  },
+  {
+   "t": "judge",
+   "kind": "J",
+   "q": "“Anxiety suffers a simulated future, and because the simulation is made by the mind, it can be worked with.”",
+   "a": 0,
+   "e": "The future is simulation, built from memory and mood. Seeing this does not deny that the fear is real; it shows that the fear is made, and so can be remade.",
+   "c": "Anxiety is a simulated future, and workable",
+   "s": "Part 3"
+  },
+  {
+   "t": "mc",
+   "kind": "A",
+   "q": "A teacher wants to try the experiment of Conversation 1.5 today. What does it ask?",
+   "o": [
+    "Find one label that has hardened into a wall, and ask whether it could soften into a working label.",
+    "Drop every label for the day, so as to see the world as it is, with no names for anything.",
+    "Add as many labels as she can, so as to see the world as it is, in the greatest detail.",
+    "Ask others which label fits her best, and then keep that label for the rest of her life."
+   ],
+   "a": 0,
+   "e": "The experiment is gentle: notice one label that has hardened, such as a mood that became my whole life, and ask whether it could be held as working.",
+   "c": "Soften one hardened label",
+   "s": "Part 3"
+  },
+  {
+   "t": "mc",
+   "kind": "U",
+   "q": "What do ground and flow have in common, in Conversation 1.5?",
+   "o": [
+    "Brahman and Śakti, Prakāśa and Vimarśa, stillness and movement: one architecture.",
+    "Three unrelated ideas, taken from three different schools of thought, which merely sound alike.",
+    "Three stages, in which a person leaves the ground behind in order to join the flow of things.",
+    "Three rivals, whose claims a person must weigh up before choosing the one that fits best."
+   ],
+   "a": 0,
+   "e": "The lesson ties Module 1 together: the ground and the flow are not two. Brahman and Śakti, Prakāśa and Vimarśa, stillness and movement describe one architecture.",
+   "c": "Ground and flow are one architecture",
+   "s": "Part 3"
+  }
+ ]
+}

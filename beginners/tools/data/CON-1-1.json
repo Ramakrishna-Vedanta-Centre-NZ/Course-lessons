@@ -1,0 +1,146 @@
+{
+ "code": "CON-1-1",
+ "lesson": "1.1",
+ "title": "What Is the Mind? A First Look",
+ "reflection": "Choose one strong reaction this week, and divide it into X and Y: the bare facts, and what you brought. Where did the situation end and where did you begin?",
+ "questions": [
+  {
+   "t": "mc",
+   "kind": "U",
+   "q": "What does Conversation 1.1 say about how well most people understand the mind?",
+   "o": [
+    "People use it every moment, yet almost nobody can say clearly what it is: a gap in our education.",
+    "People understand it better than the body, since it is the one thing everyone knows from inside.",
+    "People understand it as well as the body, since schools teach both in the same way and detail.",
+    "People do not need to understand it, since the mind looks after itself without any training."
+   ],
+   "a": 0,
+   "e": "We have solid literacy about our bodies, such as heart, lungs and digestion, but almost none about our minds. The course builds that literacy from both modern science and the Yoga Vedanta contemplative traditions.",
+   "c": "We lack literacy about the mind",
+   "s": "Part 1"
+  },
+  {
+   "t": "mc",
+   "kind": "U",
+   "q": "How does Conversation 1.1 describe thought?",
+   "o": [
+    "Useful but partial: it arrives after experience, like a commentary, a map and not the land itself.",
+    "Complete and exact: it shows an experience as it is, so a person can trust it in every case.",
+    "Harmful and false: it only gets in the way, so a person is better off without any of it.",
+    "Prior to experience: it comes first, and it decides what each experience is going to be."
+   ],
+   "a": 0,
+   "e": "Thought is a commentary on something already lived. Feeling is real but partial, since the brain’s alarm system, centred on the amygdala, can fire before thinking catches up. Ethical judgement is necessary but not final: sincerity does not guarantee accuracy.",
+   "c": "Thought is a map, not the land",
+   "s": "Part 2"
+  },
+  {
+   "t": "mc",
+   "kind": "A",
+   "q": "A woman feels afraid, though nothing around her is dangerous. Which idea from Conversation 1.1 helps?",
+   "o": [
+    "The alarm system can fire before thinking catches up, so feelings do not always match the situation.",
+    "Feelings are always exact, so there must be some danger that she has simply not yet noticed.",
+    "Feelings are always wrong, so she should learn to ignore each one that arises in her.",
+    "Feelings come from other people, so she should find out who it is that is causing this one."
+   ],
+   "a": 0,
+   "e": "Feeling is real but partial. The alarm system, centred on the amygdala, can fire before thinking catches up, which is why feelings do not always match the actual situation in front of us.",
+   "c": "Feelings are real but can run ahead of the situation",
+   "s": "Part 2"
+  },
+  {
+   "t": "judge",
+   "kind": "J",
+   "q": "“Every experience is X plus Y: X is what is given from outside, and Y is what you bring from inside.”",
+   "a": 0,
+   "e": "The two meet like two waves. The ripple is what we call the situation, but it is always a combination of both. Seeing this is liberating: what you are suffering is not the bare truth about the world, and you have a part in it.",
+   "c": "Experience is X plus Y",
+   "s": "Part 3"
+  },
+  {
+   "t": "mc",
+   "kind": "A",
+   "q": "A teacher is sure that a student is lazy. Which step does the practical situation of Conversation 1.1 suggest?",
+   "o": [
+    "Write the bare facts on one side, then on the other what she brings: mood, history, fears and hopes.",
+    "Write down only the student’s faults, so that she can see clearly what the student is like.",
+    "Wait until the feeling has gone, and only then decide whether it was right or wrong.",
+    "Ask other teachers for their view, so that the average of their opinions can be trusted."
+   ],
+   "a": 0,
+   "e": "The experiment is to divide what happened into X and Y, as if a camera recorded the facts, and then ask where the situation ended and where I began. There is no need to judge or change anything yet.",
+   "c": "Divide an event into X and Y",
+   "s": "Part 3"
+  },
+  {
+   "t": "mc",
+   "kind": "U",
+   "q": "What is the antaḥkaraṇa, according to Conversation 1.1?",
+   "o": [
+    "The inner instrument: the whole inner apparatus of thinking, feeling, judging and remembering.",
+    "The body’s main nerve: the pathway that carries every message from the brain to the heart.",
+    "The Self: the awareness that watches the instrument without ever taking part in its work.",
+    "The outer world: the field of things that the inner instrument looks at and is acted on by."
+   ],
+   "a": 0,
+   "e": "Manas, the processing mind, is part of it: it receives impressions from outside, sorts them and reacts. Module 2 takes the inner instrument apart in detail.",
+   "c": "The antaḥkaraṇa is the whole inner instrument",
+   "s": "Part 3"
+  },
+  {
+   "t": "judge",
+   "kind": "J",
+   "q": "“Because experience is partly what I bring, a painful experience can never be changed.”",
+   "a": 1,
+   "e": "The reverse holds. What you are suffering is not the bare truth about the world; it is something you have a part in, and that means it can change. This is liberating for anxiety and depression.",
+   "c": "What you bring can change",
+   "s": "Part 3"
+  },
+  {
+   "t": "mc",
+   "kind": "A",
+   "q": "A man scrolls his phone and feels worse than when he began. How does Conversation 1.1 suggest he look at it?",
+   "o": [
+    "Separate what the phone showed from what he brought to it: his mood, comparisons and fears.",
+    "Blame the phone alone, since the whole of the feeling must have come from the screen.",
+    "Blame himself alone, since only a weak person would feel worse after looking at a phone.",
+    "Ignore the feeling, since a reaction of this kind has no real cause behind it at all."
+   ],
+   "a": 0,
+   "e": "Kai’s experiment is to take the feeling after scrolling and divide it into X, what was on the screen, and Y, what he brought.",
+   "c": "Separate what was shown from what you brought",
+   "s": "Part 3"
+  },
+  {
+   "t": "mc",
+   "kind": "A",
+   "q": "A mother finds herself anxious before her daughter has said anything. Which idea from Conversation 1.1 fits?",
+   "o": [
+    "Y arrived first: what she brought, her history and fears, is already shaping the moment.",
+    "X arrived first: the daughter has already done something that she has not yet noticed.",
+    "Neither X nor Y is at work, since the anxiety has come out of nowhere at all.",
+    "The daughter is the whole cause, so the mother should ask her to change what she does."
+   ],
+   "a": 0,
+   "e": "Sarah’s practice is to catch the moment of anxiety before anything has been said and see what her Y is. This is where the situation ends and she begins.",
+   "c": "Anxiety before anything is said points to Y",
+   "s": "Part 3"
+  },
+  {
+   "t": "mc",
+   "kind": "A",
+   "q": "A man says, “I suppose it is all just my fault.” What does Conversation 1.1 add to this?",
+   "o": [
+    "It is neither all outside nor all inside: it is X and Y meeting, and the Y part is what he can work with.",
+    "It is all inside, so he is to blame for each thing that he feels, and for all of its causes.",
+    "It is all outside, so there is nothing for him to do except to wait for things to change.",
+    "It is all chance, so looking for a cause in himself or in the world is a waste of time."
+   ],
+   "a": 0,
+   "e": "The aim is not blame. Seeing the Y part gives a way to change the experience without pretending that nothing happened outside.",
+   "c": "X and Y meeting: work with the part that is yours",
+   "s": "Part 3"
+  }
+ ]
+}
