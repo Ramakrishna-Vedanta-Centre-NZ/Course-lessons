@@ -37,22 +37,22 @@
   {
    "t": "mc",
    "kind": "A",
-   "q": "James describes how a doctor is trained: what the body is, then anatomy, physiology, illness, treatment. How does Swamiji map this onto the five modules?",
+   "q": "James hears the five stages of the course. Which list matches Swamiji’s, in order?",
    "o": [
-    "Orientation, anatomy, physiology, clinical framework and treatment, one for each module in order.",
-    "Treatment, anatomy, orientation, physiology and clinical framework, in an order a learner may choose.",
-    "Anatomy, physiology and treatment only, since orientation and clinical framework belong to doctors.",
+    "Orientation, the structure of the mind, how experience is built, flourishing and drift, and practice.",
+    "Practice, orientation, flourishing and drift, the structure of the mind, and how experience is built.",
+    "The structure of the mind, how experience is built and practice only, since the other two are for specialists.",
     "Five separate subjects that can be taken in any order, since each stands on its own and none depends on another."
    ],
    "a": 0,
-   "e": "He adds that the asymmetry is costly: people know the major organs and yet go quiet when asked for the major functions of their own mind. Nothing in the curriculum is decorative, James adds, and everything earns its place.",
-   "c": "The course is a medical education for the mind",
+   "e": "Swamiji says this is how the course closes the gap between what we are taught about the body and what we are taught about the mind: people know the major organs and yet go quiet when asked for the major functions of their own mind. Nothing in it is decorative, James adds, and everything earns its place.",
+   "c": "The course in five stages",
    "s": "Part 2"
   },
   {
    "t": "mc",
    "kind": "U",
-   "q": "Which four functions does Module 2, the anatomy, examine?",
+   "q": "Which four functions does Module 2, the structure of the inner instrument, examine?",
    "o": [
     "Manas the processing mind, buddhi discernment and decision, ahaṁkāra the I-maker, and citta the field of memory.",
     "Manas the field of memory, buddhi the I-maker, ahaṁkāra the processing mind, and citta discernment.",
@@ -60,7 +60,7 @@
     "Space, time, causation and difference, which are the structuring conditions of the world we live in."
    ],
    "a": 0,
-   "e": "These four are the inner instrument, the antaḥkaraṇa of Lesson 1.1. Module 3 is the physiology, where the X and Y waves return; Module 4 the clinical framework of Ritam and anṛta; Module 5 the treatment, four families of practice.",
+   "e": "These four are the inner instrument, the antaḥkaraṇa of Lesson 1.1. Module 3 is how experience is built moment by moment, where the X and Y waves return; Module 4 is Ritam and anṛta, flourishing and drift; Module 5 is practice, four families of it.",
    "c": "Manas, buddhi, ahaṁkāra and citta",
    "s": "Part 2"
   },
