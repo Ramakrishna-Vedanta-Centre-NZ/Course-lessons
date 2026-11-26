@@ -21,3 +21,10 @@ Notes
 - Audit every Beginners lesson on Wix (1.1 to 5.8) against its Drive master: list figures in the master, list IMAGE nodes on Wix, upload and place any that are missing (with alt text and captions as done for 3.3).
 - Cause not yet established: the Module 5 Wix lessons appear to have been published from text only. To be checked, not assumed.
 - Only 3.3 has had a figure audit so far. Inserting images must not disturb the "Along with this lesson" box or the end quiz block.
+
+## TO DO: upload missing figures (noted 27 Nov 2026, at Swamiji's request)
+- Course-wide audit needed: compare every Beginners lesson on Wix (all 36) with its Drive master and list lessons whose figures (images) are missing on Wix.
+- Known so far: the Module 5 lessons (5.1 to 5.8) have NO figures on live Wix, though the Drive masters have them. Module 3.3 figures were checked and are fine. Modules 1 to 4 not yet audited (some of Module 1 are known to carry images).
+- The Module handbooks have figure frames that refer to these figures, so the lessons and handbooks should match.
+- Method: upload each figure to Wix Media, then insert an IMAGE node at the right place in the lesson (Ricos), with alt text and caption as done for 3.3. Check each lesson afterwards. Republishing a lesson from Markdown wipes the quiz and handbook boxes, so insert images by PATCH and not by republishing.
+- Advanced and Parents courses: also check for missing figures.
