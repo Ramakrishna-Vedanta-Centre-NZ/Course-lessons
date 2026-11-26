@@ -1,0 +1,758 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>My Journey</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700&family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&family=Noto+Serif+Devanagari:wght@400;600&display=swap" rel="stylesheet">
+<style>
+/* ---------- Settings you may want to change ---------- */
+/* The links and course lines are in the SETTINGS block in the script at the bottom. */
+
+*{box-sizing:border-box}
+html,body{margin:0;background:#FBF5EA;color:#26221C;font-family:'Noto Sans',Arial,sans-serif}
+a{color:#12285A}a:hover{color:#0A1A3F}
+h1,h2,h3,p,ul,figure,blockquote{margin:0}
+.wrap{max-width:1160px;margin:0 auto;padding:44px 32px 64px}
+.serif{font-family:'Noto Serif',Georgia,serif}
+.label{font-size:11px;font-weight:700;letter-spacing:2px;color:#7A5C14;text-transform:uppercase}
+.card{background:#FFFDF8;border:1px solid #E4D8BF;border-radius:14px;padding:22px}
+.jr textarea{width:100%;min-height:150px;padding:14px;border:1px solid #CDBD9A;border-radius:10px;background:#FFFFFF;font:16px/1.6 'Noto Sans',Arial,sans-serif;color:#26221C;resize:vertical}
+.jr textarea:focus{outline:2px solid #12285A;outline-offset:1px}
+.jr-entry{border-top:1px solid #E4D8BF;padding-top:14px;margin-top:14px}
+.jr select{min-height:44px;padding:8px 12px;border:1px solid #CDBD9A;border-radius:10px;background:#FFF;font:15px 'Noto Sans',Arial,sans-serif;color:#26221C}
+.jr .btn[disabled]{opacity:.55;cursor:default}
+.reply-card{background:#F6EEDC;border:1px solid #E4D8BF;border-left:4px solid #C9A24A;border-radius:14px;padding:14px 16px;display:flex;flex-direction:column;gap:10px}
+.reply-card .care{font-size:13px;line-height:1.6;color:#5C5444;margin:0}
+.jr textarea.reply-box{min-height:110px;margin-top:10px}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:10px 18px;text-align:center;border-radius:10px;font-weight:700;font-size:14px;line-height:1.3;text-decoration:none;border:0;cursor:pointer;font-family:inherit}
+.btn-navy{background:#12285A;color:#FBF5EA}.btn-navy:hover{color:#FBF5EA;background:#0A1A3F}
+.btn-gold{background:#C9A24A;color:#12285A}.btn-gold:hover{color:#12285A}
+.btn-line{background:transparent;color:#12285A;border:1px solid #A88B4A}
+.hero{display:flex;flex-wrap:wrap;gap:32px;align-items:flex-end;padding-bottom:32px;border-bottom:1px solid #E4D8BF}
+.hero-main{flex:1 1 520px;min-width:0}
+.avatar{flex:0 0 52px;width:52px;height:52px;border-radius:50%;border:2px solid #C9A24A;background:#F3E6C4;display:flex;align-items:center;justify-content:center;text-decoration:none;font-weight:700;font-size:21px;color:#12285A}
+h1{font-family:'Noto Serif',Georgia,serif;font-size:clamp(22px, 5.5vw, 28px);font-weight:700;color:#12285A;line-height:1.15}
+h2{font-family:'Noto Serif',Georgia,serif;font-size:21px;color:#12285A}
+h3{font-family:'Noto Serif',Georgia,serif;color:#12285A}
+.row{display:flex;flex-wrap:wrap;gap:18px;align-items:stretch}
+.cols{display:flex;flex-wrap:wrap;gap:40px;padding-top:40px;align-items:flex-start}
+.col-main{flex:999 1 600px;min-width:0;display:flex;flex-direction:column;gap:40px}
+.col-side{flex:1 1 320px;min-width:0;display:flex;flex-direction:column;gap:28px}
+.chip{padding:6px 14px;border-radius:20px;background:#F3E6C4;color:#12285A;font-weight:600;font-size:13.5px}
+.pill{font-size:11px;font-weight:700;letter-spacing:1.5px;color:#12285A;background:#F3E6C4;padding:3px 10px;border-radius:20px}
+.grid-offers{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px}
+.grid-plans{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:18px;align-items:stretch}
+.plan{display:flex;flex-direction:column;gap:10px}
+.plan ul{padding-left:18px;font-size:13.5px;line-height:1.7;color:#4A4438}
+.note{padding:12px;border-radius:10px;background:#F6EEDC;font-size:13.5px;line-height:1.55}
+.navy-card{background:#12285A;color:#FBF5EA;border-radius:14px;padding:22px;display:flex;flex-direction:column;gap:10px}
+.navy-card .label{color:#E6C36A}
+dialog{border:0;border-radius:18px;padding:0;max-width:640px;width:calc(100% - 24px);background:#FBF5EA;color:#26221C}
+dialog::backdrop{background:rgba(15,30,69,.82)}
+.dlg{padding:32px 32px 28px;display:flex;flex-direction:column;gap:22px}
+.dlg .x{width:44px;height:44px;border-radius:50%;border:1px solid #D9C9A3;background:#FFFDF8;color:#12285A;cursor:pointer;flex:0 0 44px;display:flex;align-items:center;justify-content:center}
+.deva{font-family:'Noto Serif Devanagari','Noto Serif',serif}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+@media (max-width:640px){
+ .wrap{padding:28px 16px 48px}
+ h1{font-size:clamp(22px, 5.5vw, 28px)}
+ h2{font-size:21px}
+ .dlg{padding:22px 18px}
+}
+</style>
+</head>
+<body>
+<div class="wrap" id="app" aria-live="polite"><p style="color:#5C5444">Loading your page...</p></div>
+
+<dialog id="verse" aria-labelledby="verse-h">
+<div class="dlg">
+<div style="display:flex;gap:16px;align-items:flex-start">
+<div style="flex:1;min-width:0">
+<p class="label" style="margin-bottom:6px">The verse</p>
+<div class="deva" lang="sa" style="font-size:42px;line-height:1.3;color:#12285A">अमृतस्य पुत्राः</div>
+<h2 id="verse-h" lang="sa-Latn" style="font-size:21px;font-weight:700;margin-top:2px">Amṛtasya putrāḥ</h2>
+<p class="serif" style="font-style:italic;font-size:15px;color:#4A4438;margin-top:6px">Children of Immortal Bliss</p>
+</div>
+<button type="button" class="x" id="verse-x" aria-label="Close"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+</div>
+<section class="card" style="display:flex;flex-direction:column;gap:12px;padding:22px">
+<p class="label">The verse in full</p>
+<div class="deva" lang="sa" style="font-size:22px;line-height:1.6;color:#12285A">
+<div>शृण्वन्तु विश्वे अमृतस्य पुत्रा आ ये धामानि दिव्यानि तस्थुः ॥</div>
+<div>वेदाहमेतं पुरुषं महान्तमादित्यवर्णं तमसः परस्तात् ।</div>
+<div>तमेव विदित्वातिमृत्युमेति नान्यः पन्था विद्यतेऽयनाय ॥</div>
+</div>
+<div class="serif" lang="sa-Latn" style="font-style:italic;font-size:13.5px;line-height:1.6;color:#7A5C14">
+<div>śṛṇvantu viśve amṛtasya putrā ā ye dhāmāni divyāni tasthuḥ |</div>
+<div>vedāham etaṁ puruṣaṁ mahāntam ādityavarṇaṁ tamasaḥ parastāt |</div>
+<div>tam eva viditvāti mṛtyum eti nānyaḥ panthā vidyate 'yanāya ||</div>
+</div>
+<p style="font-size:15px;line-height:1.65;color:#4A4438">Hear, O children of Immortal Bliss, even those who dwell in the heavenly spheres! I know this great Supreme Being (Puruṣa), resplendent like the sun and far beyond all darkness. Only by knowing Him does one pass beyond death; there is no other path to the ultimate goal.</p>
+</section>
+<div class="note" style="padding:14px 16px">
+<!-- AUDIO: set VERSE_AUDIO_URL in the SETTINGS block below to the web address of Swamiji's recording. -->
+<audio id="verse-audio" controls preload="none" aria-label="Recording of the verse, chanted by Swamiji" style="width:100%;display:block"></audio>
+<p id="audio-missing" style="display:none;font-size:13.5px;color:#5C5444">The recording will be added here.</p>
+</div>
+<div style="display:flex;flex-wrap:wrap;gap:14px;align-items:center;justify-content:space-between">
+<p style="font-size:13.5px;color:#5C5444">Śvetāśvatara Upaniṣad</p>
+<button type="button" class="btn btn-navy" id="verse-close">Close</button>
+</div>
+</div>
+</dialog>
+
+<script>
+/* =====================  SETTINGS  ===================== */
+var SETTINGS = {
+  // Where "Sign in" links go is handled by the page code (it opens the Wix login box).
+  SITE: 'https://www.vedanta.nz',
+  PLANS_URL: 'https://www.vedanta.nz/pricing-plans/list',
+  CIRCLES_URL: 'https://www.vedanta.nz/groups',
+  SATSANG_URL: 'https://www.vedanta.nz/event-list',
+  COURSES_URL: 'https://www.vedanta.nz/course/satsang-study',
+  // Where members see and manage their plan (Wix Pricing Plans member page).
+  ACCOUNT_URL: 'https://www.vedanta.nz/my-subscriptions',
+  // Address of the verse recording (upload the audio to the Wix Media Manager and paste its link here).
+  VERSE_AUDIO_URL: 'https://music.wixstatic.com/mp3/1f559e_c39069737cf74136b4cd3581b1a36cff.mp3',
+  // Where "Begin" in the quiet moment card goes. Leave empty until the quiet moment page or audio is ready.
+  QUIET_URL: '',
+  // Switch to true only when the member sections are fed with real member data. Until then a signed-in member sees a short welcome.
+  SHOW_MEMBER_LAYOUT: false,
+  // The circles shown to visitors. Community is left out until there is a Community plan.
+  CIRCLES: ['VedantaNZ Members', 'Parents', 'Teachers', 'Health Professionals', 'Youth', 'Workplace'],
+  // Free course lines. "link" is the course page that opens for signed-in people.
+  COURSES: [
+    { name: 'Advanced - The Mind', tag: 'Lessons 1 to 3 free', blurb: '', link: 'https://www.vedanta.nz/course/know-thy-mind', ready: true },
+    { name: 'Ritam Wellness for Parents', tag: 'Coming soon', blurb: 'Vedanta knowledge and wellbeing skills for better parenting. The first lessons are being prepared.', link: '', ready: false }
+  ],
+  OFFERS: [
+    { title: 'Circle forums', body: 'Conversation, discussions and shared resources with others in your circle.' },
+    { title: 'More courses', body: 'Wellbeing Meditations, Mind and its Care, Vedanta Online Study, Yoga of Devotion and Karma Yoga, depending on your plan.' },
+    { title: 'Wellbeing podcasts', body: 'The wellbeing podcasts that come with most plans.' }
+  ],
+  // Lab 369 note (Wix does not hold this).
+  LAB_NAME_MATCH: 'research lab 369',
+  LAB_NOTE: 'Eligibility: for people with a science or spirituality background. Joining needs approval by the admin.'
+};
+
+/* =====================  CODE  ===================== */
+var state = { viewer: 'visitor', firstName: '', photoUrl: '', plans: null, plansFailed: false, dash: null,
+  journal: null, journalFailed: false, months: [], viewMonth: '', viewEntries: null, viewTheme: null, editDate: '', draft: '', status: '', sharing: '', shareNote: '', shared: null, noteReplies: {}, noteFollowups: {}, replyDraft: {}, replyNote: {}, myReplies: null, myFollowups: [], followDraft: {}, followNote: {}, MAX_FOLLOWUPS: 3, tools: '', toolsNote: '', exportText: '' };
+
+function esc(s){ return String(s == null ? '' : s).replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
+function today(){
+  try { return new Date().toLocaleDateString('en-NZ', { weekday:'long', day:'numeric', month:'long', year:'numeric', timeZone:'Pacific/Auckland' }).toUpperCase(); }
+  catch (e) { return ''; }
+}
+function link(url, cls, text, extra){ return '<a class="'+cls+'" href="'+esc(url)+'" target="_top" '+(extra||'')+'>'+esc(text)+'</a>'; }
+
+function heroVisitor(){
+  return '<div style="display:flex;align-items:center;gap:16px">'+
+    '<a class="avatar" href="#" data-signin aria-label="Your avatar. Sign in to choose one"><svg aria-hidden="true" viewBox="0 0 64 64" width="30" height="30" fill="none" stroke="#12285A" stroke-width="3" stroke-linecap="round"><circle cx="32" cy="24" r="10"/><path d="M12 54c2-11 10-17 20-17s18 6 20 17"/></svg></a>'+
+    '<h1>Namaste, and welcome</h1></div>'+
+    '<p style="margin-top:12px;font-size:15px;line-height:1.6;color:#4A4438;max-width:560px">This is a place to slow down, to learn, and to be among others on the same road. Begin wherever you like. The lessons and moments marked free are free to you.</p>';
+}
+function heroMember(){
+  var n = state.firstName ? state.firstName : '';
+  var initial = n ? n.charAt(0).toUpperCase() : '';
+  return '<div style="display:flex;align-items:center;gap:16px">'+
+    (state.photoUrl ? '<img class="avatar" src="'+esc(state.photoUrl)+'" alt="" style="object-fit:cover;background:#F3E6C4">' : '<span class="avatar" aria-hidden="true">'+esc(initial)+'</span>')+
+    '<h1>Namaste'+(n ? ', '+esc(n) : '')+'</h1></div>'+
+    '<p style="margin-top:12px;font-size:15px;line-height:1.6;color:#4A4438;max-width:560px">Welcome back to your practice journal.</p>';
+}
+function heroShell(inner){
+  return '<section class="hero"><div class="hero-main">'+
+    '<p class="label" style="font-size:12.5px;letter-spacing:3px;margin-bottom:8px">'+esc(today())+'</p>'+ inner +
+    '<div style="margin-top:16px;display:flex;flex-wrap:wrap;align-items:center;gap:4px 16px">'+
+    '<p class="serif" lang="sa" style="font-style:italic;font-size:21px;color:#7A5C14">Amṛtasya putrāḥ <span style="font-style:normal;font-size:15px;color:#4A4438">· children of immortal bliss</span></p>'+
+    '<button type="button" class="btn btn-line" id="open-verse" aria-haspopup="dialog" style="font-size:14px">Hear the verse</button></div></div>'+
+    '<figure class="card" style="flex:1 1 380px;min-width:0;padding:22px 26px">'+
+    '<p class="label" style="letter-spacing:3px;margin-bottom:6px">Thought for today</p>'+
+    '<blockquote class="serif" style="font-style:italic;font-size:15px;line-height:1.55;color:#12285A">“Learn to make the whole world your own. No one is a stranger, my child; this whole world is your own.”</blockquote>'+
+    '<figcaption style="margin-top:10px;font-size:13.5px;color:#5C5444">Sri Sarada Devi</figcaption></figure></section>';
+}
+
+function coursesCard(){
+  var rows = SETTINGS.COURSES.map(function(c){
+    var action = c.ready ? '<a class="btn btn-navy" href="#" data-signin data-next="'+esc(c.link)+'">Sign in to open</a>' : '';
+    return '<div style="padding:16px 0;border-top:1px solid #EFE5CF;display:flex;flex-wrap:wrap;gap:12px 16px;align-items:center">'+
+      '<div style="flex:1 1 260px;min-width:0"><p style="font-weight:600;font-size:15px">'+esc(c.name)+'</p>'+
+      (c.blurb ? '<p style="margin-top:2px;font-size:13.5px;color:#5C5444">'+esc(c.blurb)+'</p>' : '')+'</div>'+
+      '<p class="pill">'+esc(c.tag)+'</p>'+action+'</div>';
+  }).join('');
+  return '<article class="card" style="flex:2 1 460px;min-width:0;padding:24px;display:flex;flex-direction:column;gap:10px">'+
+    '<p class="label">Your first three lessons, free</p>'+
+    '<h3 style="font-size:21px;line-height:1.3">Begin a course at no cost</h3>'+
+    '<p style="font-size:15px;line-height:1.6;color:#4A4438">Each course below opens with lessons 1 to 3 free. Sign in or create a free account and they are yours to begin.</p>'+
+    '<div style="display:flex;flex-direction:column;margin-top:4px">'+rows+'</div></article>';
+}
+function quietCard(){
+  var btn = SETTINGS.QUIET_URL
+    ? '<a class="btn btn-gold" href="'+esc(SETTINGS.QUIET_URL)+'" target="_top" style="align-self:flex-start;margin-top:auto">Begin</a>'
+    : '<p style="margin-top:auto;font-size:13.5px;color:#E6C36A">Coming soon</p>';
+  return '<article class="navy-card" style="flex:1 1 250px;min-width:0">'+
+    '<p class="label">A quiet moment</p>'+
+    '<h3 style="color:#FBF5EA;font-size:21px;line-height:1.3">Sit for five minutes</h3>'+
+    '<p style="font-size:15px;line-height:1.6;color:#F1ECDF">A short pause to settle, before you do anything else. No sign-in needed.</p>'+btn+'</article>';
+}
+function signinCard(){
+  return '<article class="card" style="flex:1 1 250px;min-width:0;background:#F6EEDC;display:flex;flex-direction:column;gap:12px">'+
+    '<p class="label">Your journey</p>'+
+    '<h3 style="font-size:21px;line-height:1.3">Keep your place</h3>'+
+    '<p style="font-size:15px;line-height:1.6;color:#4A4438">A free account opens your first lessons and keeps a record of your journey as you go.</p>'+
+    '<a class="btn btn-navy" href="#" data-signin style="align-self:flex-start;margin-top:auto">Sign in or create a free account</a></article>';
+}
+function circlesSection(){
+  return '<section class="card" style="padding:24px;display:flex;flex-direction:column;gap:14px">'+
+    '<h2>Come into a circle</h2>'+
+    '<p style="font-size:15px;line-height:1.6;color:#4A4438">Yarning circles are online community spaces to collaborate and be connected. Taking part is for registered members. Here you can see what each circle is about, and join when you feel ready.</p>'+
+    '<div style="display:flex;flex-wrap:wrap;gap:10px">'+SETTINGS.CIRCLES.map(function(n){ return '<p class="chip">'+esc(n)+'</p>'; }).join('')+'</div>'+
+    link(SETTINGS.CIRCLES_URL, '', 'See the circles', 'style="align-self:flex-start;font-size:15px;font-weight:600"')+'</section>';
+}
+function offersSection(){
+  return '<section><h2 style="margin-bottom:6px">What joining offers</h2><p style="margin-bottom:16px;font-size:15px;color:#5C5444">A glimpse of what members find inside.</p>'+
+    '<div class="grid-offers">'+SETTINGS.OFFERS.map(function(o){
+      return '<article class="card" style="display:flex;flex-direction:column;gap:10px"><p class="label">For members</p><h3 style="font-size:21px">'+esc(o.title)+'</h3><p style="font-size:15px;line-height:1.6;color:#4A4438">'+esc(o.body)+'</p></article>';
+    }).join('')+'</div></section>';
+}
+function plansSection(){
+  var head = '<h2 style="margin-bottom:6px">Membership plans</h2><p style="margin-bottom:16px;font-size:15px;color:#5C5444">Each plan is a year of membership. Look through them at your own pace. Prices in New Zealand dollars.</p>';
+  if (state.plans === null && !state.plansFailed) {
+    return '<section aria-labelledby="plans-h">'+head+'<p style="color:#5C5444">Loading the plans...</p></section>';
+  }
+  if (state.plansFailed || !state.plans.length) {
+    return '<section>'+head+'<p style="color:#4A4438">'+link(SETTINGS.PLANS_URL, '', 'See all the membership plans', 'style="font-weight:600"')+'</p></section>';
+  }
+  var cards = state.plans.map(function(p){
+    var isLab = String(p.name).toLowerCase().indexOf(SETTINGS.LAB_NAME_MATCH) !== -1;
+    var perks = (p.perks || []).map(function(t){ return '<li>'+esc(t)+'</li>'; }).join('');
+    var price = (p.price === null || p.price === undefined) ? '' : '<div style="display:flex;align-items:baseline;gap:8px"><span class="serif" style="font-size:32px;font-weight:700;line-height:1;color:#12285A">'+esc(p.priceText)+'</span><span style="font-size:14px;color:#5C5444">'+esc(p.periodText)+'</span></div>';
+    return '<article class="card plan"><h3 style="font-size:21px;line-height:1.3">'+esc(p.name)+'</h3>'+price+
+      (p.description ? '<p style="font-size:15px;line-height:1.55;color:#4A4438">'+esc(p.description)+'</p>' : '')+
+      (perks ? '<ul>'+perks+'</ul>' : '')+
+      (isLab ? '<p class="note"><b>Eligibility:</b> '+esc(SETTINGS.LAB_NOTE.replace(/^Eligibility:\s*/, ''))+'</p>' : '')+
+      '<a class="btn btn-navy" href="'+esc(SETTINGS.PLANS_URL)+'" target="_top" style="align-self:flex-start;margin-top:auto">'+(isLab ? 'Request approval' : 'See this plan')+'</a></article>';
+  }).join('');
+  return '<section>'+head+'<div class="grid-plans">'+cards+'</div></section>';
+}
+function satsangCard(){
+  return '<section class="navy-card" style="padding:24px"><p class="label" style="letter-spacing:3px">Satsangs</p>'+
+    '<h3 style="color:#FBF5EA;font-size:21px;line-height:1.3">Join the next satsang</h3>'+
+    '<p style="font-size:15px;line-height:1.6;color:#F1ECDF">See the dates, the Zoom link and the recordings.</p>'+
+    '<a class="btn btn-gold" href="'+esc(SETTINGS.SATSANG_URL)+'" target="_top" style="align-self:flex-start;margin-top:6px">Satsangs and Zoom link</a></section>';
+}
+function shareCard(){
+  var url = encodeURIComponent(SETTINGS.SITE);
+  return '<section class="card" style="display:flex;flex-direction:column;gap:12px"><h2 style="font-size:21px">Share the journey</h2>'+
+    '<p style="font-size:15px;line-height:1.6;color:#4A4438">Know someone who would enjoy this? Invite them to begin with the free lessons, podcasts and satsangs.</p>'+
+    '<button type="button" class="btn btn-navy" id="copy-invite" style="align-self:flex-start">Copy invite link</button>'+
+    '<div style="display:flex;flex-wrap:wrap;gap:18px;font-size:13.5px;font-weight:600">'+
+    '<a href="mailto:?subject=An%20invitation%20to%20Vedanta%20New%20Zealand&body='+url+'" target="_top">Email</a>'+
+    '<a href="https://wa.me/?text='+url+'" target="_blank" rel="noopener">WhatsApp</a>'+
+    '<a href="https://www.facebook.com/sharer/sharer.php?u='+url+'" target="_blank" rel="noopener">Facebook</a></div></section>';
+}
+
+function renderVisitor(){
+  return heroShell(heroVisitor())+
+    '<section style="padding-top:32px"><h2 style="margin-bottom:16px">Today</h2><div class="row">'+coursesCard()+quietCard()+signinCard()+'</div></section>'+
+    '<div class="cols"><div class="col-main">'+circlesSection()+offersSection()+plansSection()+'</div>'+
+    '<aside class="col-side">'+satsangCard()+shareCard()+'</aside></div>';
+}
+function fmtDate(iso, withTime){
+  try {
+    var o = withTime ? { weekday:'long', day:'numeric', month:'long', hour:'numeric', minute:'2-digit', timeZone:'Pacific/Auckland' } : { day:'numeric', month:'long', year:'numeric', timeZone:'Pacific/Auckland' };
+    return new Date(iso).toLocaleString('en-NZ', o);
+  } catch (e) { return ''; }
+}
+function dashFailed(name){ var d = state.dash; return !!(d && d.failed && (d.failed.indexOf(name) !== -1 || d.failed.indexOf('all') !== -1)); }
+function loadingNote(){ return '<p style="font-size:15px;color:#5C5444">Loading...</p>'; }
+function cardShell(label, title, inner, extra){
+  return '<article class="card" style="flex:1 1 280px;min-width:0;display:flex;flex-direction:column;gap:10px;'+(extra||'')+'"><p class="label">'+esc(label)+'</p><h3 style="font-size:21px;line-height:1.3">'+esc(title)+'</h3>'+inner+'</article>';
+}
+var P = 'font-size:15px;line-height:1.6;color:#4A4438';
+function continueCard(){
+  var d = state.dash, inner;
+  if (!d) inner = loadingNote();
+  else if (dashFailed('courses')) inner = '<p style="'+P+'">Your courses are in the Courses area.</p>'+link(SETTINGS.COURSES_URL, 'btn btn-navy', 'Open my courses', 'style="align-self:flex-start;margin-top:auto"');
+  else if (!d.courses || !d.courses.length) inner = '<p style="'+P+'">You have not started a course yet. The first lessons are free.</p>'+link(SETTINGS.COURSES_URL, 'btn btn-navy', 'See the courses', 'style="align-self:flex-start;margin-top:auto"');
+  else {
+    var top = d.courses[0], rest = d.courses.slice(1, 4);
+    var bar = function(c){ return '<div role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="'+c.percent+'" aria-label="'+esc(c.name)+' progress" style="height:8px;border-radius:99px;background:#EFE5CF;overflow:hidden"><div style="height:100%;width:'+c.percent+'%;background:#C9A24A"></div></div>'; };
+    inner = '<div><p style="font-weight:600;font-size:16px">'+esc(top.name)+'</p>'+
+      (top.total ? '<p style="margin:4px 0 8px;font-size:13.5px;color:#5C5444">'+top.done+' of '+top.total+' steps done · '+top.percent+'%</p>'+bar(top) : '')+'</div>'+
+      link(top.url || SETTINGS.COURSES_URL, 'btn btn-navy', 'Continue', 'style="align-self:flex-start"')+
+      (rest.length ? '<div style="margin-top:6px;border-top:1px solid #EFE5CF">'+rest.map(function(c){
+        return '<div style="padding:12px 0;border-bottom:1px solid #EFE5CF"><a href="'+esc(c.url || SETTINGS.COURSES_URL)+'" target="_top" style="font-weight:600;font-size:14.5px">'+esc(c.name)+'</a>'+
+          (c.total ? '<p style="margin:2px 0 6px;font-size:13px;color:#5C5444">'+c.percent+'% done</p>'+bar(c) : '')+'</div>';
+      }).join('')+'</div>' : '')+
+      link(SETTINGS.COURSES_URL, '', 'All my courses', 'style="font-size:14.5px;font-weight:600;align-self:flex-start;margin-top:auto"');
+  }
+  return cardShell('Courses', 'Continue studying', inner, 'flex:2 1 420px;');
+}
+function nextSatsangCard(){
+  var d = state.dash, n = d && d.nextSatsang, body;
+  if (!d) body = loadingNote().replace('#5C5444','#F1ECDF');
+  else if (dashFailed('satsang') || !n || !n.has) body = '<p style="font-size:15px;line-height:1.6;color:#F1ECDF">See the dates and the recordings.</p>';
+  else body = '<p style="font-weight:600;color:#FBF5EA;font-size:16px">'+esc(fmtDate(n.startsAt, true))+'</p>'+
+    (n.place ? '<p style="font-size:14.5px;color:#F1ECDF">'+esc(n.place)+'</p>' : '')+
+    '<p style="font-size:13.5px;line-height:1.5;color:#E6C36A">The Zoom link comes to you when you register.</p>';
+  var url = (n && n.has && n.url) ? n.url : SETTINGS.SATSANG_URL;
+  var btn = '<a class="btn btn-gold" href="'+esc(url)+'" target="_top" style="align-self:flex-start;margin-top:auto">'+((n && n.has && n.url) ? 'Details and joining' : 'Satsangs and recordings')+'</a>';
+  return '<article class="navy-card" style="flex:1 1 280px;min-width:0"><p class="label">Next satsang</p><h3 style="color:#FBF5EA;font-size:21px;line-height:1.3">'+esc(n && n.has ? n.title : 'Join us')+'</h3>'+body+btn+'</article>';
+}
+function membershipCard(){
+  var d = state.dash, m = d && d.membership, inner;
+  if (!d) inner = loadingNote();
+  else if (dashFailed('membership')) inner = '<p style="'+P+'">See your plan and renewal date in your account.</p>'+link(SETTINGS.ACCOUNT_URL, 'btn btn-navy', 'My membership', 'style="align-self:flex-start;margin-top:auto"');
+  else if (!m || !m.has) inner = '<p style="'+P+'">You have a free account. A membership opens circles, more courses and the podcasts.</p>'+link(SETTINGS.PLANS_URL, 'btn btn-navy', 'See the plans', 'style="align-self:flex-start;margin-top:auto"');
+  else inner = '<p style="font-weight:600;font-size:16px">'+esc(m.planName)+'</p>'+
+    (m.renewsOn ? '<p style="'+P+'">'+(m.autoRenewCanceled ? 'Ends on ' : 'Renews on ')+esc(fmtDate(m.renewsOn, false))+'</p>' : '')+
+    link(SETTINGS.ACCOUNT_URL, 'btn btn-line', 'Manage my plan', 'style="align-self:flex-start;margin-top:auto"');
+  return cardShell('Membership', 'My membership', inner);
+}
+function myCirclesCard(){
+  var d = state.dash, inner;
+  if (!d) inner = loadingNote();
+  else if (dashFailed('circles')) inner = '<p style="'+P+'">Your circles, forums and discussions.</p>';
+  else if (!d.circles || !d.circles.length) inner = '<p style="'+P+'">You have not joined a circle yet. Each one is a place to talk with others on the same road.</p>';
+  else inner = '<div style="display:flex;flex-wrap:wrap;gap:10px">'+d.circles.map(function(c){ return /^https:\/\//.test(c.url || '') ? '<a class="chip" href="'+esc(c.url)+'" target="_top" style="text-decoration:none">'+esc(c.name)+'</a>' : '<p class="chip">'+esc(c.name)+'</p>'; }).join('')+'</div>';
+  inner += link(SETTINGS.CIRCLES_URL, (d && d.circles && d.circles.length) ? '' : 'btn btn-navy', (d && d.circles && d.circles.length) ? 'Open my circles' : 'See the circles', 'style="align-self:flex-start;margin-top:auto;'+((d && d.circles && d.circles.length) ? 'font-size:15px;font-weight:600' : '')+'"');
+  return cardShell('Circles', 'My Yarning Circles', inner);
+}
+
+/* ---- private journal ---- */
+function monthLabel(key){
+  try { return new Date(key + '-01T12:00:00Z').toLocaleString('en-NZ', { month: 'long', year: 'numeric', timeZone: 'UTC' }); } catch (e) { return key; }
+}
+function dayLabel(d){
+  try { return new Date(d + 'T12:00:00Z').toLocaleString('en-NZ', { weekday: 'long', day: 'numeric', month: 'long', timeZone: 'UTC' }); } catch (e) { return d; }
+}
+function sharedCard(){
+  var list = state.shared; if (!list) return '';
+  var P = 'font-size:15px;line-height:1.6;color:#4A4438';
+  var unread = list.filter(function(n){ return !n.seen; }).length;
+  var h = '<section style="padding-top:32px"><div class="card jr" style="display:flex;flex-direction:column;gap:14px"><span class="label">For Swamiji</span><h2>Notes shared with you</h2><p style="'+P+'">'+(list.length ? unread+' unread, '+list.length+' in all. Only you can see this.' : 'No notes have been shared yet. Only you can see this.')+'</p>';
+  list.forEach(function(n){
+    var when = ''; try { when = new Date(n.sharedAt).toLocaleDateString('en-NZ', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'Pacific/Auckland' }); } catch (e) {}
+    h += '<div class="jr-entry" style="'+(n.seen ? 'opacity:.75' : 'border-left:4px solid #C9A24B;padding-left:14px')+'"><p style="font-size:13.5px;color:#5C5444;margin:0 0 4px">'+esc(n.from)+(n.date ? ' · written '+esc(dayLabel(n.date)) : '')+(when ? ' · shared '+esc(when) : '')+(n.theme ? ' · '+esc(n.theme) : '')+'</p><p style="'+P+';white-space:pre-wrap;margin:0">'+esc(n.text)+'</p>'+(n.seen ? '' : '<button type="button" class="btn btn-line" style="margin-top:10px" data-seen="'+esc(n.id)+'">Mark as read</button>')+replyArea(n)+'</div>';
+  });
+  return h + '</div></section>';
+}
+/* Swamiji's replies. The box is drawn only for the notes list, which the page code sends to Swamiji alone. The server checks again. */
+function replyArea(n){
+  var P = 'font-size:15px;line-height:1.6;color:#4A4438';
+  var sent = state.noteReplies[n.id] || [], h = '';
+  var thread = sent.map(function(r){ return { mine: true, r: r, at: r.repliedAt }; }).concat((state.noteFollowups[n.id] || []).map(function(f){ return { mine: false, r: f, at: f.sentAt }; }));
+  thread.sort(function(a, b){ return new Date(a.at) - new Date(b.at); });
+  thread.forEach(function(t){
+    var r = t.r, when = ''; try { when = new Date(t.at).toLocaleDateString('en-NZ', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'Pacific/Auckland' }); } catch (e) {}
+    if (t.mine) h += '<div class="reply-card" style="margin-top:12px"><p class="label">Your reply'+(when ? ' · '+esc(when) : '')+'</p><p style="'+P+';white-space:pre-wrap;margin:0">'+esc(r.replyText)+'</p><p class="care" style="margin:0">'+(r.readByMember ? esc(n.from)+' has read it.' : 'Not yet read.')+'</p></div>';
+    else h += '<div class="jr-entry" style="margin-top:12px;border-left:4px solid #C9A24B;padding-left:14px"><p style="font-size:13.5px;color:#5C5444;margin:0 0 4px">'+esc(n.from)+' wrote back'+(when ? ' · '+esc(when) : '')+'</p><p style="'+P+';white-space:pre-wrap;margin:0">'+esc(r.text)+'</p></div>';
+  });
+  var id = n.id, busy = state.replyNote[id] === 'Sending...';
+  h += '<label for="reply-'+esc(id)+'" style="display:block;margin-top:12px;font-weight:700;font-size:15px;color:#12285A">'+(sent.length ? 'Write another reply' : 'Reply to '+esc(n.from))+'</label>'+
+    '<textarea class="reply-box" id="reply-'+esc(id)+'" data-reply-text="'+esc(id)+'" maxlength="4000" placeholder="Write your reply. '+esc(n.from)+' will see it privately in My Journey.">'+esc(state.replyDraft[id] || '')+'</textarea>'+
+    '<div style="display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-top:10px"><button type="button" class="btn btn-navy" data-reply-send="'+esc(id)+'"'+(busy ? ' disabled' : '')+'>Send reply</button>'+
+    '<span role="status" style="font-size:14px;color:#4A4438">'+esc(state.replyNote[id] || '')+'</span></div>'+
+    '<p style="font-size:13px;line-height:1.6;color:#5C5444;margin:8px 0 0">'+esc(n.from)+' gets a short email with a link to My Journey. The email does not contain your words.</p>';
+  return h;
+}
+/* The member's own cards: "A note from Swamiji". */
+var CARE_LINE = 'This note is shared in friendship and guidance, not as counselling. If you need support now, call or text 1737 (New Zealand, free, any time) or visit findahelpline.com.';
+/* Under the newest note from Swamiji about an entry: what the member has written back, and a box for up to 3 follow-ups. The server checks the limit again. */
+function followupBlock(r){
+  if (!r.noteId) return '';
+  var same = (state.myReplies || []).filter(function(x){ return x.noteId === r.noteId; });
+  same.sort(function(a, b){ return new Date(b.repliedAt) - new Date(a.repliedAt); });
+  if (!same.length || same[0].id !== r.id) return '';
+  var P = 'font-size:15px;line-height:1.6;color:#26221C', id = r.noteId, h = '';
+  var mine = (state.myFollowups || []).filter(function(f){ return f.noteId === id; });
+  mine.forEach(function(f){
+    var when = ''; try { when = new Date(f.sentAt).toLocaleDateString('en-NZ', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'Pacific/Auckland' }); } catch (e) {}
+    h += '<div style="background:#FFFDF7;border:1px solid #E4D8BF;border-radius:12px;padding:10px 14px"><p style="font-size:13.5px;color:#5C5444;margin:0 0 4px">You wrote back'+(when ? ' · '+esc(when) : '')+'</p><p style="'+P+';white-space:pre-wrap;margin:0">'+esc(f.text)+'</p></div>';
+  });
+  var left = state.MAX_FOLLOWUPS - mine.length, busy = state.followNote[id] === 'Sending...';
+  if (left > 0) {
+    h += '<label for="follow-'+esc(id)+'" style="display:block;font-weight:700;font-size:15px;color:#12285A">Write back to Swamiji</label>'+
+      '<textarea class="reply-box" id="follow-'+esc(id)+'" data-follow-text="'+esc(id)+'" maxlength="2000" placeholder="Write a few words. Only Swamiji will see this.">'+esc(state.followDraft[id] || '')+'</textarea>'+
+      '<div style="display:flex;flex-wrap:wrap;gap:12px;align-items:center"><button type="button" class="btn btn-navy" data-follow-send="'+esc(id)+'"'+(busy ? ' disabled' : '')+'>Send to Swamiji</button><span role="status" style="font-size:14px;color:#4A4438">'+esc(state.followNote[id] || '')+'</span></div>'+
+      '<p class="care" style="margin:0">You can write back up to '+state.MAX_FOLLOWUPS+' times about this note ('+left+' left). Swamiji replies when he can.</p>';
+  } else {
+    h += '<p class="care" style="margin:0">You have used your '+state.MAX_FOLLOWUPS+' follow-up replies for this note. You are always welcome to write and share a new journal entry.</p>';
+  }
+  return h;
+}
+function replyCardHtml(r, withDate){
+  var when = ''; try { when = new Date(r.repliedAt).toLocaleDateString('en-NZ', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'Pacific/Auckland' }); } catch (e) {}
+  var P = 'font-size:15px;line-height:1.6;color:#26221C';
+  return '<div class="reply-card" style="margin-top:12px"><p class="label">A note from Swamiji</p>'+
+    (withDate && r.noteDate ? '<p style="font-size:13.5px;color:#5C5444;margin:0">About your note of '+esc(dayLabel(r.noteDate))+(r.noteTheme ? ' · '+esc(r.noteTheme) : '')+'</p>' : '')+
+    '<p class="serif" style="'+P+';white-space:pre-wrap;margin:0">'+esc(r.replyText)+'</p>'+
+    (when ? '<p style="font-size:13.5px;color:#5C5444;margin:0">'+esc(when)+'</p>' : '')+
+    (r.readByMember ? '' : '<button type="button" class="btn btn-navy" style="align-self:flex-start" data-reply-thanks="'+esc(r.id)+'">Thank you</button>')+
+    followupBlock(r)+
+    '<p class="care">'+esc(CARE_LINE)+'</p></div>';
+}
+function visibleJournalDates(){
+  var j = state.journal; if (!j) return [];
+  var editing = state.editDate || j.today, showing = state.viewMonth || monthKeyOf(j.today);
+  var entries = state.viewMonth && state.viewMonth !== monthKeyOf(j.today) ? (state.viewEntries || {}) : j.entries;
+  return Object.keys(entries).filter(function(d){ return !(showing === monthKeyOf(j.today) && d === editing); });
+}
+function repliesTopCard(){
+  var list = state.myReplies; if (!list || !list.length) return '';
+  var vis = visibleJournalDates();
+  var show = list.filter(function(r){ return !r.readByMember || vis.indexOf(r.noteDate) === -1; });
+  if (!show.length) return '';
+  return '<section style="padding-top:32px"><div class="card jr" style="display:flex;flex-direction:column;gap:6px"><span class="label">Private to you</span><h2>A note from Swamiji</h2><p style="font-size:15px;line-height:1.6;color:#4A4438">Only you can see this. It stays here for you to read again.</p>'+
+    show.map(function(r){ return replyCardHtml(r, true); }).join('')+'</div></section>';
+}
+function journalCard(){
+  var j = state.journal, P = 'font-size:15px;line-height:1.6;color:#4A4438';
+  var head = '<span class="label">Your reflection</span>';
+  if (state.journalFailed) return '<section style="padding-top:32px"><div class="card jr" style="display:flex;flex-direction:column;gap:10px">'+head+'<p style="'+P+'">Your journal could not be opened just now. Please refresh the page in a moment.</p></div></section>';
+  if (!j) return '<section style="padding-top:32px"><div class="card jr" style="display:flex;flex-direction:column;gap:10px">'+head+loadingNote()+'</div></section>';
+  var theme = j.theme, editing = state.editDate || j.today;
+  var isToday = editing === j.today;
+  var h = '<section style="padding-top:32px"><div class="card jr" style="display:flex;flex-direction:column;gap:14px">'+head;
+  if (theme) h += '<h2>'+esc(theme.title)+'</h2><p style="'+P+'">'+esc(theme.summary)+'</p>';
+  else h += '<h2>Your journal</h2>';
+  if (j.thought && j.thought.text) h += '<blockquote class="serif" style="font-size:17px;line-height:1.6;color:#26221C;border-left:3px solid #C9A24A;padding-left:14px">'+esc(j.thought.text)+(j.thought.source ? '<br><span style="font-size:13px;color:#5C5444">'+esc(j.thought.source)+'</span>' : '')+'</blockquote>';
+  var prompt = (j.thought && j.thought.prompt) || (theme && theme.prompt) || 'What is on your mind today?';
+  h += '<label for="jr-text" style="font-weight:700;font-size:15px;color:#12285A">'+(isToday ? esc(prompt) : 'Editing your note for '+esc(dayLabel(editing)))+'</label>'+
+    '<textarea id="jr-text" maxlength="5000" placeholder="Write anything you wish to remember or think about...">'+esc(state.draft)+'</textarea>'+
+    '<div style="display:flex;flex-wrap:wrap;gap:12px;align-items:center">'+
+    '<button type="button" class="btn btn-navy" id="jr-save">Save</button>'+
+    '<button type="button" class="btn btn-line" id="jr-share">Share this note with Swamiji</button>'+
+    (isToday ? '' : '<button type="button" class="btn btn-line" id="jr-today">Back to today</button>')+
+    '<span id="jr-status" role="status" style="font-size:14px;color:#4A4438">'+esc(state.status)+'</span></div>';
+  if (state.sharing === editing) h += '<div style="background:#F3E6C4;border-radius:10px;padding:14px"><p style="'+P+'">Send a copy of this note to Swamiji? Only he will read it.</p><div style="display:flex;gap:12px;margin-top:10px"><button type="button" class="btn btn-navy" id="jr-share-yes">Yes, share it</button><button type="button" class="btn btn-line" id="jr-share-no">Not now</button></div></div>';
+  if (state.shareNote) h += '<p role="status" style="font-size:14px;color:#4A4438">'+esc(state.shareNote)+'</p>';
+  h += '<p style="font-size:13.5px;line-height:1.6;color:#5C5444">Your entries are private to you and protected by encryption. Only a note you choose to share with Swamiji is read by anyone else.</p>';
+
+  /* earlier notes */
+  var entries = state.viewMonth && state.viewMonth !== monthKeyOf(j.today) ? (state.viewEntries || {}) : j.entries;
+  var showing = state.viewMonth || monthKeyOf(j.today);
+  var keys = Object.keys(entries).sort().reverse().filter(function(d){ return !(showing === monthKeyOf(j.today) && d === editing); });
+  var months = state.months.slice(), cur = monthKeyOf(j.today);
+  if (months.map(function(m){ return m.monthKey; }).indexOf(cur) === -1) months.unshift({ monthKey: cur, entryCount: Object.keys(j.entries).length });
+  h += '<div class="jr-entry"><div style="display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between"><h3 style="font-size:17px">My journal</h3>'+
+    '<select id="jr-month" aria-label="Choose a month">'+months.map(function(m){ return '<option value="'+esc(m.monthKey)+'"'+(m.monthKey === showing ? ' selected' : '')+'>'+esc(monthLabel(m.monthKey))+'</option>'; }).join('')+'</select></div>';
+  if (!keys.length) h += '<p style="'+P+';margin-top:10px">No earlier notes in '+esc(monthLabel(showing))+'.</p>';
+  keys.forEach(function(d){
+    var e = entries[d];
+    h += '<div class="jr-entry"><p style="font-size:13px;font-weight:700;color:#7A5C14">'+esc(dayLabel(d))+(e.theme ? ' &middot; '+esc(e.theme) : '')+'</p>'+
+      '<p style="'+P+';white-space:pre-wrap;margin-top:6px">'+esc(e.text)+'</p>'+
+      '<button type="button" class="btn btn-line" data-edit="'+esc(d)+'" style="margin-top:10px;min-height:38px;padding:6px 14px">Edit</button>'+
+      (state.myReplies || []).filter(function(r){ return r.noteDate === d && r.readByMember; }).map(function(r){ return replyCardHtml(r, false); }).join('')+'</div>';
+  });
+  h += journalTools();
+  return h + '</div></div></section>';
+}
+function journalTools(){
+  var P = 'font-size:14px;line-height:1.6;color:#4A4438';
+  var h = '<div class="jr-entry"><h3 style="font-size:17px">Your journal, your choice</h3><p style="'+P+';margin-top:6px">You can keep a copy of everything you have written, or erase it all. Notes you have already shared with Swamiji stay with him.</p><div style="display:flex;flex-wrap:wrap;gap:12px;margin-top:10px">'+
+    '<button type="button" class="btn btn-line" id="jr-export">'+(state.tools === 'exporting' ? 'Preparing...' : 'Download my journal')+'</button>'+
+    '<button type="button" class="btn btn-line" id="jr-erase">Erase my journal</button></div>';
+  if (state.tools === 'ready') h += '<div style="background:#F3E6C4;border-radius:10px;padding:14px;margin-top:12px"><p style="'+P+'">Your journal is ready. Download it as a text file, or copy it.</p><textarea id="jr-export-text" readonly rows="8" style="margin-top:10px">'+esc(state.exportText)+'</textarea><div style="display:flex;flex-wrap:wrap;gap:12px;margin-top:10px"><button type="button" class="btn btn-navy" id="jr-dl">Download file</button><button type="button" class="btn btn-line" id="jr-copy">Copy</button><button type="button" class="btn btn-line" id="jr-tools-close">Close</button></div></div>';
+  if (state.tools === 'confirm') h += '<div style="background:#F3E6C4;border-radius:10px;padding:14px;margin-top:12px"><p style="'+P+'">Erase your whole journal? This cannot be undone. Consider downloading it first.</p><div style="display:flex;flex-wrap:wrap;gap:12px;margin-top:10px"><button type="button" class="btn btn-navy" id="jr-erase-yes">Yes, erase everything</button><button type="button" class="btn btn-line" id="jr-erase-no">Keep my journal</button></div></div>';
+  if (state.tools === 'erasing') h += '<p role="status" style="'+P+';margin-top:10px">Erasing...</p>';
+  if (state.toolsNote) h += '<p role="status" style="'+P+';margin-top:10px">'+esc(state.toolsNote)+'</p>';
+  return h + '</div>';
+}
+function monthKeyOf(d){ return String(d).slice(0, 7); }
+function journalEntries(){
+  var j = state.journal; if (!j) return {};
+  var cur = monthKeyOf(j.today), showing = state.viewMonth || cur;
+  return showing === cur ? j.entries : (state.viewEntries || {});
+}
+function startEdit(date){
+  var j = state.journal; if (!j) return;
+  var all = {}; var k;
+  for (k in j.entries) all[k] = j.entries[k];
+  if (state.viewEntries) for (k in state.viewEntries) all[k] = state.viewEntries[k];
+  state.editDate = date; state.draft = all[date] ? all[date].text : ''; state.status = ''; state.sharing = ''; state.shareNote = '';
+  render();
+  try { window.parent.postMessage({ type: 'scrollTop' }, '*'); } catch (e) {}
+}
+/* ---- my quiz results (all courses; only this member sees them) ---- */
+function quizCard(){
+  var q = state.quiz, inner;
+  if (!q) inner = loadingNote();
+  else if (q.failed) inner = '<p style="'+P+'">Your quiz results could not be loaded just now. Please try again later.</p>';
+  else if (!q.quizzes || !q.quizzes.length) inner = '<p style="'+P+'">You have not taken a quiz yet. Each lesson ends with a short quiz, and every answer comes with an explanation. You can take it as often as you like.</p>';
+  else {
+    inner = '<p style="'+P+'">'+esc(String(q.total))+(q.total === 1 ? ' quiz' : ' quizzes')+' taken, '+esc(String(q.grasped))+' well grasped.</p>'+
+      q.quizzes.slice(0, 8).map(function(z){
+        var url = /^CON-/.test(z.code) ? SETTINGS.SITE+'/quiz-hub?q='+encodeURIComponent(z.code) : '';
+        var title = url ? '<a href="'+esc(url)+'" target="_top" style="font-weight:600;font-size:14.5px">'+esc(z.title)+'</a>' : '<span style="font-weight:600;font-size:14.5px">'+esc(z.title)+'</span>';
+        var best = z.best === null ? '' : 'Best '+esc(String(z.best))+' percent';
+        var tries = z.attempts+(z.attempts === 1 ? ' attempt' : ' attempts');
+        var when = z.lastAt ? ', last on '+esc(fmtDate(z.lastAt)) : '';
+        return '<div style="padding:12px 0;border-bottom:1px solid #EFE5CF">'+title+
+          '<p style="font-size:13.5px;line-height:1.6;color:#4A4438;margin-top:2px">'+best+(best ? ', ' : '')+tries+when+'. '+
+          '<span class="pill" style="margin-left:4px">'+(z.grasped ? 'WELL GRASPED' : 'REVISIT THESE IDEAS')+'</span></p></div>';
+      }).join('')+
+      (q.total > 8 ? '<p style="font-size:13.5px;color:#5C5444">Showing your 8 most recent of '+esc(String(q.total))+'.</p>' : '');
+  }
+  inner += '<p style="font-size:12.5px;line-height:1.5;color:#7A7058;margin-top:6px">Only you can see these results. They are not shared or ranked.</p>';
+  return cardShell('Quizzes', 'My quiz results', inner, 'flex:1 1 100%;');
+}
+function renderMemberHolding(){
+  return heroShell(heroMember())+
+  repliesTopCard()+journalCard()+
+    '<section style="padding-top:32px"><h2 style="margin-bottom:16px">Your journey</h2><div class="row">'+continueCard()+nextSatsangCard()+'</div></section>'+
+    '<section style="padding-top:18px"><div class="row">'+membershipCard()+myCirclesCard()+'</div></section>'+
+    '<section style="padding-top:18px"><div class="row">'+quizCard()+'</div></section>'+
+    '<section style="padding-top:32px">'+shareCard()+'</section>'+
+    sharedCard()+techNote();
+}
+function techNote(){
+  var e = state.dash && state.dash.errors, keys = e ? Object.keys(e) : [];
+  if (!keys.length) return '';
+  return '<section style="padding-top:24px"><p style="font-size:12px;line-height:1.5;color:#7A7058">Technical note for the site team: '+keys.map(function(k){ return esc(k)+' - '+esc(e[k]); }).join('; ')+'</p></section>';
+}
+function renderMemberFull(){
+  /* Placeholder for the full member layout. Build it from the member design once the data (lessons, quiz results,
+     circle posts, membership and renewal date) is available, then set SHOW_MEMBER_LAYOUT to true. */
+  return renderMemberHolding();
+}
+
+function render(){
+  var app = document.getElementById('app');
+  if (state.viewer === 'member') app.innerHTML = SETTINGS.SHOW_MEMBER_LAYOUT ? renderMemberFull() : renderMemberHolding();
+  else app.innerHTML = renderVisitor();
+  wire();
+  postHeight();
+}
+
+function wire(){
+  var ov = document.getElementById('open-verse');
+  if (ov) ov.addEventListener('click', openVerse);
+  Array.prototype.forEach.call(document.querySelectorAll('[data-signin]'), function(el){
+    el.addEventListener('click', function(ev){ ev.preventDefault(); parentPost({ type: 'signin', next: el.getAttribute('data-next') || '' }); });
+  });
+  var jt = document.getElementById('jr-text');
+  if (jt) {
+    jt.addEventListener('input', function(){ state.draft = jt.value; });
+    document.getElementById('jr-save').addEventListener('click', function(){
+      var date = state.editDate || state.journal.today;
+      state.status = 'Saving...'; document.getElementById('jr-status').textContent = state.status;
+      parentPost({ type: 'journal-save', date: date, text: jt.value });
+    });
+    document.getElementById('jr-share').addEventListener('click', function(){
+      var date = state.editDate || state.journal.today;
+      if (!jt.value.trim()) { state.status = 'Please write something first.'; document.getElementById('jr-status').textContent = state.status; return; }
+      state.sharing = date; state.shareNote = ''; render();
+    });
+    var td = document.getElementById('jr-today');
+    if (td) td.addEventListener('click', function(){ state.editDate = ''; state.status = ''; state.sharing = ''; var e = state.journal.entries[state.journal.today]; state.draft = e ? e.text : ''; render(); });
+    var yes = document.getElementById('jr-share-yes');
+    if (yes) yes.addEventListener('click', function(){
+      var date = state.editDate || state.journal.today;
+      state.shareNote = 'Sharing...'; state.sharing = ''; render();
+      parentPost({ type: 'journal-save', date: date, text: state.draft, thenShare: true });
+    });
+    var no = document.getElementById('jr-share-no');
+    if (no) no.addEventListener('click', function(){ state.sharing = ''; render(); });
+    var sel = document.getElementById('jr-month');
+    if (sel) sel.addEventListener('change', function(){
+      var cur = monthKeyOf(state.journal.today);
+      if (sel.value === cur) { state.viewMonth = ''; state.viewEntries = null; render(); }
+      else { state.viewMonth = sel.value; state.viewEntries = {}; render(); parentPost({ type: 'journal-month', monthKey: sel.value }); }
+    });
+    Array.prototype.forEach.call(document.querySelectorAll('[data-edit]'), function(el){
+      el.addEventListener('click', function(){ startEdit(el.getAttribute('data-edit')); });
+    });
+  }
+  var jx = document.getElementById('jr-export');
+  if (jx) {
+    var setT = function(t, note){ state.tools = t; state.toolsNote = note || ''; render(); };
+    jx.addEventListener('click', function(){ setT('exporting'); parentPost({ type: 'journal-export' }); });
+    document.getElementById('jr-erase').addEventListener('click', function(){ setT('confirm'); });
+    var ey = document.getElementById('jr-erase-yes'); if (ey) ey.addEventListener('click', function(){ setT('erasing'); parentPost({ type: 'journal-erase' }); });
+    var en = document.getElementById('jr-erase-no'); if (en) en.addEventListener('click', function(){ setT(''); });
+    var tc = document.getElementById('jr-tools-close'); if (tc) tc.addEventListener('click', function(){ state.exportText = ''; setT(''); });
+    var dl = document.getElementById('jr-dl');
+    if (dl) dl.addEventListener('click', function(){
+      try {
+        var blob = new Blob([state.exportText], { type: 'text/plain;charset=utf-8' });
+        var a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'my-journal.txt';
+        document.body.appendChild(a); a.click(); setTimeout(function(){ document.body.removeChild(a); }, 500);
+        state.toolsNote = 'If no file appeared, use Copy instead.';
+      } catch (e) { state.toolsNote = 'Your device did not allow a download. Please use Copy instead.'; }
+      var n = document.querySelector('[role=status]'); if (n) n.textContent = state.toolsNote;
+    });
+    var cp = document.getElementById('jr-copy');
+    if (cp) cp.addEventListener('click', function(){
+      var ta = document.getElementById('jr-export-text'), ok = false;
+      try { ta.focus(); ta.select(); ok = document.execCommand('copy'); } catch (e) {}
+      state.toolsNote = ok ? 'Copied.' : 'Please select the text and copy it yourself.';
+      var s = document.getElementById('jr-copy'); if (s) s.textContent = ok ? 'Copied' : 'Copy';
+    });
+  }
+  Array.prototype.forEach.call(document.querySelectorAll('[data-seen]'), function(el){
+    el.addEventListener('click', function(){
+      var id = el.getAttribute('data-seen');
+      (state.shared || []).forEach(function(n){ if (n.id === id) n.seen = true; });
+      render(); parentPost({ type: 'shared-seen', id: id });
+    });
+  });
+  Array.prototype.forEach.call(document.querySelectorAll('[data-reply-text]'), function(el){
+    el.addEventListener('input', function(){ state.replyDraft[el.getAttribute('data-reply-text')] = el.value; });
+  });
+  Array.prototype.forEach.call(document.querySelectorAll('[data-reply-send]'), function(el){
+    el.addEventListener('click', function(){
+      var id = el.getAttribute('data-reply-send'), t = String(state.replyDraft[id] || '').trim();
+      if (!t) { state.replyNote[id] = 'Please write a reply first.'; render(); return; }
+      state.replyNote[id] = 'Sending...'; render();
+      parentPost({ type: 'reply-send', noteId: id, text: t });
+    });
+  });
+  Array.prototype.forEach.call(document.querySelectorAll('[data-follow-text]'), function(el){
+    el.addEventListener('input', function(){ state.followDraft[el.getAttribute('data-follow-text')] = el.value; });
+  });
+  Array.prototype.forEach.call(document.querySelectorAll('[data-follow-send]'), function(el){
+    el.addEventListener('click', function(){
+      var id = el.getAttribute('data-follow-send'), t = String(state.followDraft[id] || '').trim();
+      if (!t) { state.followNote[id] = 'Please write a few words first.'; render(); return; }
+      state.followNote[id] = 'Sending...'; render();
+      parentPost({ type: 'followup-send', noteId: id, text: t });
+    });
+  });
+  Array.prototype.forEach.call(document.querySelectorAll('[data-reply-thanks]'), function(el){
+    el.addEventListener('click', function(){
+      var id = el.getAttribute('data-reply-thanks');
+      (state.myReplies || []).forEach(function(r){ if (r.id === id) r.readByMember = true; });
+      render(); parentPost({ type: 'reply-read', id: id });
+    });
+  });
+  var cp = document.getElementById('copy-invite');
+  if (cp) cp.addEventListener('click', function(){
+    var done = function(){ cp.textContent = 'Link copied'; setTimeout(function(){ cp.textContent = 'Copy invite link'; }, 2500); };
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(SETTINGS.SITE).then(done, function(){ parentPost({ type: 'copy', text: SETTINGS.SITE }); });
+    else parentPost({ type: 'copy', text: SETTINGS.SITE });
+  });
+}
+
+/* ---- verse dialog ---- */
+var dlg = document.getElementById('verse');
+function openVerse(){
+  var a = document.getElementById('verse-audio'), missing = document.getElementById('audio-missing');
+  if (SETTINGS.VERSE_AUDIO_URL) { if (!a.getAttribute('src')) a.setAttribute('src', SETTINGS.VERSE_AUDIO_URL); a.style.display = 'block'; missing.style.display = 'none'; }
+  else { a.style.display = 'none'; missing.style.display = 'block'; }
+  /* This page sits in a tall box inside the Wix page, so the pop-up must not be centred in the whole box (that is far below the screen). Place it level with the button instead. */
+  var btn = document.getElementById('open-verse'), top = 24;
+  if (btn) { top = Math.max(16, Math.round(btn.getBoundingClientRect().top - 12)); }
+  dlg.style.margin = top + 'px auto auto auto';
+  if (dlg.showModal) dlg.showModal(); else dlg.setAttribute('open', '');
+}
+function closeVerse(){ var a = document.getElementById('verse-audio'); try { a.pause(); } catch (e) {} if (dlg.close) dlg.close(); else dlg.removeAttribute('open'); }
+document.getElementById('verse-x').addEventListener('click', closeVerse);
+document.getElementById('verse-close').addEventListener('click', closeVerse);
+dlg.addEventListener('click', function(ev){ if (ev.target === dlg) closeVerse(); });
+
+/* ---- talking to the Wix page code ---- */
+function parentPost(msg){ try { window.parent.postMessage(msg, '*'); } catch (e) {} } /* messages carry no personal data */
+function postHeight(){ parentPost({ type: 'height', value: Math.ceil(document.documentElement.scrollHeight) }); }
+window.addEventListener('message', function(ev){
+  var d = ev.data;
+  if (d && d.type === 'dashboard' && d.dashboard && typeof d.dashboard === 'object') {
+    state.dash = d.dashboard; render();
+    if (!state.quizAsked) { state.quizAsked = true; parentPost({ type: 'quiz-results-load' }); }
+    return;
+  }
+  if (d && d.type === 'quiz-results') {
+    state.quiz = d.failed ? { failed: true } : (d.results && typeof d.results === 'object' ? d.results : { failed: true });
+    render(); return;
+  }
+  if (d && d.type === 'journal-data' && d.data && typeof d.data === 'object') {
+    state.journal = d.data; state.journalFailed = false;
+    if (!state.repliesAsked) { state.repliesAsked = true; parentPost({ type: 'my-replies-load' }); }
+    var te = d.data.entries && d.data.entries[d.data.today];
+    if (!state.editDate) state.draft = te ? te.text : '';
+    render(); return;
+  }
+  if (d && d.type === 'shared-notes' && Array.isArray(d.notes)) {
+    state.shared = d.notes; render();
+    if (d.notes.length) parentPost({ type: 'replies-for-notes', ids: d.notes.map(function(n){ return n.id; }) });
+    return;
+  }
+  if (d && d.type === 'replies-for-notes-data' && Array.isArray(d.replies)) {
+    state.noteReplies = {};
+    d.replies.forEach(function(r){ (state.noteReplies[r.noteId] = state.noteReplies[r.noteId] || []).push(r); });
+    state.noteFollowups = {};
+    (Array.isArray(d.followups) ? d.followups : []).forEach(function(f){ (state.noteFollowups[f.noteId] = state.noteFollowups[f.noteId] || []).push(f); });
+    render(); return;
+  }
+  if (d && d.type === 'reply-sent' && typeof d.noteId === 'string') {
+    if (d.ok) {
+      if (d.reply) (state.noteReplies[d.noteId] = state.noteReplies[d.noteId] || []).push(d.reply);
+      state.replyDraft[d.noteId] = '';
+      var who = 'The member'; (state.shared || []).forEach(function(n){ if (n.id === d.noteId) who = n.from; });
+      state.replyNote[d.noteId] = d.emailSent === false ? 'Reply saved. The email alert could not be sent, so ' + who + ' will see it next time they open My Journey.' : 'Reply sent. ' + who + ' has been emailed a link.';
+      (state.shared || []).forEach(function(n){ if (n.id === d.noteId) n.seen = true; });
+    } else { state.replyNote[d.noteId] = d.message || 'Sorry, that could not be sent. Please try again.'; }
+    render(); return;
+  }
+  if (d && d.type === 'my-replies' && Array.isArray(d.replies)) { state.myReplies = d.replies; state.myFollowups = Array.isArray(d.followups) ? d.followups : []; render(); return; }
+  if (d && d.type === 'followup-sent' && typeof d.noteId === 'string') {
+    if (d.ok) {
+      if (d.followup) state.myFollowups.push(d.followup);
+      state.followDraft[d.noteId] = ''; state.followNote[d.noteId] = 'Sent. Swamiji has been told.';
+    } else { state.followNote[d.noteId] = d.message || 'Sorry, that could not be sent. Please try again.'; }
+    render(); return;
+  }
+  if (d && d.type === 'journal-exported') {
+    if (d.ok && Array.isArray(d.entries) && d.entries.length) {
+      state.exportText = 'My journal (vedanta.nz)\n\n' + d.entries.map(function(e){ return dayLabel(e.date)+', '+String(e.date).slice(0,4)+(e.theme ? ' - '+e.theme : '')+'\n'+e.text; }).join('\n\n');
+      state.tools = 'ready'; state.toolsNote = '';
+    } else { state.tools = ''; state.toolsNote = d.ok ? 'You have no journal entries yet.' : 'Sorry, your journal could not be prepared. Please try again.'; }
+    render(); return;
+  }
+  if (d && d.type === 'journal-erased') {
+    if (d.ok) {
+      if (state.journal) state.journal.entries = {};
+      state.months = []; state.viewMonth = ''; state.viewEntries = null; state.editDate = ''; state.draft = ''; state.status = ''; state.sharing = '';
+      state.tools = ''; state.toolsNote = 'Your journal has been erased.';
+    } else { state.tools = ''; state.toolsNote = 'Sorry, your journal could not be erased. Please try again.'; }
+    render(); return;
+  }
+  if (d && d.type === 'journal-failed') { state.journalFailed = true; render(); return; }
+  if (d && d.type === 'journal-months' && Array.isArray(d.months)) { state.months = d.months; render(); return; }
+  if (d && d.type === 'journal-month-data' && d.monthKey === state.viewMonth) { state.viewEntries = d.entries || {}; render(); return; }
+  if (d && d.type === 'journal-saved') {
+    if (d.ok) {
+      var jj = state.journal, dd = d.date, cur = jj ? monthKeyOf(jj.today) : '';
+      if (jj && d.entry !== undefined) {
+        var tgt = monthKeyOf(dd) === cur ? jj.entries : (state.viewEntries || (state.viewEntries = {}));
+        if (d.entry) tgt[dd] = d.entry; else delete tgt[dd];
+      }
+      state.status = d.shared ? '' : (d.entry ? 'Saved.' : 'Entry removed.');
+      if (d.shared) state.shareNote = 'Shared with Swamiji. Thank you.';
+      else if (state.shareNote === 'Sharing...') state.shareNote = '';
+      if (d.entry && jj && state.months.map(function(m){ return m.monthKey; }).indexOf(monthKeyOf(dd)) === -1) state.months.unshift({ monthKey: monthKeyOf(dd), entryCount: 1 });
+    } else {
+      state.status = d.message || 'Sorry, that could not be saved. Please try again.';
+      if (state.shareNote === 'Sharing...') state.shareNote = d.message || 'Sorry, that could not be shared. Please try again.';
+    }
+    render(); return;
+  }
+  if (!d || d.type !== 'journey') return;
+  state.viewer = d.viewer === 'member' ? 'member' : 'visitor';
+  if (state.viewer === 'member' && !state.journal && !state.journalAsked) { state.journalAsked = true; parentPost({ type: 'journal-load' }); }
+  state.firstName = d.firstName || '';
+  state.photoUrl = (typeof d.photoUrl === 'string' && /^https:\/\//.test(d.photoUrl)) ? d.photoUrl : '';
+  if (Array.isArray(d.plans)) { state.plans = d.plans; state.plansFailed = false; }
+  else if (d.plansFailed) { state.plans = []; state.plansFailed = true; }
+  render();
+});
+window.addEventListener('resize', function(){ setTimeout(postHeight, 150); });
+render();
+parentPost({ type: 'ready' });
+setTimeout(function(){ if (state.plans === null) { state.plansFailed = true; render(); } }, 8000);
+</script>
+</body>
+</html>
