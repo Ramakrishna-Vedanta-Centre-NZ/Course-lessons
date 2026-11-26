@@ -49,3 +49,10 @@ Notes
 - Box display fixes on the phone: handbook button label shortened to "Download the handbook (PDF)" (it was cut off), and box text set to black like the rest of the lesson.
 - Modules 1 and 2 lessons have no "For the curious" section: the end block is appended after the Key ideas list; the top box goes before the first non-empty heading.
 - Figures: 2.1 3, 2.2 2, 2.3 3, 2.4 3, 2.5 3, 2.6 0, 2.7 0 images on Wix (check masters).
+
+## Module 2 and Module 1: DONE (27 Nov 2026)
+- Module 2: quizzes CON-2-1 to 2-7 built, pushed, registered in QuizRegistry. Handbook (26 pp) uploaded. Lessons 2.1 to 2.7 wired (top box, end block, 4 buttons each, read back).
+- Module 1: quizzes CON-1-1 to 1-6 built, click-tested, pushed, registered. Handbook af2af0_bf88f2e91d574eecb48a352364f19978.pdf (22 pp: cover 1, terms 2 to 4, lesson k starts p. 5+3(k-1)). Lessons 1.1 to 1.6 wired (4 buttons each, images untouched, read back).
+- All 36 Beginners conversations now have a quiz, a handbook section and wired lessons on Wix.
+- Caveats: Module 1 to 4 quizzes were written from key ideas, practical situations and part headings, not full lesson text. In 1.6 the Bridge Inquiry question (Q9) is described from its title only: reviewer must check it against the lesson text. Handbook scenes in Module 1 are fictional.
+- Still open: team review via verification packs; F5 title alignment batch; figures upload and audit; live Quiz Hub test on a phone; Velo edit for My Journey (ask first); module/capstone quizzes deferred; old handbook uploads remain in Media Manager.
