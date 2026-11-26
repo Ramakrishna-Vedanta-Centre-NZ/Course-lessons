@@ -56,3 +56,10 @@ Notes
 - All 36 Beginners conversations now have a quiz, a handbook section and wired lessons on Wix.
 - Caveats: Module 1 to 4 quizzes were written from key ideas, practical situations and part headings, not full lesson text. In 1.6 the Bridge Inquiry question (Q9) is described from its title only: reviewer must check it against the lesson text. Handbook scenes in Module 1 are fictional.
 - Still open: team review via verification packs; F5 title alignment batch; figures upload and audit; live Quiz Hub test on a phone; Velo edit for My Journey (ask first); module/capstone quizzes deferred; old handbook uploads remain in Media Manager.
+
+## REWORK IN PROGRESS (27 Nov 2026, Swamiji's instruction): rewrite quizzes for Modules 1 to 4 from the FULL lesson text
+- Reason: the first versions of M1 to M4 quizzes (except 3.3) were written from digests (key ideas, practical situations, headings): a shortcut. Swamiji ruled it unacceptable.
+- Method: for each lesson, GET the step from Wix (descriptionFieldSet=EXTENDED), extract the text (skip BUTTON/DIVIDER and the box paragraphs), write src/cN_K.py from what the lesson actually says (speaker details, examples, figures, practical situation), build, lens-check, click-test, push. The quiz page URL does not change, so Wix lessons and registry rows need no change.
+- Rewritten from full text so far: 1.1.
+- To do: 1.2 to 1.6; 2.1 to 2.7; 3.1, 3.2, 3.4 to 3.8; 4.1 to 4.7. (M5 and 3.3 were done from full text or need a check: confirm M5 sources in the transcript before claiming.)
+- Handbooks were also rebuilt: terms now flow continuously. New totals: M1 21 pp (lessons from p. 4), M2 25, M3 28, M4 25, M5 28 (lessons from p. 5). Media IDs: M1 af2af0_2ab0f81c9e5347abae85a5b4854af068, M2 af2af0_aea4b2bfe2744f55a76a22d445b0b7cc, M3 af2af0_c16cbe8d4c394c62b966d4984882d451, M4 af2af0_c53a6c22aa274c54a1b62be5d2eb7e1d, M5 af2af0_073fe1fa302c463cbe3f135406827af6 (all .pdf). All 36 lessons updated to match.

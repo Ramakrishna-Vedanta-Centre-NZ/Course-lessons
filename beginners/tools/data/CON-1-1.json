@@ -2,145 +2,145 @@
  "code": "CON-1-1",
  "lesson": "1.1",
  "title": "What Is the Mind? A First Look",
- "reflection": "Choose one strong reaction this week, and divide it into X and Y: the bare facts, and what you brought. Where did the situation end and where did you begin?",
+ "reflection": "Choose one strong reaction this week. On paper, write the bare facts on one side, as a camera would, and on the other what you brought. Where did the situation end and where did you begin?",
  "questions": [
   {
    "t": "mc",
    "kind": "U",
-   "q": "What does Conversation 1.1 say about how well most people understand the mind?",
+   "q": "When Swamiji asks the group “What is the mind?”, what does he point out about their answers?",
    "o": [
-    "People use it every moment, yet almost nobody can say clearly what it is: a gap in our education.",
-    "People understand it better than the body, since it is the one thing everyone knows from inside.",
-    "People understand it as well as the body, since schools teach both in the same way and detail.",
-    "People do not need to understand it, since the mind looks after itself without any training."
+    "Each trails off after a few sentences, although we use the mind every moment of our lives.",
+    "Each gives a different correct answer, which shows how rich the subject is for everyone.",
+    "Each answer is wrong, which shows that none of the three has ever thought about the mind.",
+    "Each answer agrees with the others, which shows that the mind is easy to define in words."
    ],
    "a": 0,
-   "e": "We have solid literacy about our bodies, such as heart, lungs and digestion, but almost none about our minds. The course builds that literacy from both modern science and the Yoga Vedanta contemplative traditions.",
-   "c": "We lack literacy about the mind",
+   "e": "Three thoughtful people became uncertain within a few sentences. We use the mind from waking to sleeping, yet when asked what it is we can barely speak. Swamiji calls this gap consequential, not embarrassing.",
+   "c": "We use the mind every moment yet cannot say what it is",
    "s": "Part 1"
   },
   {
    "t": "mc",
    "kind": "U",
-   "q": "How does Conversation 1.1 describe thought?",
+   "q": "What does Swamiji say is missing, despite the many talks, books and apps about the mind?",
    "o": [
-    "Useful but partial: it arrives after experience, like a commentary, a map and not the land itself.",
-    "Complete and exact: it shows an experience as it is, so a person can trust it in every case.",
-    "Harmful and false: it only gets in the way, so a person is better off without any of it.",
-    "Prior to experience: it comes first, and it decides what each experience is going to be."
+    "A working model, like anatomy for the body: a coherent map of structure, function, health and drift.",
+    "More information, since there are still too few books and apps for people to learn from.",
+    "More belief, since people need to trust one authority before any study of the mind can start.",
+    "More brain scans, since only measurement can show what the mind really is and how it acts."
    ],
    "a": 0,
-   "e": "Thought is a commentary on something already lived. Feeling is real but partial, since the brain’s alarm system, centred on the amygdala, can fire before thinking catches up. Ethical judgement is necessary but not final: sincerity does not guarantee accuracy.",
+   "e": "There is no shortage of information; searching gives many conflicting answers. What is missing is a coherent map: this is the structure, these are the functions, here is what health looks like and what drift looks like, and how balance is restored.",
+   "c": "What is missing is a working model of the mind",
+   "s": "Part 1"
+  },
+  {
+   "t": "mc",
+   "kind": "A",
+   "q": "Kai reads a short message as dismissive and is wound up for hours. Next morning the same words seem neutral. What does the lesson say about this?",
+   "o": [
+    "The words stayed the same; what he brought to them changed, so the experience was X meeting his state, Y.",
+    "The words changed overnight, so the friend must have sent a second and gentler message.",
+    "His morning self was mistaken, so the evening reading was the true one and should be kept.",
+    "His mood did not matter at all, so the difference must have come from the friend alone."
+   ],
+   "a": 0,
+   "e": "Swamiji says the spiral was the meeting of the message and Kai’s state. Both were real, but together they felt more alarming than either alone.",
+   "c": "Same words, different Y",
+   "s": "Part 3"
+  },
+  {
+   "t": "mc",
+   "kind": "A",
+   "q": "James teaches the same lesson to two classes: one debates, the other is flat. Which idea does he use to understand it?",
+   "o": [
+    "The lesson was the same but the students were not: each child brings a different Y into the room.",
+    "The lesson must have been delivered differently, so he should look for his own error first.",
+    "The flat class is less able, so he should simplify the lesson for it and move on at once.",
+    "The debating class is the typical one, so the flat class must have something wrong with it."
+   ],
+   "a": 0,
+   "e": "It is the Y each child carries in: history with the subject, history with adults, what happened before they sat down. Swamiji adds that a teacher should try to understand something about the Y in the room.",
+   "c": "The Y in the room differs, so the same lesson lands differently",
+   "s": "Part 3"
+  },
+  {
+   "t": "judge",
+   "kind": "J",
+   "q": "“Thought is a map of experience: useful and sometimes indispensable, but the map is not the land.”",
+   "a": 0,
+   "e": "Thought always arrives after experience: you hear a sound and then identify it, meet someone and then form an opinion. Thought is the mind catching up with what has already happened, and it is valuable, since without it there would be no science, language or deep relationship.",
    "c": "Thought is a map, not the land",
    "s": "Part 2"
   },
   {
    "t": "mc",
-   "kind": "A",
-   "q": "A woman feels afraid, though nothing around her is dangerous. Which idea from Conversation 1.1 helps?",
+   "kind": "U",
+   "q": "Why can a feeling of danger persist when there is no real danger, according to the lesson?",
    "o": [
-    "The alarm system can fire before thinking catches up, so feelings do not always match the situation.",
-    "Feelings are always exact, so there must be some danger that she has simply not yet noticed.",
-    "Feelings are always wrong, so she should learn to ignore each one that arises in her.",
-    "Feelings come from other people, so she should find out who it is that is causing this one."
+    "A fast threat-detection system, the amygdala, can fire before the thinking brain has assessed the situation.",
+    "The thinking brain always fires first, so the feeling is only a mistake of reasoning.",
+    "The body has no alarm system, so a feeling of danger is always a sign of real danger nearby.",
+    "Fear is a habit of the culture, so it disappears when a person stops talking about danger."
    ],
    "a": 0,
-   "e": "Feeling is real but partial. The alarm system, centred on the amygdala, can fire before thinking catches up, which is why feelings do not always match the actual situation in front of us.",
-   "c": "Feelings are real but can run ahead of the situation",
+   "e": "The alarm system evolved to keep us alive, not to be accurate in every situation. It responds to patterns from the past, not necessarily to what is fully present now, which is why James’s students can feel danger in a safe classroom.",
+   "c": "The alarm can fire before thinking has assessed",
    "s": "Part 2"
   },
   {
    "t": "judge",
    "kind": "J",
-   "q": "“Every experience is X plus Y: X is what is given from outside, and Y is what you bring from inside.”",
-   "a": 0,
-   "e": "The two meet like two waves. The ripple is what we call the situation, but it is always a combination of both. Seeing this is liberating: what you are suffering is not the bare truth about the world, and you have a part in it.",
-   "c": "Experience is X plus Y",
-   "s": "Part 3"
-  },
-  {
-   "t": "mc",
-   "kind": "A",
-   "q": "A teacher is sure that a student is lazy. Which step does the practical situation of Conversation 1.1 suggest?",
-   "o": [
-    "Write the bare facts on one side, then on the other what she brings: mood, history, fears and hopes.",
-    "Write down only the student’s faults, so that she can see clearly what the student is like.",
-    "Wait until the feeling has gone, and only then decide whether it was right or wrong.",
-    "Ask other teachers for their view, so that the average of their opinions can be trusted."
-   ],
-   "a": 0,
-   "e": "The experiment is to divide what happened into X and Y, as if a camera recorded the facts, and then ask where the situation ended and where I began. There is no need to judge or change anything yet.",
-   "c": "Divide an event into X and Y",
-   "s": "Part 3"
-  },
-  {
-   "t": "mc",
-   "kind": "U",
-   "q": "What is the antaḥkaraṇa, according to Conversation 1.1?",
-   "o": [
-    "The inner instrument: the whole inner apparatus of thinking, feeling, judging and remembering.",
-    "The body’s main nerve: the pathway that carries every message from the brain to the heart.",
-    "The Self: the awareness that watches the instrument without ever taking part in its work.",
-    "The outer world: the field of things that the inner instrument looks at and is acted on by."
-   ],
-   "a": 0,
-   "e": "Manas, the processing mind, is part of it: it receives impressions from outside, sorts them and reacts. Module 2 takes the inner instrument apart in detail.",
-   "c": "The antaḥkaraṇa is the whole inner instrument",
-   "s": "Part 3"
-  },
-  {
-   "t": "judge",
-   "kind": "J",
-   "q": "“Because experience is partly what I bring, a painful experience can never be changed.”",
+   "q": "“If a person is sincere in a moral judgement, it follows that the judgement is complete and correct.”",
    "a": 1,
-   "e": "The reverse holds. What you are suffering is not the bare truth about the world; it is something you have a part in, and that means it can change. This is liberating for anxiety and depression.",
-   "c": "What you bring can change",
+   "e": "Conscience, responsibility and honesty are essential, but what you take to be right is shaped by upbringing, culture, history, fears and hopes. You can be sincere and still be missing something: the judgement may be good and still be partial.",
+   "c": "Sincerity does not guarantee accuracy",
+   "s": "Part 2"
+  },
+  {
+   "t": "mc",
+   "kind": "A",
+   "q": "Sarah notices a running commentary in her head while she is with her daughter: “she’s doing this wrong, I should have said that differently.” What does she realise?",
+   "o": [
+    "That she has stopped actually being with her daughter, since the commentary has taken the place of the experience.",
+    "That the commentary shows she is a very good mother, since she is thinking about her child all the time.",
+    "That the commentary is useless, so she should stop all thought whenever she is with another person.",
+    "That the commentary is the daughter’s fault, since it begins only when the daughter speaks."
+   ],
+   "a": 0,
+   "e": "Thought is the mind’s commentary on an experience, not the experience. When commentary runs, we can stop being with the person. Swamiji calls this a precise observation.",
+   "c": "Commentary can replace actually being there",
+   "s": "Part 2"
+  },
+  {
+   "t": "mc",
+   "kind": "A",
+   "q": "A worried parent looks at a closed bedroom door and hears danger; a more settled parent hears nothing. Which statement fits the lesson?",
+   "o": [
+    "The door is the same and the Y is different, so the experience is X meeting what each parent brings.",
+    "The door is different in the two homes, so the two parents are simply reacting to different facts.",
+    "The settled parent is cold, so she cannot be reading the situation as accurately as the worried one.",
+    "The worried parent is simply wrong, so she should take the settled parent’s view and say no more."
+   ],
+   "a": 0,
+   "e": "Swamiji presents this as the structure of all human knowing, not a criticism. The door (X) is the same; the Y, the history, mood and predictions each brings, is different.",
+   "c": "Same door, different Y",
    "s": "Part 3"
   },
   {
    "t": "mc",
    "kind": "A",
-   "q": "A man scrolls his phone and feels worse than when he began. How does Conversation 1.1 suggest he look at it?",
+   "q": "For the practical experiment, what should a person write down on the “X” side of the paper?",
    "o": [
-    "Separate what the phone showed from what he brought to it: his mood, comparisons and fears.",
-    "Blame the phone alone, since the whole of the feeling must have come from the screen.",
-    "Blame himself alone, since only a weak person would feel worse after looking at a phone.",
-    "Ignore the feeling, since a reaction of this kind has no real cause behind it at all."
+    "Only the bare facts, what was said or done, as if a camera were recording it, with no interpretation.",
+    "Their opinion of the other person, so that they can see clearly whether it was justified.",
+    "Their mood and their history with the person, since these are what really caused the reaction.",
+    "Their plan for what to say next time, so that the same reaction does not happen again."
    ],
    "a": 0,
-   "e": "Kai’s experiment is to take the feeling after scrolling and divide it into X, what was on the screen, and Y, what he brought.",
-   "c": "Separate what was shown from what you brought",
-   "s": "Part 3"
-  },
-  {
-   "t": "mc",
-   "kind": "A",
-   "q": "A mother finds herself anxious before her daughter has said anything. Which idea from Conversation 1.1 fits?",
-   "o": [
-    "Y arrived first: what she brought, her history and fears, is already shaping the moment.",
-    "X arrived first: the daughter has already done something that she has not yet noticed.",
-    "Neither X nor Y is at work, since the anxiety has come out of nowhere at all.",
-    "The daughter is the whole cause, so the mother should ask her to change what she does."
-   ],
-   "a": 0,
-   "e": "Sarah’s practice is to catch the moment of anxiety before anything has been said and see what her Y is. This is where the situation ends and she begins.",
-   "c": "Anxiety before anything is said points to Y",
-   "s": "Part 3"
-  },
-  {
-   "t": "mc",
-   "kind": "A",
-   "q": "A man says, “I suppose it is all just my fault.” What does Conversation 1.1 add to this?",
-   "o": [
-    "It is neither all outside nor all inside: it is X and Y meeting, and the Y part is what he can work with.",
-    "It is all inside, so he is to blame for each thing that he feels, and for all of its causes.",
-    "It is all outside, so there is nothing for him to do except to wait for things to change.",
-    "It is all chance, so looking for a cause in himself or in the world is a waste of time."
-   ],
-   "a": 0,
-   "e": "The aim is not blame. Seeing the Y part gives a way to change the experience without pretending that nothing happened outside.",
-   "c": "X and Y meeting: work with the part that is yours",
-   "s": "Part 3"
+   "e": "The Y side holds what you brought: mood, history with this person, what you feared or hoped, what the moment reminded you of. Then ask: where did the situation end and where did I begin? No judging or changing yet, just seeing.",
+   "c": "X is the camera record: the bare facts",
+   "s": "Practical situation"
   }
  ]
 }
