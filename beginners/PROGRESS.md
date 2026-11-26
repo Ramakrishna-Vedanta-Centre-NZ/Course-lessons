@@ -23,7 +23,7 @@ One purpose only: modern education makes us literate about the physical body, bu
 Compared against the live Beginners lessons (program e40d25ac). 5.1, 5.3, 5.4 read in full against the quiz questions: scenes, pictures and terms match (e.g. 5.4 spoonful and bucket, riverbed, reins, sole doer; 5.3 seedling, two notes, screen, mauna, obstacles). 5.5 and 5.8 checked by vocabulary: no quiz term missing from the lesson except common English words. 5.2, 5.6, 5.7 checked at the level of stories and terms (minister and threads, beetle, swan emblem, surgeon and anatomy, staircase, mantra, forceful breathing); not read line by line. No quiz rewritten. Lesson 3.3 quiz written from full text earlier; no rework.
 
 ## My Journey (Wix editor)
-Backend quizResults.web.js, page code (o93cs) and embed changes applied in the editor as a saved DRAFT, NOT PUBLISHED. Needs a member test (Test Site, with a CON result), a second-member privacy check, and Swamiji's decision to publish. Files: wix-code/my-journey-quiz-results/. Drive backups: folder "Wix code - My Journey".
+Backend quizResults.web.js, page code (o93cs) and embed changes PUBLISHED LIVE by Swamiji's instruction on 27 Nov 2026 (about 12:10 NZ). Still needs a member test (Test Site, with a CON result), a second-member privacy check, and Swamiji's decision to publish. Files: wix-code/my-journey-quiz-results/. Drive backups: folder "Wix code - My Journey".
 
 ## Open items
 - Mobile lesson title spacing (wrapped titles show a large gap between the two lines, screenshot 07:53): not yet investigated.
