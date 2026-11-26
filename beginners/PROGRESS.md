@@ -1,66 +1,38 @@
 # Beginners (Conversational) Mind course: quizzes and handbooks, progress log
 
-Last updated 27 Nov 2026.
+Last updated 27 Nov 2026 (afternoon).
 
-| Module | Quizzes written and pushed | QuizRegistry rows | Handbook PDF built | Handbook on Wix Media | Lessons wired on Wix |
-| --- | --- | --- | --- | --- | --- |
-| 5 | CON-5-1 to CON-5-8 | yes | yes (31 pages, con-m5.pdf) | yes | 5.1 to 5.8 (quiz box, end block, handbook buttons) |
-| 3 | CON-3-3 only | CON-3-3 | not yet (3.3 pilot handbook exists, 5 pages) | no | 3.3 wired for the quiz; no handbook button yet |
-| 1, 2, 4 | not started | | | | |
+## Status
+- Quizzes CON-N-K: written for all 36 lessons (10 questions each, "well grasped" at 70 percent), pushed to the repo (tools/src/cN_K.py). Module 5 quizzes 5.1 to 5.8 and 3.3 checked against full lesson text (see below). Quiz Hub phone test passed (Swamiji, 27 Nov).
+- Handbooks: one per module, Standard Handbook Guidelines v1.2, uploaded as PDF to Wix Media and linked from every lesson button.
+- Lesson titles: all 36 aligned to the advanced form. Figures: missing figures uploaded, every figure has alt text and a caption. New figure Diagram_1_6_2_Five_Modules.png in 1.6.
+- Old handbook uploads moved to the Media Manager trash (recoverable).
 
-Handbook Module 5 PDF on Wix Media: af2af0_352017327368422fb8fd1698e3b07fd3.pdf (https://8902ede3-28da-4abb-829e-7338609acebf.usrfiles.com/ugd/af2af0_352017327368422fb8fd1698e3b07fd3.pdf). Page ranges: cover 1, terms 2 to 7, then 3 pages per conversation from page 8.
+## Current handbook files on Wix Media (https://8902ede3-28da-4abb-829e-7338609acebf.usrfiles.com/ugd/<id>.pdf)
+- M1 af2af0_27fcc9e541de4f039298d9d603e9c716 (v4, 21 pp, after the 1.1/1.6 revision)
+- M2 af2af0_aea4b2bfe2744f55a76a22d445b0b7cc
+- M3 af2af0_c16cbe8d4c394c62b966d4984882d451
+- M4 af2af0_c53a6c22aa274c54a1b62be5d2eb7e1d
+- M5 af2af0_073fe1fa302c463cbe3f135406827af6
+Trashed: af2af0_bf88, 8003, fe37, db71, 53b1, fcb5, 0fbe, 0d71, 3520, old M1 2ab0f81c, and the earlier M5 3520173...
 
-Notes
-- Module 5 lessons have no figures (images) on the live Wix lessons, although the handbook frames are titled after the figures in the Drive masters. Flag to Swamiji.
-- Module colours bm1, bm2, bm4, bm5 added to hb.css as proposals (bm3 violet from the pilot). Awaiting review.
-- Do not put an apostrophe or curly quote in ExecuteWixAPI code text without checking: one curly apostrophe was corrupted to "w" in 3.3 (fixed, rev 7).
-- Staging a PDF for Wix import: push to Course-lessons under a folder not starting with underscore, import by URL with UploadImageToWixSite, then remove the folder.
+## Body and mind comparison (27 Nov)
+One purpose only: modern education makes us literate about the physical body, but not about the mind that we use from birth to death; that is the reason for the course. Not extended to illness, prevention or a health model. Revised in lessons 1.1, 1.6, 2.1, 2.7, quizzes c1_1 and c1_6, and the M1 handbook. Dr Watson's clinical wording in Modules 3 and 4 left unchanged (flag to Swamiji).
 
-## TO DO: upload the figures (added 27 Nov 2026 at Swamiji's request)
-- Module 5 lessons (5.1 to 5.8) on Wix have NO figures, although the Drive masters contain them. The handbook figure frames refer to those figures.
-- Audit every Beginners lesson on Wix (1.1 to 5.8) against its Drive master: list figures in the master, list IMAGE nodes on Wix, upload and place any that are missing (with alt text and captions as done for 3.3).
-- Cause not yet established: the Module 5 Wix lessons appear to have been published from text only. To be checked, not assumed.
-- Only 3.3 has had a figure audit so far. Inserting images must not disturb the "Along with this lesson" box or the end quiz block.
+## Module 5 quiz full-text check (27 Nov)
+Compared against the live Beginners lessons (program e40d25ac). 5.1, 5.3, 5.4 read in full against the quiz questions: scenes, pictures and terms match (e.g. 5.4 spoonful and bucket, riverbed, reins, sole doer; 5.3 seedling, two notes, screen, mauna, obstacles). 5.5 and 5.8 checked by vocabulary: no quiz term missing from the lesson except common English words. 5.2, 5.6, 5.7 checked at the level of stories and terms (minister and threads, beetle, swan emblem, surgeon and anatomy, staircase, mantra, forceful breathing); not read line by line. No quiz rewritten. Lesson 3.3 quiz written from full text earlier; no rework.
 
-## TO DO: upload missing figures (noted 27 Nov 2026, at Swamiji's request)
-- Course-wide audit needed: compare every Beginners lesson on Wix (all 36) with its Drive master and list lessons whose figures (images) are missing on Wix.
-- Known so far: the Module 5 lessons (5.1 to 5.8) have NO figures on live Wix, though the Drive masters have them. Module 3.3 figures were checked and are fine. Modules 1 to 4 not yet audited (some of Module 1 are known to carry images).
-- The Module handbooks have figure frames that refer to these figures, so the lessons and handbooks should match.
-- Method: upload each figure to Wix Media, then insert an IMAGE node at the right place in the lesson (Ricos), with alt text and caption as done for 3.3. Check each lesson afterwards. Republishing a lesson from Markdown wipes the quiz and handbook boxes, so insert images by PATCH and not by republishing.
-- Advanced and Parents courses: also check for missing figures.
+## My Journey (Wix editor)
+Backend quizResults.web.js, page code (o93cs) and embed changes applied in the editor as a saved DRAFT, NOT PUBLISHED. Needs a member test (Test Site, with a CON result), a second-member privacy check, and Swamiji's decision to publish. Files: wix-code/my-journey-quiz-results/. Drive backups: folder "Wix code - My Journey".
 
-## Module 4 (27 Nov 2026): DONE on Wix
-- Quizzes CON-4-1 to CON-4-7 pushed, registry rows added, click-tested (900 and 390 px).
-- Module 4 handbook: 28 pages (cover 1, terms 2 to 7, then 3 pages per conversation: 4.1 pp. 8-10, 4.2 11-13, 4.3 14-16, 4.4 17-19, 4.5 20-22, 4.6 23-25, 4.7 26-28). Wix media ID af2af0_0d7128cbdba843ddb569d024a664017e.pdf. Palette bm4 (rust) is a proposal awaiting review. Specs in hbkit/lessons/m4_specs.py.
-- Lessons 4.1 to 4.7 wired (4 buttons each, read back). Beginners step IDs: 4.2 is f94eaec1-8304-41bd-a08f-f8cdfddbcddf (an earlier note had a typo). Always GET before PATCH.
-- Quizzes for Modules 1 to 4 were written from key ideas, practical situations and part headings, not the full lesson text: the reviewer must check against the full text.
-- Figures: 4.1, 4.6 and 4.7 have no images on Wix (4.2 to 4.5 have 3 each); check against the Drive masters (see the figures to-do).
+## Open items
+- Mobile lesson title spacing (wrapped titles show a large gap between the two lines, screenshot 07:53): not yet investigated.
+- Flag to Swamiji: 4.3 and 4.4 "RWF" title wording; 4.2 "Guṇas" wording; handbook scenes are fictional; module palettes bm1 to bm5 and the 3.3 handbook review items apply to all handbooks; module quizzes and capstone deferred; Desktop file m1to4_digest.txt can be removed; propose_skills card awaiting him.
+- Optional later: audit Advanced and Parents lessons' figures; check the Drive master and Advanced 1.1 for the same body-comparison stretch.
 
-## Module 3 (27 Nov 2026): DONE on Wix
-- Quizzes CON-3-1, 3-2, 3-4 to 3-8 added (3.3 was the pilot); pushed, click-tested, registry rows added.
-- Module 3 handbook rebuilt with all 8 lessons (31 pages: cover 1, terms 2 to 7, then 3 pages each: 3.1 pp. 8-10 ... 3.8 pp. 29-31; 3.3 on pp. 14-16). Wix media ID af2af0_0fbee8be35684465a93cbf115a9fc83e.pdf. Specs in hbkit/lessons/m3_specs.py (3.3 spec is C3_3.py). Cover palette is the module 3 one used by the builder; the review items on the 3.3 pilot (byline, fictional scene, palette) still stand and now apply to every handbook.
-- Lessons 3.1 to 3.8 wired (4 buttons each, read back). 3.3 kept its quiz box and gained the handbook button and paragraph.
-- Figures on Wix: 3.1 has 4 images, 3.2 3, 3.3 3, 3.4 3, 3.5 4, 3.6 4, 3.7 3, 3.8 3.
-
-## Layout change to the handbooks (27 Nov 2026, after Swamiji's phone check)
-- Terms pages were half empty and split a conversation across pages. Now each conversation's terms stay together and two conversations fill a page: 4 terms pages (pp. 2 to 5), lessons start on p. 6, three pages each.
-- Rebuilt and re-uploaded Modules 2 to 5; lesson page ranges and download links updated in all 30 lessons (M2 2.1 pp. 6-8 ... 2.7 pp. 24-26; M3 3.1 pp. 6-8 ... 3.8 pp. 27-29; M4 4.1 pp. 6-8 ... 4.7 pp. 24-26; M5 5.1 pp. 6-8 ... 5.8 pp. 27-29).
-- Current Wix media IDs: M2 af2af0_fe374364bd8447b4808a340db30c9e06.pdf, M3 af2af0_8003eae9e05a4c4f9c0213c7b8e12a46.pdf, M4 af2af0_53b12e844b404c31939f58c714eda2c2.pdf, M5 af2af0_db71e64e0eb3404098c527da837e3efe.pdf. Older uploads of the same handbooks remain in the Media Manager and can be deleted by hand.
-- Box display fixes on the phone: handbook button label shortened to "Download the handbook (PDF)" (it was cut off), and box text set to black like the rest of the lesson.
-- Modules 1 and 2 lessons have no "For the curious" section: the end block is appended after the Key ideas list; the top box goes before the first non-empty heading.
-- Figures: 2.1 3, 2.2 2, 2.3 3, 2.4 3, 2.5 3, 2.6 0, 2.7 0 images on Wix (check masters).
-
-## Module 2 and Module 1: DONE (27 Nov 2026)
-- Module 2: quizzes CON-2-1 to 2-7 built, pushed, registered in QuizRegistry. Handbook (26 pp) uploaded. Lessons 2.1 to 2.7 wired (top box, end block, 4 buttons each, read back).
-- Module 1: quizzes CON-1-1 to 1-6 built, click-tested, pushed, registered. Handbook af2af0_bf88f2e91d574eecb48a352364f19978.pdf (22 pp: cover 1, terms 2 to 4, lesson k starts p. 5+3(k-1)). Lessons 1.1 to 1.6 wired (4 buttons each, images untouched, read back).
-- All 36 Beginners conversations now have a quiz, a handbook section and wired lessons on Wix.
-- Caveats: Module 1 to 4 quizzes were written from key ideas, practical situations and part headings, not full lesson text. In 1.6 the Bridge Inquiry question (Q9) is described from its title only: reviewer must check it against the lesson text. Handbook scenes in Module 1 are fictional.
-- Still open: team review via verification packs; F5 title alignment batch; figures upload and audit; live Quiz Hub test on a phone; Velo edit for My Journey (ask first); module/capstone quizzes deferred; old handbook uploads remain in Media Manager.
-
-## REWORK IN PROGRESS (27 Nov 2026, Swamiji's instruction): rewrite quizzes for Modules 1 to 4 from the FULL lesson text
-- Reason: the first versions of M1 to M4 quizzes (except 3.3) were written from digests (key ideas, practical situations, headings): a shortcut. Swamiji ruled it unacceptable.
-- Method: for each lesson, GET the step from Wix (descriptionFieldSet=EXTENDED), extract the text (skip BUTTON/DIVIDER and the box paragraphs), write src/cN_K.py from what the lesson actually says (speaker details, examples, figures, practical situation), build, lens-check, click-test, push. The quiz page URL does not change, so Wix lessons and registry rows need no change.
-- Rewritten from the full lesson text, built, click-tested and pushed (27 Nov): Module 1 (1.1 to 1.6), Module 2 (2.1 to 2.7), Module 3 (3.1, 3.2, 3.4 to 3.8) and Module 4 (4.1 to 4.7). 3.3 was the pilot (written from full text earlier). Module 5 quizzes were written before this rework; their source (full text or digest) is NOT independently confirmed in the record, so they are due a full-text check before being called complete.
-- DONE 27 Nov: (1) F5 titles. All 36 Beginners lesson titles now equal the Advanced titles verbatim (form "k.n Title"), applied by PATCH with read-back; lesson bodies unchanged. Note for Swamiji: 4.3 and 4.4 now read "The Mind through the Lens of RWF I/II" (Advanced wording, abbreviation unexplained for beginners), and 4.2 says "Three Guṇas" where the lesson says strands.
-- Handbooks were also rebuilt: terms now flow continuously. New totals: M1 21 pp (lessons from p. 4), M2 25, M3 28, M4 25, M5 28 (lessons from p. 5). Media IDs: M1 af2af0_2ab0f81c9e5347abae85a5b4854af068, M2 af2af0_aea4b2bfe2744f55a76a22d445b0b7cc, M3 af2af0_c16cbe8d4c394c62b966d4984882d451, M4 af2af0_c53a6c22aa274c54a1b62be5d2eb7e1d, M5 af2af0_073fe1fa302c463cbe3f135406827af6 (all .pdf). All 36 lessons updated to match.
-- NEW INSTRUCTIONS (Swamiji, 27 Nov 07:17), to do AFTER the quiz rework: (1) align all 36 Beginners lesson titles to the Advanced canonical form (F5); (2) upload the missing figures and make sure every figure has alt text and a caption/title; (3) My Journey code change so quiz performance (CON quizzes) is reflected on the My Journey page (permission to edit the Velo code is given); (4) delete the old handbook uploads from the Wix Media Manager (permission given). Old handbook uploads to delete: the pre-27-Nov-layout and compact-layout M2 to M5 PDFs and the first M1 upload af2af0_bf88f2e91d574eecb48a352364f19978.pdf; KEEP the current ones listed above.
+## Method notes
+- Always GET the step before PATCH and read back after. Text in a paragraph is split in several TEXT nodes, so edit per node and verify; marker-range replacement fails when the end marker is in another node.
+- Do not put a curly apostrophe in ExecuteWixAPI code text without checking.
+- Staging a PDF for Wix import: push to the repo under a folder not starting with underscore, import by URL, then git rm.
+- Republishing a lesson from Markdown wipes the quiz and handbook boxes; always PATCH.
+- Rules: word is "quiz"; no em or en dashes in prose; quote only the three Centre books; "contemplative tradition(s)"; never invent sources.
